@@ -1,0 +1,609 @@
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #1a1a1a;
+    font-family: "Cinzel", "Georgia", serif; 
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+}
+
+/* Left Side Menu styling */
+#sidebar {
+    width: 320px;
+    background-color: #211c14; 
+    color: #d4c5a1; 
+    display: flex;
+    flex-direction: column;
+    border-right: 2px solid #4a3e2e;
+    z-index: 10;
+    flex-shrink: 0;
+}
+
+.sidebar-header {
+    padding: 20px 15px;
+    border-bottom: 2px solid #4a3e2e;
+    font-weight: bold;
+    font-size: 18px;
+    text-align: center;
+    letter-spacing: 0.5px;
+    color: #f1e4c3;
+    text-shadow: 1px 1px 2px #000;
+    line-height: 1.3;
+}
+
+#menu-container {
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+/* Mod Heading Category Styling */
+.mod-heading {
+    background-color: #15110c;
+    color: #ffd700;
+    padding: 8px 15px;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-top: 1px solid #332b20;
+    border-bottom: 1px solid #332b20;
+    font-weight: bold;
+}
+
+.file-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.file-list li {
+    padding: 12px 20px;
+    cursor: pointer;
+    border-bottom: 1px solid #2d251c;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    color: #c4b491;
+}
+
+.file-list li:hover {
+    background-color: #362e22;
+    color: #fff;
+    padding-left: 25px; 
+}
+
+.file-list li.active {
+    background-color: #4a3e2e;
+    color: #ffd700; 
+    font-weight: bold;
+    border-left: 4px solid #ffd700;
+}
+
+/* Viewer Area Layout on the right */
+#main-viewer {
+    flex-grow: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+/* Top control bar for map utility toggles */
+#control-bar {
+    background-color: #1c1811;
+    border-bottom: 1px solid #4a3e2e;
+    padding: 10px 20px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    z-index: 5;
+}
+
+.toggle-btn {
+    background-color: #362e22;
+    color: #d4c5a1;
+    border: 1px solid #ffd700;
+    padding: 6px 14px;
+    font-family: "Cinzel", "Georgia", serif;
+    font-size: 12px;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: all 0.2s;
+}
+
+.toggle-btn:hover, .toggle-btn.active-tool {
+    background-color: #4a3e2e;
+    color: #ffd700;
+}
+
+.toggle-btn.disabled {
+    background-color: #15120d;
+    color: #665c45;
+    border-color: #4a3e2e;
+}
+
+#tool-status {
+    color: #ffd700;
+    font-size: 12px;
+    margin-left: 10px;
+    font-style: italic;
+    display: none;
+}
+
+#viewport {
+    flex-grow: 1;
+    overflow: hidden;
+    position: relative;
+    cursor: grab;
+}
+
+#viewport:active {
+    cursor: grabbing;
+}
+
+#viewport.creator-mode {
+    cursor: crosshair !important;
+}
+
+#pan-container {
+    position: absolute;
+    transform-origin: 0 0;
+    display: inline-block;
+}
+
+img {
+    display: block;
+    user-select: none;
+    -webkit-user-drag: none;
+    max-width: none;
+    max-height: none;
+}
+
+/* --- STANDARD LOCAL LABELS --- */
+.map-label {
+    position: absolute;
+    background-color: rgba(33, 28, 20, 0.95);
+    color: #f1e4c3;
+    border: 1px solid #ffd700;
+    padding: 5px 12px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-family: Arial, sans-serif; 
+    font-weight: bold;
+    white-space: nowrap;
+    box-shadow: 0px 3px 6px rgba(0,0,0,0.6);
+    cursor: pointer;
+    transform: translate(-50%, -100%); 
+    transition: background-color 0.15s, color 0.15s;
+    z-index: 2;
+}
+
+.map-label:hover {
+    background-color: #ffd700;
+    color: #211c14;
+}
+
+.map-label::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 5px 5px 0;
+    border-style: solid;
+    border-color: #ffd700 transparent;
+    display: block;
+    width: 0;
+}
+
+/* --- ICONIC ARCANUM OVERWORLD POINTS & LABELS --- */
+
+/* The 10px marker dot. Anchors on center using 50%/50% translate bounds */
+.arcanum-world-dot {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: #000000;
+    border: 1px solid #5a1d82;
+    border-radius: 50%;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+    transform: translate(-50%, -50%);
+    z-index: 3;
+    cursor: pointer;
+}
+
+/* The completely detached text element. Sits slightly offset to the right */
+.arcanum-world-text {
+    position: absolute;
+    color: #ffffff;
+    font-family: "Times New Roman", "Times", "Georgia", serif;
+    font-size: 22px;
+    font-weight: bold;
+    letter-spacing: 0.4px;
+    white-space: nowrap;
+    text-transform: none;
+    
+    /* Enhanced clean shadow layout mapping - adds a thicker flat outline shield contour */
+    text-shadow: 
+        1px 1px 0px #000000,
+        2px 2px 1px #000000,
+        0px 1px 1px #000000,
+        1px 0px 1px #000000;
+        
+    transform: translate(12px, -50%); /* 12px offset ensures it stays clear of the dot space */
+    z-index: 2;
+    user-select: none;
+    cursor: pointer;
+    transition: color 0.15s;
+}
+
+.arcanum-world-text:hover {
+    color: #d1b3ff;
+}
+
+/* Immersive Descriptive Popup Box Style */
+.info-popup {
+    position: absolute;
+    background-color: #262017;
+    color: #e5dac1;
+    border: 2px solid #b39449;
+    box-shadow: 0px 8px 24px rgba(0,0,0,0.8);
+    border-radius: 4px;
+    padding: 14px;
+    width: 240px;
+    font-family: "Georgia", serif;
+    font-size: 13px;
+    line-height: 1.5;
+    z-index: 100; 
+    transform: translate(-50%, -125%); 
+    pointer-events: auto;
+}
+
+.info-popup h4 {
+    margin: 0 0 6px 0;
+    color: #ffd700;
+    font-family: "Cinzel", "Georgia", serif;
+    font-size: 15px;
+    border-bottom: 1px solid #4a3e2e;
+    padding-bottom: 4px;
+}
+
+.info-popup .close-btn {
+    position: absolute;
+    top: 4px;
+    right: 8px;
+    color: #b39449;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.info-popup .close-btn:hover {
+    color: #ffd700;
+}
+
+/* Travel Shortcut Button inside the Info Popup */
+.travel-link-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    margin-top: 12px;
+    padding: 6px 10px;
+    background-color: #362e22;
+    color: #ffd700;
+    border: 1px solid #ffd700;
+    border-radius: 3px;
+    font-family: "Cinzel", "Georgia", serif;
+    font-size: 11px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.travel-link-btn:hover {
+    background-color: #ffd700;
+    color: #211c14;
+}
+
+#creator-panel {
+    background-color: #17130e;
+    border-top: 2px solid #4a3e2e;
+    padding: 15px;
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    font-family: "Georgia", serif;
+    font-size: 13px;
+}
+
+#creator-panel h3 {
+    margin: 0;
+    color: #ffd700;
+    font-family: "Cinzel", serif;
+    font-size: 14px;
+    border-bottom: 1px solid #332b20;
+    padding-bottom: 5px;
+}
+
+#creator-panel label {
+    color: #b3a685;
+    font-size: 11px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+#creator-panel input, #creator-panel textarea {
+    background-color: #211c14;
+    border: 1px solid #4a3e2e;
+    color: #f1e4c3;
+    padding: 6px;
+    border-radius: 3px;
+    font-family: "Georgia", serif;
+}
+
+#creator-panel textarea {
+    resize: vertical;
+    height: 50px;
+}
+
+#creator-panel code {
+    background-color: #0b0a08;
+    padding: 8px;
+    border-radius: 3px;
+    color: #8ce18c;
+    font-family: monospace;
+    font-size: 11px;
+    white-space: pre-wrap;
+    word-break: break-all;
+    border: 1px solid #221e16;
+    max-height: 80px;
+    overflow-y: auto;
+}
+
+/* Floating Zoom Control Bar on Bottom Right */
+#zoom-controls {
+    position: absolute;
+    bottom: 25px;
+    right: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 10;
+}
+
+.zoom-ctrl-btn {
+    width: 40px;
+    height: 40px;
+    background-color: #211c14;
+    color: #f1e4c3;
+    border: 2px solid #ffd700;
+    font-size: 22px;
+    font-weight: bold;
+    font-family: monospace;
+    cursor: pointer;
+    border-radius: 4px;
+    box-shadow: 0px 4px 8px rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    transition: all 0.15s ease;
+}
+
+.zoom-ctrl-btn:hover {
+    background-color: #4a3e2e;
+    color: #ffd700;
+    transform: scale(1.05);
+}
+
+.zoom-ctrl-btn:active {
+    transform: scale(0.95);
+}
+
+/* Top Bar Right-Aligned Coordinates HUD Wrapper */
+#map-coordinates-hud {
+    margin-left: auto; 
+    display: none;     
+    align-items: center;
+    gap: 15px;         
+    font-family: "Cinzel", "Georgia", serif;
+    font-size: 14px;
+    font-weight: bold;
+    color: #ffd700;
+    letter-spacing: 0.5px;
+    user-select: none;
+}
+
+.coord-box {
+    display: inline-flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.coord-box .coord-val {
+    display: inline-block;
+    width: 42px;
+    text-align: right;
+    color: #f1e4c3;
+    font-family: monospace; 
+    font-size: 15px;
+}
+
+.coord-box .coord-lbl {
+    margin-left: 5px;
+    color: #ffd700;
+}
+
+/* Filter Multi-Select Dropdown Container Elements */
+.filter-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #211c14;
+    min-width: 160px;
+    border: 1px solid #ffd700;
+    box-shadow: 0px 8px 16px rgba(0,0,0,0.6);
+    border-radius: 4px;
+    padding: 8px 0;
+    z-index: 20;
+    margin-top: 5px;
+}
+
+.dropdown-content label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 15px;
+    color: #f1e4c3;
+    font-family: "Georgia", serif;
+    font-size: 13px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.dropdown-content label:hover {
+    background-color: #362e22;
+    color: #ffd700;
+}
+
+.dropdown-content input[type="checkbox"] {
+    accent-color: #ffd700;
+    cursor: pointer;
+}
+
+/* Visibility classes used dynamically by the rendering pipeline */
+.filter-hidden {
+    display: none !important;
+}
+
+/* --- CATEGORIZED LOCAL LABELS STYLING --- */
+
+/* 📜 Quest Category Styling Card Profile */
+.map-label.cat-quest {
+    border-color: #ffaa00; /* Rich amber outline */
+    background-color: rgba(38, 30, 20, 0.95);
+    color: #ffdf80; /* Sun-gold lettering tint */
+}
+.map-label.cat-quest:hover {
+    background-color: #ffaa00;
+    color: #1a150e;
+}
+
+/* 🛡️ Followers Category Styling Card Profile */
+.map-label.cat-followers {
+    border-color: #5dade2; /* Knightly steel blue outline */
+    background-color: rgba(23, 32, 42, 0.95);
+    color: #ebf5fb; /* Bright silver lettering tint */
+}
+.map-label.cat-followers:hover {
+    background-color: #5dade2;
+    color: #17202a;
+}
+
+/* 🪙 Shop Category Styling Card Profile */
+.map-label.cat-shop {
+    border-color: #2ecc71; /* Emerald merchant currency outline */
+    background-color: rgba(20, 31, 23, 0.95);
+    color: #ea960c; /* Vivid coin gold lettering tint */
+}
+.map-label.cat-shop:hover {
+    background-color: #2ecc71;
+    color: #141f17;
+}
+
+/* Sidebar Nested Hierarchy Navigation Menu */
+.submenu-list {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 5px 0;
+    background-color: #17130e; /* Darker sub-panel tone background to contrast hierarchy levels */
+    border-bottom: 1px solid #2d251c;
+}
+
+.submenu-list li {
+    padding: 8px 20px 8px 35px !important; /* Extra left padding pushes sub-items right */
+    font-size: 12px !important;
+    border-bottom: none !important;
+    color: #a69a7c !important;
+}
+
+.submenu-list li:hover {
+    padding-left: 40px !important;
+    color: #ffffff !important;
+    background-color: #262017 !important;
+}
+
+.submenu-list li.active {
+    color: #ffd700 !important;
+    font-weight: bold;
+    border-left: 3px solid #ffd700 !important;
+    background-color: #211c14 !important;
+}
+
+/* 🧭 Waypoint Quick Travel Local Marker styling Profile */
+.map-label.cat-waypoint {
+    border-color: #e74c3c; /* Warning/action portal ruby crimson outline */
+    background-color: rgba(36, 17, 14, 0.95);
+    color: #ff9999; /* Soft red text */
+}
+.map-label.cat-waypoint:hover {
+    background-color: #e74c3c;
+    color: #ffffff;
+}
+
+/* Sidebar High-Level Mod Category Selection Tabs */
+.mod-filter-nav {
+    display: flex;
+    padding: 10px;
+    gap: 5px;
+    background-color: #17130e;
+    border-bottom: 2px solid #4a3e2e;
+}
+
+.mod-filter-tab {
+    flex: 1;
+    background-color: #2a2218;
+    color: #a69a7c;
+    border: 1px solid #4a3e2e;
+    padding: 6px 4px;
+    font-family: "Cinzel", "Georgia", serif;
+    font-size: 11px;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.mod-filter-tab:hover {
+    color: #f1e4c3;
+    background-color: #362e22;
+    border-color: #b39449;
+}
+
+.mod-filter-tab.active-tab {
+    color: #211c14;
+    background-color: #ffd700;
+    border-color: #ffd700;
+    text-shadow: none;
+}
+
+/* Sidebar Branding Header Logo Image */
+.sidebar-logo {
+    display: block;
+    max-width: 180px;      /* Restricts the width so it frames perfectly within the 320px sidebar layout */
+    height: auto;          /* Maintains natural aspect ratios to prevent warping */
+    margin: 0 auto 12px auto; /* Centers horizontally and adds a crisp 12px bottom gap */
+    user-select: none;
+    -webkit-user-drag: none;
+}
