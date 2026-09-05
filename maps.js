@@ -7,6 +7,24 @@ const ArcanumMapData = [
     typemap: "overworld",
     defaultView: { x: 1000, y: 1000, zoom: 0.6 },
     labels: [
+      { x: 503, y: 977, text: "Ashbury", description: "A city on the eastern seaboard.", targetMapFilename: "ArcanumBase/Ashburysmall.jpg" },
+      { x: 1098, y: 1441, text: "Black Root", description: "A border town.", targetMapFilename: "ArcanumBase/Blackrootsmall.jpg" },
+      { x: 1604, y: 1828, text: "Caladon", description: "A thriving feudal kingdom.", targetMapFilename: "ArcanumBase/Caladonsmall.jpg" },
+      { x: 1237, y: 1650, text: "Dernholm", description: "Capital of Cumbria - A dying feudal kingdom.", targetMapFilename: "ArcanumBase/Dernholmsmall.jpg" },
+      { x: 323, y: 877, text: "Isle of Despair", description: "A penal colony.", targetMapFilename: "ArcanumBase/IsleofDespairsmall.jpg" },
+      { x: 1545, y: 656, text: "Qintarra", description: "A large elven community.", targetMapFilename: "ArcanumBase/Qintarrasmall.jpg"},
+      { x: 1752, y: 1514, text: "Roseborough", description: "A small town near the Ring of Brodgar.", targetMapFilename: "ArcanumBase/Roseboroughsmall.jpg"},
+      { x: 1410, y: 1317, text: "Shrouded Hills", description: "A small mining town.", targetMapFilename: "ArcanumBase/ShroudedHillssmall.jpg" },
+      { x: 1190, y: 753, text: "Stillwater", description: "A small town, famed for its swords.", targetMapFilename: "ArcanumBase/Stillwatersmall.jpg" },
+      { x: 972, y: 1028, text: "Tarant", description: "The biggest, most industrial city in Arcanum", targetMapFilename: "ArcanumBase/Tarant.png"},
+      { x: 1179, y: 316, text: "The Bedokaan Village", description: "As small village of reptilian creatures." },
+      { x: 1505, y: 297, text: "Tsen-Ang", description: "Home of the Dark Elves.", targetMapFilename: "ArcanumBase/TsenAngsmall.jpg"},
+      { x: 444, y: 489, text: "Tulla", description: "A mysterious city of mages deep in the Vendigroth Wastes.", targetMapFilename: "ArcanumBase/Tullasmall.jpg"},
+      { x: 868, y: 1191, text: "Vooriden", description: "A small village just south of Tarant.", targetMapFilename: "ArcanumBase/Vooriden.png"},
+      { x: 954, y: 667, text: "Wheel Clan", description: "A Dwarven society deep in the Grey Mountains." },
+
+      { x: 1308, y: 754, text: "The Black Mountain Mines", description: "The abandoned home of the Black Mountain Clan.", targetMapFilename: "ArcanumBase/Black.Mountain.Mines.png"},
+
       { x: 1182, y: 1583, text: "A Lair Of Gyr Dolours", description: "The last known location of the tormented Lady Druella." },
       { x: 1586, y: 1816, text: "A Mysterious Location", description: "Discovered on the wall painting in the Mushroom." },
       { x: 1367, y: 1582, text: "Ancient Maze", description: "A mysterious old maze." },
@@ -14,14 +32,10 @@ const ArcanumMapData = [
       { x: 498, y: 892, text: "Ancient Shipwreck", description: "The remains of an ancient pirate ship." },
       { x: 776, y: 919, text: "Ancient Temple", description: "A temple rumored to hold treasures untold." },
       { x: 1452, y: 1303, text: "Arbalah's House", description: "Arbalah's House." },
-      { x: 503, y: 977, text: "Ashbury", description: "(CITY) A city on the eastern seaboard." },
-      { x: 1098, y: 1441, text: "Black Root", description: "(CITY) A border town." },
       { x: 629, y: 1593, text: "Boat Landing On Thanatos", description: "Landing for the Isle of Death." },
       { x: 1627, y: 1635, text: "Bolo’s Altar", description: "A weathered stone altar." },
-      { x: 1604, y: 1828, text: "Caladon", description: "(CITY) A thriving feudal kingdom." },
       { x: 1453, y: 1289, text: "Crash Site", description: "The remains of the crashed blimp." },
       { x: 346, y: 679, text: "Dark Elf Camp", description: "The dark elves' base camp near the ruins of Vendigroth." },
-      { x: 1237, y: 1650, text: "Dernholm", description: "(CITY) Capital of Cumbria - A dying feudal kingdom." },
       { x: 993, y: 790, text: "Dungeon Of The Dragon Pool", description: "Source of Dragon’s Blood for reviving Torian Kel." },
       { x: 711, y: 1022, text: "Elven Ruins", description: "A place that may hold untold elven riches." },
       { x: 1627, y: 564, text: "Falcon’s Ache", description: "Elven holy ground, at the edge of the Glimmering Forest." },
@@ -31,7 +45,6 @@ const ArcanumMapData = [
       { x: 1500, y: 1442, text: "Gorgoth Pass", description: "A long forgotten pass joining the kingdoms of Dernholm and Caladon." },
       { x: 923, y: 1689, text: "Half Ogre Island", description: "The rumored location of the secret breeding laboratory." },
       { x: 1288, y: 713, text: "Hardin’s Pass", description: "A treacherous snowy pass leading to the Glimmering Forest." },
-      { x: 323, y: 877, text: "Isle of Despair", description: "A penal colony." },
       { x: 1435, y: 616, text: "K’na Tha", description: "A place of ancient magick rumored to contain Azram’s Star." },
       { x: 882, y: 423, text: "Kerlin’s Altar", description: "An ancient, golden altar." },
       { x: 635, y: 1204, text: "Kree", description: "The once great city destroyed by the Bane of Kree." },
@@ -40,28 +53,21 @@ const ArcanumMapData = [
       { x: 1179, y: 1465, text: "Liam’s Workshop", description: "Liam Cameron’s Workshop." },
       { x: 474, y: 694, text: "Mysterious Ruins Of the Wastes", description: "A location shown to you by Weldo Rubin." },
       { x: 721, y: 1890, text: "Nasrudin's Resting Place", description: "Reputed to be the location of the remains of Nasrudin." },
-      { x: 750, y: 556, text: "Old Blind Master", description: "(Secret Location) See Quests For More Details.", targetMapFilename: "Arcanum CE Restored/OldBlindMaster.png" },
-      { x: 1545, y: 656, text: "Qintarra", description: "(CITY) A large elven community." },
+      { x: 750, y: 556, text: "Old Blind Master", description: "See Quests For More Details.", targetMapFilename: "Arcanum CE Restored/OldBlindMaster.png" },
       { x: 1503, y: 1771, text: "Razor’s Pointe", description: "Ships fear these treacherous waters that must be passed to navigate around the tip of Arcanum." },
-      { x: 1752, y: 1514, text: "Roseborough", description: "(CITY) A small town near the Ring of Brodgar." },
       { x: 1025, y: 1333, text: "Ruins of Szabo", description: "Some ancient ruins." },
       { x: 1514, y: 1184, text: "Secret Entrance To The Iron Clan", description: "The entrance to the legendary dwarven clan." },
       { x: 1320, y: 179, text: "Secret Village", description: "You hear high pitched rejoicing." },
       { x: 346, y: 827, text: "Shades Beach", description: "A place reputed to be full of strange objects." },
-      { x: 1410, y: 1317, text: "Shrouded Hills", description: "(CITY) A small mining town." },
       { x: 1450, y: 1325, text: "Simon Fahrkus' Shack", description: "Simon Fahrkus' Shack." },
       { x: 1260, y: 479, text: "Small Camp", description: "A small camp is visible from a distance." },
       { x: 1595, y: 882, text: "Small Pond", description: "You hear shouts and whip-cracking." },
-      { x: 1190, y: 753, text: "Stillwater", description: "A small town, famed for its swords.", targetMapFilename: "ArcanumBase/Stillwatersmall.jpg" },
       { x: 1343, y: 887, text: "Stonecutter Clan", description: "The home of the Stonecutter Clan." },
       { x: 1373, y: 705, text: "Strange Ceremony", description: "Strange chanting can be heard nearby...." },
       { x: 617, y: 527, text: "Strange Pond", description: "An interesting pond in the middle of nowhere." },
       { x: 682, y: 1339, text: "Stringy Pete’s Cove", description: "A haunted cove." },
       { x: 808, y: 1341, text: "Stringy Pete’s Treasure", description: "The final resting place of the infamous pirate’s bounty." },
-      { x: 972, y: 1028, text: "Tarant", description: "The biggest, most industrial city in Arcanum", targetMapFilename: "ArcanumBase/Tarant.png"},
       { x: 1178, y: 289, text: "The Bangellian Deeps", description: "The resting place of the Bangellian Scourge." },
-      { x: 1179, y: 316, text: "The Bedokaan Village", description: "As small village of reptilian creatures." },
-      { x: 1308, y: 754, text: "The Black Mountain Mines", description: "The abandoned home of the Black Mountain Clan." },
       { x: 1076, y: 514, text: "The Bog", description: "An evil looking place." },
       { x: 1629, y: 1205, text: "The Broken Cathedral", description: "A place of old ruins." },
       { x: 1386, y: 640, text: "The Castle S’nel N’fa", description: "A trap filled ruin rumored to contain the staff of K’an Tau." },
@@ -79,14 +85,10 @@ const ArcanumMapData = [
       { x: 1529, y: 1534, text: "Thieves Cave", description: "Thieves Cave." },
       { x: 1214, y: 1137, text: "Torg’s Altar", description: "An old, stone altar." },
       { x: 1419, y: 1099, text: "Torin Quarry", description: "An ancient dwarven stone quarry." },
-      { x: 1505, y: 297, text: "Tsen-Ang", description: "(CITY) Home of the Dark Elves." },
-      { x: 444, y: 489, text: "Tulla", description: "(CITY) A mysterious city of mages deep in the Vendigroth Wastes." },
       { x: 1046, y: 693, text: "Uncharted Cave", description: "No one knows what mysteries may lie in this unexplored cave." },
       { x: 307, y: 587, text: "Vendigroth Ruins", description: "The remnants of an ancient city." },
       { x: 745, y: 1700, text: "Village Of the Ashlag Tribe", description: "The home of a primitive tribe that worships a primate deity." },
       { x: 1230, y: 981, text: "Vollinger’s Meeting Place", description: "Vollinger’s Meeting Place." },
-      { x: 868, y: 1191, text: "Vooriden", description: "(CITY) A small village just south of Tarant." },
-      { x: 954, y: 667, text: "Wheel Clan", description: "A Dwarven society deep in the Grey Mountains." },
       { x: 1230, y: 1530, text: "Wolf Cave", description: "Wolf Cave." }
     ]
   },
@@ -102,61 +104,96 @@ const ArcanumMapData = [
     ]
   },
   {
-    filename: "ArcanumBase/Ashbury.jpg",
+    filename: "ArcanumBase/Ashburysmall.jpg",
     displayName: "Ashbury",
     modGroup: "Arcanum",
     typemap: "local",
-    labels: []
+    defaultView: { x: 4116, y: 3252, zoom: 1 },
+    labels: [
+      { x: 5663, y: 2388, text: "Worthless Mutt (Dog)", description: "", category: "followers" },
+      { x: 2947, y: 3240, text: "Geoffrey Tarellond-Ashe", description: "", category: "followers" },
+
+      { x: 2041, y: 2737, text: "Crematorium (Level I)", description: "", category: "waypoint" },
+      { x: 3707, y: 1325, text: "Haunted Castle", description: "", category: "waypoint" },
+      { x: 3277, y: 2500, text: "Scienticians Underground", description: "", category: "waypoint" },
+
+    ]
   },
   {
-    filename: "ArcanumBase/Black.Root.jpg",
+    filename: "ArcanumBase/BlackRootsmall.jpg",
     displayName: "Black Root",
     modGroup: "Arcanum",
     typemap: "local",
-    labels: []
+    labels: [
+      { x: 5586, y: 1308, text: "Dante", description: "", category: "followers" },
+      { x: 4656, y: 3063, text: "Franklin Payne", description: "", category: "followers" },
+    ]
   },
   {
-    filename: "ArcanumBase/Caladon_01.jpg",
+    filename: "ArcanumBase/Caladonsmall.jpg",
     displayName: "Caladon",
     modGroup: "Arcanum",
     typemap: "local",
-    labels: []
+    defaultView: { x: 3596, y: 3305, zoom: 1 },
+    labels: [
+      { x: 4401, y: 1297, text: "Caladon - Panarii Temple", description: "", category: "waypoint" },
+      { x: 6613, y: 1768, text: "Caladon Castle", description: "", category: "waypoint" },
+      { x: 6870, y: 2460, text: "Caladon Guardhouse Basement", description: "", category: "waypoint" },
+      { x: 7529, y: 1837, text: "Caladon High Security Prison", description: "", category: "waypoint" },
+      { x: 5883, y: 1959, text: "Caladon Mafia Underground", description: "", category: "waypoint" },
+      { x: 5390, y: 1723, text: "Caladon Sanders Basement", description: "", category: "waypoint" },
+      { x: 6879, y: 782, text: "Caladon Trap Disarm Dungeon", description: "", category: "waypoint" },
+    ]
   },
   {
-    filename: "ArcanumBase/Dernholm.jpg",
+    filename: "ArcanumBase/Dernholmsmall.jpg",
     displayName: "Dernholm",
     modGroup: "Arcanum",
     typemap: "local",
-    labels: []
+    defaultView: { x: 1870, y: 2624, zoom: 1 },
+    labels: [
+      { x: 2416, y: 2728, text: "Jayna Stiles", description: "", category: "followers" },
+      { x: 3002, y: 2146, text: "Vollinger", description: "", category: "followers" },
+
+      { x: 4391, y: 1155, text: "Dernholm Pits", description: "", category: "waypoint" },
+      { x: 3629, y: 1775, text: "Dernholm Castle", description: "", category: "waypoint" },
+    ]
   },
   {
-    filename: "ArcanumBase/Isle.of.Despair.jpg",
+    filename: "ArcanumBase/IsleofDespairsmall.jpg",
     displayName: "Isle of Despair",
     modGroup: "Arcanum",
     typemap: "local",
+    defaultView: { x: 2976, y: 1409, zoom: 1 },
     labels: []
   },
   {
-    filename: "ArcanumBase/Qintarra.jpg",
+    filename: "ArcanumBase/Qintarrasmall.jpg",
     displayName: "Qintarra",
     modGroup: "Arcanum",
     typemap: "local",
+    defaultView: { x: 1749, y: 1327, zoom: 1 },
     labels: []
   },
   {
-    filename: "ArcanumBase/Roseborough.jpg",
+    filename: "ArcanumBase/Roseboroughsmall.jpg",
     displayName: "Roseborough",
     modGroup: "Arcanum",
     typemap: "local",
+    defaultView: { x: 3064, y: 2710, zoom: 1 },
     labels: []
   },
   {
-    filename: "ArcanumBase/Shrouded.Hills.jpg",
+    filename: "ArcanumBase/ShroudedHillssmall.jpg",
     displayName: "Shrouded Hills",
     modGroup: "Arcanum",
     typemap: "local",
+    defaultView: { x: 5689, y: 3230, zoom: 1 },
     labels: [
-      { x: 4365, y: 6553, text: "Bessie Toone Mine", description: "", category: "waypoint", targetMapFilename: "ArcanumBase/ShroudedHills.Mine.png"},
+      { x: 5914, y: 3147, text: "Shrouded Hills Panarii Temple", description: "", category: "waypoint", targetMapFilename: "ArcanumBase/ShroudedHillsTemple.png"},
+      { x: 2179, y: 3272, text: "Bessie Toone Mine", description: "", category: "waypoint", targetMapFilename: "ArcanumBase/ShroudedHillsBessieToone.png", targetX: 1697, targetY: 805},
+
+      { x: 5762, y: 3504, text: "Sogg Mead Mug", description: "", category: "followers" },
     ]
   },
   {
@@ -188,6 +225,7 @@ const ArcanumMapData = [
       { x: 4523, y: 1634, text: "Magick Shop Clerk", description: "", category: "shop" },
       { x: 4410, y: 1558, text: "Magickal Smith", description: "", category: "shop" },
       { x: 4598, y: 1524, text: "Magick Shop Clerk", description: "", category: "shop" },
+      { x: 4570, y: 2347, text: "Black Market", description: "", category: "shop" },
 
       { x: 3800, y: 2093, text: "Magnus", description: "", category: "followers" },
       { x: 4792, y: 1662, text: "Gar", description: "", category: "followers" },
@@ -197,12 +235,18 @@ const ArcanumMapData = [
       { x: 4340, y: 2454, text: "The Crystal Ball (Part II)", description: "Madame Toussaude wants you to deliver her crystal ball to Delores Beston.", category: "quest" },
       { x: 4668, y: 2647, text: "Rid Mr. Plough's Warehouses of Rats", description: "Mr. Plough wants you to rid his warehouses, near the docks in Tarant, of rats.", category: "quest" },
     
+      { x: 5442, y: 1502, text: "Bates Mansion", description: "", category: "waypoint" },
+      { x: 4947, y: 1428, text: "City Hall Underground", description: "", category: "waypoint" },
+      { x: 3780, y: 1940, text: "P. Schuyler & Sons (Level I)", description: "", category: "waypoint" },
       { x: 1812, y: 2706, text: "Tarant Old Sewers", description: "", category: "waypoint", targetMapFilename: "ArcanumBase/Tarant_03.jpg" },
       { x: 3081, y: 2970, text: "Tarant Old Sewers", description: "", category: "waypoint", targetMapFilename: "ArcanumBase/Tarant_03.jpg" },
       { x: 5443, y: 2279, text: "Tarant Old Sewers", description: "", category: "waypoint", targetMapFilename: "ArcanumBase/Tarant_03.jpg" },
       { x: 5066, y: 3131, text: "Tarant Old Sewers", description: "", category: "waypoint", targetMapFilename: "ArcanumBase/Tarant_03.jpg", targetX: 3805, targetY: 2237, targetZoom: 1.0},
+      { x: 3302, y: 2074, text: "Tarant New Sewers", description: "", category: "waypoint" },
+      { x: 3849, y: 2316, text: "Tarant New Sewers", description: "", category: "waypoint" },
+      { x: 3976, y: 1990, text: "Tarant New Sewers", description: "", category: "waypoint" },
+      { x: 3871, y: 1649, text: "Tarant New Sewers", description: "", category: "waypoint" },
       { x: 2816, y: 2083, text: "Bates Tunnel", description: "", category: "waypoint" },
-
       { x: 3417, y: 2459, text: "Station A: West Garillon Bridge", description: "", category: "waypoint" },
       { x: 3598, y: 1728, text: "Station B: Vermillion Station", description: "", category: "waypoint" },
       { x: 4499, y: 1279, text: "Station C: Tarant University", description: "", category: "waypoint" },
@@ -214,26 +258,55 @@ const ArcanumMapData = [
       ]
   },
   {
-    filename: "ArcanumBase/T'sen-Ang.jpg",
+    filename: "ArcanumBase/TsenAngsmall.jpg",
     displayName: "T'sen-Ang",
     modGroup: "Arcanum",
     typemap: "local",
+    defaultView: { x: 3841, y: 1707, zoom: 1 },
     labels: []
   },
   {
-    filename: "ArcanumBase/Tulla_01.jpg",
+    filename: "ArcanumBase/Tullasmall.jpg",
     displayName: "Tulla",
     modGroup: "Arcanum",
     typemap: "local",
+    defaultView: { x: 1910, y: 1655, zoom: 1 },
     labels: []
   },
   {
-    filename: "ArcanumBase/Wheel.Clan_01.jpg",
+    filename: "ArcanumBase/Vooriden.png",
+    displayName: "Vooriden",
+    modGroup: "Arcanum",
+    typemap: "local",
+    defaultView: { x: 1031, y: 496, zoom: 1 },
+    labels: []
+  },
+  {
+    filename: "ArcanumBase/WheelClan.png",
     displayName: "Wheel Clan",
     modGroup: "Arcanum",
     typemap: "local",
     labels: []
   },
+
+/// DUNGEONS MAPS
+
+  {
+    filename: "ArcanumBase/Black.Mountain.Mines.png",
+    displayName: "The Black Mountain Mines",
+    modGroup: "Arcanum",
+    typemap: "local",
+    defaultView: { x: 868, y: 598, zoom: 1 },
+    labels: [],
+  },
+  {
+    filename: "ArcanumBase/VendigrothRuinssmall.jpg",
+    displayName: "Vendigroth Ruins",
+    modGroup: "Arcanum",
+    typemap: "local",
+    defaultView: { x: 868, y: 598, zoom: 1 },
+    labels: [],
+  }, 
   {
     filename: "ArcanumBase/Void_01.jpg",
     displayName: "Void",
@@ -245,13 +318,55 @@ const ArcanumMapData = [
 /// SUBMAPS
 
   {
-    filename: "ArcanumBase/ShroudedHills.Mine.png",
+    filename: "ArcanumBase/Black.Mountain.Mines_01.jpg",
+    displayName: "The Black Mountain Mines - Level 1",
+    modGroup: "Arcanum",
+    typemap: "local",
+    defaultView: { x: 108, y: 614, zoom: 1 },
+    parentFilename: "ArcanumBase/Black.Mountain.Mines.png",
+    labels: [],
+  },
+  {
+    filename: "ArcanumBase/Black.Mountain.Mines_02.jpg",
+    displayName: "The Black Mountain Mines - Level 2",
+    modGroup: "Arcanum",
+    typemap: "local",
+    defaultView: { x: 773, y: 405, zoom: 1 },
+    parentFilename: "ArcanumBase/Black.Mountain.Mines.png",
+    labels: [],
+  },
+  {
+    filename: "ArcanumBase/Black.Mountain.Mines_03.jpg",
+    displayName: "The Black Mountain Mines - Level 3",
+    modGroup: "Arcanum",
+    typemap: "local",
+    defaultView: { x: 1254, y: 941, zoom: 1 },
+    parentFilename: "ArcanumBase/Black.Mountain.Mines.png",
+    labels: [],
+  },
+  {
+    filename: "ArcanumBase/ShroudedHillsTemple.png",
+    displayName: "Panarii Temple",
+    modGroup: "Arcanum",
+    typemap: "local",
+    defaultView: { x: 545, y: 599, zoom: 1 },
+    parentFilename: "ArcanumBase/ShroudedHillssmall.jpg",
+    labels: [
+      { x: 545, y: 599, text: "Shrouded Hills", description: "", category: "waypoint" , targetMapFilename: "ArcanumBase/ShroudedHillssmall.jpg", targetX: 5914, targetY: 3147},
+    ],
+  },
+  {
+    filename: "ArcanumBase/ShroudedHillsBessieToone.png",
     displayName: "Bessie Toone Mine",
     modGroup: "Arcanum",
     typemap: "local",
-    parentFilename: "ArcanumBase/Shrouded.Hills.jpg",
-    labels: []
+    defaultView: { x: 1697, y: 805, zoom: 1 },
+    parentFilename: "ArcanumBase/ShroudedHillssmall.jpg",
+    labels: [
+      { x: 1697, y: 805, text: "Shrouded Hills", description: "", category: "waypoint" , targetMapFilename: "ArcanumBase/ShroudedHillssmall.jpg", targetX: 2179, targetY: 3272},
+    ],
   },
+
   {
     filename: "ArcanumBase/StillwaterGiantsCave.png",
     displayName: "Stillwater Giants Cave",
@@ -278,7 +393,12 @@ const ArcanumMapData = [
     modGroup: "Arcanum",
     typemap: "local",
     parentFilename: "ArcanumBase/Tarant.png",
-    labels: []
+    labels: [
+      { x: 1202, y: 863, text: "Tarant", description: "", category: "waypoint" },
+      { x: 2023, y: 1108, text: "Tarant", description: "", category: "waypoint" },
+      { x: 2044, y: 997, text: "Tarant", description: "", category: "waypoint" },
+      { x: 2235, y: 529, text: "Tarant", description: "", category: "waypoint" },
+    ]
   },
   {
     filename: "ArcanumBase/Tarant_03.jpg",
@@ -286,6 +406,51 @@ const ArcanumMapData = [
     modGroup: "Arcanum",
     typemap: "local",
     parentFilename: "ArcanumBase/Tarant.png",
+    labels: [
+      { x: 564, y: 1778, text: "Tarant", description: "", category: "waypoint" },
+      { x: 1714, y: 2153, text: "Tarant", description: "", category: "waypoint" },
+      { x: 3805, y: 2239, text: "Tarant", description: "", category: "waypoint" },
+      { x: 4273, y: 1436, text: "Tarant", description: "", category: "waypoint" },
+    ]
+  },
+  {
+    filename: "ArcanumBase/Tulla_02.jpg",
+    displayName: "Simeons Chamber",
+    modGroup: "Arcanum",
+    typemap: "local",
+    parentFilename: "ArcanumBase/Tullasmall.jpg",
+    labels: []
+  },
+  {
+    filename: "ArcanumBase/WheelClanMainHall.jpg",
+    displayName: "Wheel Clan - Main Hall",
+    modGroup: "Arcanum",
+    typemap: "local",
+    parentFilename: "ArcanumBase/WheelClan.png",
+    labels: []
+  },
+  {
+    filename: "ArcanumBase/WheelClanCommecialDistrict.jpg",
+    displayName: "Wheel Clan - Commercial District",
+    modGroup: "Arcanum",
+    typemap: "local",
+    parentFilename: "ArcanumBase/WheelClan.png",
+    labels: []
+  },
+  {
+    filename: "ArcanumBase/WheelClanMine.jpg",
+    displayName: "Wheel Clan - Mine",
+    modGroup: "Arcanum",
+    typemap: "local",
+    parentFilename: "ArcanumBase/WheelClan.png",
+    labels: []
+  },
+  {
+    filename: "ArcanumBase/WheelClanThroneHall.jpg",
+    displayName: "Wheel Clan - Throne Hall",
+    modGroup: "Arcanum",
+    typemap: "local",
+    parentFilename: "ArcanumBase/WheelClan.png",
     labels: []
   },
 
@@ -317,11 +482,26 @@ const ArcanumMapData = [
     labels: []
   },
   {
+    filename: "Forgotten Places/ForgottenPlaces-BigWoodsLodge.png",
+    displayName: "Big Woods Lodge",
+    modGroup: "Forgotten Places",
+    typemap: "local",
+    defaultView: { x: 970, y: 1098, zoom: 1},
+    labels: []
+  },
+  {
     filename: "Forgotten Places/ForgottenPlaces-Cotswold.png",
     displayName: "Cotswold",
     modGroup: "Forgotten Places",
     typemap: "local",
     defaultView: { x: 865, y: 1028, zoom: 1},
+    labels: []
+  },
+  {
+    filename: "Forgotten Places/ForgottenPlaces-Marsyona.png",
+    displayName: "Marsyona",
+    modGroup: "Forgotten Places",
+    typemap: "local",
     labels: []
   },
   {
@@ -331,6 +511,23 @@ const ArcanumMapData = [
     typemap: "local",
     labels: []
   },
+  {
+    filename: "Forgotten Places/ForgottenPlaces-TempterOfFate.png",
+    displayName: "The Tempter of Fate",
+    modGroup: "Forgotten Places",
+    typemap: "local",
+    labels: []
+  },
+  {
+    filename: "Forgotten Places/ForgottenPlaces-Vaselan.png",
+    displayName: "Vaselan",
+    modGroup: "Forgotten Places",
+    typemap: "local",
+    labels: []
+  },
+
+/// MODULES
+
   {
     filename: "Tomb of Tol Gurdur/TombTolGurdurCity.jpg",
     displayName: "City",

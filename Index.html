@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arcanum CE Restored - Map Explorer</title>
+    <!-- Link to the clean external layout stylesheet file -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Left Menu Sidebar -->
+    <div id="sidebar">
+        <div class="sidebar-header">
+            <img src="Textures/Site-logo.png" alt="Arcanum Logo" class="sidebar-logo">
+            - Map Explorer -
+        </div>
+        
+        <!-- Three high-level selector buttons requested under the title -->
+        <div class="mod-filter-nav">
+            <div id="tab-arcanum" class="mod-filter-tab active-tab" onclick="switchModCategory('arcanum')">Arcanum</div>
+            <div id="tab-cerestored" class="mod-filter-tab" onclick="switchModCategory('cerestored')">CE Restored</div>
+            <div id="tab-modules" class="mod-filter-tab" onclick="switchModCategory('modules')">Modules</div>
+        </div>
+
+        <div id="menu-container">
+            <!-- Items grouped by modifications load here dynamically -->
+        </div>
+
+        <!-- Creator Tool Input Deck Panel -->
+        <div id="creator-panel">
+            <h3>Label Placement Tool</h3>
+            <div style="color:#d4c5a1; font-size:12px;">Coordinates: <strong id="coord-display">X: -, Y: -</strong></div>
+            
+            <label>Label Text</label>
+            <input type="text" id="new-label-text" placeholder="e.g., Bates Factory">
+            
+            <label>Description Note</label>
+            <textarea id="new-label-desc" placeholder="Historical information..."></textarea>
+            
+            <button id="add-to-preview-btn" class="toggle-btn" style="width:100%;">Test Live Marker</button>
+            
+            <label>Paste code line into maps.js:</label>
+            <code id="output-code">// Click your map to generate code</code>
+        </div>
+    </div>
+
+    <!-- Right Side Global Workspace Area -->
+    <div id="main-viewer">
+        <div id="control-bar">
+            <!-- Filter drawer multiselect panel deck dropdown link option -->
+            <div class="filter-dropdown">
+                <button id="filterDropdownBtn" class="toggle-btn">Filter Labels ▾</button>
+                <div id="filterDropdownContent" class="dropdown-content">
+                    <label><input type="checkbox" id="chk-quest" checked> Quest</label>
+                    <label><input type="checkbox" id="chk-followers" checked> Followers</label>
+                    <label><input type="checkbox" id="chk-shop" checked> Shop</label>
+                    <label><input type="checkbox" id="chk-waypoint" checked> Waypoint</label>
+                    <label id="lbl-overworld-all" style="display:none;"><input type="checkbox" id="chk-overworld-all" checked> World Locations</label>
+                </div>
+            </div>
+            
+            <!-- Renamed button link element configuration -->
+            <button id="toggleCreatorModeBtn" class="toggle-btn">Label Editor</button>
+            <!-- Repositioned Hot-Reload button asset pinned to top utility navigation deck bar -->
+            <button id="topBarReloadBtn" class="toggle-btn" onclick="hotReloadMapDatabase()" title="Reload maps.js dataset without resetting your page zoom">↻ Reload Data</button>
+            
+            <span id="tool-status">✦ Click directly onto the map to place an anchor pin</span>
+            
+            <!-- Splitting coordinates into rigid individual text containers inside the menu bar -->
+            <div id="map-coordinates-hud">
+                <div class="coord-box"><span id="hud-val-w" class="coord-val">0</span><span class="coord-lbl">W</span></div>
+                <div class="coord-box"><span id="hud-val-s" class="coord-val">0</span><span class="coord-lbl">S</span></div>
+            </div>
+        </div>
+        
+        <div id="viewport">
+            <div id="pan-container">
+                <img id="zoomImage" src="" alt="" style="display: none;">
+                <!-- Map labels and structural info popups inject dynamically here -->
+            </div>
+
+            <!-- Floating On-Screen Map Zoom Interface HUD Buttons -->
+            <div id="zoom-controls">
+                <button id="zoomInBtn" class="zoom-ctrl-btn" title="Zoom In">+</button>
+                <button id="zoomOutBtn" class="zoom-ctrl-btn" title="Zoom Out">-</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load data asset manifest first -->
+    <script src="maps.js"></script>
+
+    <!-- Load clean separated engine logic script file -->
+    <script src="viewer.js"></script>
+</body>
+</html>
