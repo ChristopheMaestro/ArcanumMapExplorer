@@ -10,6 +10,7 @@ const creatorPanel = document.getElementById('creator-panel');
 const coordDisplay = document.getElementById('coord-display');
 const newLabelText = document.getElementById('new-label-text');
 const newLabelDesc = document.getElementById('new-label-desc');
+const newLabelLinks = document.getElementById('new-label-links');
 const addToPreviewBtn = document.getElementById('add-to-preview-btn');
 const clearPendingBtn = document.getElementById('clear-pending-btn');
 const outputCode = document.getElementById('output-code');
@@ -30,6 +31,8 @@ const chkFollowers = document.getElementById('chk-followers');
 const chkShop = document.getElementById('chk-shop');
 const chkWaypoint = document.getElementById('chk-waypoint');
 const chkKey = document.getElementById('chk-key');
+const chkNpc = document.getElementById('chk-npc');
+const chkChest = document.getElementById('chk-chest');
 const chkOverworldAll = document.getElementById('chk-overworld-all');
 const lblOverworldAll = document.getElementById('lbl-overworld-all');
 
@@ -43,6 +46,7 @@ const hudValZoom = document.getElementById('hud-val-zoom');
 
 const musicToggleBtn = document.getElementById('musicToggleBtn');
 const musicVolumeSlider = document.getElementById('musicVolumeSlider');
+const shareLinkBtn = document.getElementById('shareLinkBtn');
 const bgMusicAudio = new Audio();
 bgMusicAudio.loop = true;
 bgMusicAudio.onerror = () => {
@@ -96,6 +100,8 @@ const filterRegistry = {
     shop: true,
     waypoint: true,
     key: true,
+    npc: true,
+    chest: true,
     overworldAll: true
 };
 
@@ -104,7 +110,9 @@ const CATEGORY_EMOJI = {
     followers: '🛡️',
     shop: '🪙',
     waypoint: '🚪',
-    key: '🔑'
+    key: '🔑',
+    npc: '🧑',
+    chest: '📦'
 };
 
 const CATEGORY_COLORS = {
@@ -112,7 +120,9 @@ const CATEGORY_COLORS = {
     followers: '#5dade2',
     shop: '#2ecc71',
     waypoint: '#e74c3c',
-    key: '#9b59b6'
+    key: '#9b59b6',
+    npc: '#20b2aa',
+    chest: '#8b5a2b'
 };
 
 function getSelectedNewLabelCategories() {
@@ -229,6 +239,37 @@ function updateBackgroundMusic(selectedMap) {
     attemptPlayMusic();
 }
 
+// --- Shareable links ---
+// Reuses the same {x, y, zoom} view format as defaultView/travel arrivals, so a link
+// reconstructs correctly regardless of the recipient's window size.
+
+function getCurrentMapCenter() {
+    const mapCenterX = (viewport.clientWidth / 2 - posX) / scale;
+    const mapCenterY = (viewport.clientHeight / 2 - posY) / scale;
+    return { x: Math.round(mapCenterX), y: Math.round(mapCenterY), zoom: scale };
+}
+
+function parseShareLink() {
+    if (!window.location.hash || window.location.hash.length < 2) return null;
+    const params = new URLSearchParams(window.location.hash.substring(1));
+    const mapName = params.get('map');
+    if (!mapName) return null;
+    const matchIndex = ArcanumMapData.findIndex(m => m.displayName === mapName);
+    if (matchIndex === -1) return null;
+
+    const x = parseFloat(params.get('x'));
+    const y = parseFloat(params.get('y'));
+    const zoom = parseFloat(params.get('zoom'));
+    const view = (!isNaN(x) && !isNaN(y) && !isNaN(zoom)) ? { x, y, zoom } : null;
+    return { index: matchIndex, view };
+}
+
+function flashShareButton(message) {
+    const original = shareLinkBtn.textContent;
+    shareLinkBtn.textContent = message;
+    setTimeout(() => { shareLinkBtn.textContent = original; }, 1500);
+}
+
 function initViewer() {
     if (typeof ArcanumMapData === 'undefined') {
         menuContainer.innerHTML = '<div style="text-align:center;color:#ff6b6b;padding:20px;">Error: maps.js not loaded.</div>';
@@ -257,18 +298,55 @@ function initViewer() {
         saveMusicSettings();
     });
 
+    shareLinkBtn.addEventListener('click', () => {
+        const selectedMap = ArcanumMapData.find(m => m.filename === currentMapFilename);
+        if (!selectedMap) return;
+        const center = getCurrentMapCenter();
+        const params = new URLSearchParams();
+        params.set('map', selectedMap.displayName);
+        params.set('x', center.x);
+        params.set('y', center.y);
+        params.set('zoom', center.zoom.toFixed(3));
+        const baseUrl = window.location.href.split('#')[0];
+        const shareUrl = `${baseUrl}#${params.toString()}`;
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(shareUrl).then(() => {
+                flashShareButton('✓ Copied!');
+            }).catch(() => {
+                window.prompt('Copy this link:', shareUrl);
+            });
+        } else {
+            window.prompt('Copy this link:', shareUrl);
+        }
+    });
+
     if (ArcanumMapData.length > 0) {
         let startIndex = 0;
         let restorePosition = null;
+        let arrivalView = null;
 
-        const saved = loadSavedViewerState();
-        if (saved) {
-            const savedIndex = ArcanumMapData.findIndex(m => m.filename === saved.mapFilename);
-            if (savedIndex !== -1) {
-                startIndex = savedIndex;
-                if (saved.modCategory) activeModCategory = saved.modCategory;
-                if (typeof saved.scale === 'number' && typeof saved.posX === 'number' && typeof saved.posY === 'number') {
-                    restorePosition = { scale: saved.scale, posX: saved.posX, posY: saved.posY };
+        const shared = parseShareLink();
+        if (shared) {
+            startIndex = shared.index;
+            arrivalView = shared.view;
+            const sharedMap = ArcanumMapData[startIndex];
+            if (checkMapCategoryMatch(sharedMap, "arcanum")) activeModCategory = "arcanum";
+            else if (checkMapCategoryMatch(sharedMap, "cerestored")) activeModCategory = "cerestored";
+            else activeModCategory = "modules";
+            // Strip the hash after applying it once, so it's a one-time teleport rather
+            // than permanently overriding your own saved position on every future reload
+            history.replaceState(null, '', window.location.href.split('#')[0]);
+        } else {
+            const saved = loadSavedViewerState();
+            if (saved) {
+                const savedIndex = ArcanumMapData.findIndex(m => m.filename === saved.mapFilename);
+                if (savedIndex !== -1) {
+                    startIndex = savedIndex;
+                    if (saved.modCategory) activeModCategory = saved.modCategory;
+                    if (typeof saved.scale === 'number' && typeof saved.posX === 'number' && typeof saved.posY === 'number') {
+                        restorePosition = { scale: saved.scale, posX: saved.posX, posY: saved.posY };
+                    }
                 }
             }
         }
@@ -279,7 +357,7 @@ function initViewer() {
 
         renderGroupedFileList();
         populateTargetMapOptions();
-        loadImage(startIndex, null, restorePosition);
+        loadImage(startIndex, arrivalView, restorePosition);
     } else {
         menuContainer.innerHTML = '<div style="text-align:center;color:#888;padding:20px;">No maps registered.</div>';
     }
@@ -304,6 +382,8 @@ function initViewer() {
     chkShop.addEventListener('change', () => processFilterChange('shop', chkShop));
     chkWaypoint.addEventListener('change', () => processFilterChange('waypoint', chkWaypoint));
     chkKey.addEventListener('change', () => processFilterChange('key', chkKey));
+    chkNpc.addEventListener('change', () => processFilterChange('npc', chkNpc));
+    chkChest.addEventListener('change', () => processFilterChange('chest', chkChest));
     chkOverworldAll.addEventListener('change', () => processFilterChange('overworldAll', chkOverworldAll));
 
 
@@ -347,6 +427,11 @@ function initViewer() {
             description: labelDescription
         };
 
+        const linkedText = newLabelLinks.value.trim();
+        if (linkedText) {
+            newLabelObj.linkedLabels = linkedText.split(',').map(s => s.trim()).filter(Boolean);
+        }
+
         if (currentMapType !== "overworld") {
             const cats = getSelectedNewLabelCategories();
             if (cats.length === 1) {
@@ -372,6 +457,7 @@ function initViewer() {
         // similar labels is quick - only the free-text fields reset between placements.
         newLabelText.value = '';
         newLabelDesc.value = '';
+        newLabelLinks.value = '';
         newLabelTargetX.value = '';
         newLabelTargetY.value = '';
     });
@@ -532,6 +618,8 @@ function loadImage(index, arrivalViewOverride, restorePosition) {
         chkShop.parentElement.style.display = 'none';
         chkWaypoint.parentElement.style.display = 'none';
         chkKey.parentElement.style.display = 'none';
+        chkNpc.parentElement.style.display = 'none';
+        chkChest.parentElement.style.display = 'none';
         categoryField.style.display = 'none';
         waypointFields.style.display = 'none';
     } else {
@@ -545,6 +633,8 @@ function loadImage(index, arrivalViewOverride, restorePosition) {
         chkShop.parentElement.style.display = 'flex';
         chkWaypoint.parentElement.style.display = 'flex';
         chkKey.parentElement.style.display = 'flex';
+        chkNpc.parentElement.style.display = 'flex';
+        chkChest.parentElement.style.display = 'flex';
         categoryField.style.display = 'flex';
         waypointFields.style.display = getSelectedNewLabelCategories().includes('waypoint') ? 'flex' : 'none';
     }
@@ -632,6 +722,29 @@ function travelToMapByFilename(targetName, arrivalViewOverride) {
     }
 }
 
+function findLabelAnywhereByText(searchText) {
+    for (const map of ArcanumMapData) {
+        if (!map.labels) continue;
+        const found = map.labels.find(l => l.text === searchText);
+        if (found) return { map, label: found };
+    }
+    return null;
+}
+
+function travelToLinkedLabel(searchText) {
+    const result = findLabelAnywhereByText(searchText);
+    if (!result) {
+        alert(`Linked label not found: "${searchText}" - check that a label with this exact text exists somewhere in maps.js.`);
+        return;
+    }
+    const { map, label } = result;
+    // The overworld's own x/y are in the special W/S grid, not raw pixels like every other
+    // map's defaultView/arrival coordinates - rather than mis-convert it, just use that
+    // map's default view when the link happens to land on the world map itself.
+    const viewOverride = (map.typemap === "overworld") ? null : { x: label.x, y: label.y, zoom: 1.5 };
+    travelToMapByFilename(map.displayName, viewOverride);
+}
+
 // Part 4
 
 function clearOldLabels() {
@@ -678,12 +791,47 @@ function renderSingleLabel(label, isPending) {
             const viewData = (typeof label.targetX === 'number') ? `data-x="${label.targetX}" data-y="${label.targetY}" data-z="${label.targetZoom || 1}"` : "";
             travelButtonHtml = `<button class="travel-link-btn" data-target="${label.targetMapFilename}" ${viewData}>🧭 Travel to Location</button>`;
         }
+
+        let linkedButtonsHtml = "";
+        if (Array.isArray(label.linkedLabels) && label.linkedLabels.length > 0) {
+            const blocks = label.linkedLabels.map((entry, i) => {
+                let title, icon, titleColor, descHtml;
+
+                if (typeof entry === 'string') {
+                    // Plain form: links straight to another label, showing THAT label's own info
+                    const found = findLabelAnywhereByText(entry);
+                    const foundCats = found
+                        ? (Array.isArray(found.label.category) ? found.label.category : (found.label.category ? [found.label.category] : []))
+                        : [];
+                    const cat = foundCats[0];
+                    title = entry;
+                    icon = (cat && CATEGORY_EMOJI[cat]) ? CATEGORY_EMOJI[cat] : '🔗';
+                    titleColor = (cat && CATEGORY_COLORS[cat]) ? CATEGORY_COLORS[cat] : '#ffd700';
+                    descHtml = (found && found.label.description) ? `<p class="linked-quest-desc">${found.label.description}</p>` : '';
+                } else {
+                    // Inline form: { questName, questDescription, target, category? } - the quest's own
+                    // name/description live here directly, separate from wherever "target" actually is
+                    const cat = entry.category || 'quest';
+                    title = entry.questName || entry.target || 'Quest';
+                    icon = CATEGORY_EMOJI[cat] || '📜';
+                    titleColor = CATEGORY_COLORS[cat] || '#ffaa00';
+                    descHtml = entry.questDescription ? `<p class="linked-quest-desc">${entry.questDescription}</p>` : '';
+                }
+
+                return `<div class="linked-quest-block">
+                    <div class="linked-quest-title" style="color:${titleColor};">${icon} ${title}</div>
+                    ${descHtml}
+                    <button class="travel-link-btn linked-label-btn" data-link-index="${i}">🧭 Go to Location</button>
+                </div>`;
+            }).join('');
+            linkedButtonsHtml = `<div class="popup-links-heading">Leads to:</div>${blocks}`;
+        }
         
-        popup.innerHTML = `<span class="close-btn">&times;</span><h4>${label.text}</h4><p style="margin:0;">${descText}</p>${travelButtonHtml}`;
+        popup.innerHTML = `<span class="close-btn">&times;</span><h4>${label.text}</h4><p style="margin:0;">${descText}</p>${travelButtonHtml}${linkedButtonsHtml}`;
         popup.querySelector('.close-btn').addEventListener('click', (el) => { el.stopPropagation(); popup.remove(); });
         
         if (label.targetMapFilename) {
-            popup.querySelector('.travel-link-btn').addEventListener('click', (el) => {
+            popup.querySelector('.travel-link-btn:not(.linked-label-btn)').addEventListener('click', (el) => {
                 el.stopPropagation();
                 let viewOverride = null;
                 if (typeof label.targetX === 'number') {
@@ -692,6 +840,18 @@ function renderSingleLabel(label, isPending) {
                 travelToMapByFilename(label.targetMapFilename, viewOverride);
             });
         }
+
+        if (Array.isArray(label.linkedLabels)) {
+            popup.querySelectorAll('.linked-label-btn').forEach((btn, i) => {
+                btn.addEventListener('click', (el) => {
+                    el.stopPropagation();
+                    const entry = label.linkedLabels[i];
+                    const targetText = (typeof entry === 'string') ? entry : entry.target;
+                    if (targetText) travelToLinkedLabel(targetText);
+                });
+            });
+        }
+
         container.appendChild(popup);
     };
 
@@ -858,6 +1018,18 @@ function buildLabelCodeLine(labelData) {
     if (labelData.targetMapFilename) parts.push(`targetMapFilename: "${labelData.targetMapFilename}"`);
     if (typeof labelData.targetX === 'number' && !isNaN(labelData.targetX)) parts.push(`targetX: ${labelData.targetX}`);
     if (typeof labelData.targetY === 'number' && !isNaN(labelData.targetY)) parts.push(`targetY: ${labelData.targetY}`);
+    if (Array.isArray(labelData.linkedLabels) && labelData.linkedLabels.length > 0) {
+        const serializedEntries = labelData.linkedLabels.map(entry => {
+            if (typeof entry === 'string') return `"${entry}"`;
+            const objParts = [];
+            if (entry.questName) objParts.push(`questName: "${entry.questName}"`);
+            if (entry.questDescription) objParts.push(`questDescription: "${entry.questDescription}"`);
+            if (entry.target) objParts.push(`target: "${entry.target}"`);
+            if (entry.category) objParts.push(`category: "${entry.category}"`);
+            return `{ ${objParts.join(', ')} }`;
+        });
+        parts.push(`linkedLabels: [${serializedEntries.join(', ')}]`);
+    }
     return `{ ${parts.join(', ')} },`;
 }
 

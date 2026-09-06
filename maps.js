@@ -27,8 +27,11 @@ const ArcanumMapData = [
       { x: 1452, y: 1303, text: "Arbalah's House", description: "Arbalah's House.", targetMapFilename: "Arbalah's House"},
       { x: 1586, y: 1816, text: "A mysterious location", description: "Discovered on the wall painting in the Mushroom." },
       { x: 1754, y: 1479, text: "Ancient Ruins", description: "Ancient ruins.", targetMapFilename: "Ancient Ruins" },
+      { x: 776, y: 919, text: "Ancient Temple", description: "A temple rumored to hold treasures untold.", targetMapFilename: "Ancient Temple"},
       { x: 1627, y: 1635, text: "Bolo’s Altar", description: "A weathered stone altar.", targetMapFilename:"Bolo's Altar" },
       { x: 1453, y: 1289, text: "Crash Site", description: "The remains of the crashed blimp.", targetMapFilename: "Crash Site"},
+      { x: 711, y: 1022, text: "Elven Ruins", description: "A place that may hold untold elven riches.", targetMapFilename: "Elven Ruins"},
+      { x: 830, y: 1036, text: "Forbidden Pit", description: "Dangerous looking pit filled with skeletons and widowers.", targetMapFilename: "Forbidden Pit" },
       { x: 923, y: 1689, text: "Half Ogre Island", description: "The rumored location of the secret breeding laboratory.", targetMapFilename: "Half Ogre Island"},
       { x: 882, y: 423, text: "Kerlin’s Altar", description: "An ancient, golden altar.", targetMapFilename:"Kerlin’s Altar"},
       { x: 720, y: 1886, text: "Land Bridge", description: "Beginning of the trail leading to the god of Thanatos.", targetMapFilename: "Land Bridge", targetX: 1435, targetY: 735},
@@ -37,29 +40,31 @@ const ArcanumMapData = [
       { x: 1514, y: 1184, text: "Secret Entrance To The Iron Clan", description: "The entrance to the legendary dwarven clan.", targetMapFilename: "Secret Entrance to the Iron Clan"},
       { x: 346, y: 827, text: "Shades Beach", description: "A place reputed to be full of strange objects.", targetMapFilename: "Shades Beach"},
       { x: 1450, y: 1325, text: "Simon Fahrkus' Shack", description: "Simon Fahrkus' Shack.", targetMapFilename: "Simon Fahrkus' Shack"},
+      { x: 1260, y: 479, text: "Small Camp", description: "A small camp is visible from a distance.", targetMapFilename: "Small Camp" },
+      { x: 617, y: 527, text: "Strange Pond", description: "An interesting pond in the middle of nowhere.", targetMapFilename: "Strange Pond"},
       { x: 1308, y: 754, text: "The Black Mountain Mines", description: "The abandoned home of the Black Mountain Clan.", targetMapFilename: "The Black Mountain Mines"},
       { x: 1629, y: 1205, text: "The Broken Cathedral", description: "A place of old ruins.", targetMapFilename: "The Broken Cathedral"},
       { x: 1613, y: 1413, text: "The Cold Place", description: "An ominous place.", targetMapFilename: "The Cold Place"},
       { x: 768, y: 838, text: "The Lair of Bellerogrim", description: "A cave where they discovered Arcanum’s last Dragon.", targetMapFilename: "The Lair of Bellerogrim"},
       { x: 642, y: 1765, text: "The Lair Of The Bogaroth", description: "The reputed lair of the monster that slaughtered the entire Ashlag tribe.", targetMapFilename: "The Lair of the Bogaroth"},
       { x: 1695, y: 1318, text: "The Old Lagoon", description: "A remote lagoon.", targetMapFilename: "The Old Lagoon"},
+      { x: 1076, y: 514, text: "The Bog", description: "An evil looking place.", targetMapFilename: "The Bog"},
+      { x: 1364, y: 936, text: "The Pit Of Fires", description: "The location of the Blade Of Xerxes.", targetMapFilename: "The Pit of Fires"},
       { x: 1320, y: 827, text: "The Place Of Lost Voices", description: "A place shown to you by the map in the Iron Clan Chest.", targetMapFilename: "The Place of Lost Voices" },
       { x: 509, y: 1113, text: "The Williamson Homestead", description: "A run-down shanty.", targetMapFilename: "TheWilliamsonHomestead" },
       { x: 1214, y: 1137, text: "Torg’s Altar", description: "An old, stone altar.", targetMapFilename: "Torg'sAltar"},
       { x: 1419, y: 1099, text: "Torin Quarry", description: "An ancient dwarven stone quarry.", targetMapFilename: "Torin Quarry"},
       { x: 745, y: 1700, text: "Village Of the Ashlag Tribe", description: "The home of a primitive tribe that worships a primate deity.", targetMapFilename: "Village of the Ashlag Tribe"},
       { x: 307, y: 587, text: "Vendigroth Ruins", description: "The remnants of an ancient city.", targetMapFilename: "Vendigroth Ruins" },
+      { x: 1230, y: 981, text: "Vollinger’s Meeting Place", description: "Vollinger’s Meeting Place.", targetMapFilename: "Vollinger’s Meeting Place"},
 
       { x: 1182, y: 1583, text: "A Lair Of Gyr Dolours", description: "The last known location of the tormented Lady Druella." },
       { x: 1367, y: 1582, text: "Ancient Maze", description: "A mysterious old maze." },
       { x: 498, y: 892, text: "Ancient Shipwreck", description: "The remains of an ancient pirate ship." },
-      { x: 776, y: 919, text: "Ancient Temple", description: "A temple rumored to hold treasures untold." },
       { x: 629, y: 1593, text: "Boat Landing On Thanatos", description: "Landing for the Isle of Death." },
       { x: 346, y: 679, text: "Dark Elf Camp", description: "The dark elves' base camp near the ruins of Vendigroth." },
       { x: 993, y: 790, text: "Dungeon Of The Dragon Pool", description: "Source of Dragon’s Blood for reviving Torian Kel." },
-      { x: 711, y: 1022, text: "Elven Ruins", description: "A place that may hold untold elven riches." },
       { x: 1627, y: 564, text: "Falcon’s Ache", description: "Elven holy ground, at the edge of the Glimmering Forest." },
-      { x: 830, y: 1036, text: "Forbidden Pit", description: "Dangerous looking pit filled with skeletons and widowers." },
       { x: 466, y: 741, text: "Gateway To The Wastes", description: "A bridge leading into the Vendigroth Wastes." },
       { x: 1500, y: 1442, text: "Gorgoth Pass", description: "A long forgotten pass joining the kingdoms of Dernholm and Caladon." },
       { x: 1288, y: 713, text: "Hardin’s Pass", description: "A treacherous snowy pass leading to the Glimmering Forest." },
@@ -70,24 +75,19 @@ const ArcanumMapData = [
       { x: 474, y: 694, text: "Mysterious Ruins Of the Wastes", description: "A location shown to you by Weldo Rubin." },
       { x: 1025, y: 1333, text: "Ruins of Szabo", description: "Some ancient ruins." },
       { x: 1320, y: 179, text: "Secret Village", description: "You hear high pitched rejoicing." },
-      { x: 1260, y: 479, text: "Small Camp", description: "A small camp is visible from a distance." },
       { x: 1595, y: 882, text: "Small Pond", description: "You hear shouts and whip-cracking." },
       { x: 1343, y: 887, text: "Stonecutter Clan", description: "The home of the Stonecutter Clan." },
       { x: 1373, y: 705, text: "Strange Ceremony", description: "Strange chanting can be heard nearby...." },
-      { x: 617, y: 527, text: "Strange Pond", description: "An interesting pond in the middle of nowhere." },
       { x: 682, y: 1339, text: "Stringy Pete’s Cove", description: "A haunted cove." },
       { x: 808, y: 1341, text: "Stringy Pete’s Treasure", description: "The final resting place of the infamous pirate’s bounty." },
       { x: 1178, y: 289, text: "The Bangellian Deeps", description: "The resting place of the Bangellian Scourge." },
-      { x: 1076, y: 514, text: "The Bog", description: "An evil looking place." },
       { x: 1386, y: 640, text: "The Castle S’nel N’fa", description: "A trap filled ruin rumored to contain the staff of K’an Tau." },
       { x: 320, y: 838, text: "The Home Of Maximillan", description: "A strange old man on the Isle of Despair." },
-      { x: 1364, y: 936, text: "The Pit Of Fires", description: "The location of the Blade Of Xerxes." },
       { x: 1206, y: 276, text: "The Poachers Camp", description: "The camp of some Bedokaan poachers." },
       { x: 749, y: 249, text: "The Ruby Glade", description: "An eerie, ancient place." },
       { x: 268, y: 824, text: "The Women’s Camp", description: "A small village comprised solely of nomadic women." },
       { x: 1529, y: 1534, text: "Thieves Cave", description: "Thieves Cave." },
       { x: 1046, y: 693, text: "Uncharted Cave", description: "No one knows what mysteries may lie in this unexplored cave." },
-      { x: 1230, y: 981, text: "Vollinger’s Meeting Place", description: "Vollinger’s Meeting Place." },
       { x: 1230, y: 1530, text: "Wolf Cave", description: "Wolf Cave." }
     ]
   },
@@ -221,8 +221,8 @@ const ArcanumMapData = [
     music: "music/towns.flac",
     defaultView: { x: 5689, y: 3230, zoom: 1 },
     labels: [
-      { x: 5262, y: 2990, text: "Ristezze Imported Goods", description: "", category: "shop" },
-      { x: 4975, y: 3178, text: "Gurloes' Metalworkings", description: "Blacksmith / Find Ore / Key to Lloyd room", category:  ["shop", "quest", "key"]},
+      { x: 5262, y: 2990, text: "Ristezze Imported Goods", description: "Key to Ristezze's Bedroom", category: ["shop", "quest", "key"] },
+      { x: 4975, y: 3178, text: "Gurloes' Metalworkings", description: "Blacksmith / Find Ore / Key to Lloyd Gurloes' backroom", category:  ["shop", "quest", "key"]},
       { x: 4575, y: 3237, text: "Slim Pickens", description: "", category: "shop" },
       { x: 4561, y: 2421, text: "Herbalist Gaylin", description: "", category: "shop" },
       { x: 7136, y: 2559, text: "Gypsy", description: "", category: "shop" },
@@ -238,6 +238,7 @@ const ArcanumMapData = [
     displayName: "Stillwater",
     modGroup: "Arcanum",
     typemap: "local",
+    music: "music/villages.flac",
     defaultView: { x: 2816, y: 2407, zoom: 1 },
     labels: [
       { x: 1293, y: 2938, text: "Find the Stolen Idol (I)", description: "", category: "quest" },
@@ -245,9 +246,23 @@ const ArcanumMapData = [
       { x: 721, y: 2002, text: "Rescue Cyrus (II)", description: "", category: "quest" },
       { x: 1748, y: 549, text: "Rescue Cyrus (III)", description: "", category: "quest" },
       { x: 2389, y: 3537, text: "Elder Joachim's paper trail (III)", description: "", category: "quest" },
-      { x: 2719, y: 1753, text: "Capturing the Stillwater Giant (I)", description: "", category: "quest" },
-      { x: 4249, y: 1785, text: "Capturing the Stillwater Giant (II)", description: "", category: "quest" },
-      { x: 2271, y: 2586, text: "Finding the Amulet of N'Tala (II)", description: "", category: "quest" },
+      { x: 2271, y: 2586, text: "Myrth", category: ["npc", "quest"],
+        linkedLabels: [
+          { questName: "The Stillwater Giant (Part I)",
+            questDescription: "Myrth, an elf residing in Stillwater, instructs you to perform a rite of passage, killing a Stillwater Giant and bringing its pelt to him. He directs you to Stanley Xavier Hippington, living directly North from his house.",
+            target: "Stanley Xavier Hippington" },
+          { questName: "Find the Amulet of N'Tala (Part II)",
+            questDescription: "The amulet can be obtained from Myrth either by stealing it or by taking it from his corpse after killing him.",
+            target: "Sister Elowen" }
+        ]
+      },
+      { x: 2719, y: 1753, text: "Stanley Xavier Hippington", description: "", category: ["npc", "quest"],
+        linkedLabels: [
+          { questName: "The Stillwater Giant (Part II)",
+            questDescription: "Upon talking to Stanley Xavier Hippington, a cryptozoologist, he gives you a Stillwater trap and a bottle of Stillwater Giant scent to use to capture a Stillwater Giant, residing in a cave nearby.",
+            target: "The Stillwater Giant (Part III)" },
+          ]
+      },
       { x: 2627, y: 2829, text: "Retrieving the Ruby (I)", description: "", category: "quest" },
 
       { x: 1978, y: 3831, text: "General Goods", description: "", category: "shop" },
@@ -282,6 +297,7 @@ const ArcanumMapData = [
       { x: 3225, y: 2223, text: "Perriman Smythe", description: "", category: "followers" },
       { x: 2463, y: 2798, text: "Sebastian", description: "", category: "followers" },
 
+      { x: 4162, y: 1649, text: "The Crystal Ball (Part I)", description: "", category: "quest", linkedLabels: ["The Crystal Ball (Part II)"] },
       { x: 4340, y: 2454, text: "The Crystal Ball (Part II)", description: "Madame Toussaude wants you to deliver her crystal ball to Delores Beston.", category: "quest" },
       { x: 4668, y: 2647, text: "Rid Mr. Plough's Warehouses of Rats", description: "Mr. Plough wants you to rid his warehouses, near the docks in Tarant, of rats.", category: "quest" },
     
@@ -367,6 +383,17 @@ const ArcanumMapData = [
     typemap: "local",
     // music:
     defaultView: { x: 655, y: 493, zoom: 1 },
+    labels: [
+      { x: 835, y: 390, text: "Mystic Chest", description: "", category: ["chest"] },
+    ],
+  },
+  {
+    filename: "ArcanumBase/AncientTemple.png",
+    displayName: "Ancient Temple",
+    modGroup: "Other locations",
+    typemap: "local",
+    // music:
+    defaultView: { x: 1026, y: 849, zoom: 1 },
     labels: [],
   },
   {
@@ -392,7 +419,28 @@ const ArcanumMapData = [
       { x: 2872, y: 1312, text: "Letter", description: "", category: "quest" },
       { x: 3239, y: 894, text: "Crash Site - Cave", description: "", category: "waypoint", targetMapFilename: "Crash Site - Cave" },
       { x: 2165, y: 1323, text: "Virgil", description: "", category: "followers" },
+      { x: 1309, y: 1733, text: "Magick Chest", description: "", category: "chest" },
     ],
+  },
+  {
+    filename: "ArcanumBase/ElvenRuins.png",
+    displayName: "Elven Ruins",
+    modGroup: "Other locations",
+    typemap: "local",
+    //music: 
+    defaultView: { x: 837, y: 611, zoom: 1 },
+    //background: "#000000",
+    labels: [],
+  },
+  {
+    filename: "ArcanumBase/ForbiddenPit.png",
+    displayName: "Forbidden Pit",
+    modGroup: "Other locations",
+    typemap: "local",
+    //music: 
+    defaultView: { x: 1076, y: 399, zoom: 1 },
+    //background: "#000000",
+    labels: [],
   },
   {
     filename: "ArcanumBase/HalfOgreIsland.jpg",
@@ -464,7 +512,30 @@ const ArcanumMapData = [
     labels: [
       { x: 828, y: 498, text: "Quest: The Priest and the Bandit (Part III)", description: "", category: "quest" },
     ],
-  }, 
+  },
+  {
+    filename: "ArcanumBase/SmallCamp.png",
+    displayName: "Small Camp",
+    modGroup: "Other locations",
+    typemap: "local",
+    // music: "music/wilderness.flac",
+    defaultView: { x: 816, y: 711, zoom: 1 },
+    // background: "#000000",
+    labels: [
+      { x: 1170, y: 246, text: "Arcane Chest", description: "", category: "chest" },
+    ],
+  },
+  {
+    filename: "ArcanumBase/StrangePond.jpg",
+    displayName: "Strange Pond",
+    modGroup: "Other locations",
+    typemap: "local",
+    //music: No music here.
+    defaultView: { x: 2532, y: 562, zoom: 1 },
+    labels: [
+      { x: 1501, y: 1146, text: "Arcane Chest", description: "Always contains a Ring of Shadows", category: "chest" },
+    ],
+  },
   {
     filename: "ArcanumBase/Black.Mountain.Mines.png",
     displayName: "The Black Mountain Mines",
@@ -474,12 +545,25 @@ const ArcanumMapData = [
     labels: [],
   },
   {
+    filename: "ArcanumBase/TheBog.jpg",
+    displayName: "The Bog",
+    modGroup: "Other locations",
+    typemap: "local",
+    //music: No music here.
+    defaultView: { x: 1396, y: 1442, zoom: 1 },
+    labels: [
+      { x: 1563, y: 789, text: "Wood Chest", description: "Contains an Arcane Great Sword and an Axe of Creeping Death.", category: "chest" },
+    ],
+  },
+  {
     filename: "ArcanumBase/TheBrokenCathedral.png",
     displayName: "The Broken Cathedral",
     modGroup: "Other locations",
     typemap: "local",
     defaultView: { x: 868, y: 598, zoom: 1 },
-    labels: [],
+    labels: [
+      { x: 1061, y: 524, text: "Arcane Chest", description: "", category: "chest" },
+    ],
   },
   {
     filename: "ArcanumBase/TheColdPlace.jpg",
@@ -514,6 +598,15 @@ const ArcanumMapData = [
     // music: no music here
     typemap: "local",
     defaultView: { x: 1917, y: 1048, zoom: 1 },
+    labels: [],
+  },
+    {
+    filename: "ArcanumBase/ThePitOfFires.png",
+    displayName: "The Pit of Fires",
+    modGroup: "Other locations",
+    music: "music/villages.flac",
+    typemap: "local",
+    defaultView: { x: 1098, y: 606, zoom: 1 },
     labels: [],
   },
   {
@@ -578,6 +671,15 @@ const ArcanumMapData = [
     labels: []
   },
 */
+  {
+    filename: "ArcanumBase/Vollinger'sMeetingPlace.png",
+    displayName: "Vollinger’s Meeting Place",
+    modGroup: "Other locations",
+    typemap: "local",
+    // music: "music/wilderness.flac", No music here it seems
+    defaultView: { x: 852, y: 617, zoom: 1 },
+    labels: [],
+  },
 
 /// SUBMAPS
 
@@ -713,6 +815,7 @@ const ArcanumMapData = [
     parentFilename: "ArcanumBase/Stillwater.jpg",
     labels: [
       { x: 432, y: 719, text: "Stillwater", description: "", category: "waypoint", targetMapFilename: "Stillwater", targetX: 4211, targetY: 1759, targetZoom: 1.0},
+      { x: 1264, y: 483, text: "The Stillwater Giant (Part III)", description: "", category: "quest", linkedLabels: ["The Stillwater Giant (Part IV)"] },
     ]
   },
   {

@@ -38,6 +38,11 @@
             <label>Description Note</label>
             <textarea id="new-label-desc" placeholder="Historical information..."></textarea>
 
+            <div class="field-row">
+                <label>Linked Label(s) - optional</label>
+                <input type="text" id="new-label-links" placeholder="Exact text of other label(s), comma-separated">
+            </div>
+
             <div id="category-field" class="field-row">
                 <label>Category (pick one or more)</label>
                 <div class="category-checkboxes">
@@ -46,6 +51,8 @@
                     <label><input type="checkbox" class="new-label-cat-chk" value="shop"> 🪙 Shop</label>
                     <label><input type="checkbox" class="new-label-cat-chk" value="waypoint"> 🚪 Waypoint</label>
                     <label><input type="checkbox" class="new-label-cat-chk" value="key"> 🔑 Key</label>
+                    <label><input type="checkbox" class="new-label-cat-chk" value="npc"> 🧑 NPC</label>
+                    <label><input type="checkbox" class="new-label-cat-chk" value="chest"> 📦 Chest</label>
                 </div>
             </div>
 
@@ -87,6 +94,8 @@
                     <label><input type="checkbox" id="chk-shop" checked> Shop</label>
                     <label><input type="checkbox" id="chk-waypoint" checked> Waypoint</label>
                     <label><input type="checkbox" id="chk-key" checked> Key</label>
+                    <label><input type="checkbox" id="chk-npc" checked> NPC</label>
+                    <label><input type="checkbox" id="chk-chest" checked> Chest</label>
                     <label id="lbl-overworld-all" style="display:none;"><input type="checkbox" id="chk-overworld-all" checked> World Locations</label>
                 </div>
             </div>
@@ -95,6 +104,8 @@
             <button id="toggleCreatorModeBtn" class="toggle-btn">Label Editor</button>
             <!-- Repositioned Hot-Reload button asset pinned to top utility navigation deck bar -->
             <button id="topBarReloadBtn" class="toggle-btn" onclick="hotReloadMapDatabase()" title="Reload maps.js dataset without resetting your page zoom">↻ Reload Data</button>
+            <!-- Copies a link that reopens this exact map, spot, and zoom for whoever you send it to -->
+            <button id="shareLinkBtn" class="toggle-btn" title="Copy a link to this exact map view">🔗 Share View</button>
 
             <!-- Background music control - plays whatever track the current map's "music" field points to -->
             <div class="music-control">

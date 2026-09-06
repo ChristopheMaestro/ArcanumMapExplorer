@@ -336,6 +336,51 @@ img {
     color: #211c14;
 }
 
+/* Tighter stacking when several travel/linked buttons appear one after another */
+.travel-link-btn + .travel-link-btn {
+    margin-top: 6px;
+}
+
+/* Small section label above a list of linked labels (e.g. quests an NPC offers) */
+.popup-links-heading {
+    margin: 12px 0 6px 0;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #b39449;
+    font-family: "Cinzel", "Georgia", serif;
+}
+
+/* One block per linked label: its name, its description (if any), then a button to it */
+.linked-quest-block {
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px dashed #4a3e2e;
+}
+
+.linked-quest-block:first-of-type {
+    border-top: none;
+    padding-top: 0;
+    margin-top: 6px;
+}
+
+.linked-quest-title {
+    font-weight: bold;
+    font-size: 13px;
+    margin-bottom: 4px;
+}
+
+.linked-quest-desc {
+    margin: 0 0 6px 0;
+    font-size: 12px;
+    color: #c9bd9a;
+    line-height: 1.4;
+}
+
+.linked-quest-block .travel-link-btn {
+    margin-top: 4px;
+}
+
 #creator-panel {
     background-color: #17130e;
     border-top: 2px solid #4a3e2e;
@@ -643,6 +688,30 @@ img {
 .map-label.cat-key:hover {
     background-color: #9b59b6;
     color: #1a1024;
+}
+
+/* 🧑 NPC Category Styling Card Profile */
+.map-label.cat-npc {
+    border-color: #20b2aa; /* Teal outline for characters/dialogue */
+    background-color: rgba(18, 34, 33, 0.95);
+    color: #a8e8e2; /* Pale teal lettering tint */
+    --label-color: #20b2aa;
+}
+.map-label.cat-npc:hover {
+    background-color: #20b2aa;
+    color: #0d1e1c;
+}
+
+/* 📦 Chest Category Styling Card Profile */
+.map-label.cat-chest {
+    border-color: #8b5a2b; /* Weathered wood/bronze outline, fitting for a treasure chest */
+    background-color: rgba(34, 25, 16, 0.95);
+    color: #d9a86c; /* Warm tan lettering tint */
+    --label-color: #8b5a2b;
+}
+.map-label.cat-chest:hover {
+    background-color: #8b5a2b;
+    color: #1c1309;
 }
 
 /* Sidebar High-Level Mod Category Selection Tabs */
