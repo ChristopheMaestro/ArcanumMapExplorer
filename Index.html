@@ -53,6 +53,7 @@
                     <label><input type="checkbox" class="new-label-cat-chk" value="key"> 🔑 Key</label>
                     <label><input type="checkbox" class="new-label-cat-chk" value="npc"> 🧑 NPC</label>
                     <label><input type="checkbox" class="new-label-cat-chk" value="chest"> 📦 Chest</label>
+                    <label><input type="checkbox" class="new-label-cat-chk" value="information"> ℹ️ Information</label>
                 </div>
             </div>
 
@@ -96,6 +97,7 @@
                     <label><input type="checkbox" id="chk-key" checked> Key</label>
                     <label><input type="checkbox" id="chk-npc" checked> NPC</label>
                     <label><input type="checkbox" id="chk-chest" checked> Chest</label>
+                    <label><input type="checkbox" id="chk-information" checked> Information</label>
                     <label id="lbl-overworld-all" style="display:none;"><input type="checkbox" id="chk-overworld-all" checked> World Locations</label>
                 </div>
             </div>
@@ -106,6 +108,8 @@
             <button id="topBarReloadBtn" class="toggle-btn" onclick="hotReloadMapDatabase()" title="Reload maps.js dataset without resetting your page zoom">↻ Reload Data</button>
             <!-- Copies a link that reopens this exact map, spot, and zoom for whoever you send it to -->
             <button id="shareLinkBtn" class="toggle-btn" title="Copy a link to this exact map view">🔗 Share View</button>
+            <!-- Opens the right-side panel listing every quest on the current map, grouped by NPC -->
+            <button id="questListBtn" class="toggle-btn" title="Show all quests on this map, grouped by NPC">📋 Quests</button>
 
             <!-- Background music control - plays whatever track the current map's "music" field points to -->
             <div class="music-control">
@@ -136,6 +140,30 @@
             </div>
         </div>
     </div>
+
+    <!-- Right-side slide-out panel listing all quests on the current map, grouped by NPC -->
+    <div id="quest-list-panel">
+        <div class="quest-panel-header">
+            <h3>Quests — <span id="quest-panel-mapname"></span></h3>
+            <span id="quest-panel-close" class="quest-panel-close-btn">&times;</span>
+        </div>
+        <div id="quest-panel-content"></div>
+    </div>
+
+    <!-- Catches a maps.js syntax/parse error before it happens - must be registered
+         before maps.js loads, since viewer.js (which reports it) loads after maps.js -->
+    <script>
+        window.__mapsJsLoadError = null;
+        window.addEventListener('error', function(e) {
+            if (e.filename && e.filename.indexOf('maps.js') !== -1) {
+                window.__mapsJsLoadError = {
+                    message: e.message,
+                    line: e.lineno,
+                    column: e.colno
+                };
+            }
+        });
+    </script>
 
     <!-- Load data asset manifest first -->
     <script src="maps.js"></script>

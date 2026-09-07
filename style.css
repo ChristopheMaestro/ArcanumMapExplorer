@@ -714,6 +714,18 @@ img {
     color: #1c1309;
 }
 
+/* ℹ️ Information Category Styling Card Profile */
+.map-label.cat-information {
+    border-color: #95a5a6; /* Neutral silver-grey outline, fitting for a plain notice/sign */
+    background-color: rgba(28, 30, 31, 0.95);
+    color: #dfe4e5; /* Pale grey lettering tint */
+    --label-color: #95a5a6;
+}
+.map-label.cat-information:hover {
+    background-color: #95a5a6;
+    color: #1a1c1c;
+}
+
 /* Sidebar High-Level Mod Category Selection Tabs */
 .mod-filter-nav {
     display: flex;
@@ -760,4 +772,127 @@ img {
     margin: 0 auto 12px auto; /* Centers horizontally and adds a crisp 12px bottom gap */
     user-select: none;
     -webkit-user-drag: none;
+}
+
+/* Right-side slide-out Quest List panel */
+#quest-list-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 320px;
+    height: 100vh;
+    background-color: #17130e;
+    border-left: 2px solid #4a3e2e;
+    box-shadow: -4px 0 16px rgba(0,0,0,0.5);
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.25s ease;
+}
+
+#quest-list-panel.open {
+    transform: translateX(0);
+}
+
+.quest-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 2px solid #4a3e2e;
+    flex-shrink: 0;
+}
+
+.quest-panel-header h3 {
+    margin: 0;
+    color: #ffd700;
+    font-family: "Cinzel", "Georgia", serif;
+    font-size: 15px;
+    font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.quest-panel-close-btn {
+    cursor: pointer;
+    color: #b39449;
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 1;
+    flex-shrink: 0;
+    margin-left: 10px;
+}
+
+.quest-panel-close-btn:hover {
+    color: #ffd700;
+}
+
+#quest-panel-content {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 15px;
+    font-family: "Georgia", serif;
+}
+
+.quest-panel-npc-group {
+    margin-bottom: 20px;
+}
+
+.quest-panel-npc-name {
+    font-weight: bold;
+    color: #20b2aa;
+    font-size: 14px;
+    margin-bottom: 8px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #332b20;
+    cursor: pointer;
+    transition: color 0.15s;
+}
+
+.quest-panel-npc-name:hover {
+    color: #7be0d8;
+}
+
+.quest-panel-quest-item {
+    padding: 6px 0 6px 10px;
+    border-left: 2px solid #4a3e2e;
+    margin-bottom: 6px;
+    cursor: pointer;
+    transition: border-color 0.15s, background-color 0.15s;
+}
+
+.quest-panel-quest-item:hover {
+    border-left-color: #ffaa00;
+    background-color: rgba(255, 170, 0, 0.06);
+}
+
+.quest-panel-quest-title {
+    color: #ffdf80;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.quest-panel-quest-desc {
+    color: #9c8f70;
+    font-size: 11px;
+    margin-top: 2px;
+    line-height: 1.4;
+}
+
+.quest-panel-section-label {
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 10px;
+    color: #b39449;
+    margin: 4px 0 10px 0;
+}
+
+.quest-panel-empty {
+    color: #665c45;
+    font-style: italic;
+    text-align: center;
+    padding: 30px 10px;
+    font-size: 13px;
 }

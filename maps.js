@@ -54,6 +54,7 @@ const ArcanumMapData = [
       { x: 509, y: 1113, text: "The Williamson Homestead", description: "A run-down shanty.", targetMapFilename: "TheWilliamsonHomestead" },
       { x: 1214, y: 1137, text: "Torg’s Altar", description: "An old, stone altar.", targetMapFilename: "Torg'sAltar"},
       { x: 1419, y: 1099, text: "Torin Quarry", description: "An ancient dwarven stone quarry.", targetMapFilename: "Torin Quarry"},
+      { x: 1046, y: 693, text: "Uncharted Cave", description: "No one knows what mysteries may lie in this unexplored cave.", targetMapFilename: "Uncharted Cave"},
       { x: 745, y: 1700, text: "Village Of the Ashlag Tribe", description: "The home of a primitive tribe that worships a primate deity.", targetMapFilename: "Village of the Ashlag Tribe"},
       { x: 307, y: 587, text: "Vendigroth Ruins", description: "The remnants of an ancient city.", targetMapFilename: "Vendigroth Ruins" },
       { x: 1230, y: 981, text: "Vollinger’s Meeting Place", description: "Vollinger’s Meeting Place.", targetMapFilename: "Vollinger’s Meeting Place"},
@@ -87,7 +88,6 @@ const ArcanumMapData = [
       { x: 749, y: 249, text: "The Ruby Glade", description: "An eerie, ancient place." },
       { x: 268, y: 824, text: "The Women’s Camp", description: "A small village comprised solely of nomadic women." },
       { x: 1529, y: 1534, text: "Thieves Cave", description: "Thieves Cave." },
-      { x: 1046, y: 693, text: "Uncharted Cave", description: "No one knows what mysteries may lie in this unexplored cave." },
       { x: 1230, y: 1530, text: "Wolf Cave", description: "Wolf Cave." }
     ]
   },
@@ -142,9 +142,9 @@ const ArcanumMapData = [
       { x: 5663, y: 2388, text: "Worthless Mutt (Dog)", description: "", category: "followers" },
       { x: 2947, y: 3240, text: "Geoffrey Tarellond-Ashe", description: "", category: "followers" },
 
-      { x: 2041, y: 2737, text: "Crematorium (Level I)", description: "", category: "waypoint" },
-      { x: 3707, y: 1325, text: "Haunted Castle", description: "", category: "waypoint" },
-      { x: 3277, y: 2500, text: "Scienticians Underground", description: "", category: "waypoint" },
+      { x: 2041, y: 2737, text: "Ashbury Crematorium - Level 1", description: "", category: "waypoint", targetMapFilename: "Ashbury Crematorium - Level 1" },
+      { x: 3707, y: 1325, text: "Ashbury Castle - Level 1", description: "", category: "waypoint", targetMapFilename: "Ashbury Castle - Level 1" },
+      { x: 3277, y: 2500, text: "Scienticians Underground", description: "", category: "waypoint", targetMapFilename: "Scienticians Underground" },
 
     ]
   },
@@ -165,13 +165,20 @@ const ArcanumMapData = [
     typemap: "local",
     defaultView: { x: 3596, y: 3305, zoom: 1 },
     labels: [
-      { x: 4401, y: 1297, text: "Caladon - Panarii Temple", description: "", category: "waypoint" },
-      { x: 6613, y: 1768, text: "Caladon Castle", description: "", category: "waypoint" },
-      { x: 6870, y: 2460, text: "Caladon Guardhouse Basement", description: "", category: "waypoint" },
+      { x: 4401, y: 1297, text: "Caladon - Panarii Temple", description: "", category: "waypoint", targetMapFilename: "Caladon - Panarii Temple Level 1"},
+      { x: 6613, y: 1768, text: "Caladon Castle", description: "", category: "waypoint", targetMapFilename: "Caladon - Castle Main Floor"},
+      { x: 6870, y: 2460, text: "Caladon Guardhouse Basement", description: "", category: "waypoint", targetMapFilename: "Caladon - Guardhouse Basement"},
       { x: 7529, y: 1837, text: "Caladon High Security Prison", description: "", category: "waypoint" },
-      { x: 5883, y: 1959, text: "Caladon Mafia Underground", description: "", category: "waypoint" },
-      { x: 5390, y: 1723, text: "Caladon Sanders Basement", description: "", category: "waypoint" },
+      { x: 5883, y: 1959, text: "Caladon Mafia Underground", description: "", category: "waypoint", targetMapFilename: "Caladon - Mafia Underground"},
+      { x: 5390, y: 1723, text: "Caladon Sanders Basement", description: "", category: "waypoint", targetMapFilename: "Caladon - Sanders Basement"},
       { x: 6879, y: 782, text: "Caladon Trap Disarm Dungeon", description: "", category: "waypoint" },
+      
+      { x: 8236, y: 1540, text: "Caladon Sewers", description: "", category: "waypoint", targetMapFilename: "Caladon - Sewers", targetX: 3690, targetY: 819 },
+      { x: 4353, y: 1328, text: "Caladon Sewers", description: "", category: "waypoint", targetMapFilename: "Caladon - Sewers", targetX: 2244, targetY: 346 }, //In front of Panarii Temple
+      { x: 6300, y: 978, text: "Caladon Sewers", description: "", category: "waypoint", targetMapFilename: "Caladon - Sewers", targetX: 2753, targetY: 356}, // In front of Museum
+      { x: 7480, y: 2591, text: "Caladon Sewers", description: "", category: "waypoint", targetMapFilename: "Caladon - Sewers", targetX: 3265, targetY: 1347 },
+      { x: 5602, y: 2270, text: "Caladon Sewers", description: "", category: "waypoint", targetMapFilename: "Caladon - Sewers", targetX: 2148, targetY: 1103 },
+      { x: 5742, y: 3327, text: "Caladon Sewers", description: "", category: "waypoint", targetMapFilename: "Caladon - Sewers", targetX: 2326, targetY: 1784 },
     ]
   },
   {
@@ -221,10 +228,51 @@ const ArcanumMapData = [
     music: "music/towns.flac",
     defaultView: { x: 5689, y: 3230, zoom: 1 },
     labels: [
-      { x: 5262, y: 2990, text: "Ristezze Imported Goods", description: "Key to Ristezze's Bedroom", category: ["shop", "quest", "key"] },
-      { x: 4975, y: 3178, text: "Gurloes' Metalworkings", description: "Blacksmith / Find Ore / Key to Lloyd Gurloes' backroom", category:  ["shop", "quest", "key"]},
-      { x: 4575, y: 3237, text: "Slim Pickens", description: "", category: "shop" },
-      { x: 4561, y: 2421, text: "Herbalist Gaylin", description: "", category: "shop" },
+      { x: 5262, y: 2990, text: "Ristezze", description: "Key to Ristezze's Bedroom", category: ["shop", "quest", "key"],
+        linkedLabels: [
+          { questName: "Find the Boy (Part II)", questDescription: "Discover the origins of the strange ring.", target: "Ristezze" },
+          { questName: "Find a camera or Bessie Toone paraphernalia", questDescription: "Ristezze the Importer wants you to find a camera OR some Bessie Toone paraphenalia. In return, he will give you information about P. Schuyler & Sons.", target: "Ristezze" },
+          { questName: "Get Information from the Schuylers", questDescription: "Get information from P. Schuyler & Sons about owner of strange ring.", target: "Ristezze" },
+        ],},
+      { x: 4725, y: 3619, text: "Jongle Dunne", description: "", category: ["quest", "npc"],
+       linkedLabels: [
+          { questName: "", questDescription: "Jongle Dunne wants you to destroy the town's steam engine.", target: "" },
+          { questName: "", questDescription: "Jongle Dunne needs a package picked up from a man named Charles Dolan, a merchant in Dernholm.", target: "" },
+        ],},
+      { x: 5619, y: 3254, text: "Constable Owens", description: "", category: ["quest", "npc"],
+        linkedLabels: [
+          { questName: "", questDescription: "Constable Owens needs you to remove the thieves from the bridge.", target: "Lukan the Witless" },
+          { questName: "", questDescription: "Constable Owens wants you to fix the town's steam engine.", target: "" },
+        ],},
+      { x: 4975, y: 3178, text: "Lloyd Gurloes", description: "Blacksmith / Key to Lloyd Gurloes' backroom", category:  ["shop", "quest", "key"],
+        linkedLabels: [
+          { questName: "", questDescription: "Lloyd Gurloes wants you to obtain some pure ore for him.", target: "" },
+        ],},
+      { x: 5701, y: 3465, text: "Jacob Bens", description: "", category: ["quest", "npc"],
+        linkedLabels: [
+          { questName: "", questDescription: "Jacob Bens in Shrouded Hills wants you to steal the local mining company's payroll from the bank's safe.", target: "" },
+        ],},
+      { x: 5489, y: 2720, text: "Doc Roberts", description: "", category: ["quest", "npc", "followers"],
+        linkedLabels: [
+          { questName: "Stop the bank robbery (Part I)", questDescription: "Doc Roberts wants you to help him stop an impending bank robbery.", target: "Stop the bank robbery (Part II)" },
+        ],},
+      { x: 5288, y: 3388, text: "Stop the bank robbery (Part II)", description: "Kill the three bank robbers.", category: "quest", target: "Doc Roberts"},
+      { x: 2556, y: 3742, text: "Percival Toone", description: "", category: ["quest", "npc"],
+        linkedLabels: [
+          { questName: "", questDescription: "Percival Toone wants you to find a way to free the ghost of his mother.", target: "" },
+        ],},
+      { x: 4561, y: 2421, text: "Gaylin", description: "Herbalist", category: ["shop", "quest"],
+        linkedLabels: [
+          { questName: "Find the Amulet of N'Tala (Part I)", questDescription: "If, in my travels, I happen across the ancient elven amulet of N'Tala, Gaylin has offered to pay me a handsome reward for its return.", target: "Myrth" },
+        ],},
+      { x: 8487, y: 2098, text: "Lukan the Witless", description: "", category: ["quest", "key", "npc"],
+        linkedLabels: [
+          { questName: "", questDescription: "In order to join the thieves, you must destroy the construction materials for the new bridge.", target: "Bridge materials" },
+        ],},
+      { x: 6361, y: 3567, text: "Elder Joachim's paper trail (Part I)", description: "", category: "quest" },
+      { x: 7734, y: 3628, text: "Bridge materials", description: "", category: "quest" },
+
+      { x: 4575, y: 3237, text: "Slim Pickens", description: "General goods", category: "shop" },
       { x: 7136, y: 2559, text: "Gypsy", description: "", category: "shop" },
 
       { x: 5914, y: 3147, text: "Shrouded Hills Panarii Temple", description: "", category: "waypoint", targetMapFilename: "Panarii Temple"},
@@ -248,19 +296,12 @@ const ArcanumMapData = [
       { x: 2389, y: 3537, text: "Elder Joachim's paper trail (III)", description: "", category: "quest" },
       { x: 2271, y: 2586, text: "Myrth", category: ["npc", "quest"],
         linkedLabels: [
-          { questName: "The Stillwater Giant (Part I)",
-            questDescription: "Myrth, an elf residing in Stillwater, instructs you to perform a rite of passage, killing a Stillwater Giant and bringing its pelt to him. He directs you to Stanley Xavier Hippington, living directly North from his house.",
-            target: "Stanley Xavier Hippington" },
-          { questName: "Find the Amulet of N'Tala (Part II)",
-            questDescription: "The amulet can be obtained from Myrth either by stealing it or by taking it from his corpse after killing him.",
-            target: "Sister Elowen" }
-        ]
+          { questName: "The Stillwater Giant (Part I)", questDescription: "Myrth, an elf residing in Stillwater, instructs you to perform a rite of passage, killing a Stillwater Giant and bringing its pelt to him. He directs you to Stanley Xavier Hippington, living directly North from his house.", target: "Stanley Xavier Hippington" },
+          { questName: "Find the Amulet of N'Tala (Part II)", questDescription: "The amulet can be obtained from Myrth either by stealing it or by taking it from his corpse after killing him.", target: "Gaylin" }]
       },
       { x: 2719, y: 1753, text: "Stanley Xavier Hippington", description: "", category: ["npc", "quest"],
         linkedLabels: [
-          { questName: "The Stillwater Giant (Part II)",
-            questDescription: "Upon talking to Stanley Xavier Hippington, a cryptozoologist, he gives you a Stillwater trap and a bottle of Stillwater Giant scent to use to capture a Stillwater Giant, residing in a cave nearby.",
-            target: "The Stillwater Giant (Part III)" },
+          { questName: "The Stillwater Giant (Part II)", questDescription: "Upon talking to Stanley Xavier Hippington, a cryptozoologist, he gives you a Stillwater trap and a bottle of Stillwater Giant scent to use to capture a Stillwater Giant, residing in a cave nearby.", target: "The Stillwater Giant (Part III)" },
           ]
       },
       { x: 2627, y: 2829, text: "Retrieving the Ruby (I)", description: "", category: "quest" },
@@ -312,7 +353,7 @@ const ArcanumMapData = [
       { x: 3849, y: 2316, text: "Tarant New Sewers", description: "", category: "waypoint" },
       { x: 3976, y: 1990, text: "Tarant New Sewers", description: "", category: "waypoint" },
       { x: 3871, y: 1649, text: "Tarant New Sewers", description: "", category: "waypoint" },
-      { x: 2816, y: 2083, text: "Bates Tunnel", description: "", category: "waypoint" },
+      { x: 2949, y: 2014, text: "Bates Tunnel", description: "", category: "waypoint", targetMapFilename: "Tarant - Bates Tunnel"},
       { x: 3417, y: 2459, text: "Station A: West Garillon Bridge", description: "", category: "waypoint" },
       { x: 3598, y: 1728, text: "Station B: Vermillion Station", description: "", category: "waypoint" },
       { x: 4499, y: 1279, text: "Station C: Tarant University", description: "", category: "waypoint" },
@@ -364,7 +405,9 @@ const ArcanumMapData = [
     // music: "music/wilderness.flac", No music here it seems
     defaultView: { x: 1031, y: 605, zoom: 1 },
     labels: [
-      { x: 912, y: 477, text: "Quest: The Priest and the Bandit (Part II)", description: "", category: "quest" },
+      { x: 912, y: 477, text: "Arbalah", description: "", category: ["quest", "npc"],
+        linkedLabels: [{ questName: "Quest: The Priest and the Bandit (Part II)", questDescription: "Arbalah has refuted the claims of Charles Brehgo, saying Brehgo and his partner Fahrkus killed his family and stole a sacred artifact from him. He would like for me to locate and return this artifact to him.", target: "Charles Brehgo" }],
+     },
     ],
   }, 
   {
@@ -418,9 +461,11 @@ const ArcanumMapData = [
       { x: 2353, y: 1112, text: "Camera", description: "", category: "quest" },
       { x: 2872, y: 1312, text: "Letter", description: "", category: "quest" },
       { x: 3239, y: 894, text: "Crash Site - Cave", description: "", category: "waypoint", targetMapFilename: "Crash Site - Cave" },
-      { x: 2165, y: 1323, text: "Virgil", description: "", category: "followers" },
+      { x: 2179, y: 1308, text: "Virgil", description: "", category: "followers" },
       { x: 1309, y: 1733, text: "Magick Chest", description: "", category: "chest" },
-    ],
+      { x: 2132, y: 1344, text: "Preston Radcliffe", description: "", category: ["quest", "npc"],
+          linkedLabels: [{ questName: "Find the Boy (Part I)", questDescription: "Discover the origins of the strange ring.", target: "Ristezze" }],
+      }]
   },
   {
     filename: "ArcanumBase/ElvenRuins.png",
@@ -479,11 +524,11 @@ const ArcanumMapData = [
     labels: [],
   },
   {
-    filename: "ArcanumBase/IronClan_Gate.jpg",
+    filename: "ArcanumBase/SecretEntranceToTheIronClan.png",
     displayName: "Secret Entrance to the Iron Clan",
     modGroup: "Other locations",
     typemap: "local",
-    defaultView: { x: 3100, y: 1730, zoom: 1 },
+    defaultView: { x: 879, y: 466, zoom: 1 },
     labels: [],
   },
   {
@@ -510,7 +555,11 @@ const ArcanumMapData = [
     // music: "music/wilderness.flac", No music here it seems
     defaultView: { x: 705, y: 555, zoom: 1 },
     labels: [
-      { x: 828, y: 498, text: "Quest: The Priest and the Bandit (Part III)", description: "", category: "quest" },
+      { x: 828, y: 498, text: "Simon Fahrkus", description: "", category: ["quest", "npc"],
+        linkedLabels: [
+          { questName: "Quest: The Priest and the Bandit (Part IV)", questDescription: "Lie, threaten, steal or kill Fahrkus to retrieve the Sacred Artifact.", target: "Arbalah" },
+        ],
+      },
     ],
   },
   {
@@ -647,6 +696,16 @@ const ArcanumMapData = [
     labels: [],
   },
   {
+    filename: "ArcanumBase/UnchartedCave.png",
+    displayName: "Uncharted Cave",
+    modGroup: "Other locations",
+    typemap: "local",
+    // music: "music/wilderness.flac",
+    //defaultView: { x: 1470, y: 762, zoom: 1 },
+    // background: "#000000",
+    labels: [],
+  },
+  {
     filename: "ArcanumBase/VillageOfTheAshlagTribe.png",
     displayName: "Village of the Ashlag Tribe",
     modGroup: "Other locations",
@@ -761,6 +820,134 @@ const ArcanumMapData = [
     labels: [],
   },
   {
+    filename: "ArcanumBase/Caladon-Sewers.jpg",
+    displayName: "Caladon - Sewers",
+    modGroup: "Arcanum",
+    typemap: "local",
+    defaultView: {},
+    background: "#000000",
+    parentFilename: "ArcanumBase/Caladonsmall.jpg",
+    labels: [
+      { x: 2245, y: 341, text: "Caladon", description: "", category: "waypoint", targetMapFilename: "Caladon", targetX: 4353, targetY: 1328}, // In front of Panarii
+      { x: 3690, y: 819, text: "Caladon", description: "", category: "waypoint", targetMapFilename: "Caladon", targetX: 8236, targetY: 1540},
+      { x: 2753, y: 356, text: "Caladon", description: "", category: "waypoint", targetMapFilename: "Caladon", targetX: 6300, targetY: 978}, // In front of Museum
+      { x: 3265, y: 1347, text: "Caladon", description: "", category: "waypoint", targetMapFilename: "Caladon", targetX: 7480, targetY: 2591},
+      { x: 2326, y: 1784, text: "Caladon", description: "", category: "waypoint", targetMapFilename: "Caladon", targetX: 5742, targetY: 3327},
+      { x: 2148, y: 1103, text: "Caladon", description: "", category: "waypoint", targetMapFilename: "Caladon", targetX: 5602, targetY: 2270},
+
+      { x: 2142, y: 333, text: "Panarii Temple Catacombs", description: "", category: "waypoint" },
+      { x: 1860, y: 603, text: "Panarii Temple Catacombs", description: "", category: "waypoint" },
+
+      { x: 3580, y: 891, text: "Arcane Chest", description: "", category: "chest" },
+      { x: 3798, y: 880, text: "Arcane Chest", description: "", category: "chest" },
+
+      { x: 3560, y: 888, text: "Vincent", description: "", category: ["quest", "npc"] },
+      { x: 2426, y: 999, text: "Half Ogre Bandit", description: "The corpse contains some Magick loot, notably Boots of the Dark Toll.", category: "information" },
+    ],
+  },
+  {
+    filename: "ArcanumBase/Caladon-CastleMainFloor.jpg",
+    displayName: "Caladon - Castle Main Floor",
+    modGroup: "Arcanum",
+    typemap: "local",
+    background: "#000000",
+    defaultView: {},
+    parentFilename: "ArcanumBase/Caladonsmall.jpg",
+    labels: [],
+  },
+  {
+    filename: "ArcanumBase/Caladon-CastleUpstairs.jpg",
+    displayName: "Caladon - Castle Upstairs",
+    modGroup: "Arcanum",
+    typemap: "local",
+    background: "#000000",
+    defaultView: {},
+    parentFilename: "ArcanumBase/Caladonsmall.jpg",
+    labels: [],
+  },
+  {
+    filename: "ArcanumBase/Caladon-CastleDownstairs.jpg",
+    displayName: "Caladon - Castle Downstairs",
+    modGroup: "Arcanum",
+    typemap: "local",
+    background: "#000000",
+    defaultView: {},
+    parentFilename: "ArcanumBase/Caladonsmall.jpg",
+    labels: [],
+  },
+  {
+    filename: "ArcanumBase/Caladon-CastleVents.jpg",
+    displayName: "Caladon - Castle Vents",
+    modGroup: "Arcanum",
+    typemap: "local",
+    background: "#000000",
+    defaultView: {},
+    parentFilename: "ArcanumBase/Caladonsmall.jpg",
+    labels: [],
+  },
+  {
+    filename: "ArcanumBase/Caladon-GuardhouseBasement.png",
+    displayName: "Caladon - Guardhouse Basement",
+    modGroup: "Arcanum",
+    typemap: "local",
+    background: "#000000",
+    defaultView: {},
+    parentFilename: "ArcanumBase/Caladonsmall.jpg",
+    labels: [],
+  },
+  {
+    filename: "ArcanumBase/Caladon-SandersBasement.png",
+    displayName: "Caladon - Sanders Basement",
+    modGroup: "Arcanum",
+    typemap: "local",
+    background: "#000000",
+    defaultView: {},
+    parentFilename: "ArcanumBase/Caladonsmall.jpg",
+    labels: [],
+  },
+  {
+    filename: "ArcanumBase/Caladon-MafiaUnderground.png",
+    displayName: "Caladon - Mafia Underground",
+    modGroup: "Arcanum",
+    typemap: "local",
+    background: "#000000",
+    defaultView: { x: 429, y: 598},
+    parentFilename: "ArcanumBase/Caladonsmall.jpg",
+    labels: [
+      { x: 429, y: 598, text: "Caladon", description: "", category: "waypoint", targetMapFilename: "Caladon", targetX: 5883, targetY: 1959},
+    ],
+  },
+  {
+    filename: "ArcanumBase/Caladon-PanariiTemple.png",
+    displayName: "Caladon - Panarii Temple Level 1",
+    modGroup: "Arcanum",
+    typemap: "local",
+    background: "#000000",
+    defaultView: {},
+    parentFilename: "ArcanumBase/Caladonsmall.jpg",
+    labels: [],
+  },
+  {
+    filename: "ArcanumBase/Caladon-PanariiTempleLevel2.png",
+    displayName: "Caladon - Panarii Temple Level 2",
+    modGroup: "Arcanum",
+    typemap: "local",
+    background: "#000000",
+    defaultView: {},
+    parentFilename: "ArcanumBase/Caladonsmall.jpg",
+    labels: [],
+  },
+  {
+    filename: "ArcanumBase/Caladon-PanariiTempleLevel3.png",
+    displayName: "Caladon - Panarii Temple Level 3",
+    modGroup: "Arcanum",
+    typemap: "local",
+    background: "#000000",
+    defaultView: {},
+    parentFilename: "ArcanumBase/Caladonsmall.jpg",
+    labels: [],
+  },
+  {
     filename: "ArcanumBase/CrashSite-Cave.png",
     displayName: "Crash Site - Cave",
     modGroup: "Arcanum",
@@ -771,16 +958,30 @@ const ArcanumMapData = [
     background: "#000000",
     labels: [
       { x: 234, y: 629, text: "Crash Site", description: "", category: "waypoint", targetMapFilename: "Crash Site", targetX: 3239, targetY: 894},
-      { x: 360, y: 191, text: "Quest: The Priest and the Bandit (Part I)", description: "", category: "quest" },
+      { x: 360, y: 191, text: "Charles Brehgo", description: "", category: ["quest", "npc"],
+          linkedLabels: [
+            { questName: "Quest: The Priest and the Bandit (Part I)", questDescription: "The cursed spirit of Charles Brehgo has implored me to kill the priest who cursed him, Arbalah. It is his belief that if I kill Arbalah, he will be released from the curse.", target: "Arbalah" },
+            { questName: "Quest: The Priest and the Bandit (Part III)", questDescription: "Return to Brehgo's spirit in the Crash Site Cave and demand that he tell you where Fahrkus is. Trick him into thinking Arbalah will release the curse if he helps you.", target: "Simon Fahrkus" }
+          ],
+      },
     ],
   }, 
+  {
+    filename: "ArcanumBase/IronClan_Gate.jpg",
+    displayName: "Iron Clan - Gate",
+    modGroup: "Arcanum",
+    typemap: "local",
+    defaultView: { x: 3168, y: 1742, zoom: 1 },
+    parentFilename: "ArcanumBase/SecretEntranceToTheIronClan.png",
+    labels: [],
+  },
   {
     filename: "ArcanumBase/IronClan_ThroneHall.jpg",
     displayName: "Iron Clan - Throne Hall",
     modGroup: "Arcanum",
     typemap: "local",
-    defaultView: { x: 3740, y: 1571, zoom: 1 },
-    parentFilename: "ArcanumBase/IronClan_Gate.jpg",
+    defaultView: { x: 3972, y: 1642, zoom: 1 },
+    parentFilename: "ArcanumBase/SecretEntranceToTheIronClan.png",
     labels: [],
   }, 
   {
@@ -829,11 +1030,21 @@ const ArcanumMapData = [
     ]
   },
   {
+    filename: "ArcanumBase/Tarant-BatesTunnel.png",
+    displayName: "Tarant - Bates Tunnel",
+    modGroup: "Arcanum",
+    typemap: "local",
+    parentFilename: "ArcanumBase/Tarant.png",
+    background: "#000000",
+    labels: []
+  },
+  {
     filename: "ArcanumBase/Tarant_02.jpg",
     displayName: "Tarant New Sewers",
     modGroup: "Arcanum",
     typemap: "local",
     parentFilename: "ArcanumBase/Tarant.png",
+    background: "#000000",
     labels: [
       { x: 1202, y: 863, text: "Tarant", description: "", category: "waypoint" },
       { x: 2023, y: 1108, text: "Tarant", description: "", category: "waypoint" },
@@ -861,6 +1072,17 @@ const ArcanumMapData = [
     typemap: "local",
     parentFilename: "ArcanumBase/Tullasmall.jpg",
     labels: []
+  },
+  {
+    filename: "ArcanumBase/UnchartedCave-Inside.png",
+    displayName: "Uncharted Cave - Inside",
+    modGroup: "Other locations",
+    typemap: "local",
+    // music: "music/wilderness.flac",
+    //defaultView: { x: 1470, y: 762, zoom: 1 },
+    background: "#000000",
+    parentFilename: "ArcanumBase/UnchartedCave.png",
+    labels: [],
   },
   {
     filename: "ArcanumBase/WheelClanMainHall.jpg",

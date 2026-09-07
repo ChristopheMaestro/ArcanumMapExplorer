@@ -33,6 +33,7 @@ const chkWaypoint = document.getElementById('chk-waypoint');
 const chkKey = document.getElementById('chk-key');
 const chkNpc = document.getElementById('chk-npc');
 const chkChest = document.getElementById('chk-chest');
+const chkInformation = document.getElementById('chk-information');
 const chkOverworldAll = document.getElementById('chk-overworld-all');
 const lblOverworldAll = document.getElementById('lbl-overworld-all');
 
@@ -47,6 +48,11 @@ const hudValZoom = document.getElementById('hud-val-zoom');
 const musicToggleBtn = document.getElementById('musicToggleBtn');
 const musicVolumeSlider = document.getElementById('musicVolumeSlider');
 const shareLinkBtn = document.getElementById('shareLinkBtn');
+const questListBtn = document.getElementById('questListBtn');
+const questListPanel = document.getElementById('quest-list-panel');
+const questPanelMapName = document.getElementById('quest-panel-mapname');
+const questPanelContent = document.getElementById('quest-panel-content');
+const questPanelClose = document.getElementById('quest-panel-close');
 const bgMusicAudio = new Audio();
 bgMusicAudio.loop = true;
 bgMusicAudio.onerror = () => {
@@ -102,6 +108,7 @@ const filterRegistry = {
     key: true,
     npc: true,
     chest: true,
+    information: true,
     overworldAll: true
 };
 
@@ -112,7 +119,8 @@ const CATEGORY_EMOJI = {
     waypoint: '🚪',
     key: '🔑',
     npc: '🧑',
-    chest: '📦'
+    chest: '📦',
+    information: 'ℹ️'
 };
 
 const CATEGORY_COLORS = {
@@ -122,7 +130,8 @@ const CATEGORY_COLORS = {
     waypoint: '#e74c3c',
     key: '#9b59b6',
     npc: '#20b2aa',
-    chest: '#8b5a2b'
+    chest: '#8b5a2b',
+    information: '#95a5a6'
 };
 
 function getSelectedNewLabelCategories() {
@@ -271,8 +280,20 @@ function flashShareButton(message) {
 }
 
 function initViewer() {
+    if (window.__mapsJsLoadError) {
+        const err = window.__mapsJsLoadError;
+        const lineInfo = (typeof err.line === 'number' && err.line > 0)
+            ? `<div style="color:#ffaa00;font-family:monospace;margin-top:8px;">Line ${err.line}${err.column ? `, column ${err.column}` : ''}</div>`
+            : '';
+        menuContainer.innerHTML = `<div style="text-align:center;color:#ff6b6b;padding:20px;">
+            <strong>maps.js failed to load</strong>
+            <div style="margin-top:8px;font-size:12px;color:#f1e4c3;">${err.message}</div>
+            ${lineInfo}
+        </div>`;
+        return;
+    }
     if (typeof ArcanumMapData === 'undefined') {
-        menuContainer.innerHTML = '<div style="text-align:center;color:#ff6b6b;padding:20px;">Error: maps.js not loaded.</div>';
+        menuContainer.innerHTML = '<div style="text-align:center;color:#ff6b6b;padding:20px;">Error: maps.js not loaded (ArcanumMapData is not defined - check the file exists and the path is correct).</div>';
         return;
     }
 
@@ -319,6 +340,15 @@ function initViewer() {
         } else {
             window.prompt('Copy this link:', shareUrl);
         }
+    });
+
+    questListBtn.addEventListener('click', () => {
+        const isOpen = questListPanel.classList.toggle('open');
+        if (isOpen) renderQuestPanel();
+    });
+
+    questPanelClose.addEventListener('click', () => {
+        questListPanel.classList.remove('open');
     });
 
     if (ArcanumMapData.length > 0) {
@@ -384,6 +414,7 @@ function initViewer() {
     chkKey.addEventListener('change', () => processFilterChange('key', chkKey));
     chkNpc.addEventListener('change', () => processFilterChange('npc', chkNpc));
     chkChest.addEventListener('change', () => processFilterChange('chest', chkChest));
+    chkInformation.addEventListener('change', () => processFilterChange('information', chkInformation));
     chkOverworldAll.addEventListener('change', () => processFilterChange('overworldAll', chkOverworldAll));
 
 
@@ -620,6 +651,7 @@ function loadImage(index, arrivalViewOverride, restorePosition) {
         chkKey.parentElement.style.display = 'none';
         chkNpc.parentElement.style.display = 'none';
         chkChest.parentElement.style.display = 'none';
+        chkInformation.parentElement.style.display = 'none';
         categoryField.style.display = 'none';
         waypointFields.style.display = 'none';
     } else {
@@ -635,6 +667,7 @@ function loadImage(index, arrivalViewOverride, restorePosition) {
         chkKey.parentElement.style.display = 'flex';
         chkNpc.parentElement.style.display = 'flex';
         chkChest.parentElement.style.display = 'flex';
+        chkInformation.parentElement.style.display = 'flex';
         categoryField.style.display = 'flex';
         waypointFields.style.display = getSelectedNewLabelCategories().includes('waypoint') ? 'flex' : 'none';
     }
@@ -692,6 +725,7 @@ function loadImage(index, arrivalViewOverride, restorePosition) {
             selectedMap.labels.forEach(label => renderSingleLabel(label));
         }
         applyActiveFilters(); 
+        if (questListPanel.classList.contains('open')) renderQuestPanel();
     };
     img.onerror = () => {
         img.style.display = 'none';
@@ -745,6 +779,124 @@ function travelToLinkedLabel(searchText) {
     travelToMapByFilename(map.displayName, viewOverride);
 }
 
+// --- Quest list panel: all quests on the current map, grouped by the NPC that gives them ---
+
+function jumpToLabelOnCurrentMap(label) {
+    resetView({ x: label.x, y: label.y, zoom: 1.5 });
+    const allLabelEls = container.querySelectorAll('.map-label');
+    for (const el of allLabelEls) {
+        if (el.getAttribute('data-label-text') === label.text) {
+            el.click();
+            break;
+        }
+    }
+}
+
+function buildQuestListForCurrentMap() {
+    const selectedMap = ArcanumMapData.find(m => m.filename === currentMapFilename);
+    if (!selectedMap || !selectedMap.labels) return { npcGroups: [], unassigned: [] };
+
+    const claimedQuestTexts = new Set();
+    const npcGroups = [];
+
+    selectedMap.labels.forEach(npcLabel => {
+        const cats = Array.isArray(npcLabel.category) ? npcLabel.category : (npcLabel.category ? [npcLabel.category] : []);
+        if (!cats.includes('npc')) return;
+        if (!Array.isArray(npcLabel.linkedLabels) || npcLabel.linkedLabels.length === 0) return;
+
+        const quests = npcLabel.linkedLabels.map(entry => {
+            if (typeof entry === 'string') {
+                const found = findLabelAnywhereByText(entry);
+                if (!found) return null;
+                const foundCats = Array.isArray(found.label.category) ? found.label.category : (found.label.category ? [found.label.category] : []);
+                // Only treat this as a quest entry if the resolved label is actually a quest
+                // (not an NPC) - otherwise its "description" is that person's own bio, not quest text
+                if (!foundCats.includes('quest') || foundCats.includes('npc')) return null;
+                claimedQuestTexts.add(entry);
+                return { title: entry, description: found.label.description || '', target: entry };
+            }
+            if (entry.target) claimedQuestTexts.add(entry.target);
+            return { title: entry.questName || entry.target || 'Quest', description: entry.questDescription || '', target: entry.target };
+        }).filter(Boolean);
+
+        if (quests.length === 0) return;
+        npcGroups.push({ npcLabel, quests });
+    });
+
+    npcGroups.sort((a, b) => a.npcLabel.text.localeCompare(b.npcLabel.text));
+
+    const unassigned = selectedMap.labels
+        .filter(label => {
+            const cats = Array.isArray(label.category) ? label.category : (label.category ? [label.category] : []);
+            if (!cats.includes('quest')) return false;
+            if (cats.includes('npc')) return false; // already represented as its own NPC group above
+            return !claimedQuestTexts.has(label.text);
+        })
+        .map(label => ({ title: label.text, description: label.description || '', ownLabel: label }));
+
+    return { npcGroups, unassigned };
+}
+
+function renderQuestPanel() {
+    const selectedMap = ArcanumMapData.find(m => m.filename === currentMapFilename);
+    questPanelMapName.textContent = selectedMap ? selectedMap.displayName : '';
+
+    const { npcGroups, unassigned } = buildQuestListForCurrentMap();
+
+    if (npcGroups.length === 0 && unassigned.length === 0) {
+        questPanelContent.innerHTML = '<div class="quest-panel-empty">No quests found on this map.</div>';
+        return;
+    }
+
+    let html = '';
+    npcGroups.forEach((group, gi) => {
+        html += `<div class="quest-panel-npc-group">
+            <div class="quest-panel-npc-name" data-npc-index="${gi}">🧑 ${group.npcLabel.text}</div>`;
+        group.quests.forEach((q, qi) => {
+            html += `<div class="quest-panel-quest-item" data-npc-index="${gi}" data-quest-index="${qi}">
+                <div class="quest-panel-quest-title">📜 ${q.title}</div>
+                ${q.description ? `<div class="quest-panel-quest-desc">${q.description}</div>` : ''}
+            </div>`;
+        });
+        html += `</div>`;
+    });
+
+    if (unassigned.length > 0) {
+        html += `<div class="quest-panel-section-label">Other quests</div>`;
+        unassigned.forEach((q, ui) => {
+            html += `<div class="quest-panel-quest-item" data-unassigned-index="${ui}">
+                <div class="quest-panel-quest-title">📜 ${q.title}</div>
+                ${q.description ? `<div class="quest-panel-quest-desc">${q.description}</div>` : ''}
+            </div>`;
+        });
+    }
+
+    questPanelContent.innerHTML = html;
+
+    questPanelContent.querySelectorAll('.quest-panel-npc-name').forEach(el => {
+        el.addEventListener('click', () => {
+            const gi = parseInt(el.getAttribute('data-npc-index'), 10);
+            jumpToLabelOnCurrentMap(npcGroups[gi].npcLabel);
+        });
+    });
+
+    questPanelContent.querySelectorAll('.quest-panel-quest-item[data-quest-index]').forEach(el => {
+        el.addEventListener('click', () => {
+            const gi = parseInt(el.getAttribute('data-npc-index'), 10);
+            const qi = parseInt(el.getAttribute('data-quest-index'), 10);
+            const quest = npcGroups[gi].quests[qi];
+            if (quest.target) travelToLinkedLabel(quest.target);
+        });
+    });
+
+    questPanelContent.querySelectorAll('.quest-panel-quest-item[data-unassigned-index]').forEach(el => {
+        el.addEventListener('click', () => {
+            const ui = parseInt(el.getAttribute('data-unassigned-index'), 10);
+            jumpToLabelOnCurrentMap(unassigned[ui].ownLabel);
+        });
+    });
+}
+
 // Part 4
 
 function clearOldLabels() {
@@ -784,7 +936,7 @@ function renderSingleLabel(label, isPending) {
             popup.style.left = `${label.x}px`;
             popup.style.top = `${label.y}px`;
         }
-        const descText = label.description || "No archival notes recorded for this location.";
+        const descHtmlMain = label.description ? `<p style="margin:0;">${label.description}</p>` : '';
         
         let travelButtonHtml = "";
         if (label.targetMapFilename) {
@@ -824,10 +976,11 @@ function renderSingleLabel(label, isPending) {
                     <button class="travel-link-btn linked-label-btn" data-link-index="${i}">🧭 Go to Location</button>
                 </div>`;
             }).join('');
-            linkedButtonsHtml = `<div class="popup-links-heading">Leads to:</div>${blocks}`;
+            const headingLabel = label.linkedLabels.length > 1 ? 'Quests:' : 'Quest:';
+            linkedButtonsHtml = `<div class="popup-links-heading">${headingLabel}</div>${blocks}`;
         }
         
-        popup.innerHTML = `<span class="close-btn">&times;</span><h4>${label.text}</h4><p style="margin:0;">${descText}</p>${travelButtonHtml}${linkedButtonsHtml}`;
+        popup.innerHTML = `<span class="close-btn">&times;</span><h4>${label.text}</h4>${descHtmlMain}${travelButtonHtml}${linkedButtonsHtml}`;
         popup.querySelector('.close-btn').addEventListener('click', (el) => { el.stopPropagation(); popup.remove(); });
         
         if (label.targetMapFilename) {
@@ -896,6 +1049,7 @@ function renderSingleLabel(label, isPending) {
         const cats = Array.isArray(label.category) ? label.category.filter(Boolean) : (label.category ? [label.category] : []);
         const dataCatString = cats.length ? cats.join(' ') : 'uncategorized';
         labelElement.setAttribute('data-category', dataCatString);
+        labelElement.setAttribute('data-label-text', label.text);
 
         const guardedClick = (handler) => (e) => {
             e.stopPropagation();
