@@ -134,6 +134,19 @@ const CATEGORY_COLORS = {
     information: '#95a5a6'
 };
 
+// Shop markup severity tags - checked highest threshold first, so a markup of 250
+// gets "rip off" not "expensive". Edit freely to adjust the thresholds/wording/colors.
+const SHOP_MARKUP_TIERS = [
+    { min: 300, label: 'scam', color: '#e74c3c' },
+    { min: 200, label: 'rip off', color: '#e67e22' },
+    { min: 150, label: 'expensive', color: '#f1c40f' }
+];
+
+function getShopMarkupTier(markup) {
+    if (typeof markup !== 'number') return null;
+    return SHOP_MARKUP_TIERS.find(tier => markup >= tier.min) || null;
+}
+
 function getSelectedNewLabelCategories() {
     return Array.from(newLabelCategoryChecks).filter(cb => cb.checked).map(cb => cb.value);
 }
@@ -936,7 +949,29 @@ function renderSingleLabel(label, isPending) {
             popup.style.left = `${label.x}px`;
             popup.style.top = `${label.y}px`;
         }
+        const popupCats = Array.isArray(label.category) ? label.category : (label.category ? [label.category] : []);
         const descHtmlMain = label.description ? `<p style="margin:0;">${label.description}</p>` : '';
+
+        let shopInfoHtml = "";
+        if (popupCats.includes('shop') && (label.shopType || typeof label.shopMarkup === 'number')) {
+            const shopTypeHtml = label.shopType ? `<div class="shop-info-type">${label.shopType}</div>` : '';
+            let shopMarkupHtml = '';
+            if (typeof label.shopMarkup === 'number') {
+                const tier = getShopMarkupTier(label.shopMarkup);
+                const tierHtml = tier ? ` <span class="shop-markup-tier" style="color:${tier.color};">(${tier.label})</span>` : '';
+                shopMarkupHtml = `<div class="shop-info-markup">Markup: <strong>${label.shopMarkup}%</strong>${tierHtml}</div>`;
+            }
+            shopInfoHtml = `<div class="shop-info-block">${shopTypeHtml}${shopMarkupHtml}</div>`;
+        }
+
+        let inventoryHtml = "";
+        if (Array.isArray(label.inventory) && label.inventory.length > 0) {
+            const itemsHtml = label.inventory.map(item => `<li>${item}</li>`).join('');
+            inventoryHtml = `<div class="npc-inventory-block">
+                <div class="npc-inventory-title">Inventory</div>
+                <ul class="npc-inventory-list">${itemsHtml}</ul>
+            </div>`;
+        }
         
         let travelButtonHtml = "";
         if (label.targetMapFilename) {
@@ -980,7 +1015,7 @@ function renderSingleLabel(label, isPending) {
             linkedButtonsHtml = `<div class="popup-links-heading">${headingLabel}</div>${blocks}`;
         }
         
-        popup.innerHTML = `<span class="close-btn">&times;</span><h4>${label.text}</h4>${descHtmlMain}${travelButtonHtml}${linkedButtonsHtml}`;
+        popup.innerHTML = `<span class="close-btn">&times;</span><h4>${label.text}</h4>${shopInfoHtml}${inventoryHtml}${descHtmlMain}${travelButtonHtml}${linkedButtonsHtml}`;
         popup.querySelector('.close-btn').addEventListener('click', (el) => { el.stopPropagation(); popup.remove(); });
         
         if (label.targetMapFilename) {
@@ -1168,6 +1203,11 @@ function buildLabelCodeLine(labelData) {
         } else {
             parts.push(`category: "${labelData.category}"`);
         }
+    }
+    if (labelData.shopType) parts.push(`shopType: "${labelData.shopType}"`);
+    if (typeof labelData.shopMarkup === 'number' && !isNaN(labelData.shopMarkup)) parts.push(`shopMarkup: ${labelData.shopMarkup}`);
+    if (Array.isArray(labelData.inventory) && labelData.inventory.length > 0) {
+        parts.push(`inventory: [${labelData.inventory.map(i => `"${i}"`).join(', ')}]`);
     }
     if (labelData.targetMapFilename) parts.push(`targetMapFilename: "${labelData.targetMapFilename}"`);
     if (typeof labelData.targetX === 'number' && !isNaN(labelData.targetX)) parts.push(`targetX: ${labelData.targetX}`);
