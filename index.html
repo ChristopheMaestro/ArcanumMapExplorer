@@ -150,23 +150,27 @@
         <div id="quest-panel-content"></div>
     </div>
 
-    <!-- Catches a maps.js syntax/parse error before it happens - must be registered
-         before maps.js loads, since viewer.js (which reports it) loads after maps.js -->
+    <!-- Catches a maps-data syntax/parse error before it happens - must be registered
+         before the data files load, since viewer.js (which reports it) loads after them -->
     <script>
-        window.__mapsJsLoadError = null;
+        window.__mapsJsLoadErrors = [];
         window.addEventListener('error', function(e) {
             if (e.filename && e.filename.indexOf('maps.js') !== -1) {
-                window.__mapsJsLoadError = {
+                const shortName = e.filename.split('/').pop();
+                window.__mapsJsLoadErrors.push({
+                    file: shortName,
                     message: e.message,
                     line: e.lineno,
                     column: e.colno
-                };
+                });
             }
         });
     </script>
 
-    <!-- Load data asset manifest first -->
-    <script src="maps.js"></script>
+    <!-- Load data asset manifests - one per mod-category tab -->
+    <script src="arcanummaps.js"></script>
+    <script src="cerestoredmaps.js"></script>
+    <script src="modulesmaps.js"></script>
 
     <!-- Load clean separated engine logic script file -->
     <script src="viewer.js"></script>

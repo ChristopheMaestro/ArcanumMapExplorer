@@ -1,5 +1,14 @@
 // Part 1
 
+// Merge the three per-tab data files (arcanummaps.js, cerestoredmaps.js, modulesmaps.js)
+// into the single ArcanumMapData array the rest of this file expects. Each guard falls
+// back to an empty array so a syntax error in just one file doesn't take down the others.
+const ArcanumMapData = [
+    ...(typeof ArcanumCitiesMapData !== 'undefined' ? ArcanumCitiesMapData : []),
+    ...(typeof CERestoredMapData !== 'undefined' ? CERestoredMapData : []),
+    ...(typeof ModulesMapData !== 'undefined' ? ModulesMapData : [])
+];
+
 const menuContainer = document.getElementById('menu-container');
 const viewport = document.getElementById('viewport');
 const container = document.getElementById('pan-container');
@@ -293,20 +302,25 @@ function flashShareButton(message) {
 }
 
 function initViewer() {
-    if (window.__mapsJsLoadError) {
-        const err = window.__mapsJsLoadError;
-        const lineInfo = (typeof err.line === 'number' && err.line > 0)
-            ? `<div style="color:#ffaa00;font-family:monospace;margin-top:8px;">Line ${err.line}${err.column ? `, column ${err.column}` : ''}</div>`
-            : '';
+    if (window.__mapsJsLoadErrors && window.__mapsJsLoadErrors.length > 0) {
+        const errorBlocks = window.__mapsJsLoadErrors.map(err => {
+            const lineInfo = (typeof err.line === 'number' && err.line > 0)
+                ? `<div style="color:#ffaa00;font-family:monospace;margin-top:4px;">Line ${err.line}${err.column ? `, column ${err.column}` : ''}</div>`
+                : '';
+            return `<div style="margin-top:14px;padding-top:10px;border-top:1px solid #4a3e2e;">
+                <strong style="color:#ff9999;">${err.file}</strong>
+                <div style="margin-top:4px;font-size:12px;color:#f1e4c3;">${err.message}</div>
+                ${lineInfo}
+            </div>`;
+        }).join('');
         menuContainer.innerHTML = `<div style="text-align:center;color:#ff6b6b;padding:20px;">
-            <strong>maps.js failed to load</strong>
-            <div style="margin-top:8px;font-size:12px;color:#f1e4c3;">${err.message}</div>
-            ${lineInfo}
+            <strong>One or more map data files failed to load</strong>
+            ${errorBlocks}
         </div>`;
         return;
     }
-    if (typeof ArcanumMapData === 'undefined') {
-        menuContainer.innerHTML = '<div style="text-align:center;color:#ff6b6b;padding:20px;">Error: maps.js not loaded (ArcanumMapData is not defined - check the file exists and the path is correct).</div>';
+    if (!ArcanumMapData || ArcanumMapData.length === 0) {
+        menuContainer.innerHTML = '<div style="text-align:center;color:#ff6b6b;padding:20px;">Error: no map data loaded (check that arcanummaps.js, cerestoredmaps.js, and modulesmaps.js exist alongside Index.html).</div>';
         return;
     }
 
@@ -567,11 +581,11 @@ window.switchModCategory = function(categoryKey) {
 function checkMapCategoryMatch(map, categoryKey) {
     const group = map.modGroup || "";
     if (categoryKey === "arcanum") {
-        return (group === "World Map" || group === "Arcanum" || group === "Other locations");
+        return (group === "World Map" || group === "Cities" || group === "Quest locations" || group === "Other locations");
     } else if (categoryKey === "cerestored") {
         return (group === "Arcanum CE Restored" || group === "Forgotten Places" || group === "CE Restored World Map");
     } else if (categoryKey === "modules") {
-        return (group !== "World Map" && group !== "Arcanum" && group !== "Arcanum CE Restored" && group !== "Forgotten Places" && group !== "CE Restored World Map" && group !== "Other locations");
+        return (group !== "World Map" && group !== "Cities" && group !== "Quest locations" && group !== "Arcanum CE Restored" && group !== "Forgotten Places" && group !== "CE Restored World Map" && group !== "Other locations");
     }
     return false;
 }
