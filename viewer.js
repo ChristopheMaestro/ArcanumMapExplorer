@@ -21,8 +21,7 @@ const newLabelText = document.getElementById('new-label-text');
 const newLabelDesc = document.getElementById('new-label-desc');
 const newLabelLinks = document.getElementById('new-label-links');
 const addToPreviewBtn = document.getElementById('add-to-preview-btn');
-const clearPendingBtn = document.getElementById('clear-pending-btn');
-const outputCode = document.getElementById('output-code');
+const copyEditsBtn = document.getElementById('copy-edits-btn');
 const categoryField = document.getElementById('category-field');
 const newLabelCategoryChecks = document.querySelectorAll('.new-label-cat-chk');
 const waypointFields = document.getElementById('waypoint-fields');
@@ -43,6 +42,8 @@ const chkKey = document.getElementById('chk-key');
 const chkNpc = document.getElementById('chk-npc');
 const chkChest = document.getElementById('chk-chest');
 const chkInformation = document.getElementById('chk-information');
+const chkAltar = document.getElementById('chk-altar');
+const chkBounty = document.getElementById('chk-bounty');
 const chkOverworldAll = document.getElementById('chk-overworld-all');
 const lblOverworldAll = document.getElementById('lbl-overworld-all');
 
@@ -62,11 +63,16 @@ const questListPanel = document.getElementById('quest-list-panel');
 const questPanelMapName = document.getElementById('quest-panel-mapname');
 const questPanelContent = document.getElementById('quest-panel-content');
 const questPanelClose = document.getElementById('quest-panel-close');
-const bgMusicAudio = new Audio();
-bgMusicAudio.loop = true;
-bgMusicAudio.onerror = () => {
-    console.warn(`Could not load background music track: "${bgMusicAudio.src}"`);
-};
+const bgMusicAudioA = new Audio();
+const bgMusicAudioB = new Audio();
+bgMusicAudioA.loop = true;
+bgMusicAudioB.loop = true;
+bgMusicAudioA.onerror = () => console.warn(`Could not load background music track: "${bgMusicAudioA.src}"`);
+bgMusicAudioB.onerror = () => console.warn(`Could not load background music track: "${bgMusicAudioB.src}"`);
+let activeMusicAudio = bgMusicAudioA;
+let inactiveMusicAudio = bgMusicAudioB;
+let musicFadeRAF = null;
+const MUSIC_FADE_MS = 1800;
 
 let domElementsRegistry = []; 
 let scale = 1;
@@ -93,8 +99,8 @@ let dragLastScreenX = 0;
 let dragLastScreenY = 0;
 let suppressNextLabelClick = false;
 
-// Labels added in this editing session (not yet pasted into maps.js) + any existing labels that were moved
-let outputEntries = [];
+// Labels added in this editing session, not yet part of the map's own labels array
+let pendingNewLabels = [];
 
 let clickMapX = 0;
 let clickMapY = 0;
@@ -118,6 +124,8 @@ const filterRegistry = {
     npc: true,
     chest: true,
     information: true,
+    altar: true,
+    bounty: true,
     overworldAll: true
 };
 
@@ -129,7 +137,9 @@ const CATEGORY_EMOJI = {
     key: '🔑',
     npc: '🧑',
     chest: '📦',
-    information: 'ℹ️'
+    information: 'ℹ️',
+    altar: '🕯️',
+    bounty: '💰'
 };
 
 const CATEGORY_COLORS = {
@@ -140,7 +150,9 @@ const CATEGORY_COLORS = {
     key: '#9b59b6',
     npc: '#20b2aa',
     chest: '#8b5a2b',
-    information: '#95a5a6'
+    information: '#95a5a6',
+    altar: '#6c5ce7',
+    bounty: '#e84393'
 };
 
 // Shop markup severity tags - checked highest threshold first, so a markup of 250
@@ -244,30 +256,54 @@ function resolveMusicPath(selectedMap) {
     return null;
 }
 
-function attemptPlayMusic() {
-    if (!bgMusicAudio.src) return;
-    const playPromise = bgMusicAudio.play();
+function attemptPlayMusic(audioEl) {
+    if (!audioEl.src) return;
+    const playPromise = audioEl.play();
     if (playPromise && typeof playPromise.catch === 'function') {
         playPromise.catch(() => {
             // Most browsers block audio until the user interacts with the page at least once -
             // silently retry on the first click anywhere, by which point that's no longer an issue
-            document.addEventListener('click', () => { bgMusicAudio.play().catch(() => {}); }, { once: true });
+            document.addEventListener('click', () => { audioEl.play().catch(() => {}); }, { once: true });
         });
     }
+}
+
+function crossfadeToTrack(newPath) {
+    cancelAnimationFrame(musicFadeRAF);
+
+    const outgoing = activeMusicAudio;
+    const incoming = inactiveMusicAudio;
+    const outgoingStartVolume = outgoing.volume;
+    const startTime = performance.now();
+
+    if (newPath) {
+        incoming.src = newPath;
+        incoming.volume = 0;
+        attemptPlayMusic(incoming);
+        activeMusicAudio = incoming;
+        inactiveMusicAudio = outgoing;
+    }
+
+    function step(now) {
+        const progress = Math.max(0, Math.min(1, (now - startTime) / MUSIC_FADE_MS));
+        outgoing.volume = Math.max(0, Math.min(1, outgoingStartVolume * (1 - progress)));
+        if (newPath) incoming.volume = Math.max(0, Math.min(1, musicVolume * progress)); // read musicVolume live so a slider change mid-fade still applies
+        if (progress < 1) {
+            musicFadeRAF = requestAnimationFrame(step);
+        } else {
+            outgoing.pause();
+            outgoing.removeAttribute('src');
+            outgoing.volume = musicVolume; // reset ready for whenever it becomes the "incoming" track next
+        }
+    }
+    musicFadeRAF = requestAnimationFrame(step);
 }
 
 function updateBackgroundMusic(selectedMap) {
     const resolvedPath = resolveMusicPath(selectedMap);
     if (resolvedPath === currentMusicPath) return; // same track (or still no track) - leave it playing as-is
     currentMusicPath = resolvedPath;
-    if (!resolvedPath) {
-        bgMusicAudio.pause();
-        bgMusicAudio.removeAttribute('src');
-        return;
-    }
-    bgMusicAudio.src = resolvedPath;
-    // Keep playing even while muted (silently) so unmuting resumes mid-track instead of restarting
-    attemptPlayMusic();
+    crossfadeToTrack(resolvedPath);
 }
 
 // --- Shareable links ---
@@ -295,10 +331,10 @@ function parseShareLink() {
     return { index: matchIndex, view };
 }
 
-function flashShareButton(message) {
-    const original = shareLinkBtn.textContent;
-    shareLinkBtn.textContent = message;
-    setTimeout(() => { shareLinkBtn.textContent = original; }, 1500);
+function flashButtonText(btn, message) {
+    const original = btn.textContent;
+    btn.textContent = message;
+    setTimeout(() => { btn.textContent = original; }, 1500);
 }
 
 function initViewer() {
@@ -325,24 +361,27 @@ function initViewer() {
     }
 
     loadMusicSettings();
-    bgMusicAudio.volume = musicVolume;
-    bgMusicAudio.muted = isMusicMuted;
+    bgMusicAudioA.volume = musicVolume;
+    bgMusicAudioB.volume = musicVolume;
+    bgMusicAudioA.muted = isMusicMuted;
+    bgMusicAudioB.muted = isMusicMuted;
     musicVolumeSlider.value = Math.round(musicVolume * 100);
     musicToggleBtn.textContent = isMusicMuted ? '🔇' : '🔊';
     musicToggleBtn.title = isMusicMuted ? 'Unmute background music' : 'Mute background music';
 
     musicToggleBtn.addEventListener('click', () => {
         isMusicMuted = !isMusicMuted;
-        bgMusicAudio.muted = isMusicMuted;
+        bgMusicAudioA.muted = isMusicMuted;
+        bgMusicAudioB.muted = isMusicMuted;
         musicToggleBtn.textContent = isMusicMuted ? '🔇' : '🔊';
         musicToggleBtn.title = isMusicMuted ? 'Unmute background music' : 'Mute background music';
         saveMusicSettings();
-        if (!isMusicMuted) attemptPlayMusic(); // covers the case where autoplay was blocked before the first click
+        if (!isMusicMuted) attemptPlayMusic(activeMusicAudio); // covers the case where autoplay was blocked before the first click
     });
 
     musicVolumeSlider.addEventListener('input', () => {
         musicVolume = musicVolumeSlider.value / 100;
-        bgMusicAudio.volume = musicVolume;
+        activeMusicAudio.volume = musicVolume;
         saveMusicSettings();
     });
 
@@ -360,7 +399,7 @@ function initViewer() {
 
         if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(shareUrl).then(() => {
-                flashShareButton('✓ Copied!');
+                flashButtonText(shareLinkBtn, '✓ Copied!');
             }).catch(() => {
                 window.prompt('Copy this link:', shareUrl);
             });
@@ -442,6 +481,8 @@ function initViewer() {
     chkNpc.addEventListener('change', () => processFilterChange('npc', chkNpc));
     chkChest.addEventListener('change', () => processFilterChange('chest', chkChest));
     chkInformation.addEventListener('change', () => processFilterChange('information', chkInformation));
+    chkAltar.addEventListener('change', () => processFilterChange('altar', chkAltar));
+    chkBounty.addEventListener('change', () => processFilterChange('bounty', chkBounty));
     chkOverworldAll.addEventListener('change', () => processFilterChange('overworldAll', chkOverworldAll));
 
 
@@ -508,8 +549,7 @@ function initViewer() {
         }
 
         renderSingleLabel(newLabelObj, true);
-        outputEntries.push({ kind: 'new', label: newLabelObj });
-        renderOutputPanel();
+        pendingNewLabels.push(newLabelObj);
 
         // Keep coordinate/category/target-map selections sticky so placing a run of
         // similar labels is quick - only the free-text fields reset between placements.
@@ -520,8 +560,22 @@ function initViewer() {
         newLabelTargetY.value = '';
     });
 
-    clearPendingBtn.addEventListener('click', () => {
-        clearPendingEditorState();
+    copyEditsBtn.addEventListener('click', () => {
+        const selectedMap = ArcanumMapData.find(m => m.filename === currentMapFilename);
+        if (!selectedMap) return;
+        const allLabels = [...(selectedMap.labels || []), ...pendingNewLabels];
+        const lines = allLabels.map(l => `  ${buildLabelCodeLine(l)}`).join('\n');
+        const fullText = `labels: [\n${lines}\n]`;
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(fullText).then(() => {
+                flashButtonText(copyEditsBtn, '✓ Copied!');
+            }).catch(() => {
+                window.prompt('Copy this text:', fullText);
+            });
+        } else {
+            window.prompt('Copy this text:', fullText);
+        }
     });
 
     zoomInBtn.addEventListener('click', (e) => { e.stopPropagation(); executeButtonZoom(true); });
@@ -679,6 +733,8 @@ function loadImage(index, arrivalViewOverride, restorePosition) {
         chkNpc.parentElement.style.display = 'none';
         chkChest.parentElement.style.display = 'none';
         chkInformation.parentElement.style.display = 'none';
+        chkAltar.parentElement.style.display = 'none';
+        chkBounty.parentElement.style.display = 'none';
         categoryField.style.display = 'none';
         waypointFields.style.display = 'none';
     } else {
@@ -695,6 +751,8 @@ function loadImage(index, arrivalViewOverride, restorePosition) {
         chkNpc.parentElement.style.display = 'flex';
         chkChest.parentElement.style.display = 'flex';
         chkInformation.parentElement.style.display = 'flex';
+        chkAltar.parentElement.style.display = 'flex';
+        chkBounty.parentElement.style.display = 'flex';
         categoryField.style.display = 'flex';
         waypointFields.style.display = getSelectedNewLabelCategories().includes('waypoint') ? 'flex' : 'none';
     }
@@ -1060,16 +1118,55 @@ function renderSingleLabel(label, isPending) {
     if (currentMapType === "overworld") {
         const renderX = (img.clientWidth / 2000) * (2000 - label.x);
         const renderY = (img.clientHeight / 2000) * label.y;
+
+        let hoverTooltip = null;
+        let hoverTimeout = null;
+        const showHoverTooltip = () => {
+            if (isCreatorMode) return;
+            clearTimeout(hoverTimeout);
+            hoverTimeout = setTimeout(() => {
+                if (hoverTooltip) return;
+                hoverTooltip = document.createElement('div');
+                hoverTooltip.className = 'world-hover-tooltip';
+                hoverTooltip.style.left = `${renderX}px`;
+                hoverTooltip.style.top = `${renderY}px`;
+                const descText = label.description || '';
+                hoverTooltip.innerHTML = `<h4>${label.text}</h4>${descText ? `<p>${descText}</p>` : ''}`;
+                container.appendChild(hoverTooltip);
+                // Add the visible class on the next frame so the transition actually animates in
+                requestAnimationFrame(() => {
+                    if (hoverTooltip) hoverTooltip.classList.add('visible');
+                });
+            }, 300);
+        };
+        const hideHoverTooltip = () => {
+            clearTimeout(hoverTimeout);
+            if (hoverTooltip) { hoverTooltip.remove(); hoverTooltip = null; }
+        };
+        const handleWorldLabelClick = (e) => {
+            e.stopPropagation();
+            if (suppressNextLabelClick) { suppressNextLabelClick = false; return; }
+            if (isCreatorMode) {
+                openInfoPopup();
+                return;
+            }
+            hideHoverTooltip();
+            if (label.targetMapFilename) {
+                let viewOverride = null;
+                if (typeof label.targetX === 'number') {
+                    viewOverride = { x: label.targetX, y: label.targetY, zoom: label.targetZoom || 1 };
+                }
+                travelToMapByFilename(label.targetMapFilename, viewOverride);
+            }
+        };
         
         const dot = document.createElement('div');
         dot.className = 'arcanum-world-dot';
         if (isPending) dot.classList.add('pending-label');
         dot.style.left = `${renderX}px`; dot.style.top = `${renderY}px`;
-        dot.addEventListener('click', (e) => {
-            e.stopPropagation();
-            if (suppressNextLabelClick) { suppressNextLabelClick = false; return; }
-            openInfoPopup();
-        });
+        dot.addEventListener('mouseenter', showHoverTooltip);
+        dot.addEventListener('mouseleave', hideHoverTooltip);
+        dot.addEventListener('click', handleWorldLabelClick);
         container.appendChild(dot);
 
         const txt = document.createElement('div');
@@ -1077,11 +1174,9 @@ function renderSingleLabel(label, isPending) {
         if (isPending) txt.classList.add('pending-label');
         txt.innerHTML = `<span>${label.text}</span>`;
         txt.style.left = `${renderX}px`; txt.style.top = `${renderY}px`;
-        txt.addEventListener('click', (e) => {
-            e.stopPropagation();
-            if (suppressNextLabelClick) { suppressNextLabelClick = false; return; }
-            openInfoPopup();
-        });
+        txt.addEventListener('mouseenter', showHoverTooltip);
+        txt.addEventListener('mouseleave', hideHoverTooltip);
+        txt.addEventListener('click', handleWorldLabelClick);
         
         txt.setAttribute('data-raw-x', renderX);
         txt.setAttribute('data-raw-y', renderY);
@@ -1241,24 +1336,8 @@ function buildLabelCodeLine(labelData) {
     return `{ ${parts.join(', ')} },`;
 }
 
-function renderOutputPanel() {
-    if (outputEntries.length === 0) {
-        outputCode.textContent = '// Click the map, fill in the fields, and hit "Add Label".\n// Drag any pin (new or existing) to reposition it.';
-        return;
-    }
-    const lines = outputEntries.map(entry => {
-        const codeLine = buildLabelCodeLine(entry.label);
-        if (entry.kind === 'update') {
-            return `// Moved "${entry.label.text}" - find its existing line in maps.js and replace it with:\n${codeLine}`;
-        }
-        return codeLine;
-    });
-    outputCode.textContent = lines.join('\n');
-}
-
 function clearPendingEditorState() {
-    outputEntries = [];
-    renderOutputPanel();
+    pendingNewLabels = [];
     const pendingEls = container.querySelectorAll('.pending-label');
     pendingEls.forEach(el => el.remove());
 }
@@ -1382,11 +1461,6 @@ window.addEventListener('mouseup', () => {
     if (isDraggingLabel) {
         isDraggingLabel = false;
         suppressNextLabelClick = true;
-        const alreadyTracked = outputEntries.some(entry => entry.label === draggedLabelData);
-        if (!alreadyTracked) {
-            outputEntries.push({ kind: 'update', label: draggedLabelData });
-        }
-        renderOutputPanel();
         draggedLabelData = null;
         draggedLabelElements = null;
     }

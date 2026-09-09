@@ -54,6 +54,8 @@
                     <label><input type="checkbox" class="new-label-cat-chk" value="npc"> 🧑 NPC</label>
                     <label><input type="checkbox" class="new-label-cat-chk" value="chest"> 📦 Chest</label>
                     <label><input type="checkbox" class="new-label-cat-chk" value="information"> ℹ️ Information</label>
+                    <label><input type="checkbox" class="new-label-cat-chk" value="altar"> 🕯️ Altar</label>
+                    <label><input type="checkbox" class="new-label-cat-chk" value="bounty"> 💰 Bounty</label>
                 </div>
             </div>
 
@@ -75,11 +77,7 @@
             </div>
             
             <button id="add-to-preview-btn" class="toggle-btn" style="width:100%;">+ Add Label</button>
-            <button id="clear-pending-btn" class="toggle-btn" style="width:100%;">Clear Unsaved Labels</button>
-            
-            <label>Paste into maps.js:</label>
-            <code id="output-code">// Click the map, fill in the fields, and hit "Add Label".
-// Drag any pin (new or existing) to reposition it.</code>
+            <button id="copy-edits-btn" class="toggle-btn" style="width:100%;">📋 Copy Edits</button>
         </div>
     </div>
 
@@ -98,6 +96,8 @@
                     <label><input type="checkbox" id="chk-npc" checked> NPC</label>
                     <label><input type="checkbox" id="chk-chest" checked> Chest</label>
                     <label><input type="checkbox" id="chk-information" checked> Information</label>
+                    <label><input type="checkbox" id="chk-altar" checked> Altar</label>
+                    <label><input type="checkbox" id="chk-bounty" checked> Bounty</label>
                     <label id="lbl-overworld-all" style="display:none;"><input type="checkbox" id="chk-overworld-all" checked> World Locations</label>
                 </div>
             </div>

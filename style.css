@@ -267,6 +267,43 @@ img {
     color: #d1b3ff;
 }
 
+/* Lightweight hover-only tooltip for world map labels - description only, no buttons */
+.world-hover-tooltip {
+    position: absolute;
+    background-color: #262017;
+    color: #e5dac1;
+    border: 2px solid #b39449;
+    box-shadow: 0px 8px 24px rgba(0,0,0,0.8);
+    border-radius: 4px;
+    padding: 10px 14px;
+    width: max-content;
+    max-width: 280px;
+    font-family: "Georgia", serif;
+    font-size: 12px;
+    line-height: 1.4;
+    z-index: 99;
+    transform: translate(-50%, -125%) scale(0.9);
+    opacity: 0;
+    transition: opacity 0.18s ease, transform 0.18s ease;
+    pointer-events: none;
+}
+
+.world-hover-tooltip.visible {
+    transform: translate(-50%, -125%) scale(1);
+    opacity: 1;
+}
+
+.world-hover-tooltip h4 {
+    margin: 0 0 4px 0;
+    color: #ffd700;
+    font-family: "Cinzel", "Georgia", serif;
+    font-size: 14px;
+}
+
+.world-hover-tooltip p {
+    margin: 0;
+}
+
 /* Immersive Descriptive Popup Box Style */
 .info-popup {
     position: absolute;
@@ -783,6 +820,30 @@ img {
 .map-label.cat-information:hover {
     background-color: #95a5a6;
     color: #1a1c1c;
+}
+
+/* 🕯️ Altar Category Styling Card Profile */
+.map-label.cat-altar {
+    border-color: #6c5ce7; /* Mystical indigo outline, fitting for a sacred/ritual site */
+    background-color: rgba(24, 21, 40, 0.95);
+    color: #c9c0f7; /* Pale indigo lettering tint */
+    --label-color: #6c5ce7;
+}
+.map-label.cat-altar:hover {
+    background-color: #6c5ce7;
+    color: #14101f;
+}
+
+/* 💰 Bounty Category Styling Card Profile - items to steal for the thieves' underground */
+.map-label.cat-bounty {
+    border-color: #e84393; /* Illicit magenta outline, fitting for a marked heist target */
+    background-color: rgba(40, 20, 30, 0.95);
+    color: #f8c6de; /* Pale pink lettering tint */
+    --label-color: #e84393;
+}
+.map-label.cat-bounty:hover {
+    background-color: #e84393;
+    color: #1f0f16;
 }
 
 /* Sidebar High-Level Mod Category Selection Tabs */

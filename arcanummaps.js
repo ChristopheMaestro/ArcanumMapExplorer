@@ -18,8 +18,9 @@ const ArcanumCitiesMapData = [
         // NEW MAP TO DO
       { x: 1237, y: 1650, text: "Dernholm, capital of Cumbria", description: "Capital of Cumbria - A dying feudal kingdom.", targetMapFilename: "Dernholm" }, // MAP OK
       { x: 323, y: 877, text: "Isle of Despair", description: "A penal colony.", targetMapFilename: "Isle of Despair" }, // MAP OK
+        // To do: Pit
       { x: 1545, y: 656, text: "Qintarra", description: "A large elven community.", targetMapFilename: "Qintarra"}, // MAP OK
-        // To do: Queens chambers
+        // To do: Silver Lady Chambers
       { x: 1752, y: 1514, text: "Roseborough", description: "A small town near the Ring of Brodgar.", targetMapFilename: "Roseborough"},
         // NEW MAP TO DO
         // To do: Mannox Hole
@@ -31,6 +32,7 @@ const ArcanumCitiesMapData = [
       { x: 1179, y: 316, text: "The Bedokaan Village", description: "As small village of reptilian creatures.", targetMapFilename: "The Bedokaan Village" }, // MAP OK
       { x: 1505, y: 297, text: "T’sen-Ang", description: "Home of the Dark Elves.", targetMapFilename: "T’sen-Ang"}, // MAP OK
       { x: 444, y: 489, text: "Tulla", description: "A mysterious city of mages deep in the Vendigroth Wastes.", targetMapFilename: "Tulla"}, // MAP OK
+        // To do: Fa'al Kin's Maze
       { x: 868, y: 1191, text: "Vooriden", description: "A small village just south of Tarant.", targetMapFilename: "Vooriden"}, // MAP OK
       { x: 954, y: 667, text: "Wheel Clan", description: "A Dwarven society deep in the Grey Mountains.", targetMapFilename: "Wheel Clan"},
         // NEW MAP TO DO
@@ -119,12 +121,26 @@ const ArcanumCitiesMapData = [
     defaultView: { x: 4116, y: 3252, zoom: 1 },
     labels: [
       { x: 5663, y: 2388, text: "Worthless Mutt (Dog)", description: "", category: "followers" },
-      { x: 2947, y: 3240, text: "Geoffrey Tarellond-Ashe", description: "", category: "followers" },
-
+      { x: 2947, y: 3240, text: "Geoffrey Tarellond-Ashe", description: "Geoffrey Tarellond-Ashe wants you to help him solve the mystery of the Ashbury Cemetary.", category: ["quest", "followers"] },
       { x: 2041, y: 2737, text: "Ashbury Crematorium - Level 1", description: "", category: "waypoint", targetMapFilename: "Ashbury Crematorium - Level 1" },
       { x: 3707, y: 1325, text: "Haunted Castle - Ground Floor", description: "", category: "waypoint", targetMapFilename: "Haunted Castle - Ground Floor" },
       { x: 3277, y: 2500, text: "Scienticians Underground", description: "", category: "waypoint", targetMapFilename: "Scienticians Underground" },
-
+      { x: 3305, y: 2623, text: "Theodore", description: "A fellow named Theodore wants you to retrieve his 'technologically improved' plate from Ashbury's local scientician.", category: ["quest", "npc"] },
+      { x: 4662, y: 2382, text: "Chester Miller", description: "The Mayor of Ashbury will allow you to answer questions at this evenings Town Council meeting. Your answers must please as many people as possible.", category: ["quest", "npc"] },
+      { x: 5007, y: 2634, text: "Gun Smith", description: "100 / Gun store", category: "shop" },
+      { x: 3920, y: 2543, text: "Herbalist", description: "90 / Herbalist", category: "shop" },
+      { x: 5763, y: 2928, text: "Elven Trader", description: "100 / Elven Trader", category: "shop" },
+      { x: 5605, y: 2781, text: "Raymond Pierce", description: "100 / Glasses", category: "shop" },
+      { x: 4345, y: 2945, text: "Elf Shopkeeper", description: "100 / Magic shop", category: "shop" },
+      { x: 4637, y: 2835, text: "Tailor", description: "90 / Tailor", category: "shop" },
+      { x: 4455, y: 2734, text: "Blacksmith", description: "110 / Blacksmith", category: "shop" },
+      { x: 4650, y: 4618, text: "Wise Woman", description: "150 / Gypsy", category: "shop" },
+      { x: 3568, y: 2381, text: "Kendrick Wales", description: "The first time you talk to him, Wales will let you know that he's the author of The Curse of T'sen-Ang, but he won't tell you anything about the book. Later you'll get to read a copy of the book, and learn how Wales picked up the information to write it.", category: ["quest", "npc"] },
+      { x: 1933, y: 2562, text: "Infernal Hammer", description: "", category: "information" },
+      { x: 3790, y: 3998, text: "Theo Brightstart", description: "Kill the 3 wild pigs that keep eating Theo Brightstart's corn crop. / Load the 5 large boulders located in Theo Brightstart's field onto his cart.", category: ["quest", "npc"] },
+      { x: 5486, y: 4176, text: "William Thorndop", description: "Firearms Master", category: ["quest", "npc"] },
+      { x: 6797, y: 2363, text: "Barrel", description: "Contains: The Hand", category: ["quest", "chest"], linkedLabels: ["Ogdin"] },
+      { x: 3970, y: 3041, text: "General store", description: "", category: "shop" },
     ]
   },
   {
@@ -134,7 +150,38 @@ const ArcanumCitiesMapData = [
     typemap: "local",
     labels: [
       { x: 5593, y: 2093, text: "Dante", description: "", category: "followers" },
-      { x: 4727, y: 3785, text: "Franklin Payne", description: "", category: "followers" },
+      { x: 4727, y: 3785, text: "Franklin Payne", description: "Franklin Payne will only show up after you've visited T'sen-Ang and learned the fate of the Black Mountain Clan . If you ask him the most dangerous place he's ever been, he'll say Thanatos. At that point you can invite him to come along with you to Thanatos, even if you joined the dark elves and thus can't go to Thanatos.", inventory: ["Elephant Gun", "Mithril Chainmail"], category: ["followers", "information"] },
+      { x: 3912, y: 2885, text: "Garret Almstead", description: "", shopType: "Blacksmith", shopMarkup: 110, inventory: ["Dwarven Gauntlets", "Key"], category: ["quest", "shop", "key"] },
+      { x: 3575, y: 3080, text: "Tailor", description: "", inventory: ["Enchanted Gown"], shopType: "Tailor", shopMarkup: 90, category: ["shop"] },
+      { x: 5032, y: 2161, text: "General Store", description: "", shopType: "General Store", shopMarkup: 110, category: ["shop"] },
+      { x: 4383, y: 3109, text: "Inventor", description: "", shopType: " Inventor", shopMarkup: 110, category: ["shop"] },
+      { x: 5496, y: 2376, text: "Junk Dealer", description: "", shopType: "Junk Dealer", shopMarkup: 200, category: ["shop"] },
+      { x: 4360, y: 2355, text: "Herbalist", description: "", shopType: "Herbalist", shopMarkup: 90, category: ["shop"] },
+      { x: 3083, y: 2915, text: "Magic Shop", description: "", shopType: "Magic Shop", shopMarkup: 100, category: ["shop"] },
+
+      { x: 2028, y: 3570, text: "Note from Tyron", description: "''The crow is in danger.''", category: "quest" },
+      { x: 2331, y: 3399, text: "Tugal the Hedge Wizard", description: "", category: ["quest", "npc"] },
+      { x: 864, y: 3243, text: "Monster around Black Root (1/3)", description: "", category: "information" },
+      { x: 3707, y: 3803, text: "Monster around Black Root (2/3)", description: "", category: "information" },
+      { x: 5738, y: 4002, text: "Monster around Black Root (3/3)", description: "", category: "information" },
+
+      { x: 3248, y: 2623, text: "Kietzel Pierce", description: "Master Bowman", category: ["quest", "npc"] },
+      { x: 3184, y: 2665, text: "Clarissa Shalmo", description: "Master of Throwing", category: ["quest", "npc"] },
+      { x: 3568, y: 2664, text: "Daniel Hallaway", description: "", category: ["quest", "npc"], linkedLabels: ["Garret Almstead"] },
+      { x: 4627, y: 3224, text: "Grunwalde", description: "", inventory: ["Envenomed Sword", "Poison (Quest)"], category: ["quest", "npc"] },
+      { x: 5458, y: 3392, text: "Mrs. Cameron", description: "", inventory: ["Mage’s Dagger", "Chapeau of Magnetic Inversion"], category: ["quest", "npc"],
+          linkedLabels: [
+          { questName: "Find Liam Cameron (Part I)", questDescription: "When you talk to Mrs. Cameron, she'll tell you that her son Liam has gone missing from his workshop. Then she'll mark the location of his workshop on your map.", target: "Liam's body" },
+        ],
+      },
+      { x: 7180, y: 2486, text: "Black Root Mayor", description: "", category: ["quest", "npc"], linkedLabels: ["D'ak Taan", "King Praetor"] },
+      { x: 8125, y: 2907, text: "Halfling Wizard (1/3)", description: "A painted face, hands with no bones. My oldest brother was made of stones. What am I? - A clock", category: ["quest", "npc"], linkedLabels: ["Halfling Wizard (2/3)"] },
+      { x: 5685, y: 2704, text: "Herkemer Oggdoddler", description: "If you let him tell his war stories for long enough, he'll offer to give you expert training in melee , dodge , firearms , and spot traps.", category: "npc" },
+      { x: 5926, y: 1652, text: "Master Shipbuilder", description: "At one point in the game you might need to buy a ship. The regular price is 50,000 coins, but a skilled haggler can try to negotiate. The price will be brought down to 35,000 with maximum (rank 20, 5 character points worth) Haggle but no Master status, whereas a Haggle Master can reduce it down to 25,000.", category: ["npc", "information"] },
+      { x: 4224, y: 1820, text: "Train", description: "Tarant / Ashbury. 75 gold per party member.", category: "waypoint" },
+      { x: 3164, y: 1271, text: "D'ak Taan", description: "", category: ["quest", "npc"], linkedLabels: ["Grunwalde", "Tugal the Hedge Wizard", "Black Root Mayor"]},
+      { x: 1947, y: 1610, text: "Halfling Wizard (2/3)", description: "Death to one, while birthing another - trees begin to shiver around its grandmother. What am I? - The spring", category: ["quest", "npc"], linkedLabels: ["Halfling Wizard (3/3)"]  },
+      { x: 1783, y: 920, text: "Halfling Wizard (3/3)", description: "Causing wounds, and cleansing. History dies from its rinsing. Life or scars is its blessing. What am I? - Fire", category: ["quest", "npc"] },
     ]
   },
   {
@@ -142,22 +189,49 @@ const ArcanumCitiesMapData = [
     displayName: "Caladon",
     modGroup: "Cities",
     typemap: "local",
+    music: "music/caladon.flac",
     defaultView: { x: 3596, y: 3305, zoom: 1 },
     labels: [
-      { x: 4401, y: 1297, text: "Caladon - Panarii Temple", description: "", category: "waypoint", targetMapFilename: "Caladon - Panarii Temple Level 1"},
-      { x: 6613, y: 1768, text: "Caladon Castle", description: "", category: "waypoint", targetMapFilename: "Caladon - Castle Main Floor"},
-      { x: 6870, y: 2460, text: "Caladon Guardhouse Basement", description: "", category: "waypoint", targetMapFilename: "Caladon - Guardhouse Basement"},
-      { x: 7529, y: 1837, text: "High Security Prison", description: "", category: "waypoint", targetMapFilename: "High Security Prison"},
-      { x: 5883, y: 1959, text: "Caladon Mafia Underground", description: "", category: "waypoint", targetMapFilename: "Caladon - Mafia Underground"},
-      { x: 5390, y: 1723, text: "Caladon Sanders Basement", description: "", category: "waypoint", targetMapFilename: "Caladon - Sanders Basement"},
-      { x: 6879, y: 782, text: "Caladon Trap Disarm Dungeon", description: "", category: "waypoint" },
-      
+      { x: 4401, y: 1297, text: "Caladon - Panarii Temple", description: "", category: "waypoint", targetMapFilename: "Caladon - Panarii Temple Level 1" },
+      { x: 6613, y: 1768, text: "Caladon Castle", description: "", category: "waypoint", targetMapFilename: "Caladon - Castle Main Floor" },
+      { x: 6870, y: 2460, text: "Caladon Guardhouse Basement", description: "", category: "waypoint", targetMapFilename: "Caladon - Guardhouse Basement" },
+      { x: 7529, y: 1837, text: "High Security Prison", description: "", category: "waypoint", targetMapFilename: "High Security Prison" },
+      { x: 5883, y: 1959, text: "Caladon Mafia Underground", description: "", category: "waypoint", targetMapFilename: "Caladon - Mafia Underground" },
+      { x: 5377, y: 1643, text: "Caladon Sanders Basement", description: "", category: "waypoint", targetMapFilename: "Caladon - Sanders Basement" },
+      { x: 6878, y: 716, text: "Caladon Trap Disarm Dungeon", description: "", category: "waypoint" },
       { x: 8236, y: 1540, text: "Caladon Sewers", description: "", category: "waypoint", targetMapFilename: "Caladon - Sewers", targetX: 3690, targetY: 819 },
-      { x: 4353, y: 1328, text: "Caladon Sewers", description: "", category: "waypoint", targetMapFilename: "Caladon - Sewers", targetX: 2244, targetY: 346 }, //In front of Panarii Temple
-      { x: 6300, y: 978, text: "Caladon Sewers", description: "", category: "waypoint", targetMapFilename: "Caladon - Sewers", targetX: 2753, targetY: 356}, // In front of Museum
+      { x: 4353, y: 1328, text: "Caladon Sewers", description: "", category: "waypoint", targetMapFilename: "Caladon - Sewers", targetX: 2244, targetY: 346 },
+      { x: 6300, y: 978, text: "Caladon Sewers", description: "", category: "waypoint", targetMapFilename: "Caladon - Sewers", targetX: 2753, targetY: 356 },
       { x: 7480, y: 2591, text: "Caladon Sewers", description: "", category: "waypoint", targetMapFilename: "Caladon - Sewers", targetX: 3265, targetY: 1347 },
       { x: 5602, y: 2270, text: "Caladon Sewers", description: "", category: "waypoint", targetMapFilename: "Caladon - Sewers", targetX: 2148, targetY: 1103 },
       { x: 5742, y: 3327, text: "Caladon Sewers", description: "", category: "waypoint", targetMapFilename: "Caladon - Sewers", targetX: 2326, targetY: 1784 },
+      { x: 4333, y: 2610, text: "Kietzel Pierce", description: "Kietzel Pearce will train you as a Bow Master if you can find the Bow of Ecclesiates, said to be hidden in the ancient Ruins of Szabo.", category: ["quest", "npc"] },
+      { x: 4836, y: 1928, text: "Lilian Misk", description: "Lillian Misk wants an investigation into who disclosed the information concerning the ownership of ''Horror Among the Dark Elves'' by her late husband.", category: ["quest", "npc"] },
+      { x: 6384, y: 1799, text: "Edward Willoughsby (Caladon)", description: "Edward Willoughsby wants you to convince King Farad's advisors that Caladon should join the Unified Kingdom.", category: ["quest", "npc"] },
+      { x: 7225, y: 1852, text: "Chief Inspector Henderson", description: "Chief Inspector Henderson has charged you with the task of finding the Whytechurch Murderer.", category: ["quest", "npc"] },
+      { x: 6838, y: 758, text: "Daniel McPherson", description: "Daniel McPherson will train you as the Trap Master if you can survive the training maze beneath his house.", category: ["quest", "npc"] },
+      { x: 6553, y: 605, text: "Adam Maxwell", description: "Adam Maxwell, a member of the Thieves Underground, has asked you to steal the ancient book entitled ''Divinations and Magicks for the Adept Wizard'' from the home of Widower Misk in Caladon. // Adam Maxwell, a member of the Thieves Underground, has asked you to heist the priceless Necklace of Queen K'na S'ea from the museum in Caladon.", category: ["quest", "npc"] },
+      { x: 5456, y: 2009, text: "Ryan Sanders", description: "Ryan Sanders wants you to kill his father, Jonathan Sanders.  He will pay you 1,000 coin when the job is complete.", category: ["quest", "npc"] },
+      { x: 5200, y: 1714, text: "Jonathan Sanders", description: "", category: ["quest", "npc"], linkedLabels: ["Ryan Sanders"] },
+      { x: 2182, y: 3781, text: "David Wit", description: "David Wit would like you to discover what is killing his rabbits.", category: ["quest", "npc"] },
+      { x: 1229, y: 2891, text: "Hieronymous Maxim", description: "Find proof for Hieronymous Maxim that his heavier than air machines actually flew.", category: ["quest", "npc"] },
+      { x: 6337, y: 739, text: "Arthur Tyron", description: "Arthur Tyron needs you to find proof of half ogre breeding being done on ''Half Ogre Island''.", category: ["quest", "npc"] },
+      { x: 6488, y: 101, text: "Wise Woman", description: "Markup 150 / Gypse/nomad", category: "shop" },
+      { x: 5820, y: 1881, text: "Theft Fence", description: "", category: "shop" },
+      { x: 5136, y: 2155, text: "Magical smith", description: "100 / Magical smith", category: "shop" },
+      { x: 5330, y: 2137, text: "Magic shop", description: "Magic shop / 100", category: "shop" },
+      { x: 4419, y: 2175, text: "Herbalist", description: "Herbalist / 90", category: "shop" },
+      { x: 4797, y: 2365, text: "Dwarven Smith", description: "Blacksmith / 105", category: "shop" },
+      { x: 5355, y: 2633, text: "New Marker Location", description: "", category: "shop" },
+      { x: 6565, y: 4413, text: "Chest Of Gold", description: "", category: "bounty" },
+      { x: 3899, y: 2304, text: "Chest", description: "Magick Necklace", category: ["chest", "bounty"] },
+      { x: 6000, y: 3368, text: "Crate", description: "Post Bound For Tarant", category: ["chest", "bounty"] },
+      { x: 7424, y: 1805, text: "Cabinet", description: "Ryan Marshall's Police Record", category: ["chest", "bounty"] },
+      { x: 5513, y: 598, text: "Safe", description: "Necklace of Queen K'na S'ea", category: "chest" },
+      { x: 4298, y: 1706, text: "Grave of Lawrence Brummond", description: "", category: ["chest", "information"] },
+      { x: 3843, y: 1855, text: "Grave of Victor Misk", description: "Book purchased at the Roseborough Gift Shop.", category: ["quest", "chest"] },
+      { x: 4732, y: 1870, text: "Locked Case", description: "Divinations and Magicks for the Adept Wizard", category: ["quest", "chest"], linkedLabels: ["Adam Maxwell"] },
+      { x: 4743, y: 1964, text: "Display case", description: "The Book of Durin's Truth", category: ["quest", "chest"] },
     ]
   },
   {
@@ -170,9 +244,25 @@ const ArcanumCitiesMapData = [
       { x: 4851, y: 2182, text: "Vollinger", description: "", category: "followers" },
       { x: 4273, y: 2736, text: "Jayna Stiles", description: "", category: "followers" },
 
-      { x: 6132, y: 1215, text: "Dernholm Pits", description: "", category: "waypoint", targetMapFilename: "Dernholm Pits"},
-      { x: 5465, y: 1782, text: "Dernholm Castle", description: "", category: "waypoint" },
-      { x: 499, y: 573, text: "Dernholm Pits", description: "", category: "waypoint", targetMapFilename: "Dernholm Pits"},
+      { x: 6132, y: 1215, text: "Dernholm Pits", description: "", category: "waypoint", targetMapFilename: "Dernholm Pits", targetX: 2399, targetY: 1977},
+      { x: 5465, y: 1782, text: "Dernholm Castle", description: "", category: "waypoint", targetMapFilename: "Dernholm Castle", targetX: 702, targetY: 956},
+      { x: 499, y: 573, text: "Dernholm Pits", description: "", category: "waypoint", targetMapFilename: "Dernholm Pits", targetX: 341, targetY: 1317},
+
+      { x: 3566, y: 2147, text: "Charles Dolan", description: "", shopType: "General Store", shopMarkup: 110, category: ["quest", "shop"], linkedLabels: ["Jongle Dunne"] },
+      { x: 4488, y: 2401, text: "Junk Dealer", description: "", shopType: "Junk Dealer", shopMarkup: 200, category: "shop" },
+      { x: 4404, y: 1736, text: "Blacksmith", description: "", shopType: "Blacksmith", shopMarkup: 110, category: "shop" },
+
+      { x: 3794, y: 1939, text: "Lianna Pel Dar", description: "", category: ["quest", "npc"], linkedLabels: ["Maximillian"] },
+      { x: 4426, y: 2084, text: "Sarah Toone", description: "", category: ["quest", "npc"] },
+      { x: 3631, y: 1635, text: "Gladys", description: "", category: ["quest", "npc"] },
+      { x: 5608, y: 2574, text: "Bernard", description: "", category: ["quest", "npc"] },
+      { x: 5331, y: 2291, text: "Archibald", description: "", category: ["quest", "npc"] },
+      { x: 4902, y: 1463, text: "Dudley Crosston", description: "", category: ["quest", "npc"] },
+      { x: 4926, y: 1505, text: "Sir Garrick Stout", description: "Melee Master", category: ["quest", "npc"] },
+
+      { x: 3870, y: 1373, text: "Wood Chest", description: "", inventory: ["Shovel"], category: "chest" },
+
+      { x: 6244, y: 1057, text: "Guard", description: "", category: "information", linkedLabels: ["The only way to use this entrance is to insult the guards until they toss you in."] },
     ]
   },
   {
@@ -181,7 +271,23 @@ const ArcanumCitiesMapData = [
     modGroup: "Cities",
     typemap: "local",
     defaultView: { x: 3593, y: 4071, zoom: 1 },
-    labels: []
+    labels: [
+      { x: 3813, y: 4071, text: "Go back to Ashbury", description: "", category: ["waypoint"], targetMapFilename: "Ashbury" },
+
+      { x: 2836, y: 3708, text: "Gate Guard", description: "", category: ["quest", "npc"] },
+      { x: 2559, y: 3446, text: "Cynthia Boggs", description: "", category: ["quest", "followers"] },
+      { x: 2340, y: 3662, text: "Norian", description: "", category: ["quest", "npc"], linkedLabels: ["Maximillian"] },
+      { x: 2330, y: 3216, text: "Jones the Collector", description: "", category: ["quest", "npc"] },
+      { x: 2054, y: 3320, text: "Gorrin, Master of the Pit", description: "", category: ["quest", "npc"] },
+      { x: 1836, y: 3281, text: "Ogdin", description: "", category: ["quest", "key", "npc"] },
+      { x: 1504, y: 3105, text: "Thorvald Two Stones", description: "", category: ["quest", "followers"] },
+      
+      { x: 1954, y: 605, text: "The Sorcerous Beast", description: "", category: "quest" },
+      { x: 1121, y: 3570, text: "Window", description: "You can break this window to run away with Cynthia Boggs.", category: "information" },
+
+      { x: 3891, y: 1901, text: "Wooden Chest", inventory: ["1800 coins (???)"], category: "chest" },
+      { x: 1934, y: 539, text: "Loot", inventory: ["Baneful Gauntlets", "Charmed Ring"], category: "chest" },
+    ]
   },
   {
     filename: "ArcanumBase/Qintarra.png",
@@ -190,7 +296,20 @@ const ArcanumCitiesMapData = [
     typemap: "local",
     music: "music/qintarra.flac",
     defaultView: { x: 1938, y: 1431, zoom: 1 },
-    labels: []
+    labels: [
+      { x: 2198, y: 1407, text: "Swyft", description: "Take Swyft to Tarant", category: ["quest", "followers"] },
+      { x: 1717, y: 1360, text: "Winde", description: "Winde is Master of the Hunt. He'll ask you to find a missing hunter, and he'll mark the Bedokaan Village on your world map.", category: ["quest", "npc"] },
+      { x: 511, y: 1361, text: "Jormund", description: "", category: ["quest", "followers"] },
+      { x: 2204, y: 633, text: "Wrath", description: "", category: ["quest", "npc"] },
+      { x: 2135, y: 1905, text: "Fawn (aka Kal-N'driel)", description: "Master Healer.", shopType: "Magic Shop", shopMarkup: 100, category: ["shop", "information"] },
+      { x: 1879, y: 2035, text: "Whysper", description: "", category: ["quest", "npc"] },
+      { x: 3271, y: 1373, text: "Silver Lady Chambers", description: "", category: "waypoint" },
+      { x: 3154, y: 1409, text: "Raven", description: "", category: ["quest", "followers"], linkedLabels: ["William Bench"]},
+      { x: 3064, y: 1993, text: "Ellumyn", description: "Ellumyn will ask you to fetch him some mithril, which you can find at the Wheel Clan. When you return the metal to him, he'll give you Ellumyn's Bow (a faster version of the elven hunter's bow), and you'll also receive 1700 experience.", shopType: "Magic Shop", shopMarkup: 300, category: ["quest", "shop"] },
+      { x: 3493, y: 1913, text: "Ivory", shopType: "Potions", shopMarkup: 300, description: "", category: ["quest", "shop"] },
+      { x: 3455, y: 1878, text: "Sharpe", shopType: "Potions", shopMarkup: 300, description: "", category: "shop" },
+
+    ]
   },
   {
     filename: "ArcanumBase/Roseboroughsmall.jpg",
@@ -216,13 +335,13 @@ const ArcanumCitiesMapData = [
         ],},
       { x: 4725, y: 3619, text: "Jongle Dunne", description: "", category: ["quest", "npc"],
        linkedLabels: [
-          { questName: "", questDescription: "Jongle Dunne wants you to destroy the town’s steam engine.", target: "" },
-          { questName: "", questDescription: "Jongle Dunne needs a package picked up from a man named Charles Dolan, a merchant in Dernholm.", target: "" },
+          { questName: "", questDescription: "Jongle Dunne wants you to destroy the town’s steam engine.", target: "Steam Machine" },
+          { questName: "", questDescription: "Jongle Dunne needs a package picked up from a man named Charles Dolan, a merchant in Dernholm.", target: "Charles Dolan" },
         ],},
       { x: 5619, y: 3254, text: "Constable Owens", description: "", category: ["quest", "npc"],
         linkedLabels: [
           { questName: "", questDescription: "Constable Owens needs you to remove the thieves from the bridge.", target: "Lukan the Witless" },
-          { questName: "", questDescription: "Constable Owens wants you to fix the town’s steam engine.", target: "" },
+          { questName: "", questDescription: "Constable Owens wants you to fix the town’s steam engine.", target: "Barrel (Sprocket)" },
         ],},
       { x: 4975, y: 3178, text: "Lloyd Gurloes", shopType: "Blacksmith", shopMarkup: 110, inventory: ["Key to Lloyd Gurloes’ backroom"], category:  ["shop", "quest", "key"],
         linkedLabels: [
@@ -236,7 +355,7 @@ const ArcanumCitiesMapData = [
         linkedLabels: [
           { questName: "Stop the bank robbery (Part I)", questDescription: "Doc Roberts wants you to help him stop an impending bank robbery.", target: "Stop the bank robbery (Part II)" },
         ],},
-      { x: 5288, y: 3388, text: "Stop the bank robbery (Part II)", description: "Kill the three bank robbers.", category: "quest", target: "Doc Roberts"},
+      { x: 5288, y: 3388, text: "Bank robbers", description: "Stop the bank robbery (Part II) - Kill the three bank robbers.", category: "quest", target: "Doc Roberts"},
       { x: 2556, y: 3742, text: "Percival Toone", description: "", category: ["quest", "npc"],
         linkedLabels: [
           { questName: "", questDescription: "Percival Toone wants you to find a way to free the ghost of his mother.", target: "" },
@@ -249,11 +368,11 @@ const ArcanumCitiesMapData = [
         linkedLabels: [
           { questName: "", questDescription: "In order to join the thieves, you must destroy the construction materials for the new bridge.", target: "Bridge materials" },
         ],},
-      { x: 6361, y: 3567, text: "Elder Joachim’s paper trail (Part I)", description: "", category: "quest" },
-      { x: 7734, y: 3628, text: "Bridge materials", description: "", category: "quest" },
+      { x: 6361, y: 3567, text: "Elder Joachim’s paper trail (Part I)", description: "Note from Joachim", category: "quest", linkedLabels: ["Telegraph Operator"]},
+      { x: 7734, y: 3628, text: "Bridge materials", description: "", category: "quest", linkedLabels: ["Lukan the Witless"] },
 
       { x: 4575, y: 3237, text: "Gnome Shopkeeper", shopType: "General Store", shopMarkup: 110, category: "shop" },
-      { x: 7136, y: 2559, text: "Wise Woman", shopType: "Gypsy/Nomad", shopMarkup: 150, description: "", category: "shop" },
+      { x: 7136, y: 2559, text: "Wise Woman", shopType: "Gypsy/Nomad", shopMarkup: 150, inventory: ["Witch's Dagger"], category: "shop" },
 
       { x: 5914, y: 3147, text: "Shrouded Hills Panarii Temple", description: "", category: "waypoint", targetMapFilename: "Panarii Temple"},
       { x: 2179, y: 3272, text: "Bessie Toone Mine", description: "", category: "waypoint", targetMapFilename: "Bessie Toone Mine", targetX: 1697, targetY: 805},
@@ -269,27 +388,19 @@ const ArcanumCitiesMapData = [
     music: "music/villages.flac",
     defaultView: { x: 2816, y: 2407, zoom: 1 },
     labels: [
-      { x: 1293, y: 2938, text: "Find the Stolen Idol (I)", description: "", category: "quest" },
-      { x: 3777, y: 3372, text: "Find the Stolen Idol (II)", description: "", category: "quest" },
-      { x: 721, y: 2002, text: "Rescue Cyrus (II)", description: "", category: "quest" },
+      { x: 1298, y: 2918, text: "Brigitte", description: "Find the Stolen Idol (I)", category: ["npc", "quest"] },
+      { x: 3777, y: 3372, text: "Marley", description: "Find the Stolen Idol (II)", category: ["npc", "quest", "key"] },
+      { x: 721, y: 2002, text: "Puddles of blood and footprints", description: "Rescue Cyrus (II)", category: "quest", linkedLabels: ["Cyrus"]},
       { x: 2389, y: 3537, text: "Elder Joachim’s paper trail (III)", description: "", category: "quest" },
-      { x: 2271, y: 2586, text: "Myrth", category: ["npc", "quest"],
-        linkedLabels: [
-          { questName: "The Stillwater Giant (Part I)", questDescription: "Myrth, an elf residing in Stillwater, instructs you to perform a rite of passage, killing a Stillwater Giant and bringing its pelt to him. He directs you to Stanley Xavier Hippington, living directly North from his house.", target: "Stanley Xavier Hippington" },
-          { questName: "Find the Amulet of N’Tala (Part II)", questDescription: "The amulet can be obtained from Myrth either by stealing it or by taking it from his corpse after killing him.", target: "Gaylin" }]
-      },
-      { x: 2719, y: 1753, text: "Stanley Xavier Hippington", description: "", category: ["npc", "quest"],
-        linkedLabels: [
-          { questName: "The Stillwater Giant (Part II)", questDescription: "Upon talking to Stanley Xavier Hippington, a cryptozoologist, he gives you a Stillwater trap and a bottle of Stillwater Giant scent to use to capture a Stillwater Giant, residing in a cave nearby.", target: "The Stillwater Giant (Part III)" },
-          ]
-      },
-      { x: 2627, y: 2829, text: "Retrieving the Ruby (I)", description: "", category: "quest" },
-
-      { x: 1978, y: 3831, text: "General Goods", description: "", category: "shop" },
-      { x: 2278, y: 3130, text: "The Falling Hammer", description: "Blacksmith / Quest: Rescue Cyrus (I)", category:  ["shop", "quest"]},
-
-      { x: 1681, y: 633, text: "Drogs Cave", description: "", category: "waypoint", targetMapFilename: "Drogs Cave"},
-      { x: 4211, y: 1759, text: "Stillwater Giants Cave", description: "", category: "waypoint", targetMapFilename: "Stillwater Giants Cave"},
+      { x: 2271, y: 2586, text: "Myrth", description: "", category: ["npc", "quest"], linkedLabels: [{ questName: "The Stillwater Giant (Part I)", questDescription: "Myrth, an elf residing in Stillwater, instructs you to perform a rite of passage, killing a Stillwater Giant and bringing its pelt to him. He directs you to Stanley Xavier Hippington, living directly North from his house.", target: "Stanley Xavier Hippington" }, { questName: "Find the Amulet of N’Tala (Part II)", questDescription: "The amulet can be obtained from Myrth either by stealing it or by taking it from his corpse after killing him.", target: "Gaylin" }] },
+      { x: 2719, y: 1753, text: "Stanley Xavier Hippington", description: "", category: ["npc", "quest"], linkedLabels: [{ questName: "The Stillwater Giant (Part II)", questDescription: "Upon talking to Stanley Xavier Hippington, a cryptozoologist, he gives you a Stillwater trap and a bottle of Stillwater Giant scent to use to capture a Stillwater Giant, residing in a cave nearby.", target: "The Stillwater Giant (Part III)" }] },
+      { x: 2627, y: 2829, text: "Gildor Nightwalk", description: "Retrieving the Ruby (I)", category: "quest" },
+      { x: 784, y: 3387, text: "Adkin Chambers", description: "Adkin Chambers, the Dodge Master, wants you to kill Sir Garrick Stout, the Melee Master, and bring his eyes as proof that you have completed the task.", category: ["quest", "npc"] },
+      { x: 1978, y: 3831, text: "Gnome General", description: "", category: "shop", shopType: "General Store", shopMarkup: 110 },
+      { x: 2278, y: 3130, text: "Richard Leeks", description: "Richard Leeks, the blacksmith in Stillwater, wants you to find his friend Cyrus.", category: ["shop", "quest"], shopType: "Blacksmith", shopMarkup: 110, inventory: ["Tempered Shield", "Stillwater Blade"], linkedLabels: ["Puddles of blood and footprints"]},
+      { x: 1681, y: 633, text: "Drogs Cave", description: "", category: "waypoint", targetMapFilename: "Drogs Cave" },
+      { x: 4211, y: 1759, text: "Stillwater Giants Cave", description: "", category: "waypoint", targetMapFilename: "Stillwater Giants Cave" },
+      { x: 1237, y: 2882, text: "Altar to Geshtianna", description: "", category: "altar" },
     ],
   },
   {
@@ -297,58 +408,116 @@ const ArcanumCitiesMapData = [
     displayName: "Tarant",
     modGroup: "Cities",
     typemap: "local",
+    music: "music/tarant.flac",
     defaultView: { x: 3338, y: 2537, zoom: 1 },
     labels: [
-      { x: 3574, y: 2372, text: "Castleton’s General Store", description: "", category: "shop" },
-      { x: 3710, y: 2304, text: "Tailor", description: "", category: "shop" },
-      { x: 4007, y: 2094, text: "Inventor", description: "", category: "shop" },
-      { x: 4035, y: 2067, text: "Herbalist", description: "", category: "shop" },
+      { x: 3546, y: 2326, text: "Castleton’s General Store", description: "", category: "shop" },
+      { x: 3688, y: 2254, text: "Tailor", description: "", category: "shop" },
+      { x: 3985, y: 2094, text: "Inventor", description: "", category: "shop" },
+      { x: 4054, y: 2060, text: "Herbalist", description: "", category: "shop" },
       { x: 3932, y: 2486, text: "Junk Dealer", description: "", category: "shop" },
       { x: 3905, y: 1863, text: "Wallow’s Quality Armour", description: "", category: "shop" },
       { x: 3782, y: 1797, text: "Smythe’s Gun Shoppe", description: "", category: "shop" },
       { x: 2297, y: 2808, text: "Mellin Bungerton", description: "", category: "shop" },
       { x: 4523, y: 1634, text: "Magick Shop Clerk", description: "", category: "shop" },
-      { x: 4410, y: 1558, text: "Magickal Smith", description: "", category: "shop" },
+      { x: 4405, y: 1556, text: "Magickal Smith", description: "", category: "shop" },
       { x: 4598, y: 1524, text: "Magick Shop Clerk", description: "", category: "shop" },
       { x: 4570, y: 2347, text: "Black Market", description: "", category: "shop" },
-
       { x: 3800, y: 2093, text: "Magnus", description: "", category: "followers" },
-      { x: 4792, y: 1662, text: "Gar", description: "", category: "followers" },
-      { x: 3225, y: 2223, text: "Perriman Smythe", description: "", category: "followers" },
+      { x: 4766, y: 1656, text: "Gar", description: "", category: "followers" },
+      { x: 3223, y: 2221, text: "Perriman Smythe", description: "", category: "followers" },
       { x: 2463, y: 2798, text: "Sebastian", description: "", category: "followers" },
-
-      { x: 4162, y: 1649, text: "The Crystal Ball (Part I)", description: "", category: "quest", linkedLabels: ["The Crystal Ball (Part II)"] },
-      { x: 4340, y: 2454, text: "The Crystal Ball (Part II)", description: "Madame Toussaude wants you to deliver her crystal ball to Delores Beston.", category: "quest" },
+      { x: 4160, y: 1635, text: "Delores Beston", description: "Delores Beston wants you to steal Madamme Toussaude's crystal ball.", category: ["npc", "quest"], linkedLabels: ["Madame Toussaude"] },
+      { x: 4340, y: 2454, text: "Madame Toussaude", description: "Madame Toussaude wants you to deliver her crystal ball to Delores Beston.", category: ["npc", "quest"], linkedLabels: ["Delores Beston"] },
       { x: 4668, y: 2647, text: "Rid Mr. Plough’s Warehouses of Rats", description: "Mr. Plough wants you to rid his warehouses, near the docks in Tarant, of rats.", category: "quest" },
-    
       { x: 5442, y: 1502, text: "Bates Mansion", description: "", category: "waypoint" },
       { x: 4947, y: 1428, text: "City Hall Underground", description: "", category: "waypoint" },
       { x: 3780, y: 1940, text: "P. Schuyler & Sons (Level I)", description: "", category: "waypoint" },
       { x: 1812, y: 2706, text: "Tarant Old Sewers", description: "", category: "waypoint", targetMapFilename: "Tarant Old Sewers" },
       { x: 3081, y: 2970, text: "Tarant Old Sewers", description: "", category: "waypoint", targetMapFilename: "Tarant Old Sewers" },
       { x: 5443, y: 2279, text: "Tarant Old Sewers", description: "", category: "waypoint", targetMapFilename: "Tarant Old Sewers" },
-      { x: 5066, y: 3131, text: "Tarant Old Sewers", description: "", category: "waypoint", targetMapFilename: "Tarant Old Sewers", targetX: 3805, targetY: 2237, targetZoom: 1.0},
+      { x: 5066, y: 3131, text: "Tarant Old Sewers", description: "", category: "waypoint", targetMapFilename: "Tarant Old Sewers", targetX: 3805, targetY: 2237 },
       { x: 3302, y: 2074, text: "Tarant New Sewers", description: "", category: "waypoint" },
-      { x: 3849, y: 2316, text: "Tarant New Sewers", description: "", category: "waypoint" },
+      { x: 3846, y: 2298, text: "Tarant New Sewers", description: "", category: "waypoint" },
       { x: 3976, y: 1990, text: "Tarant New Sewers", description: "", category: "waypoint" },
       { x: 3871, y: 1649, text: "Tarant New Sewers", description: "", category: "waypoint" },
-      { x: 2949, y: 2014, text: "Bates Tunnel", description: "", category: "waypoint", targetMapFilename: "Bates Tunnel"},
+      { x: 2949, y: 2014, text: "Bates Tunnel", description: "", category: "waypoint", targetMapFilename: "Bates Tunnel" },
       { x: 3417, y: 2459, text: "Station A: West Garillon Bridge", description: "", category: "waypoint" },
       { x: 3598, y: 1728, text: "Station B: Vermillion Station", description: "", category: "waypoint" },
       { x: 4499, y: 1279, text: "Station C: Tarant University", description: "", category: "waypoint" },
-      { x: 6009, y: 1997, text: "Station D: Warehouse District", description: "", category: "waypoint" },
+      { x: 6055, y: 2005, text: "Station D: Warehouse District", description: "", category: "waypoint" },
       { x: 5111, y: 2121, text: "Station E: Commercial District", description: "", category: "waypoint" },
       { x: 4350, y: 2624, text: "Station F: Tarantian Docks", description: "", category: "waypoint" },
-      { x: 4462, y: 1939, text: "Station G: Kensington Park", description: "", category: "waypoint" },
+      { x: 4459, y: 1911, text: "Station G: Kensington Park", description: "", category: "waypoint" },
       { x: 2309, y: 3003, text: "Station H: The Boil", description: "", category: "waypoint" },
-      ]
+      { x: 3913, y: 2132, text: "Telegraph Operator", description: "", category: "quest" },
+      { x: 3746, y: 1663, text: "Jared", description: "Discover the fate of Wilhemina, girlfriend of Jared the guard.", category: ["quest", "npc"], linkedLabels: ["Wilhemina Carpenter"] },
+      { x: 4479, y: 1944, text: "Thom Grak", description: "Thom Grak, a rather jovial half orc, has asked me to find Sir Matt de Cesare for him.", category: ["quest", "npc"], linkedLabels: ["Matt de Cesare"] },
+      { x: 3256, y: 2006, text: "Matt de Cesare", description: "Sir M. de Cesare wants you to find the skulls of the Ren'ar siamese twins and bring them to him. He believes they may be in a warehouse in Tarant somewhere. / You need to find Arthur Tyron and bring him the siamese twin skulls as proof of a larger conspiracy. His last known address was in Black Root.", category: ["quest", "npc"], linkedLabels: ["Note from Tyron"] },
+      { x: 4199, y: 2406, text: "Madam Lil", description: "Madam Lil would like you to retrieve Cassie's necklace from Mr. Mooreland's house at 46 Devonshire Way. / Mr. Langley owes 400 coin to Madam Lil.  Collect it and return it to her.  He is the doorman at The Bridesdale Inn. / Madam Lil would like you to deliver a gift to Mrs. Halster at 48 Devonshire Way.  You must tell her it is from her husband. / Madam Lil would like you to locate a Medallion of Beauty for her. / Madam Lil would like you to ''service'' Mr. Franklin.  He lives at the corner of Vermillion and Grimson.", category: ["quest", "npc", "bounty"], linkedLabels: ["Laura", "Mr. Langley", "Mrs. Halster", "Mr. Franklin"] },
+      { x: 3194, y: 1930, text: "Gurin Rockharrow", description: "Master of Gambling / Gurin Rockharrow has agreed to tutor you in the skills of gambling.", category: ["quest", "npc"] },
+      { x: 5380, y: 2563, text: "Thaddeus Mynor", description: "Thaddeus Mynor wants you to retrieve the map of the Tarantian Sewers. / Thaddeus Mynor wants you to steal the golden idol of the barbarians of Kree.", category: ["quest", "npc"] },
+      { x: 5150, y: 1959, text: "Cedric Appleby", description: "Steal any incriminating evidence from Bates to help Appleby expose him. / Cedric Appleby will gain you access into Bates' house if you destroy Bates' new steam engine prototype housed in Bates' factory. The factory is located at the end of Ten Hands Alley.", category: ["quest", "npc"] },
+      { x: 3788, y: 2333, text: "Matthew Jameson", description: "Matthew Jameson wants you to retrieve his wedding ring from the sewers.", category: ["quest", "npc"] },
+      { x: 3523, y: 2181, text: "Evelyn Garringsburg", description: "Mrs. Evelyn Garringsburg wants you to find her stolen painting, the famed ''Kerghan and Persephone'' by Pizarro.", category: ["quest", "npc"] },
+      { x: 3491, y: 2424, text: "Cassandra Pettibone", description: "Mrs. Cassandra Pettibone wants you to steal the elven funerary stone from the newly unearthed elven catacombs.", category: ["quest", "npc"] },
+      { x: 3225, y: 1865, text: "Dark Elf Noble", description: "A strange man in the Wellington wants you to deliver a note to 36 Low Dervish Row.", category: ["quest", "npc"] },
+      { x: 5178, y: 1601, text: "Guard Captain", description: "Devise a solution to Bates' saboteur difficulties at his factory to gain an audience with him. The factory is located at the end of Ten Hands Alley, and the saboteurs are reputed to strike sometime after midnite.", category: ["quest", "npc"] },
+      { x: 5234, y: 1065, text: "Benjamin Gershwin", description: "Benjamin Gershwin, the phrenologist, wants you to bring him the skulls of the Ren'ar siamese twins.", category: ["quest", "npc"] },
+      { x: 4357, y: 2003, text: "Sammie White", description: "Pickpocket master / You are to go the middle of Tarant and make a fool of yourself by running around in your underwear.", category: ["quest", "npc"] },
+      { x: 4242, y: 1687, text: "Frederick T. Fitzgerald", description: "F. Fitzgerald, the master of Spotting Traps, wants you to get the staff of K'an T'au from the castle of S'nel N'fa.  In exchange, he will give you master training.", category: ["quest", "npc"] },
+      { x: 3814, y: 2170, text: "J. M. Morat", description: "J.M. Morat, the Haggle Master, wants 10,000 coin in exchange for Master training.", category: ["quest", "npc"] },
+      { x: 5596, y: 1842, text: "Capt. Wheeler", description: "Capt. Wheeler of the Tarantian Guard wants you to kill Donn Throgg to end the orc uprising. / Capt. Wheeler of the Tarantian Guard wants you to convince Donn Throgg to surrender to end the orc uprising.", category: ["quest", "npc"] },
+      { x: 5499, y: 1805, text: "Mr. Babcock", description: "Mr. Babcock wants you to convince Donn Throgg to slip out of the factory unseen, thereby ending the orc uprising, so that he may become the union representative for the orcs of Tarant.", category: ["quest", "npc"] },
+      { x: 5782, y: 1631, text: "Donn Throgg", description: "", category: ["quest", "npc"] },
+      { x: 5980, y: 1917, text: "Stonecutter", description: "", category: ["quest", "npc"], linkedLabels: ["Jared"] },
+      { x: 4079, y: 1589, text: "Mr. Wright", description: "Mr. Wright, Editor of the Tarantian, would like you to deliver a payment note to Mrs. Halster who lives on the corner of Devonshire and Vermillion.", category: ["quest", "npc"] },
+      { x: 5783, y: 1666, text: "Factory Foreman", description: "100 / Inventor", category: "shop" },
+      { x: 5628, y: 2752, text: "Wise Woman", description: "Gypsy/Nomad 150", category: "shop" },
+      { x: 3492, y: 1894, text: "Mr. Langley", description: "", category: ["quest", "npc"] },
+      { x: 6109, y: 1545, text: "Saboteurs", description: "", category: ["quest", "npc"] },
+      { x: 5267, y: 2200, text: "Stanton", description: "", category: ["quest", "npc"] },
+      { x: 6156, y: 1855, text: "Half-ogre", description: "Key", category: ["quest", "key", "npc"] },
+      { x: 6112, y: 1814, text: "Chest", description: "Kerghan and Persephone", category: ["key", "chest"] },
+      { x: 3264, y: 2193, text: "Edward Willoughsby", description: "", category: ["quest", "npc"] },
+      { x: 4989, y: 1321, text: "Edward Willoughsby (II)", description: "", category: ["quest", "npc"] },
+      { x: 3795, y: 2011, text: "James Kingsford", description: "", category: ["quest", "key", "npc"] },
+      { x: 3455, y: 2016, text: "Mrs. Halster", description: "", category: ["quest", "npc"] },
+      { x: 4001, y: 1367, text: "Mr. Wellington", description: "", category: ["quest", "npc"] },
+      { x: 4870, y: 1664, text: "H. T. Parnell", description: "", category: ["quest", "npc"] },
+      { x: 4676, y: 1240, text: "Ancient iron chest", description: "", category: "chest" },
+      { x: 4482, y: 2260, text: "Chest", inventory: ["Cassie's Jewellery"], category: ["chest", "bounty"] },
+      { x: 5273, y: 1874, text: "Safe", inventory: ["Derian Ka Sword"], category: ["chest", "bounty"] },
+      { x: 3386, y: 2220, text: "Chest", inventory: ["Enchanted Looking Glass"], category: ["chest", "bounty"] },
+      { x: 4682, y: 1711, text: "Chest", inventory: ["Essence Of Will-O-Wisp"], category: ["chest", "bounty"] },
+      { x: 4275, y: 2987, text: "Barrel", inventory: ["Flawless Dwarven Rubies"], category: ["chest", "bounty"] },
+      { x: 6470, y: 1675, text: "Crate", inventory: ["Heron Device"], category: ["chest", "bounty"] },
+      { x: 5145, y: 1805, text: "Chest", inventory: ["Jewel Of Hebe"], category: ["chest", "bounty"] },
+      { x: 4675, y: 2230, text: "Vagrant", inventory: ["Lucky Medallion"], category: "bounty" },
+      { x: 4746, y: 1137, text: "Chest", inventory: ["Lethe Wyvern Venom"], category: ["chest", "bounty"] },
+      { x: 3452, y: 1974, text: "Cabinet", inventory: ["Napha Water"], category: ["chest", "bounty"] },
+      { x: 6193, y: 1636, text: "Cabinet", inventory: ["Plans For Schreck's Multi-barrel Pistol"], category: ["chest", "bounty"] },
+      { x: 4270, y: 1656, text: "Chest", inventory: ["Potion Of Dark Power"], category: ["chest", "bounty"] },
+      { x: 3635, y: 1897, text: "Mr. Franklin", description: "Service Mr. Franklin", inventory: ["Ring Of Virility"], category: ["quest", "npc", "bounty"] },
+      { x: 3562, y: 2070, text: "Laura", description: "", category: ["quest", "npc"] },
+    ]
   },
   {
     filename: "ArcanumBase/TheBedokaanVillage.jpg",
     displayName: "The Bedokaan Village",
     modGroup: "Cities",
     typemap: "local",
-    labels: []
+    labels: [
+      { x: 2154, y: 599, text: "Kan Kerai", description: "", category: ["quest", "npc"] },
+      { x: 2226, y: 979, text: "Waromon", description: "", category: "followers", linkedLabels: ["Waromon If you handle Kan Kerai's quest diplomatically", "Waromon might become available to join your group."] },
+      { x: 1244, y: 880, text: "Elf", description: "1 - Pit There is an elf villager stuck in the pit. This is the elf Winde at Qintarra might have asked you to rescue.", category: "quest" },
+      { x: 1787, y: 1051, text: "Altar to Makaal", description: "", category: "altar" },
+      { x: 1723, y: 292, text: "Heartstone (1/5)", description: "", category: "information" },
+      { x: 2322, y: 159, text: "Heartstone (2/5)", description: "", category: "information" },
+      { x: 2834, y: 299, text: "Heartstone (3/5)", description: "", category: "information" },
+      { x: 2570, y: 833, text: "Heartstone (4/5)", description: "", category: "information" },
+      { x: 1260, y: 702, text: "Heartstone (5/5)", description: "", category: "information" },
+    ]
   },
   {
     filename: "ArcanumBase/TsenAng.png",
@@ -356,15 +525,36 @@ const ArcanumCitiesMapData = [
     modGroup: "Cities",
     typemap: "local",
     defaultView: { x: 2294, y: 1344, zoom: 1 },
-    labels: []
+    labels: [
+      { x: 2347, y: 1314, text: "T'sen Ang - Entrance", description: "", category: "waypoint", targetMapFilename: "T’sen-Ang Entrance", targetX: 1072, targetY: 511 },
+      { x: 2360, y: 710, text: "M'in Gorad Chamber", description: "", category: "waypoint", targetMapFilename: "M'in Gorad Chamber", targetX: 137, targetY: 316 },
+
+      { x: 1468, y: 979, text: "Z'an Al'urin", description: "Z'an is an evil spellcaster (earth, force, and temporal). If you tell her your name, she might agree to join you.", category: "followers" },
+      { x: 888, y: 627, text: "T'val N'or", description: "", category: ["quest", "npc"] },
+      { x: 1353, y: 488, text: "Half-ogre Slaves", description: "Kill the dark elf mage T'val N'or in order to break the spell holding the half ogre slaves.", category: ["quest", "npc"], linkedLabels: ["T'val N'or"]},
+      { x: 2104, y: 790, text: "Gideon Laier", description: "After learning the fate of the BMC and leaving M'in Gorad's residence, you'll run into Gideon Laier, the First Blade of the Molochean Hand. He'll recognize who you are. If you know something of the history of the Molochean Hand, you might be able to convince Laier to leave you alone by telling him that he's essentially working for Arronax. However, since Gideon is wearing some nice equipment, you might want to let him attack you so you can get it. None of the dark elves will come to his aid. Oddly, the conversation with Laier will go the same whether you've joined up with the dark elves or not. If you have read Joachim's book and learned about First Assassin Trellian, then you can confront Gideon about the Hand repeating the mistakes of the past (''The Hand hasn't always been this way...'') . He will promise to call off the attacks on you, and if Vollinger is in your party, he will out him as a Hand assassin and offer him to you as a permanent companion, to make up for the Hand's attempts on your life.", category: ["npc", "information"] },
+
+    ]
   },
   {
     filename: "ArcanumBase/Tulla.jpg",
     displayName: "Tulla",
     modGroup: "Cities",
     typemap: "local",
-    defaultView: { x: 1910, y: 1655, zoom: 1 },
-    labels: []
+    music: "music/tulla.flac",
+    defaultView: { x: 676, y: 2431, zoom: 1 },
+    labels: [
+      { x: 743, y: 2388, text: "Teleportation Gate", description: "", category: "waypoint", targetMapFilename: "Tulla", targetX: 1030, targetY: 2242 },
+      { x: 1030, y: 2242, text: "Teleportation Gate", description: "", category: "waypoint", targetMapFilename: "Tulla", targetX: 743, targetY: 2388 },
+      { x: 2268, y: 1619, text: "Tulla - Inside", description: "", category: "waypoint", targetMapFilename: "Tulla - Main Floor", targetX: 836, targetY: 1410 },
+      { x: 1964, y: 2153, text: "Herzod Munk", description: "Retrieve the platinum chalice from Fa'al Kin's Maze for Herzod Munk.", category: ["quest", "npc"] },
+      { x: 1974, y: 1748, text: "Pelojian", description: "Pelojian will tell you about Vendigroth and the Device, and he'll mark the location of Vendigroth on your world map.", category: ["quest", "npc"], linkedLabels: ["Simeon Tor"] },
+      { x: 1837, y: 1775, text: "1 - Star", description: "", category: "information" },
+      { x: 2058, y: 1701, text: "2 - Spiral", description: "", category: "information" },
+      { x: 2098, y: 1789, text: "3 - Stick Figure", description: "", category: "information" },
+      { x: 1918, y: 1692, text: "4 - Cross-circle", description: "", category: "information" },
+      { x: 1957, y: 1837, text: "5 - Magic symbol", description: "", category: "information" },
+    ]
   },
   {
     filename: "ArcanumBase/Vooriden.png",
@@ -372,7 +562,11 @@ const ArcanumCitiesMapData = [
     modGroup: "Cities",
     typemap: "local",
     defaultView: { x: 1031, y: 496, zoom: 1 },
-    labels: []
+    labels: [
+      { x: 1249, y: 314, text: "Edwin Wallows", description: "Edwin Wallows of the Halcyon Order in Vooriden wants you to retrieve a new altar stone from Torin Quarry.", category: ["quest", "npc"] },
+      { x: 955, y: 487, text: "Murgo", description: "Half-Ogre helper to the priests of Halcyon. He'll join you group as a temporary follower if you accept a quest to restore the altar. However he will leave the group once you return to Vooriden, or if you deviate from the quest.", category: ["quest", "followers"] },
+      { x: 1343, y: 248, text: "Altar of Halcyon", description: "", category: ["altar"] },
+    ]
   },
   {
     filename: "ArcanumBase/WheelClan.png",
@@ -383,6 +577,17 @@ const ArcanumCitiesMapData = [
   },
 
 /// DUNGEONS MAPS
+  {
+    filename: "ArcanumBase/ALairOfGyrDolours.jpg",
+    displayName: "A Lair of Gyr Dolours",
+    modGroup: "Quest locations",
+    typemap: "local",
+    // music:
+    defaultView: {},
+    labels: [
+      { x: 1602, y: 524, text: "Lady Druella", description: "", category: ["quest", "followers"] },
+    ],
+  },
   {
     filename: "ArcanumBase/ArbalahsHouse.png",
     displayName: "Arbalah’s House",
@@ -397,22 +602,15 @@ const ArcanumCitiesMapData = [
     ],
   },
   {
-    filename: "ArcanumBase/ALairOfGyrDolours.jpg",
-    displayName: "A Lair of Gyr Dolours",
-    modGroup: "Quest locations",
-    typemap: "local",
-    // music:
-    defaultView: {},
-    labels: [],
-  },
-  {
     filename: "ArcanumBase/AMysteriousLocation.png",
     displayName: "A mysterious location",
     modGroup: "Quest locations",
     typemap: "local",
     // music:
     defaultView: { x: 796, y: 1211, zoom: 1 },
-    labels: [],
+    labels: [
+      { x: 1333, y: 838, text: "Hollow Tree", description: "", inventory: ["Note #3 of the Prowling Mastery quest"], category: ["quest", "chest"] },
+    ],
   },
   {
     filename: "ArcanumBase/AncientMaze.jpg",
@@ -428,7 +626,6 @@ const ArcanumCitiesMapData = [
     displayName: "Ancient Ruins",
     modGroup: "Other locations",
     typemap: "local",
-    // music:
     defaultView: { x: 655, y: 493, zoom: 1 },
     labels: [
       { x: 835, y: 390, text: "Mystic Chest", description: "", category: ["chest"] },
@@ -439,18 +636,20 @@ const ArcanumCitiesMapData = [
     displayName: "Ancient Shipwreck",
     modGroup: "Other locations",
     typemap: "local",
-    // music:
-    defaultView: {},
-    labels: [],
+    defaultView: {}, // Good
+    labels: [
+      { x: 1428, y: 787, text: "Greater Skeletons", description: "The Shipwreck is notable for being abandoned during the day, and haunted by several Greater Skeletons at night. The skeletons carry a variety of weapons and treasure, including a Kathorn crystal which is used to make Wheel Clan Spectacles.", category: "information" },
+    ],
   },
   {
     filename: "ArcanumBase/AncientTemple.png",
     displayName: "Ancient Temple",
     modGroup: "Quest locations",
     typemap: "local",
-    // music:
-    defaultView: { x: 1026, y: 849, zoom: 1 },
-    labels: [],
+    defaultView: { x: 1026, y: 849, zoom: 1 }, // Good
+    labels: [
+      { x: 1107, y: 315, text: "Ancient Temple - Underground", description: "", category: "waypoint", targetMapFilename: "Ancient Temple - Underground", targetX: 1798, targetY: 223},
+    ],
   },
   {
     filename: "ArcanumBase/BoatLandingOnThanatos.jpg",
@@ -458,8 +657,10 @@ const ArcanumCitiesMapData = [
     modGroup: "Quest locations",
     typemap: "local",
     // music:
-    defaultView: {},
-    labels: [],
+    defaultView: { x: 1483, y: 831, zoom: 1 },
+    labels: [
+      { x: 1199, y: 1230, text: "Barrel", description: "Contains a journal from a previous adventurer. Reading the journal will give you the locations of the Village of the Ashlag Tribe and the Thanatos Land Bridge.", category: ["quest", "chest"] },
+    ],
   },
   {
     filename: "ArcanumBase/BolosAltar.png",
@@ -480,14 +681,21 @@ const ArcanumCitiesMapData = [
     defaultView: { x: 2145, y: 1331, zoom: 1 },
     background: "#000000",
     labels: [
-      { x: 2353, y: 1112, text: "Camera", description: "", category: "quest" },
-      { x: 2872, y: 1312, text: "Letter", description: "", category: "quest" },
-      { x: 3239, y: 894, text: "Crash Site - Cave", description: "", category: "waypoint", targetMapFilename: "Crash Site - Cave" },
+      { x: 3239, y: 894, text: "Crash Site - Cave", category: "waypoint", targetMapFilename: "Crash Site - Cave" },
+
       { x: 2179, y: 1308, text: "Virgil", description: "", category: "followers" },
-      { x: 1309, y: 1733, text: "Magick Chest", description: "", category: "chest" },
-      { x: 2132, y: 1344, text: "Preston Radcliffe", description: "", category: ["quest", "npc"],
-          linkedLabels: [{ questName: "Find the Boy (Part I)", questDescription: "Discover the origins of the strange ring.", target: "Ristezze" }],
-      }]
+
+      { x: 2353, y: 1112, text: "Isaac Zapruder", inventory: ["Camera"], category: ["npc", "quest"], linkedLabels: ["Caladon Inventor", "Ristezze"] },
+      { x: 2872, y: 1312, text: "Wilhemina Carpenter", inventory: ["Letter"], category: ["npc", "quest"], linkedLabels: ["Jared"] },
+      { x: 2132, y: 1344, text: "Preston Radcliffe", inventory: ["Passport"], category: ["quest", "npc"],
+          linkedLabels: [{ questName: "Find the Boy (Part I)", questDescription: "Discover the origins of the strange ring.", target: "Ristezze" }] },
+
+      { x: 1309, y: 1733, text: "Magick Chest", category: "chest" },
+      { x: 2137, y: 430, text: "Crashed aeroplane", description: "", category: ["information"] },
+      { x: 3458, y: 2103, text: "Altar", description: "", category: "information" },
+      { x: 3928, y: 2356, text: "Assassin", description: "When you try to exit the crash site the first time, an assassin will attempt to kill you.", category: "information" },
+      { x: 4026, y: 2557, text: "Wolves", description: "Virgil will recommend you to use the world map to travel to Shrouded Hills. There are, however, 10 wolves beyond this place that gives an interesting boost in exp if you decide to kill them.", category: "information" },
+    ],
   },
   {
     filename: "ArcanumBase/DarkElfCamp.jpg",
@@ -495,8 +703,10 @@ const ArcanumCitiesMapData = [
     modGroup: "Quest locations",
     typemap: "local",
     // music:
-    defaultView: {},
-    labels: [],
+    // defaultView: {},
+    labels: [
+      { x: 1159, y: 660, text: "Body", description: "A body where you'll find a journal from a previous adventurer. Reading the journal will give you the location of the Vendigroth Ruins. Appears only if you follow the evil path.", category: ["quest", "npc"] },
+    ],
   },
   {
     filename: "ArcanumBase/DungeonOfTheDragonPool.jpg",
@@ -504,8 +714,10 @@ const ArcanumCitiesMapData = [
     modGroup: "Quest locations",
     typemap: "local",
     // music:
-    defaultView: {},
-    labels: [],
+    defaultView: { x: 1294, y: 1343, zoom: 1 },
+    labels: [
+      { x: 1276, y: 582, text: "Dungeon of the Dragon Pool - Level 1", description: "", category: "waypoint", targetMapFilename: "Dungeon of the Dragon Pool - Level 1", targetX: 164, targetY: 836 },
+    ],
   },
   {
     filename: "ArcanumBase/ElvenRuins.png",
@@ -514,8 +726,9 @@ const ArcanumCitiesMapData = [
     typemap: "local",
     //music: 
     defaultView: { x: 837, y: 611, zoom: 1 },
-    //background: "#000000",
-    labels: [],
+    labels: [
+     { x: 812, y: 471, text: "Elven Ruins - Underground", description: "", category: "waypoint", targetMapFilename: "Elven Ruins - Underground", targetX: 1904, targetY: 342},
+    ],
   },
   {
     filename: "ArcanumBase/FalconsAche.png",
@@ -523,9 +736,12 @@ const ArcanumCitiesMapData = [
     modGroup: "Quest locations",
     typemap: "local",
     //music: 
-    //defaultView: { x: 1076, y: 399, zoom: 1 },
+    defaultView: { x: 1541, y: 645, zoom: 1 },
     //background: "#000000",
-    labels: [],
+    labels: [
+      { x: 1636, y: 1011, text: "William Bench", description: "", category: ["quest", "npc"], linkedLabels: ["Raven"] },
+      { x: 1923, y: 648, text: "Altar to Ter'el", description: "", category: "altar" },
+    ],
   },
   {
     filename: "ArcanumBase/ForbiddenPit.png",
@@ -543,9 +759,10 @@ const ArcanumCitiesMapData = [
     modGroup: "Quest locations",
     typemap: "local",
     //music: 
-    //defaultView: { x: 2145, y: 1331, zoom: 1 },
-    //background: "#000000",
-    labels: [],
+    defaultView: { x: 438, y: 1357, zoom: 1 },
+    labels: [
+      { x: 605, y: 1304, text: "Weldo Rubin", description: "Find the part for Weldo's device from the wreckage in the wastes.", category: ["quest", "followers"] },
+    ],
   },
   {
     filename: "ArcanumBase/GorgothPass.jpg",
@@ -553,9 +770,12 @@ const ArcanumCitiesMapData = [
     modGroup: "Quest locations",
     typemap: "local",
     //music: 
-    //defaultView: { x: 2145, y: 1331, zoom: 1 },
-    //background: "#000000",
-    labels: [],
+    defaultView: { x: 902, y: 3703, zoom: 1 },
+    labels: [
+      { x: 3747, y: 1558, text: "Kaitan's altar", description: "", category: "altar" },
+      { x: 3506, y: 1640, text: "Geode", description: "A geode is on the ground. It's the item needed for the altar.", category: "information" },
+      { x: 2835, y: 2774, text: "Dead NPC", description: "(hexed) consuming plate mail", category: "npc" },
+    ],
   },
   {
     filename: "ArcanumBase/HalfOgreIsland.jpg",
@@ -563,9 +783,10 @@ const ArcanumCitiesMapData = [
     modGroup: "Quest locations",
     typemap: "local",
     //music: 
-    defaultView: { x: 2145, y: 1331, zoom: 1 },
-    //background: "#000000",
-    labels: [],
+    defaultView: { x: 877, y: 2074, zoom: 1 },
+    labels: [
+      { x: 3094, y: 1041, text: "Safe", description: "Contains the journal. When you pick it up you'll gain a fate point.", category: ["quest", "chest"], linkedLabels: ["Arthur Tyron"] },
+    ],
   },
   {
     filename: "ArcanumBase/HardinsPass.jpg",
@@ -593,9 +814,10 @@ const ArcanumCitiesMapData = [
     modGroup: "Quest locations",
     typemap: "local",
     // music: "music/wilderness.flac",
-    // defaultView: { x: 813, y: 464, zoom: 1 },
-    // background: "#000000",
-    labels: [],
+    defaultView: { x: 511, y: 552, zoom: 1 },
+    labels: [
+      { x: 848, y: 552, text: "K’na Tha - Level 1", description: "", category: "waypoint", targetMapFilename: "K’na Tha - Level 1", targetX: 3763, targetY: 2373},
+    ],
   },
   {
     filename: "ArcanumBase/Kree.jpg",
@@ -603,9 +825,12 @@ const ArcanumCitiesMapData = [
     modGroup: "Quest locations",
     typemap: "local",
     // music: "music/wilderness.flac",
-    // defaultView: { x: 813, y: 464, zoom: 1 },
-    // background: "#000000",
-    labels: [],
+    defaultView: { x: 790, y: 2067, zoom: 1 },
+    labels: [
+      { x: 2761, y: 553, text: "Altar to Shakar", description: "", category: "altar" },
+      { x: 3128, y: 682, text: "Altar", description: "Contains Idol / If you can steal it without killing anybody, then you'll earn a fate point.", category: ["quest", "chest"], linkedLabels: ["Thaddeus Mynor"] },
+      { x: 2788, y: 846, text: "Chest", description: "", category: "chest" },
+    ],
   },
   {
     filename: "ArcanumBase/NasrudinRestingPlace.jpg",
@@ -613,39 +838,53 @@ const ArcanumCitiesMapData = [
     modGroup: "Quest locations",
     typemap: "local",
     defaultView: { x: 1435, y: 735, zoom: 1 },
-    labels: [],
+    labels: [
+      { x: 3210, y: 2374, text: "Nasrudin", description: "Travel to the Ring of Brodgar. / Find Arronax. / Retrieve the Vendigroth Device and meet Nasrudin in the Ring of Brodgar. / Nasrudin wishes you to kill the Bogaroth. In return, he will tell you what you need to do to kill Arronax. / Stop Arronax.", category: ["quest", "npc"], linkedLabels: ["Bogaroth"] },
+    ],
   },
   {
     filename: "ArcanumBase/LetheWyvernSighting.jpg",
     displayName: "Lethe Wyvern Sighting",
     modGroup: "Quest locations",
     typemap: "local",
-    //defaultView: { x: 1435, y: 735, zoom: 1 },
-    labels: [],
+    defaultView: { x: 1506, y: 1622, zoom: 1 }, // Good
+    labels: [
+      { x: 2119, y: 1198, text: "Lethe Wyvern", description: "Trevor Lynwood, a journalist for the Tarantian, needs you to get a photograph of the elusive Lethe Wyvern.", category: ["quest", "npc"], linkedLabels: ["Trevor Lynwood"] },
+    ],
   },
   {
     filename: "ArcanumBase/LiamsWorkshop.jpg",
     displayName: "Liam’s Workshop",
     modGroup: "Quest locations",
     typemap: "local",
-    //defaultView: { x: 1435, y: 735, zoom: 1 },
-    labels: [],
+    // music: 
+    defaultView: { x: 3850, y: 570, zoom: 1 }, // Good
+    labels: [
+      { x: 3299, y: 572, text: "Chest", inventory: ["Magickal trap","Scroll of disperse magick"], category: "chest" },
+      { x: 3397, y: 554, text: "Dresser", inventory: ["Liam Cameron's Journal"], category: ["quest","chest"], linkedLabels: ["Liam's body"]},
+      { x: 1527, y: 1809, text: "Liam's body", inventory: ["Magickal trap"], category: "chest", linkedLabels: ["Portal"]},
+      { x: 799, y: 1775, text: "Portal", description: "", category: "quest", linkedLabels: ["Mrs. Cameron"] },
+    ],
   },
   {
     filename: "ArcanumBase/MysteriousRuinsOfTheWastes.jpg",
     displayName: "Mysterious ruins of the wastes",
     modGroup: "Quest locations",
     typemap: "local",
-    //defaultView: { x: 1435, y: 735, zoom: 1 },
-    labels: [],
+    defaultView: { x: 799, y: 983, zoom: 1 }, // Good
+    labels: [
+      { x: 1072, y: 811, text: "Items", description: "Sprocket", category: ["quest", "chest"], linkedLabels: ["Weldo Rubin"] },
+    ],
   }, 
   {
     filename: "ArcanumBase/NasrudinRestingPlace.jpg",
     displayName: "Nasrudin’s Resting Place",
     modGroup: "Quest locations",
     typemap: "local",
-    defaultView: { x: 3144, y: 2443, zoom: 1 },
-    labels: [],
+    defaultView: { x: 3144, y: 2443, zoom: 1 }, // Good
+    labels: [
+      { x: 3210, y: 2374, text: "Nasrudin", description: "Travel to the Ring of Brodgar. / Find Arronax. / Retrieve the Vendigroth Device and meet Nasrudin in the Ring of Brodgar. / Nasrudin wishes you to kill the Bogaroth. In return, he will tell you what you need to do to kill Arronax. / Stop Arronax.", category: ["quest", "npc"], linkedLabels: ["Bogaroth"] },
+    ],
   },
   {
     filename: "ArcanumBase/RazorsPointe.png",
@@ -653,7 +892,9 @@ const ArcanumCitiesMapData = [
     modGroup: "Quest locations",
     typemap: "local",
     defaultView: { x: 1615, y: 594, zoom: 1 },
-    labels: [],
+    labels: [
+      { x: 1241, y: 1359, text: "Body of Princess Aria", description: "Contains the amulet", category: ["quest", "chest"], linkedLabels: ["King Praetor"] },
+    ],
   }, 
   {
     filename: "ArcanumBase/RuinsOfSzaboEntrance.png",
@@ -661,7 +902,9 @@ const ArcanumCitiesMapData = [
     modGroup: "Quest locations",
     typemap: "local",
     //defaultView: { x: 1615, y: 594, zoom: 1 },
-    labels: [],
+    labels: [
+      { x: 767, y: 498, text: "Ruins of Szabo - Level 1", description: "", category: "waypoint", targetMapFilename: "Ruins of Szabo - Level 1", targetX: 450, targetY: 797},
+    ]
   },
   {
     filename: "ArcanumBase/SecretEntranceToTheIronClan.png",
@@ -669,7 +912,10 @@ const ArcanumCitiesMapData = [
     modGroup: "Quest locations",
     typemap: "local",
     defaultView: { x: 879, y: 466, zoom: 1 },
-    labels: [],
+    labels: [
+      { x: 1206, y: 439, text: "Gate to the Iron Clan", description: "", category: "waypoint", targetMapFilename: "Iron Clan - Gate" },
+      { x: 1106, y: 404, text: "Need the key", description: "", category: ["quest", "chest"] },
+    ]
   },
   {
     filename: "ArcanumBase/SecretVillage.png",
@@ -734,7 +980,9 @@ const ArcanumCitiesMapData = [
     // music: "music/wilderness.flac",
     // defaultView: { x: 816, y: 711, zoom: 1 },
     // background: "#000000",
-    labels: [],
+    labels: [
+      { x: 990, y: 620, text: "Stonecutter Clan - Level 1", description: "", category: "waypoint", targetMapFilename: "Stonecutter Clan - Level 1", targetX: 2592, targetY: 1503},
+    ]
   },
   {
     filename: "ArcanumBase/StrangeCeremony.png",
@@ -762,8 +1010,12 @@ const ArcanumCitiesMapData = [
     modGroup: "Quest locations",
     typemap: "local",
     // music: No music here.
-    // defaultView: { x: 2532, y: 562, zoom: 1 },
-    labels: [],
+    defaultView: { x: 1957, y: 242, zoom: 1 },
+    labels: [
+      { x: 3932, y: 1734, text: "Stringy Pete", description: "Stringy Pete wants you to return his treasure, including the silver boot buckles of Jonas Williamson, to the remaining members of the Williamson family / Stringy Pete wants you to repair the desecrated altar of temple in Vooriden. / Stringy Pete wants you to destroy the Bangellian Scourge.", category: ["quest", "npc"] },
+      { x: 1819, y: 742, text: "Boat", description: "", category: "waypoint", targetMapFilename: "Stringy Pete’s Cove", targetX: 3093, targetY: 1266 },
+      { x: 3095, y: 1258, text: "Boat", description: "", category: "waypoint", targetMapFilename: "Stringy Pete’s Cove", targetX: 1819, targetY: 742 },
+    ]
   },
   {
     filename: "ArcanumBase/StringyPetesTreasure.png",
@@ -780,8 +1032,10 @@ const ArcanumCitiesMapData = [
     modGroup: "Quest locations",
     // music: no music here
     typemap: "local",
-    // defaultView: { x: 1917, y: 1048, zoom: 1 },
-    labels: [],
+    defaultView: { x: 977, y: 975, zoom: 1 }, // Good
+    labels: [
+      { x: 1111, y: 896, text: "The Bangellian Deeps - Inside", description: "", category: "waypoint", targetMapFilename: "The Bangellian Deeps - Inside", targetX: 1227, targetY: 1340 },
+    ]
   },
   {
     filename: "ArcanumBase/TheBlackMountainMines.png",
@@ -837,7 +1091,9 @@ const ArcanumCitiesMapData = [
     typemap: "local",
     // music: No music here.
     // defaultView: { x: 1396, y: 1442, zoom: 1 },
-    labels: [],
+    labels: [
+      { x: 1341, y: 917, text: "Maximillian", description: "", category: ["quest", "npc"] },
+    ],
   },
   {
     filename: "ArcanumBase/TheLairofBellerogrim.png",
@@ -857,7 +1113,9 @@ const ArcanumCitiesMapData = [
     modGroup: "Quest locations",
     typemap: "local",
     defaultView: { x: 880, y: 646, zoom: 1 },
-    labels: [],
+    labels: [
+        { x: 830, y: 354, text: "Bogaroth", description: "", category: "quest", linkedLabels: ["Nasrudin"]},
+    ],
   },
   {
     filename: "ArcanumBase/TheOldLagoon.jpg",
@@ -883,7 +1141,7 @@ const ArcanumCitiesMapData = [
     modGroup: "Quest locations",
     typemap: "local",
     background: "#000000",
-    //defaultView: { x: 7612, y: 2443, zoom: 1 },
+    defaultView: { x: 4793, y: 734, zoom: 1 }, // Good
     labels: [],
   },
   {
@@ -900,18 +1158,29 @@ const ArcanumCitiesMapData = [
     displayName: "The Ruby Glade",
     modGroup: "Quest locations",
     typemap: "local",
-    // background: "#000000",
-    // defaultView: { x: 7612, y: 2443, zoom: 1 },
-    labels: [],
+    defaultView: { x: 2832, y: 2096, zoom: 1 }, // Good
+    labels: [
+      { x: 1534, y: 1360, text: "Altar", inventory: ["Great Ruby of K'alru"], category: ["quest", "chest"], linkedLabels: ["Gildor Nightwalk"] },
+      { x: 1501, y: 1408, text: "Dead Elf Noble", inventory: ["Heavy Barbarian's Blade", "Arcane Gauntlets", "Hero's Weakness Barbarian Armor"], category: "npc" },
+
+      { x: 1740, y: 1555, text: "Warning Stone", description: "If you walk past the stones without adequate stealth (either invisible or having 5 full ranks (20/20) in Prowling and not wearing any -NP gear), then six greater demons will appear and attack you.", category: ["information"] },
+      { x: 1264, y: 1487, text: "Warning Stone", description: "If you walk past the stones without adequate stealth (either invisible or having 5 full ranks (20/20) in Prowling and not wearing any -NP gear), then six greater demons will appear and attack you.", category: ["information"] },
+      { x: 1280, y: 1296, text: "Warning Stone", description: "If you walk past the stones without adequate stealth (either invisible or having 5 full ranks (20/20) in Prowling and not wearing any -NP gear), then six greater demons will appear and attack you.", category: ["information"] },
+      { x: 1515, y: 1194, text: "Warning Stone", description: "If you walk past the stones without adequate stealth (either invisible or having 5 full ranks (20/20) in Prowling and not wearing any -NP gear), then six greater demons will appear and attack you.", category: ["information"] },
+      { x: 1765, y: 1282, text: "Warning Stone", description: "If you walk past the stones without adequate stealth (either invisible or having 5 full ranks (20/20) in Prowling and not wearing any -NP gear), then six greater demons will appear and attack you.", category: ["information"] },
+      { x: 1833, y: 1413, text: "Warning Stone", description: "If you walk past the stones without adequate stealth (either invisible or having 5 full ranks (20/20) in Prowling and not wearing any -NP gear), then six greater demons will appear and attack you.", category: ["information"] },
+      { x: 1481, y: 1592, text: "Warning Stone", description: "If you walk past the stones without adequate stealth (either invisible or having 5 full ranks (20/20) in Prowling and not wearing any -NP gear), then six greater demons will appear and attack you.", category: ["information"] },
+    ],
   },
   {
     filename: "ArcanumBase/TheWilliamsonHomestead.png",
     displayName: "The Williamson Homestead",
     modGroup: "Quest locations",
-    // music: no music here
     typemap: "local",
-    defaultView: { x: 1306, y: 323, zoom: 1 },
-    labels: [],
+    defaultView: { x: 1306, y: 323, zoom: 1 }, // Good
+    labels: [
+      { x: 750, y: 568, text: "Molly Williamson", description: "Stringy Pete's Treasure quest", category: ["quest", "npc"] },
+    ],
   },
   {
     filename: "ArcanumBase/TheWomensCamp.png",
@@ -1002,21 +1271,31 @@ const ArcanumCitiesMapData = [
     displayName: "Wolf Cave",
     modGroup: "Other locations",
     typemap: "local",
-    // music: "music/wilderness.flac", No music here it seems
-    //defaultView: { x: 852, y: 617, zoom: 1 },
-    labels: [],
+    // music: No music
+    defaultView: { x: 502, y: 828, zoom: 1 }, // Good
+    labels: [
+      { x: 796, y: 739, text: "Wolf Cave - Inside", description: "", category: "waypoint", targetMapFilename: "Wolf Cave - Inside", targetX: 537, targetY: 661 },
+    ],
   },
 
 /// SUBMAPS
+
   {
     filename: "ArcanumBase/AncientTempleLevel1.png",
     displayName: "Ancient Temple - Underground",
     modGroup: "Cities",
     typemap: "local",
-    //defaultView: { x: 761, y: 1163, zoom: 1 },
+    defaultView: { x: 1798, y: 223, zoom: 1 },
     parentFilename: "ArcanumBase/AncientTemple.png",
     background: "#000000",
-    labels: [],
+    labels: [
+      { x: 1798, y: 223, text: "Ancient Temple", description: "", category: "waypoint", targetMapFilename: "Ancient Temple", targetX: 1107, targetY: 315 },
+      { x: 515, y: 647, text: "Altar to Moorindal", description: "", category: "altar" },
+      { x: 218, y: 810, text: "Arcane Chest", description: "Torian Kel key", category: ["key", "chest"] },
+      { x: 1679, y: 880, text: "Magick Chest", description: "Library Key", category: ["key", "chest"] },
+      { x: 2403, y: 550, text: "Torian Kel", description: "", category: ["quest", "followers"], linkedLabels: ["Dragon Pool"]},
+      { x: 939, y: 1249, text: "Arcane Chest", description: "", category: "chest" },
+    ],
   },
   {
     filename: "ArcanumBase/AshburyHauntedCastleGroundfloor.png",
@@ -1098,22 +1377,19 @@ const ArcanumCitiesMapData = [
     background: "#000000",
     parentFilename: "ArcanumBase/Caladonsmall.jpg",
     labels: [
-      { x: 2245, y: 341, text: "Caladon", description: "", category: "waypoint", targetMapFilename: "Caladon", targetX: 4353, targetY: 1328}, // In front of Panarii
-      { x: 3690, y: 819, text: "Caladon", description: "", category: "waypoint", targetMapFilename: "Caladon", targetX: 8236, targetY: 1540},
-      { x: 2753, y: 356, text: "Caladon", description: "", category: "waypoint", targetMapFilename: "Caladon", targetX: 6300, targetY: 978}, // In front of Museum
-      { x: 3265, y: 1347, text: "Caladon", description: "", category: "waypoint", targetMapFilename: "Caladon", targetX: 7480, targetY: 2591},
-      { x: 2326, y: 1784, text: "Caladon", description: "", category: "waypoint", targetMapFilename: "Caladon", targetX: 5742, targetY: 3327},
-      { x: 2148, y: 1103, text: "Caladon", description: "", category: "waypoint", targetMapFilename: "Caladon", targetX: 5602, targetY: 2270},
-
-      { x: 2142, y: 333, text: "Panarii Temple Catacombs", description: "", category: "waypoint", targetMapFilename: "Panarii Temple Catacombs"},
-      { x: 1860, y: 603, text: "Panarii Temple Catacombs", description: "", category: "waypoint", targetMapFilename: "Panarii Temple Catacombs"},
-
-      { x: 3580, y: 891, text: "Arcane Chest", description: "", category: "chest" },
-      { x: 3798, y: 880, text: "Arcane Chest", description: "", category: "chest" },
-
-      { x: 3560, y: 888, text: "Vincent", description: "", category: ["quest", "npc"] },
-      { x: 2426, y: 999, text: "Half Ogre Bandit", description: "The corpse contains some Magick loot, notably Boots of the Dark Toll.", category: "information" },
-    ],
+      { x: 1247, y: 349, text: "Caladon", description: "", category: "waypoint", targetMapFilename: "Caladon", targetX: 4353, targetY: 1328 },
+      { x: 2680, y: 801, text: "Caladon", description: "", category: "waypoint", targetMapFilename: "Caladon", targetX: 8236, targetY: 1540 },
+      { x: 1745, y: 346, text: "Caladon", description: "", category: "waypoint", targetMapFilename: "Caladon", targetX: 6300, targetY: 978 },
+      { x: 2265, y: 1319, text: "Caladon", description: "", category: "waypoint", targetMapFilename: "Caladon", targetX: 7480, targetY: 2591 },
+      { x: 1315, y: 1758, text: "Caladon", description: "", category: "waypoint", targetMapFilename: "Caladon", targetX: 5742, targetY: 3327 },
+      { x: 1137, y: 1088, text: "Caladon", description: "", category: "waypoint", targetMapFilename: "Caladon", targetX: 5602, targetY: 2270 },
+      { x: 1138, y: 321, text: "Panarii Temple Catacombs", description: "", category: "waypoint", targetMapFilename: "Panarii Temple Catacombs" },
+      { x: 850, y: 589, text: "Panarii Temple Catacombs", description: "", category: "waypoint", targetMapFilename: "Panarii Temple Catacombs" },
+      { x: 2569, y: 886, text: "Arcane Chest", description: "", category: "chest" },
+      { x: 2789, y: 874, text: "Arcane Chest", description: "", category: "chest" },
+      { x: 2584, y: 918, text: "Vincent", description: "", category: ["quest", "npc"] },
+      { x: 1399, y: 989, text: "Half Ogre Bandit", inventory: ["Boots of the Dark Toll"], category: ["npc"] },
+    ]
   },
   {
     filename: "ArcanumBase/Caladon-CastleMainFloor.jpg",
@@ -1274,7 +1550,10 @@ const ArcanumCitiesMapData = [
     defaultView: { x: 704, y: 944, zoom: 1 },
     background: "#000000",
     parentFilename: "ArcanumBase/Dernholm.jpg",
-    labels: [],
+    labels: [
+      { x: 1683, y: 450, text: "King Praetor", description: "", category: ["quest", "npc"], linkedLabels: ["Black Root Mayor"] },
+      { x: 702, y: 956, text: "Dernholm", description: "", category: "waypoint", targetMapFilename: "Dernholm", targetX: 5465, targetY: 1782 },
+    ],
   },
   {
     filename: "ArcanumBase/DernholmPits.png",
@@ -1284,17 +1563,26 @@ const ArcanumCitiesMapData = [
     defaultView: { x: 338, y: 1307, zoom: 1 },
     background: "#000000",
     parentFilename: "ArcanumBase/Dernholm.jpg",
-    labels: [],
+    labels: [
+      { x: 2399, y: 1977, text: "Dernholm", description: "", category: "waypoint", targetMapFilename: "Dernholm", targetX: 6132, targetY: 1215 },
+      { x: 341, y: 1317, text: "Dernholm", description: "", category: "waypoint", targetMapFilename: "Dernholm", targetX: 499, targetY: 573 }, // Top left
+    ],
   },
   {
     filename: "ArcanumBase/DungeonOfTheDragonPoolLevel1.png",
     displayName: "Dungeon of the Dragon Pool - Level 1",
     modGroup: "Cities",
     typemap: "local",
-    //defaultView: { x: 338, y: 1307, zoom: 1 },
+    defaultView: { x: 164, y: 836, zoom: 1 },
     background: "#000000",
     parentFilename: "ArcanumBase/DungeonOfTheDragonPool.jpg",
-    labels: [],
+    labels: [
+      { x: 164, y: 836, text: "Dungeon of the Dragon Pool", description: "", category: "waypoint", targetMapFilename: "Dungeon of the Dragon Pool", targetX: 1276, targetY: 582 },
+      { x: 1331, y: 769, text: "Dragon Pool Key 1", description: "", category: "key" },
+      { x: 1980, y: 835, text: "Arcane Chest", description: "", category: ["chest"] },
+      { x: 1027, y: 445, text: "Chest", inventory: ["Dragon Pool Key 2", "Random Arcane loot"], category: ["key", "chest"] },
+      { x: 2234, y: 218, text: "Dungeon of the Dragon Pool - Level 2", description: "", category: "waypoint", targetMapFilename: "Dungeon of the Dragon Pool - Level 2", targetX: 807, targetY: 279 },
+    ],
   },
     {
     filename: "ArcanumBase/DungeonOfTheDragonPoolLevel2.png",
@@ -1304,17 +1592,24 @@ const ArcanumCitiesMapData = [
     //defaultView: { x: 338, y: 1307, zoom: 1 },
     background: "#000000",
     parentFilename: "ArcanumBase/DungeonOfTheDragonPool.jpg",
-    labels: [],
+    labels: [
+      { x: 807, y: 279, text: "Dungeon of the Dragon Pool - Level 1", description: "", category: "waypoint", targetMapFilename: "Dungeon of the Dragon Pool - Level 1", targetX: 2234, targetY: 218 },
+      { x: 1483, y: 627, text: "Dragon Pool", description: "When you click on it you'll receive a vial of dragon's blood.", category: "quest", linkedLabels: ["Torian Kel"] },
+    ],
   },
   {
     filename: "ArcanumBase/ElvenRuinsUnderground.png",
     displayName: "Elven Ruins - Underground",
     modGroup: "Cities",
     typemap: "local",
-    //defaultView: { x: 761, y: 1163, zoom: 1 },
+    // music: 
+    defaultView: { x: 1870, y: 382, zoom: 1 },
     parentFilename: "ArcanumBase/ElvenRuins.png",
     background: "#000000",
-    labels: [],
+    labels: [
+      { x: 1904, y: 342, text: "Elven Ruins", description: "", category: "waypoint", targetMapFilename: "Elven Ruins", targetX: 812, targetY: 471 },
+      { x: 629, y: 180, text: "Funeral Stone", description: "", category: "quest", linkedLabels: ["Cassandra Pettibone"] },
+    ],
   },
   {
     filename: "ArcanumBase/KnaThaLevel1.jpg",
@@ -1324,7 +1619,9 @@ const ArcanumCitiesMapData = [
     //defaultView: { x: 761, y: 1163, zoom: 1 },
     parentFilename: "ArcanumBase/KnaThaEntrance.png",
     //background: "#000000",
-    labels: [],
+    labels: [
+      { x: 3763, y: 2373, text: "K’na Tha - Entrance", description: "", category: "waypoint", targetMapFilename: "K’na Tha", targetX: 848, targetY: 552 },
+    ],
   },
   {
     filename: "ArcanumBase/RoseboroughInn.png",
@@ -1344,7 +1641,9 @@ const ArcanumCitiesMapData = [
     background: "#000000",
     //defaultView: { x: 3972, y: 1642, zoom: 1 },
     parentFilename: "ArcanumBase/RuinsOfSzaboEntrance.png",
-    labels: [],
+    labels: [
+      { x: 450, y: 797, text: "Ruins of Szabo - Entrance", description: "", category: "waypoint", targetMapFilename: "Ruins of Szabo", targetX: 767, targetY: 498 },
+    ]
   },
   {
     filename: "ArcanumBase/RuinsOfSzaboLevel2.png",
@@ -1386,8 +1685,10 @@ const ArcanumCitiesMapData = [
     defaultView: { x: 545, y: 599, zoom: 1 },
     parentFilename: "ArcanumBase/ShroudedHillssmall.jpg",
     labels: [
-      { x: 545, y: 599, text: "Shrouded Hills", description: "", category: "waypoint" , targetMapFilename: "Shrouded Hills", targetX: 5914, targetY: 3147},
-    ],
+      { x: 545, y: 599, text: "Shrouded Hills", description: "", category: "waypoint", targetMapFilename: "Shrouded Hills", targetX: 5914, targetY: 3147 },
+      { x: 1085, y: 279, text: "Steam Machine", description: "", category: "quest", linkedLabels: ["Jongle Dunne"] },
+      { x: 1104, y: 315, text: "Hervor", description: "Herver will rat you out if you destroy the steam machine but leave him alive.", category: "npc" },
+    ]
   },
   {
     filename: "ArcanumBase/ShroudedHillsBessieToone.png",
@@ -1398,8 +1699,13 @@ const ArcanumCitiesMapData = [
     defaultView: { x: 1697, y: 805, zoom: 1 },
     parentFilename: "ArcanumBase/ShroudedHillssmall.jpg",
     labels: [
-      { x: 1697, y: 805, text: "Shrouded Hills", description: "", category: "waypoint" , targetMapFilename: "Shrouded Hills", targetX: 2179, targetY: 3272},
-    ],
+      { x: 1697, y: 805, text: "Shrouded Hills", description: "", category: "waypoint", targetMapFilename: "Shrouded Hills", targetX: 2179, targetY: 3272 },
+      { x: 455, y: 655, text: "Bessie Toone's Ghost", description: "Sarah, my dear Sarah...", category: "quest", linkedLabels: ["Percival Toone", "Sarah Toone"] },
+      { x: 462, y: 578, text: "Metal Can", inventory: ["Bessie Toone's Boot"], category: ["quest", "chest"], linkedLabels: ["Ristezze"] },
+      { x: 2070, y: 469, text: "Barrel (Sprocket)", inventory: ["...groth sprocket", "Dynamite"], category: ["quest", "chest"], linkedLabels: ["Constable Owens"] },
+      { x: 746, y: 452, text: "Magick Chest", category: "chest" },
+      { x: 811, y: 488, text: "Mine Cart", inventory: ["Hexed Dagger"], category: "chest" },
+    ]
   },
 
   {
@@ -1423,7 +1729,8 @@ const ArcanumCitiesMapData = [
     parentFilename: "ArcanumBase/Stillwater.jpg",
     labels: [
       { x: 841, y: 739, text: "Stillwater", description: "", category: "waypoint", targetMapFilename: "Stillwater", targetX: 1681, targetY: 633 },
-      { x: 394, y: 202, text: "Rescue Cyrus (Part III)", description: "", category: ["quest", "npc"] },
+      { x: 394, y: 202, text: "Cyrus", description: "Rescue Cyrus (Part III)", category: ["quest", "npc"], linkedLabels: "Richard Leeks" },
+      { x: 681, y: 392, text: "Drog Black Tooth", description: "Drog will spawn after you start talking with Cyrus. It is possible to avoid combat with him by quickly unlocking or destroying the door to Cyruses cell, talking to Cyrus and then leaving before Drog comes back.", category: "information" },
     ]
   },
   {
@@ -1433,7 +1740,10 @@ const ArcanumCitiesMapData = [
     typemap: "local",
     parentFilename: "ArcanumBase/StonecutterClan.png",
     background: "#000000",
-    labels: []
+    labels: [
+      { x: 2592, y: 1503, text: "Stonecutter Clan - Entrance", description: "", category: "waypoint", targetMapFilename: "Stonecutter Clan", targetX: 990, targetY: 620 },
+      { x: 2519, y: 264, text: "Stonecutter Clan - Level 2", description: "", category: "waypoint", targetMapFilename: "Stonecutter Clan - Level 2", targetX: 328, targetY: 262 },
+    ]
   },
   {
     filename: "ArcanumBase/StonecutterClanLevel2.png",
@@ -1442,7 +1752,9 @@ const ArcanumCitiesMapData = [
     typemap: "local",
     parentFilename: "ArcanumBase/StonecutterClan.png",
     background: "#000000",
-    labels: []
+    labels: [
+      { x: 328, y: 262, text: "Stonecutter Clan - Level 1", description: "", category: "waypoint", targetMapFilename: "Stonecutter Clan - Level 1", targetX: 2519, targetY: 264 },
+    ]
   },
   {
     filename: "ArcanumBase/Tarant-BatesTunnel.png",
@@ -1485,13 +1797,14 @@ const ArcanumCitiesMapData = [
     displayName: "Tarant New Sewers",
     modGroup: "Cities",
     typemap: "local",
+    music: "music/tarantsewers.flac",
     parentFilename: "ArcanumBase/Tarant.png",
     background: "#000000",
     labels: [
-      { x: 1202, y: 863, text: "Tarant", description: "", category: "waypoint" },
-      { x: 2023, y: 1108, text: "Tarant", description: "", category: "waypoint" },
-      { x: 2044, y: 997, text: "Tarant", description: "", category: "waypoint" },
-      { x: 2235, y: 529, text: "Tarant", description: "", category: "waypoint" },
+      { x: 80, y: 419, text: "Tarant", description: "", category: "waypoint" },
+      { x: 906, y: 664, text: "Tarant", description: "", category: "waypoint" },
+      { x: 925, y: 553, text: "Tarant", description: "", category: "waypoint" },
+      { x: 1115, y: 91, text: "Tarant", description: "", category: "waypoint" },
     ]
   },
   {
@@ -1500,6 +1813,7 @@ const ArcanumCitiesMapData = [
     modGroup: "Cities",
     typemap: "local",
     background: "#000000",
+    music: "music/tarantsewers.flac",
     parentFilename: "ArcanumBase/Tarant.png",
     labels: [
       { x: 564, y: 1778, text: "Tarant", description: "", category: "waypoint" },
@@ -1541,9 +1855,15 @@ const ArcanumCitiesMapData = [
     modGroup: "Cities",
     typemap: "local",
     background: "#000000",
-    //defaultView: { x: 108, y: 614, zoom: 1 },
+    defaultView: { x: 1227, y: 1340, zoom: 1 }, // Good
     parentFilename: "ArcanumBase/TheBangellianDeepsOutside.png",
-    labels: [],
+    labels: [
+      { x: 1227, y: 1340, text: "The Bangellian Deeps", description: "", category: "waypoint", targetMapFilename: "The Bangellian Deeps", targetX: 1111, targetY: 896 },
+      { x: 1959, y: 1233, text: "Chest with a full inventory of a magick shop", description: "", category: "chest" },
+      { x: 2355, y: 197, text: "Chest with the Bangellian Scourge", description: "", category: ["quest", "chest"] },
+      { x: 2268, y: 156, text: "Bangellian Furnace", description: "If you're working on the Stringy Pete quest, this is where you should put the Bangellian Scourge to destroy it. You might want to destroy the sword anyway just to receive the 6800 experience reward.", category: ["quest", "chest"] },
+      { x: 2216, y: 231, text: "Cursed Paladin", description: "Inventory: arcane axe", category: "information" }
+    ]
   },
   {
     filename: "ArcanumBase/TheBlackMountainMinesEntrance.jpg",
@@ -1637,7 +1957,9 @@ const ArcanumCitiesMapData = [
     typemap: "local",
     background: "#000000",
     parentFilename: "ArcanumBase/ThievesCaveOutside.png",
-    labels: []
+    labels: [
+      { x: 335, y: 233, text: "Renzo", description: "Renzo would like for me to plant the stolen heirloom on Frederik, who can usually be found in the bar of the Roseborough Inn, because he betrayed Renzo and his partners. After I successfully plant eh statue, I am to turn Frederik in to the Captain of the Roseborough Guard.", category: ["quest", "npc"] },
+    ]
   },
   {
     filename: "ArcanumBase/TsenAngEntrance.png",
@@ -1645,16 +1967,23 @@ const ArcanumCitiesMapData = [
     modGroup: "Cities",
     typemap: "local",
     parentFilename: "ArcanumBase/TsenAng.png",
-    labels: []
+    labels: [
+      { x: 1083, y: 561, text: "T’sen-Ang Guards", description: "the two guards next to the staircase there won't let you go up unless you have a Molochean Hand amulet. If you don't have one, the easiest place to find one is on Bingham Schulefest at the Caladon cemetery. You can also just wander around the world map until assassins attack you, and then pick up an amulet from them. Finally, if you're a good-aligned character, you can simply attack the guards to go up (you'll probably end up fighting everybody at T'sen-Ang anyway), but be aware that there are about a half dozen guards in the area. Most are hidden behind trees and are difficult to spot.", category: ["npc", "information"] },
+      { x: 1072, y: 511, text: "T’sen Ang", description: "", category: "waypoint", targetMapFilename: "T’sen-Ang", targetX: 2347, targetY: 1314 },
+    ]
   },
   {
     filename: "ArcanumBase/TsenAngMinGoradChamber.png",
-    displayName: "Min Gorad Chamber",
+    displayName: "M'in Gorad Chamber",
     modGroup: "Cities",
     typemap: "local",
     background: "#000000",
     parentFilename: "ArcanumBase/TsenAng.png",
-    labels: []
+    labels: [
+      { x: 137, y: 316, text: "T’sen-Ang", description: "", category: "waypoint", targetMapFilename: "T’sen-Ang", targetX: 2360, targetY: 710 },
+
+      { x: 280, y: 278, text: "M’in Gorad", description: "Kill all of the inhabitants of Stillwater. / I am meant to travel to Caladon and speak with the high priest of the Panarii, K'an Hua. He is to be found in his office inside the Panarii temple there.", category: ["quest", "npc"] },
+    ]
   },
   {
     filename: "ArcanumBase/TullaInside.png",
@@ -1662,8 +1991,12 @@ const ArcanumCitiesMapData = [
     modGroup: "Cities",
     typemap: "local",
     background: "#000000",
+    defaultView: { x: 836, y: 1410, zoom: 1 },
     parentFilename: "ArcanumBase/Tulla.jpg",
-    labels: []
+    labels: [
+      { x: 836, y: 1410, text: "Tulla", category: "waypoint", targetMapFilename: "Tulla", targetX: 2268, targetY: 1619 },
+      { x: 2192, y: 604, text: "Simeons Hallway", category: "waypoint", targetMapFilename: "Simeons Hallway" }
+    ]
   },
   {
     filename: "ArcanumBase/TullaSimeonsHallway.png",
@@ -1683,6 +2016,7 @@ const ArcanumCitiesMapData = [
     parentFilename: "ArcanumBase/Tulla.jpg",
     labels: []
   },
+
   {
     filename: "ArcanumBase/UnchartedCave-Inside.png",
     displayName: "Uncharted Cave - Inside",
@@ -1827,7 +2161,9 @@ const ArcanumCitiesMapData = [
     typemap: "local",
     parentFilename: "ArcanumBase/VoidMainIsland.png",
     background: "#000000",
-    labels: []
+    labels: [
+      { x: 898, y: 445, text: "Arronax", description: "Effect Arronax's release from the magick that binds him. / Defeat Kerghan.", category: ["quest", "followers"] },
+    ]
   },
   {
     filename: "ArcanumBase/VoidCaveofKryggyrdsFalchion.png",
@@ -1919,6 +2255,8 @@ const ArcanumCitiesMapData = [
     //defaultView: { x: 761, y: 1163, zoom: 1 },
     parentFilename: "ArcanumBase/WolfCave.png",
     background: "#000000",
-    labels: [],
+    labels: [
+      { x: 537, y: 661, text: "Wolf Cave - Outside", description: "", category: "waypoint", targetMapFilename: "Wolf Cave", targetX: 796, targetY: 739 },
+    ]
   },
 ];
