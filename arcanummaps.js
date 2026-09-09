@@ -266,7 +266,7 @@ const ArcanumCitiesMapData = [
     ]
   },
   {
-    filename: "ArcanumBase/IsleofDespair.jpg",
+    filename: "ArcanumBase/IsleOfDespair.jpg",
     displayName: "Isle of Despair",
     modGroup: "Cities",
     typemap: "local",
