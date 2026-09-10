@@ -11,25 +11,28 @@ const CERestoredMapData = [
       { x: 750, y: 556, text: "Old Blind Master", description: "See Quests For More Details.", targetMapFilename: "Old Blind Master" },
 
       { x: 610, y: 555, text: "Acererak's Tomb", description: "The forbidding entrance leading deep into a legendary dungeon.", targetMapFilename: "Acererak's Tomb" },
-      { x: 899, y: 374, text: "Merchant's Faire", description: "A crowded gathering node for nomadic traders.", targetMapFilename: "Merchant's Faire" },
-      { x: 418, y: 811, text: "Leahbo", description: "", targetMapFilename: "Leahbo" },
-      { x: 615, y: 1013, text: "Well of Lost Souls", description: "", targetMapFilename: "Well of Lost Souls" },
-      { x: 923, y: 1024, text: "Vaselan", description: "", targetMapFilename: "Vaselan" },
-      { x: 1003, y: 1004, text: "The Tempter of Fate", description: "", targetMapFilename: "The Tempter of Fate" },
-      { x: 770, y: 1274, text: "Cotswold", description: "", targetMapFilename: "Cotswold" },
-      { x: 1477, y: 1610, text: "The Cavern of Madness", description: "", targetMapFilename: "The Cavern of Madness" },
-      { x: 1627, y: 1127, text: "Marsyona", description: "", targetMapFilename: "Marsyona" },
-      { x: 1166, y: 894, text: "Lynchbany", description: "", targetMapFilename: "Lynchbany" },
+        // To do: Inside
       { x: 1184, y: 879, text: "Big Woods Lodge", description: "", targetMapFilename: "Big Woods Lodge" },
+      { x: 1286, y: 1436, text: "Brandybuck", description: "", targetMapFilename: "Brandybuck"},
+      { x: 770, y: 1274, text: "Cotswold", description: "", targetMapFilename: "Cotswold" },
+      { x: 418, y: 811, text: "Leahbo", description: "", targetMapFilename: "Leahbo" },
+      { x: 1166, y: 894, text: "Lynchbany", description: "", targetMapFilename: "Lynchbany" },
+      { x: 1627, y: 1127, text: "Marsyona", description: "", targetMapFilename: "Marsyona" },
+      { x: 899, y: 374, text: "Merchant's Faire", description: "A crowded gathering node for nomadic traders.", targetMapFilename: "Merchant's Faire" },
+      { x: 1297, y: 1753, text: "Plainwicke Plantation", description: "", targetMapFilename: "Plainwicke Plantation" },
+      { x: 383, y: 767, text: "Port Ruins", description: "", targetMapFilename: "Port Ruins (1)" },
+      { x: 336, y: 749, text: "Port Ruins", description: "", targetMapFilename: "Port Ruins (2)" },
+      { x: 1477, y: 1610, text: "The Cavern of Madness", description: "", targetMapFilename: "The Cavern of Madness" },
+        // To do: Inside
+      { x: 1003, y: 1004, text: "The Tempter of Fate", description: "", targetMapFilename: "The Tempter of Fate" },
+      { x: 923, y: 1024, text: "Vaselan", description: "", targetMapFilename: "Vaselan" },
+      { x: 615, y: 1013, text: "Well of Lost Souls", description: "", targetMapFilename: "Well of Lost Souls" },
 
-      { x: 1286, y: 1436, text: "Brandybuck", description: ""},
       { x: 732, y: 565, text: "An Old Mine", description: "" },
-      { x: 654, y: 664, text: "Mines of Dwarrowdelf", description: "" },
-      { x: 654, y: 687, text: "Ancient Trail", description: "" },
-      { x: 295, y: 727, text: "Port Ruins", description: "" },
-      { x: 336, y: 749, text: "Port Ruins", description: "" },
-      { x: 383, y: 767, text: "Port Ruins", description: "" },
-      { x: 1297, y: 1753, text: "Plainwicke Plantation", description: "" },
+      { x: 654, y: 664, text: "Mines of Dwarrowdelf", description: "" }, // Together
+      { x: 654, y: 687, text: "Ancient Trail", description: "" }, // Together
+        // Work ongoing - map really too big (long!), maybe should be split in two with Mines?
+      { x: 295, y: 727, text: "Port Ruins", description: "", targetMapFilename: "Port Ruins (3)" },
 
       { x: 1261, y: 1727, text: "Norleigh Seahold", description: "" }, // Empty (Boat)
       { x: 1301, y: 1795, text: "Brookeside Plantation", description: "" }, // Empty (Sign welcome)
@@ -80,6 +83,14 @@ const CERestoredMapData = [
     labels: []
   },
   {
+    filename: "Forgotten Places/ForgottenPlaces-Brandybuck.jpg",
+    displayName: "Brandybuck",
+    modGroup: "Forgotten Places",
+    typemap: "local",
+    defaultView: { x: 3383, y: 4382, zoom: 1},
+    labels: []
+  },
+  {
     filename: "Forgotten Places/ForgottenPlaces-Cotswold.png",
     displayName: "Cotswold",
     modGroup: "Forgotten Places",
@@ -115,6 +126,30 @@ const CERestoredMapData = [
     displayName: "Merchant's Faire",
     modGroup: "Forgotten Places",
     typemap: "local",
+    labels: []
+  },
+  {
+    filename: "Forgotten Places/ForgottenPlaces-PlainwickePlantation.jpg",
+    displayName: "Plainwicke Plantation",
+    modGroup: "Forgotten Places",
+    typemap: "local",
+    defaultView: { x: 7132, y: 4143, zoom: 1},
+    labels: []
+  },
+  {
+    filename: "Forgotten Places/ForgottenPlaces-PortRuins-1.png",
+    displayName: "Port Ruins (1)",
+    modGroup: "Forgotten Places",
+    typemap: "local",
+    defaultView: { x: 1306, y: 581, zoom: 1},
+    labels: []
+  },
+  {
+    filename: "Forgotten Places/ForgottenPlaces-PortRuins-2.png",
+    displayName: "Port Ruins (2)",
+    modGroup: "Forgotten Places",
+    typemap: "local",
+    defaultView: { x: 798, y: 719, zoom: 1},
     labels: []
   },
   {

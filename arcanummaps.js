@@ -24,8 +24,7 @@ const ArcanumCitiesMapData = [
       { x: 1752, y: 1514, text: "Roseborough", description: "A small town near the Ring of Brodgar.", targetMapFilename: "Roseborough"},
         // NEW MAP TO DO
         // To do: Mannox Hole
-      { x: 1410, y: 1317, text: "Shrouded Hills", description: "A small mining town.", targetMapFilename: "Shrouded Hills" },
-        // NEW MAP TO DO
+      { x: 1410, y: 1317, text: "Shrouded Hills", description: "A small mining town.", targetMapFilename: "Shrouded Hills" }, // MAP OK
       { x: 1190, y: 753, text: "Stillwater", description: "A small town, famed for its swords.", targetMapFilename: "Stillwater" }, // MAP OK
       { x: 972, y: 1028, text: "Tarant", description: "The biggest, most industrial city in Arcanum", targetMapFilename: "Tarant"},
         // NEW MAP TO DO
@@ -266,7 +265,7 @@ const ArcanumCitiesMapData = [
     ]
   },
   {
-    filename: "ArcanumBase/IsleofDespair.jpg",
+    filename: "ArcanumBase/IsleOfDespair.jpg",
     displayName: "Isle of Despair",
     modGroup: "Cities",
     typemap: "local",
@@ -312,72 +311,57 @@ const ArcanumCitiesMapData = [
     ]
   },
   {
-    filename: "ArcanumBase/Roseboroughsmall.jpg",
+    filename: "ArcanumBase/Roseborough.jpg",
     displayName: "Roseborough",
     modGroup: "Cities",
     typemap: "local",
-    defaultView: { x: 3064, y: 2710, zoom: 1 },
-    labels: []
+    defaultView: { x: 5594, y: 2974, zoom: 1 },
+    labels: [
+      { x: 6354, y: 3069, text: "Roseborough Inn", description: "", category: "waypoint", targetMapFilename: "Roseborough Inn" },
+      { x: 5100, y: 2639, text: "Captain of the Roseborough Guard", description: "", category: ["quest", "npc"] },
+      { x: 6650, y: 1740, text: "A freshly filled grave", description: "", category: ["quest", "chest"], inventory: ["Horror Among the Dark Elves"] },
+      { x: 7129, y: 1298, text: "Doctor Edmund Craig", description: "Backstab Master", category: "npc" },
+      { x: 8123, y: 2049, text: "Mrs. R. L. Morgan", description: "Free Lockpick master quest", category: ["quest", "npc"] },
+      { x: 8537, y: 2953, text: "Roseborough Gift Shoppe", description: "", category: ["information"] },
+      { x: 8431, y: 2866, text: "Gnome Shopkeeper", description: "", category: "shop", shopType: "General Store", shopMarkup: 110 },
+      { x: 8794, y: 2047, text: "Blacksmith", description: "", category: "shop", shopType: "Blacksmith", shopMarkup: 110, inventory: ["Power Axe", "Screaming Shield"] },
+      { x: 8763, y: 3130, text: "Adkin Chambers (Caladon)", description: "", category: ["quest", "npc"] },
+      { x: 8783, y: 3172, text: "Lady Druella (Caladon)", description: "", category: ["quest", "npc"] },
+      { x: 4471, y: 1482, text: "Ring of Brodgar", description: "", category: "information" },
+      { x: 6144, y: 3086, text: "Thingy", description: "Explain what it says", category: "information" },
+      { x: 926, y: 658, text: "Mannox's Hole", description: "", category: "waypoint" },
+      { x: 4547, y: 1558, text: "Nasrudin (Roseborough)", description: "", category: ["quest", "npc"] },
+      { x: 7451, y: 2374, text: "Chest", inventory: ["Ring of Protection"], category: "chest" },
+    ]
   },
   {
-    filename: "ArcanumBase/ShroudedHillssmall.jpg",
+    filename: "ArcanumBase/ShroudedHills.jpg",
     displayName: "Shrouded Hills",
     modGroup: "Cities",
     typemap: "local",
     music: "music/towns.flac",
-    defaultView: { x: 5689, y: 3230, zoom: 1 },
+    defaultView: { x: 8143, y: 2473, zoom: 1 },
     labels: [
-      { x: 5262, y: 2990, text: "Ristezze", shopType: "Junk Dealer", shopMarkup: 200,  inventory: ["Key to Ristezze’s Bedroom"], category: ["shop", "quest", "key"],
-        linkedLabels: [
-          { questName: "Find the Boy (Part II)", questDescription: "Discover the origins of the strange ring.", target: "Ristezze" },
-          { questName: "Find a camera or Bessie Toone paraphernalia", questDescription: "Ristezze the Importer wants you to find a camera OR some Bessie Toone paraphenalia. In return, he will give you information about P. Schuyler & Sons.", target: "Ristezze" },
-          { questName: "Get Information from the Schuylers", questDescription: "Get information from P. Schuyler & Sons about owner of strange ring.", target: "Ristezze" },
-        ],},
-      { x: 4725, y: 3619, text: "Jongle Dunne", description: "", category: ["quest", "npc"],
-       linkedLabels: [
-          { questName: "", questDescription: "Jongle Dunne wants you to destroy the town’s steam engine.", target: "Steam Machine" },
-          { questName: "", questDescription: "Jongle Dunne needs a package picked up from a man named Charles Dolan, a merchant in Dernholm.", target: "Charles Dolan" },
-        ],},
-      { x: 5619, y: 3254, text: "Constable Owens", description: "", category: ["quest", "npc"],
-        linkedLabels: [
-          { questName: "", questDescription: "Constable Owens needs you to remove the thieves from the bridge.", target: "Lukan the Witless" },
-          { questName: "", questDescription: "Constable Owens wants you to fix the town’s steam engine.", target: "Barrel (Sprocket)" },
-        ],},
-      { x: 4975, y: 3178, text: "Lloyd Gurloes", shopType: "Blacksmith", shopMarkup: 110, inventory: ["Key to Lloyd Gurloes’ backroom"], category:  ["shop", "quest", "key"],
-        linkedLabels: [
-          { questName: "", questDescription: "Lloyd Gurloes wants you to obtain some pure ore for him.", target: "" },
-        ],},
-      { x: 5701, y: 3465, text: "Jacob Bens", description: "", category: ["quest", "npc"],
-        linkedLabels: [
-          { questName: "", questDescription: "Jacob Bens in Shrouded Hills wants you to steal the local mining company’s payroll from the bank’s safe.", target: "" },
-        ],},
-      { x: 5489, y: 2720, text: "Doc Roberts", description: "", category: ["quest", "npc", "followers"],
-        linkedLabels: [
-          { questName: "Stop the bank robbery (Part I)", questDescription: "Doc Roberts wants you to help him stop an impending bank robbery.", target: "Stop the bank robbery (Part II)" },
-        ],},
-      { x: 5288, y: 3388, text: "Bank robbers", description: "Stop the bank robbery (Part II) - Kill the three bank robbers.", category: "quest", target: "Doc Roberts"},
-      { x: 2556, y: 3742, text: "Percival Toone", description: "", category: ["quest", "npc"],
-        linkedLabels: [
-          { questName: "", questDescription: "Percival Toone wants you to find a way to free the ghost of his mother.", target: "" },
-        ],},
-      { x: 4561, y: 2421, text: "Gaylin", description: "Herbalist", category: ["shop", "quest"],
-        linkedLabels: [
-          { questName: "Find the Amulet of N’Tala (Part I)", questDescription: "If, in my travels, I happen across the ancient elven amulet of N’Tala, Gaylin has offered to pay me a handsome reward for its return.", target: "Myrth" },
-        ],},
-      { x: 8487, y: 2098, text: "Lukan the Witless", description: "", category: ["quest", "key", "npc"],
-        linkedLabels: [
-          { questName: "", questDescription: "In order to join the thieves, you must destroy the construction materials for the new bridge.", target: "Bridge materials" },
-        ],},
-      { x: 6361, y: 3567, text: "Elder Joachim’s paper trail (Part I)", description: "Note from Joachim", category: "quest", linkedLabels: ["Telegraph Operator"]},
-      { x: 7734, y: 3628, text: "Bridge materials", description: "", category: "quest", linkedLabels: ["Lukan the Witless"] },
-
-      { x: 4575, y: 3237, text: "Gnome Shopkeeper", shopType: "General Store", shopMarkup: 110, category: "shop" },
-      { x: 7136, y: 2559, text: "Wise Woman", shopType: "Gypsy/Nomad", shopMarkup: 150, inventory: ["Witch's Dagger"], category: "shop" },
-
-      { x: 5914, y: 3147, text: "Shrouded Hills Panarii Temple", description: "", category: "waypoint", targetMapFilename: "Panarii Temple"},
-      { x: 2179, y: 3272, text: "Bessie Toone Mine", description: "", category: "waypoint", targetMapFilename: "Bessie Toone Mine", targetX: 1697, targetY: 805},
-
-      { x: 5762, y: 3504, text: "Sogg Mead Mug", description: "", category: "followers" },
+      { x: 7774, y: 2104, text: "Ristezze", description: "", category: ["shop", "quest", "key"], shopType: "Junk Dealer", shopMarkup: 200, inventory: ["Key to Ristezze’s Bedroom"], linkedLabels: [{ questName: "Find the Boy (Part II)", questDescription: "Discover the origins of the strange ring.", target: "Ristezze" }, { questName: "Find a camera or Bessie Toone paraphernalia", questDescription: "Ristezze the Importer wants you to find a camera OR some Bessie Toone paraphenalia. In return, he will give you information about P. Schuyler & Sons.", target: "Ristezze" }, { questName: "Get Information from the Schuylers", questDescription: "Get information from P. Schuyler & Sons about owner of strange ring.", target: "Ristezze" }] },
+      { x: 7241, y: 2765, text: "Jongle Dunne", description: "", category: ["quest", "npc"], linkedLabels: [{ questDescription: "Jongle Dunne wants you to destroy the town’s steam engine.", target: "Steam Machine" }, { questDescription: "Jongle Dunne needs a package picked up from a man named Charles Dolan, a merchant in Dernholm.", target: "Charles Dolan" }] },
+      { x: 8172, y: 2352, text: "Constable Owens", description: "", category: ["quest", "npc"], linkedLabels: [{ questDescription: "Constable Owens needs you to remove the thieves from the bridge.", target: "Lukan the Witless" }, { questDescription: "Constable Owens wants you to fix the town’s steam engine.", target: "Barrel (Sprocket)" }] },
+      { x: 7512, y: 2301, text: "Lloyd Gurloes", description: "", category: ["shop", "quest", "key"], shopType: "Blacksmith", shopMarkup: 110, inventory: ["Key to Lloyd Gurloes’ backroom"], linkedLabels: [{ questDescription: "Lloyd Gurloes wants you to obtain some pure ore for him." }] },
+      { x: 8278, y: 2640, text: "Jacob Bens", description: "", category: ["quest", "npc"], linkedLabels: [{ questDescription: "Jacob Bens in Shrouded Hills wants you to steal the local mining company’s payroll from the bank’s safe." }] },
+      { x: 8013, y: 1883, text: "Doc Roberts", description: "", category: ["quest", "npc", "followers"], linkedLabels: [{ questName: "Stop the bank robbery (Part I)", questDescription: "Doc Roberts wants you to help him stop an impending bank robbery.", target: "Stop the bank robbery (Part II)" }] },
+      { x: 7768, y: 2508, text: "Bank robbers", description: "Stop the bank robbery (Part II) - Kill the three bank robbers.", category: "quest" },
+      { x: 5022, y: 2892, text: "Percival Toone", description: "", category: ["quest", "npc"], linkedLabels: [{ questDescription: "Percival Toone wants you to find a way to free the ghost of his mother." }] },
+      { x: 7083, y: 1515, text: "Gaylin", description: "Herbalist", category: ["shop", "quest"], linkedLabels: [{ questName: "Find the Amulet of N’Tala (Part I)", questDescription: "If, in my travels, I happen across the ancient elven amulet of N’Tala, Gaylin has offered to pay me a handsome reward for its return.", target: "Myrth" }] },
+      { x: 10909, y: 1232, text: "Lukan the Witless", description: "", category: ["quest", "key", "npc"], linkedLabels: [{ questDescription: "In order to join the thieves, you must destroy the construction materials for the new bridge.", target: "Bridge materials" }] },
+      { x: 8851, y: 2680, text: "Elder Joachim’s paper trail (Part I)", description: "Note from Joachim", category: "quest", linkedLabels: ["Telegraph Operator"] },
+      { x: 10264, y: 2708, text: "Bridge materials", description: "", category: "quest", linkedLabels: ["Lukan the Witless"] },
+      { x: 7089, y: 2359, text: "Gnome Shopkeeper", description: "", category: "shop", shopType: "General Store", shopMarkup: 110 },
+      { x: 9693, y: 1666, text: "Wise Woman", description: "", category: "shop", shopType: "Gypsy/Nomad", shopMarkup: 150, inventory: ["Witch's Dagger"] },
+      { x: 8430, y: 2265, text: "Shrouded Hills Panarii Temple", description: "", category: "waypoint", targetMapFilename: "Panarii Temple" },
+      { x: 4707, y: 2378, text: "Bessie Toone Mine", description: "", category: "waypoint", targetMapFilename: "Bessie Toone Mine", targetX: 1697, targetY: 805 },
+      { x: 8262, y: 2598, text: "Sogg Mead Mug", description: "", category: "followers" },
+      { x: 1431, y: 2662, text: "Mysterious barrels", description: "These barrels are not the fruit of a random terrain generation: they were deliberately placed here. None can be open.", category: "information" },
+      { x: 4139, y: 1985, text: "Four wolves and a bunny", description: "Behind the Bessie Toone Mine are four wolves and a bunny.", category: "information" },
+      { x: 7908, y: 903, text: "Three wolves", description: "", category: "information" },
     ]
   },
   {
@@ -839,7 +823,7 @@ const ArcanumCitiesMapData = [
     typemap: "local",
     defaultView: { x: 1435, y: 735, zoom: 1 },
     labels: [
-      { x: 3210, y: 2374, text: "Nasrudin", description: "Travel to the Ring of Brodgar. / Find Arronax. / Retrieve the Vendigroth Device and meet Nasrudin in the Ring of Brodgar. / Nasrudin wishes you to kill the Bogaroth. In return, he will tell you what you need to do to kill Arronax. / Stop Arronax.", category: ["quest", "npc"], linkedLabels: ["Bogaroth"] },
+      { x: 3210, y: 2374, text: "Nasrudin", description: "Travel to the Ring of Brodgar. / Find Arronax. / Retrieve the Vendigroth Device and meet Nasrudin in the Ring of Brodgar. / Nasrudin wishes you to kill the Bogaroth. In return, he will tell you what you need to do to kill Arronax. / Stop Arronax.", category: ["quest", "npc"], linkedLabels: ["Bogaroth", "Nasrudin (Roseborough)"] },
     ],
   },
   {
@@ -1630,7 +1614,7 @@ const ArcanumCitiesMapData = [
     typemap: "local",
     background: "#000000",
     //defaultView: { x: 3972, y: 1642, zoom: 1 },
-    parentFilename: "ArcanumBase/Roseboroughsmall.jpg",
+    parentFilename: "ArcanumBase/Roseborough.jpg",
     labels: [],
   },
   {
@@ -1683,7 +1667,7 @@ const ArcanumCitiesMapData = [
     music: "music/mines.flac",
     background: "#000000",
     defaultView: { x: 545, y: 599, zoom: 1 },
-    parentFilename: "ArcanumBase/ShroudedHillssmall.jpg",
+    parentFilename: "ArcanumBase/ShroudedHills.jpg",
     labels: [
       { x: 545, y: 599, text: "Shrouded Hills", description: "", category: "waypoint", targetMapFilename: "Shrouded Hills", targetX: 5914, targetY: 3147 },
       { x: 1085, y: 279, text: "Steam Machine", description: "", category: "quest", linkedLabels: ["Jongle Dunne"] },
@@ -1697,7 +1681,7 @@ const ArcanumCitiesMapData = [
     typemap: "local",
     background: "#000000",
     defaultView: { x: 1697, y: 805, zoom: 1 },
-    parentFilename: "ArcanumBase/ShroudedHillssmall.jpg",
+    parentFilename: "ArcanumBase/ShroudedHills.jpg",
     labels: [
       { x: 1697, y: 805, text: "Shrouded Hills", description: "", category: "waypoint", targetMapFilename: "Shrouded Hills", targetX: 2179, targetY: 3272 },
       { x: 455, y: 655, text: "Bessie Toone's Ghost", description: "Sarah, my dear Sarah...", category: "quest", linkedLabels: ["Percival Toone", "Sarah Toone"] },
