@@ -28,9 +28,20 @@ const waypointFields = document.getElementById('waypoint-fields');
 const newLabelTargetMap = document.getElementById('new-label-target-map');
 const newLabelTargetX = document.getElementById('new-label-target-x');
 const newLabelTargetY = document.getElementById('new-label-target-y');
+const shopFields = document.getElementById('shop-fields');
+const newLabelShopType = document.getElementById('new-label-shop-type');
+const newLabelShopMarkup = document.getElementById('new-label-shop-markup');
+const cancelEditBtn = document.getElementById('cancel-edit-btn');
+const editingIndicator = document.getElementById('editing-indicator');
+const editingLabelName = document.getElementById('editing-label-name');
+let editingLabel = null;
+let editingLabelDomEls = [];
 
 const zoomInBtn = document.getElementById('zoomInBtn');
 const zoomOutBtn = document.getElementById('zoomOutBtn');
+const altViewBtn = document.getElementById('altViewBtn');
+const altViewIcon = document.getElementById('altViewIcon');
+let isShowingAltView = false;
 
 const filterDropdownBtn = document.getElementById('filterDropdownBtn');
 const filterDropdownContent = document.getElementById('filterDropdownContent');
@@ -63,6 +74,18 @@ const questListPanel = document.getElementById('quest-list-panel');
 const questPanelMapName = document.getElementById('quest-panel-mapname');
 const questPanelContent = document.getElementById('quest-panel-content');
 const questPanelClose = document.getElementById('quest-panel-close');
+const itemImageOverlay = document.getElementById('item-image-overlay');
+const itemImageOverlayImg = document.getElementById('item-image-overlay-img');
+
+function showItemImage(imagePath) {
+    itemImageOverlayImg.src = imagePath;
+    itemImageOverlay.style.display = 'flex';
+}
+
+function hideItemImage() {
+    itemImageOverlay.style.display = 'none';
+    itemImageOverlayImg.src = '';
+}
 const bgMusicAudioA = new Audio();
 const bgMusicAudioB = new Audio();
 bgMusicAudioA.loop = true;
@@ -168,6 +191,34 @@ function getShopMarkupTier(markup) {
     return SHOP_MARKUP_TIERS.find(tier => markup >= tier.min) || null;
 }
 
+// Sex displays as an emoji only - edit/extend this map for other values you use
+const SEX_EMOJI = {
+    male: '♂️',
+    m: '♂️',
+    female: '♀️',
+    f: '♀️'
+};
+
+// Inventory item tiers - "regular" is the default when no tier is set (or for plain-string items).
+// Edit these to adjust the colors, or add new tiers.
+const ITEM_TIER_COLORS = {
+    regular: '#ffffff',
+    magick: '#5dade2',
+    hexed: '#e67e22'
+};
+
+function buildLabelStatsRowHtml(label) {
+    const parts = [];
+    if (label.sex) {
+        const key = String(label.sex).trim().toLowerCase();
+        parts.push(SEX_EMOJI[key] || label.sex);
+    }
+    if (label.race) parts.push(label.race);
+    if (label.level !== undefined && label.level !== null && label.level !== '') parts.push(`Level ${label.level}`);
+    if (label.age !== undefined && label.age !== null && label.age !== '') parts.push(`Age ${label.age}`);
+    return parts.length > 0 ? `<div class="label-stats-row">${parts.join(' &middot; ')}</div>` : '';
+}
+
 function getSelectedNewLabelCategories() {
     return Array.from(newLabelCategoryChecks).filter(cb => cb.checked).map(cb => cb.value);
 }
@@ -184,6 +235,23 @@ function populateTargetMapOptions() {
         opt.value = optionValue;
         opt.textContent = map.modGroup ? `${map.displayName} — ${map.modGroup}` : map.displayName;
         newLabelTargetMap.appendChild(opt);
+    });
+}
+
+function populateShopTypeOptions() {
+    const datalist = document.getElementById('shop-type-options');
+    if (!datalist) return;
+    const types = new Set();
+    ArcanumMapData.forEach(map => {
+        if (!map.labels) return;
+        map.labels.forEach(label => {
+            if (label.shopType) types.add(label.shopType.trim());
+        });
+    });
+    [...types].sort().forEach(t => {
+        const opt = document.createElement('option');
+        opt.value = t;
+        datalist.appendChild(opt);
     });
 }
 
@@ -417,6 +485,11 @@ function initViewer() {
         questListPanel.classList.remove('open');
     });
 
+    itemImageOverlay.addEventListener('click', hideItemImage);
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && itemImageOverlay.style.display === 'flex') hideItemImage();
+    });
+
     if (ArcanumMapData.length > 0) {
         let startIndex = 0;
         let restorePosition = null;
@@ -453,6 +526,7 @@ function initViewer() {
 
         renderGroupedFileList();
         populateTargetMapOptions();
+        populateShopTypeOptions();
         loadImage(startIndex, arrivalView, restorePosition);
     } else {
         menuContainer.innerHTML = '<div style="text-align:center;color:#888;padding:20px;">No maps registered.</div>';
@@ -511,14 +585,70 @@ function initViewer() {
 
     newLabelCategoryChecks.forEach(cb => {
         cb.addEventListener('change', () => {
-            waypointFields.style.display = getSelectedNewLabelCategories().includes('waypoint') ? 'flex' : 'none';
+            const cats = getSelectedNewLabelCategories();
+            waypointFields.style.display = cats.includes('waypoint') ? 'flex' : 'none';
+            shopFields.style.display = cats.includes('shop') ? 'flex' : 'none';
         });
     });
 
     addToPreviewBtn.addEventListener('click', () => {
         const labelTitle = newLabelText.value.trim() || "New Marker Location";
         const labelDescription = newLabelDesc.value.trim();
+        const linkedText = newLabelLinks.value.trim();
+        const cats = (currentMapType !== "overworld") ? getSelectedNewLabelCategories() : [];
 
+        if (editingLabel) {
+            // --- Save edits to an existing (or still-pending) label, in place ---
+            editingLabel.text = labelTitle;
+            editingLabel.description = labelDescription;
+
+            // Preserve any object-form linked entries (e.g. Myrth-style multi-quest objects) -
+            // the text field only ever represents the simple string-form links
+            const preservedObjectLinks = Array.isArray(editingLabel.linkedLabels)
+                ? editingLabel.linkedLabels.filter(e => typeof e !== 'string') : [];
+            const newStringLinks = linkedText ? linkedText.split(',').map(s => s.trim()).filter(Boolean) : [];
+            const combinedLinks = [...newStringLinks, ...preservedObjectLinks];
+            if (combinedLinks.length > 0) editingLabel.linkedLabels = combinedLinks;
+            else delete editingLabel.linkedLabels;
+
+            if (currentMapType !== "overworld") {
+                if (cats.length === 1) editingLabel.category = cats[0];
+                else if (cats.length > 1) editingLabel.category = cats;
+                else delete editingLabel.category;
+
+                if (cats.includes('waypoint')) {
+                    const targetMapName = newLabelTargetMap.value;
+                    if (targetMapName) editingLabel.targetMapFilename = targetMapName; else delete editingLabel.targetMapFilename;
+                    const tX = newLabelTargetX.value.trim();
+                    const tY = newLabelTargetY.value.trim();
+                    if (tX !== '') editingLabel.targetX = parseInt(tX, 10); else delete editingLabel.targetX;
+                    if (tY !== '') editingLabel.targetY = parseInt(tY, 10); else delete editingLabel.targetY;
+                } else {
+                    delete editingLabel.targetMapFilename;
+                    delete editingLabel.targetX;
+                    delete editingLabel.targetY;
+                }
+
+                if (cats.includes('shop')) {
+                    const shopTypeVal = newLabelShopType.value.trim();
+                    if (shopTypeVal) editingLabel.shopType = shopTypeVal; else delete editingLabel.shopType;
+                    const markupVal = newLabelShopMarkup.value.trim();
+                    if (markupVal !== '') editingLabel.shopMarkup = parseFloat(markupVal); else delete editingLabel.shopMarkup;
+                } else {
+                    delete editingLabel.shopType;
+                    delete editingLabel.shopMarkup;
+                }
+            }
+
+            const wasPending = pendingNewLabels.includes(editingLabel);
+            editingLabelDomEls.forEach(el => el.remove());
+            renderSingleLabel(editingLabel, wasPending);
+
+            stopEditingLabel();
+            return;
+        }
+
+        // --- Add a brand-new label ---
         const newLabelObj = {
             x: clickMapX,
             y: clickMapY,
@@ -526,13 +656,11 @@ function initViewer() {
             description: labelDescription
         };
 
-        const linkedText = newLabelLinks.value.trim();
         if (linkedText) {
             newLabelObj.linkedLabels = linkedText.split(',').map(s => s.trim()).filter(Boolean);
         }
 
         if (currentMapType !== "overworld") {
-            const cats = getSelectedNewLabelCategories();
             if (cats.length === 1) {
                 newLabelObj.category = cats[0];
             } else if (cats.length > 1) {
@@ -546,6 +674,12 @@ function initViewer() {
                 if (tX !== '') newLabelObj.targetX = parseInt(tX, 10);
                 if (tY !== '') newLabelObj.targetY = parseInt(tY, 10);
             }
+            if (cats.includes('shop')) {
+                const shopTypeVal = newLabelShopType.value.trim();
+                if (shopTypeVal) newLabelObj.shopType = shopTypeVal;
+                const markupVal = newLabelShopMarkup.value.trim();
+                if (markupVal !== '') newLabelObj.shopMarkup = parseFloat(markupVal);
+            }
         }
 
         renderSingleLabel(newLabelObj, true);
@@ -558,6 +692,12 @@ function initViewer() {
         newLabelLinks.value = '';
         newLabelTargetX.value = '';
         newLabelTargetY.value = '';
+        newLabelShopType.value = '';
+        newLabelShopMarkup.value = '';
+    });
+
+    cancelEditBtn.addEventListener('click', () => {
+        stopEditingLabel();
     });
 
     copyEditsBtn.addEventListener('click', () => {
@@ -580,6 +720,16 @@ function initViewer() {
 
     zoomInBtn.addEventListener('click', (e) => { e.stopPropagation(); executeButtonZoom(true); });
     zoomOutBtn.addEventListener('click', (e) => { e.stopPropagation(); executeButtonZoom(false); });
+
+    altViewBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const selectedMap = ArcanumMapData.find(m => m.filename === currentMapFilename);
+        if (!selectedMap || !selectedMap.altView) return;
+        isShowingAltView = !isShowingAltView;
+        img.src = isShowingAltView ? selectedMap.altView.image : selectedMap.filename;
+        altViewBtn.classList.toggle('active', isShowingAltView);
+        altViewBtn.title = isShowingAltView ? 'Show original view' : 'Show alternate view';
+    });
 
     viewport.addEventListener('mousemove', (e) => {
         if (currentMapType !== "overworld" || !img.src) return;
@@ -713,6 +863,16 @@ function loadImage(index, arrivalViewOverride, restorePosition) {
 
     updateBackgroundMusic(selectedMap);
 
+    isShowingAltView = false;
+    if (selectedMap.altView && selectedMap.altView.icon) {
+        altViewBtn.style.display = 'flex';
+        altViewIcon.src = selectedMap.altView.icon;
+        altViewBtn.classList.remove('active');
+        altViewBtn.title = 'Show alternate view';
+    } else {
+        altViewBtn.style.display = 'none';
+    }
+
     if (selectedMap.background) {
         viewport.style.background = selectedMap.background;
     } else {
@@ -737,6 +897,7 @@ function loadImage(index, arrivalViewOverride, restorePosition) {
         chkBounty.parentElement.style.display = 'none';
         categoryField.style.display = 'none';
         waypointFields.style.display = 'none';
+        shopFields.style.display = 'none';
     } else {
         mapCoordinatesHud.style.display = 'flex';
         hudBoxW.style.display = 'none';
@@ -755,6 +916,7 @@ function loadImage(index, arrivalViewOverride, restorePosition) {
         chkBounty.parentElement.style.display = 'flex';
         categoryField.style.display = 'flex';
         waypointFields.style.display = getSelectedNewLabelCategories().includes('waypoint') ? 'flex' : 'none';
+        shopFields.style.display = getSelectedNewLabelCategories().includes('shop') ? 'flex' : 'none';
     }
 
     let primaryTargetIndex = index;
@@ -1024,6 +1186,11 @@ function renderSingleLabel(label, isPending) {
         const popupCats = Array.isArray(label.category) ? label.category : (label.category ? [label.category] : []);
         const descHtmlMain = label.description ? `<p style="margin:0;">${label.description}</p>` : '';
 
+        const statsRowHtml = buildLabelStatsRowHtml(label);
+        const portraitSrc = label.portrait || (label.race ? `Textures/${label.race}.png` : '');
+        const portraitHtml = portraitSrc ? `<img class="popup-portrait" src="${portraitSrc}" alt="" onerror="this.style.display='none'">` : '';
+        const headerHtml = `<div class="popup-header">${portraitHtml}<div class="popup-header-text"><h4>${label.text}</h4>${statsRowHtml}</div></div>`;
+
         let shopInfoHtml = "";
         if (popupCats.includes('shop') && (label.shopType || typeof label.shopMarkup === 'number')) {
             const shopTypeHtml = label.shopType ? `<div class="shop-info-type">${label.shopType}</div>` : '';
@@ -1038,7 +1205,16 @@ function renderSingleLabel(label, isPending) {
 
         let inventoryHtml = "";
         if (Array.isArray(label.inventory) && label.inventory.length > 0) {
-            const itemsHtml = label.inventory.map(item => `<li>${item}</li>`).join('');
+            const itemsHtml = label.inventory.map((item, i) => {
+                const isObject = typeof item !== 'string';
+                const name = isObject ? item.name : item;
+                const tier = (isObject && item.tier) ? item.tier : 'regular';
+                const color = ITEM_TIER_COLORS[tier] || ITEM_TIER_COLORS.regular;
+                const clickable = isObject && item.image;
+                const cls = clickable ? ' class="inventory-item-clickable"' : '';
+                const dataAttr = clickable ? ` data-inventory-index="${i}"` : '';
+                return `<li${cls}${dataAttr} style="color:${color};">${name}</li>`;
+            }).join('');
             inventoryHtml = `<div class="npc-inventory-block">
                 <div class="npc-inventory-title">Inventory</div>
                 <ul class="npc-inventory-list">${itemsHtml}</ul>
@@ -1087,7 +1263,7 @@ function renderSingleLabel(label, isPending) {
             linkedButtonsHtml = `<div class="popup-links-heading">${headingLabel}</div>${blocks}`;
         }
         
-        popup.innerHTML = `<span class="close-btn">&times;</span><h4>${label.text}</h4>${shopInfoHtml}${inventoryHtml}${descHtmlMain}${travelButtonHtml}${linkedButtonsHtml}`;
+        popup.innerHTML = `<span class="close-btn">&times;</span>${headerHtml}${shopInfoHtml}${inventoryHtml}${descHtmlMain}${travelButtonHtml}${linkedButtonsHtml}`;
         popup.querySelector('.close-btn').addEventListener('click', (el) => { el.stopPropagation(); popup.remove(); });
         
         if (label.targetMapFilename) {
@@ -1108,6 +1284,17 @@ function renderSingleLabel(label, isPending) {
                     const entry = label.linkedLabels[i];
                     const targetText = (typeof entry === 'string') ? entry : entry.target;
                     if (targetText) travelToLinkedLabel(targetText);
+                });
+            });
+        }
+
+        if (Array.isArray(label.inventory)) {
+            popup.querySelectorAll('.inventory-item-clickable').forEach(el => {
+                el.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const idx = parseInt(el.getAttribute('data-inventory-index'), 10);
+                    const item = label.inventory[idx];
+                    if (item && item.image) showItemImage(item.image);
                 });
             });
         }
@@ -1147,7 +1334,7 @@ function renderSingleLabel(label, isPending) {
             e.stopPropagation();
             if (suppressNextLabelClick) { suppressNextLabelClick = false; return; }
             if (isCreatorMode) {
-                openInfoPopup();
+                startEditingLabel(label);
                 return;
             }
             hideHoverTooltip();
@@ -1164,6 +1351,7 @@ function renderSingleLabel(label, isPending) {
         dot.className = 'arcanum-world-dot';
         if (isPending) dot.classList.add('pending-label');
         dot.style.left = `${renderX}px`; dot.style.top = `${renderY}px`;
+        dot.setAttribute('data-label-text', label.text);
         dot.addEventListener('mouseenter', showHoverTooltip);
         dot.addEventListener('mouseleave', hideHoverTooltip);
         dot.addEventListener('click', handleWorldLabelClick);
@@ -1174,6 +1362,7 @@ function renderSingleLabel(label, isPending) {
         if (isPending) txt.classList.add('pending-label');
         txt.innerHTML = `<span>${label.text}</span>`;
         txt.style.left = `${renderX}px`; txt.style.top = `${renderY}px`;
+        txt.setAttribute('data-label-text', label.text);
         txt.addEventListener('mouseenter', showHoverTooltip);
         txt.addEventListener('mouseleave', hideHoverTooltip);
         txt.addEventListener('click', handleWorldLabelClick);
@@ -1198,6 +1387,7 @@ function renderSingleLabel(label, isPending) {
         const guardedClick = (handler) => (e) => {
             e.stopPropagation();
             if (suppressNextLabelClick) { suppressNextLabelClick = false; return; }
+            if (isCreatorMode) { startEditingLabel(label); return; }
             handler();
         };
 
@@ -1315,8 +1505,25 @@ function buildLabelCodeLine(labelData) {
     }
     if (labelData.shopType) parts.push(`shopType: "${labelData.shopType}"`);
     if (typeof labelData.shopMarkup === 'number' && !isNaN(labelData.shopMarkup)) parts.push(`shopMarkup: ${labelData.shopMarkup}`);
+    if (labelData.portrait) parts.push(`portrait: "${labelData.portrait}"`);
+    if (labelData.level !== undefined && labelData.level !== null && labelData.level !== '') {
+        parts.push(typeof labelData.level === 'number' ? `level: ${labelData.level}` : `level: "${labelData.level}"`);
+    }
+    if (labelData.sex) parts.push(`sex: "${labelData.sex}"`);
+    if (labelData.race) parts.push(`race: "${labelData.race}"`);
+    if (labelData.age !== undefined && labelData.age !== null && labelData.age !== '') {
+        parts.push(typeof labelData.age === 'number' ? `age: ${labelData.age}` : `age: "${labelData.age}"`);
+    }
     if (Array.isArray(labelData.inventory) && labelData.inventory.length > 0) {
-        parts.push(`inventory: [${labelData.inventory.map(i => `"${i}"`).join(', ')}]`);
+        const serializedItems = labelData.inventory.map(item => {
+            if (typeof item === 'string') return `"${item}"`;
+            const objParts = [];
+            if (item.name) objParts.push(`name: "${item.name}"`);
+            if (item.image) objParts.push(`image: "${item.image}"`);
+            if (item.tier) objParts.push(`tier: "${item.tier}"`);
+            return `{ ${objParts.join(', ')} }`;
+        });
+        parts.push(`inventory: [${serializedItems.join(', ')}]`);
     }
     if (labelData.targetMapFilename) parts.push(`targetMapFilename: "${labelData.targetMapFilename}"`);
     if (typeof labelData.targetX === 'number' && !isNaN(labelData.targetX)) parts.push(`targetX: ${labelData.targetX}`);
@@ -1340,6 +1547,54 @@ function clearPendingEditorState() {
     pendingNewLabels = [];
     const pendingEls = container.querySelectorAll('.pending-label');
     pendingEls.forEach(el => el.remove());
+    stopEditingLabel();
+}
+
+function startEditingLabel(label) {
+    editingLabel = label;
+    editingLabelDomEls = Array.from(container.querySelectorAll('[data-label-text]'))
+        .filter(el => el.getAttribute('data-label-text') === label.text);
+
+    newLabelText.value = label.text || '';
+    newLabelDesc.value = label.description || '';
+
+    const stringLinks = Array.isArray(label.linkedLabels) ? label.linkedLabels.filter(e => typeof e === 'string') : [];
+    newLabelLinks.value = stringLinks.join(', ');
+
+    if (currentMapType !== "overworld") {
+        const cats = Array.isArray(label.category) ? label.category : (label.category ? [label.category] : []);
+        newLabelCategoryChecks.forEach(cb => { cb.checked = cats.includes(cb.value); });
+
+        waypointFields.style.display = cats.includes('waypoint') ? 'flex' : 'none';
+        newLabelTargetMap.value = label.targetMapFilename || '';
+        newLabelTargetX.value = (typeof label.targetX === 'number') ? label.targetX : '';
+        newLabelTargetY.value = (typeof label.targetY === 'number') ? label.targetY : '';
+
+        shopFields.style.display = cats.includes('shop') ? 'flex' : 'none';
+        newLabelShopType.value = label.shopType || '';
+        newLabelShopMarkup.value = (typeof label.shopMarkup === 'number') ? label.shopMarkup : '';
+    }
+
+    addToPreviewBtn.textContent = '💾 Save Edits';
+    cancelEditBtn.style.display = 'block';
+    editingIndicator.style.display = 'block';
+    editingLabelName.textContent = label.text;
+}
+
+function stopEditingLabel() {
+    if (!editingLabel) return;
+    editingLabel = null;
+    editingLabelDomEls = [];
+    addToPreviewBtn.textContent = '+ Add Label';
+    cancelEditBtn.style.display = 'none';
+    editingIndicator.style.display = 'none';
+    newLabelText.value = '';
+    newLabelDesc.value = '';
+    newLabelLinks.value = '';
+    newLabelTargetX.value = '';
+    newLabelTargetY.value = '';
+    newLabelShopType.value = '';
+    newLabelShopMarkup.value = '';
 }
 
 function resetView(viewOverride) {

@@ -333,6 +333,43 @@ img {
     padding-bottom: 4px;
 }
 
+/* Portrait + name/stats header row */
+.popup-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding-bottom: 6px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid #4a3e2e;
+}
+
+.popup-portrait {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid #4a3e2e;
+    background-color: #17130e;
+    flex-shrink: 0;
+}
+
+.popup-header-text {
+    flex: 1;
+    min-width: 0;
+}
+
+.popup-header-text h4 {
+    margin: 0 0 4px 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.label-stats-row {
+    font-size: 12px;
+    color: #c9bd9a;
+    margin: 0;
+}
+
 .info-popup .close-btn {
     position: absolute;
     top: 4px;
@@ -477,6 +514,39 @@ img {
     margin-bottom: 2px;
 }
 
+.inventory-item-clickable {
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-underline-offset: 2px;
+}
+
+.inventory-item-clickable:hover {
+    opacity: 0.75;
+}
+
+/* Full-screen image overlay for clickable inventory items (notes, books, etc.) */
+#item-image-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.88);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+#item-image-overlay img {
+    max-width: 88vw;
+    max-height: 88vh;
+    object-fit: contain;
+    box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.9);
+    border: 2px solid #b39449;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
 #creator-panel {
     background-color: #17130e;
     border-top: 2px solid #4a3e2e;
@@ -498,6 +568,16 @@ img {
     font-size: 14px;
     border-bottom: 1px solid #332b20;
     padding-bottom: 5px;
+}
+
+#editing-indicator {
+    background-color: rgba(255, 215, 0, 0.1);
+    border: 1px solid #ffd700;
+    border-radius: 3px;
+    padding: 6px 10px;
+    color: #ffd700;
+    font-size: 12px;
+    font-weight: bold;
 }
 
 #creator-panel label {
@@ -613,6 +693,45 @@ img {
 
 .zoom-ctrl-btn:active {
     transform: scale(0.95);
+}
+
+/* Alternate-view toggle icon - transparent PNG supplied per-map, pinned over the top-right
+   of the map area itself (not the control bar above it) */
+.alt-view-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 10;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    filter: drop-shadow(0px 2px 5px rgba(0,0,0,0.85));
+    transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.alt-view-btn:hover {
+    transform: scale(1.08);
+}
+
+.alt-view-btn:active {
+    transform: scale(0.96);
+}
+
+.alt-view-btn img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+/* Golden glow while the alternate version is the one currently showing */
+.alt-view-btn.active {
+    filter: drop-shadow(0px 0px 7px #ffd700) drop-shadow(0px 2px 5px rgba(0,0,0,0.85));
 }
 
 /* Top Bar Right-Aligned Coordinates HUD Wrapper */

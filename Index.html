@@ -75,8 +75,23 @@
                     <input type="number" id="new-label-target-y" placeholder="uses destination's default view if blank">
                 </div>
             </div>
+
+            <div id="shop-fields" class="waypoint-subfields" style="display:none;">
+                <div class="field-row">
+                    <label>Shop Type</label>
+                    <input type="text" id="new-label-shop-type" list="shop-type-options" placeholder="e.g., Blacksmith">
+                    <datalist id="shop-type-options"></datalist>
+                </div>
+                <div class="field-row">
+                    <label>Markup % (optional)</label>
+                    <input type="number" id="new-label-shop-markup" placeholder="e.g., 150">
+                </div>
+            </div>
+
+            <div id="editing-indicator" style="display:none;">✏️ Editing: <span id="editing-label-name"></span></div>
             
             <button id="add-to-preview-btn" class="toggle-btn" style="width:100%;">+ Add Label</button>
+            <button id="cancel-edit-btn" class="toggle-btn" style="width:100%; display:none;">Cancel Edit</button>
             <button id="copy-edits-btn" class="toggle-btn" style="width:100%;">📋 Copy Edits</button>
         </div>
     </div>
@@ -138,6 +153,11 @@
                 <button id="zoomInBtn" class="zoom-ctrl-btn" title="Zoom In">+</button>
                 <button id="zoomOutBtn" class="zoom-ctrl-btn" title="Zoom Out">-</button>
             </div>
+
+            <!-- Alternate-view toggle - only shown when the current map defines an "altView" -->
+            <button id="altViewBtn" class="alt-view-btn" title="Show alternate view" style="display:none;">
+                <img id="altViewIcon" src="" alt="Alternate view">
+            </button>
         </div>
     </div>
 
@@ -148,6 +168,11 @@
             <span id="quest-panel-close" class="quest-panel-close-btn">&times;</span>
         </div>
         <div id="quest-panel-content"></div>
+    </div>
+
+    <!-- Full-screen overlay for clickable inventory items (notes, books, etc.) - click anywhere to dismiss -->
+    <div id="item-image-overlay">
+        <img id="item-image-overlay-img" src="" alt="">
     </div>
 
     <!-- Catches a maps-data syntax/parse error before it happens - must be registered
