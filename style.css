@@ -370,6 +370,43 @@ img {
     margin: 0;
 }
 
+.altar-god-type {
+    font-style: italic;
+    font-size: 12px;
+    color: #c9c0f7;
+    margin: 0 0 2px 0;
+}
+
+.chest-status-row {
+    font-size: 12px;
+    color: #c9bd9a;
+    margin: 0 0 2px 0;
+}
+
+.chest-key-link {
+    color: #9b59b6;
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    cursor: pointer;
+}
+
+.chest-key-link:hover {
+    color: #c39bdb;
+}
+
+.quest-part-badge {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 1px 7px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: bold;
+    background-color: rgba(255, 170, 0, 0.15);
+    border: 1px solid #ffaa00;
+    color: #ffaa00;
+    vertical-align: middle;
+}
+
 .info-popup .close-btn {
     position: absolute;
     top: 4px;
@@ -417,20 +454,15 @@ img {
     margin-top: 6px;
 }
 
-/* Small section label above a list of linked labels (e.g. quests an NPC offers) */
-.popup-links-heading {
-    margin: 12px 0 6px 0;
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: #b39449;
-    font-family: "Cinzel", "Georgia", serif;
-}
-
-/* One block per linked label: its name, its description (if any), then a button to it */
+/* One block per linked label: its name, then its description (if any) */
 .linked-quest-block {
     margin-top: 10px;
     padding-top: 8px;
+    padding-bottom: 4px;
+    padding-left: 6px;
+    padding-right: 6px;
+    margin-left: -6px;
+    margin-right: -6px;
     border-top: 1px dashed #4a3e2e;
 }
 
@@ -438,6 +470,16 @@ img {
     border-top: none;
     padding-top: 0;
     margin-top: 6px;
+}
+
+.clickable-quest-block {
+    cursor: pointer;
+    border-radius: 3px;
+    transition: background-color 0.15s;
+}
+
+.clickable-quest-block:hover {
+    background-color: rgba(255, 215, 0, 0.08);
 }
 
 .linked-quest-title {
@@ -453,8 +495,12 @@ img {
     line-height: 1.4;
 }
 
-.linked-quest-block .travel-link-btn {
-    margin-top: 4px;
+.linked-quest-block:last-child .linked-quest-desc {
+    margin-bottom: 0;
+}
+
+.linked-quest-block:last-child.clickable-quest-block {
+    padding-bottom: 8px;
 }
 
 /* Shop-specific details block inside a shop label's popup */
@@ -1134,4 +1180,123 @@ img {
     text-align: center;
     padding: 30px 10px;
     font-size: 13px;
+}
+
+/* Statistics modal - centered overlay above the map, not a side panel */
+#statistics-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.75);
+    z-index: 150;
+    align-items: center;
+    justify-content: center;
+}
+
+#statistics-overlay.open {
+    display: flex;
+}
+
+.statistics-panel {
+    background-color: #17130e;
+    border: 2px solid #4a3e2e;
+    border-radius: 6px;
+    box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.8);
+    width: 640px;
+    max-width: 90vw;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.statistics-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 2px solid #4a3e2e;
+    flex-shrink: 0;
+}
+
+.statistics-header h3 {
+    margin: 0;
+    color: #ffd700;
+    font-family: "Cinzel", "Georgia", serif;
+    font-size: 15px;
+}
+
+#statistics-content {
+    padding: 15px;
+    overflow-y: auto;
+}
+
+.stats-summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 16px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #332b20;
+    font-size: 13px;
+    color: #d4c5a1;
+}
+
+.stats-summary-count strong {
+    color: #ffd700;
+    font-size: 18px;
+    margin-right: 4px;
+}
+
+.stats-summary-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.stats-summary-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #b39449;
+    font-weight: bold;
+}
+
+.stats-summary-group ul {
+    margin: 2px 0 0 0;
+    padding-left: 16px;
+    font-size: 12px;
+}
+
+.stats-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    font-family: "Georgia", serif;
+}
+
+.stats-table th {
+    text-align: left;
+    padding: 6px 8px;
+    background-color: #15110c;
+    color: #ffd700;
+    border-bottom: 2px solid #4a3e2e;
+    font-family: "Cinzel", "Georgia", serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stats-table td {
+    padding: 6px 8px;
+    border-bottom: 1px solid #2d251c;
+    color: #e5dac1;
+}
+
+.stats-table tbody tr {
+    cursor: pointer;
+    transition: background-color 0.15s;
+}
+
+.stats-table tbody tr:hover td {
+    background-color: rgba(255, 215, 0, 0.07);
 }

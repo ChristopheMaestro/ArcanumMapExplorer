@@ -125,6 +125,8 @@
             <button id="shareLinkBtn" class="toggle-btn" title="Copy a link to this exact map view">🔗 Share View</button>
             <!-- Opens the right-side panel listing every quest on the current map, grouped by NPC -->
             <button id="questListBtn" class="toggle-btn" title="Show all quests on this map, grouped by NPC">📋 Quests</button>
+            <!-- Opens a modal listing every NPC/Shop label on this map, with name/sex/race/level and summary stats -->
+            <button id="statisticsBtn" class="toggle-btn" title="Show NPC/Shop statistics for this map">📊 Statistics</button>
 
             <!-- Background music control - plays whatever track the current map's "music" field points to -->
             <div class="music-control">
@@ -173,6 +175,17 @@
     <!-- Full-screen overlay for clickable inventory items (notes, books, etc.) - click anywhere to dismiss -->
     <div id="item-image-overlay">
         <img id="item-image-overlay-img" src="" alt="">
+    </div>
+
+    <!-- Modal overlay: NPC/Shop statistics table for the current map -->
+    <div id="statistics-overlay">
+        <div class="statistics-panel">
+            <div class="statistics-header">
+                <h3>Statistics — <span id="statistics-mapname"></span></h3>
+                <span id="statistics-close" class="quest-panel-close-btn">&times;</span>
+            </div>
+            <div id="statistics-content"></div>
+        </div>
     </div>
 
     <!-- Catches a maps-data syntax/parse error before it happens - must be registered

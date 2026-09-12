@@ -74,6 +74,11 @@ const questListPanel = document.getElementById('quest-list-panel');
 const questPanelMapName = document.getElementById('quest-panel-mapname');
 const questPanelContent = document.getElementById('quest-panel-content');
 const questPanelClose = document.getElementById('quest-panel-close');
+const statisticsBtn = document.getElementById('statisticsBtn');
+const statisticsOverlay = document.getElementById('statistics-overlay');
+const statisticsMapName = document.getElementById('statistics-mapname');
+const statisticsContent = document.getElementById('statistics-content');
+const statisticsClose = document.getElementById('statistics-close');
 const itemImageOverlay = document.getElementById('item-image-overlay');
 const itemImageOverlayImg = document.getElementById('item-image-overlay-img');
 
@@ -207,6 +212,10 @@ const ITEM_TIER_COLORS = {
     hexed: '#e67e22'
 };
 
+function buildQuestPartBadge(part) {
+    return part ? ` <span class="quest-part-badge">Part ${part}</span>` : '';
+}
+
 function buildLabelStatsRowHtml(label) {
     const parts = [];
     if (label.sex) {
@@ -217,6 +226,27 @@ function buildLabelStatsRowHtml(label) {
     if (label.level !== undefined && label.level !== null && label.level !== '') parts.push(`Level ${label.level}`);
     if (label.age !== undefined && label.age !== null && label.age !== '') parts.push(`Age ${label.age}`);
     return parts.length > 0 ? `<div class="label-stats-row">${parts.join(' &middot; ')}</div>` : '';
+}
+
+// Shared renderer for inventory-like item lists (inventory / offering / blessing) - each entry is
+// either a plain string (regular tier, not clickable) or { name, image?, tier? }. fieldName is used
+// to route clicks back to the right array on the label object when opening a clickable item's image.
+function buildItemListHtml(items, sectionTitle, fieldName) {
+    if (!Array.isArray(items) || items.length === 0) return '';
+    const itemsHtml = items.map((item, i) => {
+        const isObject = typeof item !== 'string';
+        const name = isObject ? item.name : item;
+        const tier = (isObject && item.tier) ? item.tier : 'regular';
+        const color = ITEM_TIER_COLORS[tier] || ITEM_TIER_COLORS.regular;
+        const clickable = isObject && item.image;
+        const cls = clickable ? ' class="inventory-item-clickable"' : '';
+        const dataAttr = clickable ? ` data-item-field="${fieldName}" data-item-index="${i}"` : '';
+        return `<li${cls}${dataAttr} style="color:${color};">${name}</li>`;
+    }).join('');
+    return `<div class="npc-inventory-block">
+        <div class="npc-inventory-title">${sectionTitle}</div>
+        <ul class="npc-inventory-list">${itemsHtml}</ul>
+    </div>`;
 }
 
 function getSelectedNewLabelCategories() {
@@ -485,9 +515,23 @@ function initViewer() {
         questListPanel.classList.remove('open');
     });
 
+    statisticsBtn.addEventListener('click', () => {
+        const isOpen = statisticsOverlay.classList.toggle('open');
+        if (isOpen) renderStatisticsPanel();
+    });
+
+    statisticsClose.addEventListener('click', () => {
+        statisticsOverlay.classList.remove('open');
+    });
+
+    statisticsOverlay.addEventListener('click', (e) => {
+        if (e.target === statisticsOverlay) statisticsOverlay.classList.remove('open');
+    });
+
     itemImageOverlay.addEventListener('click', hideItemImage);
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && itemImageOverlay.style.display === 'flex') hideItemImage();
+        if (e.key === 'Escape' && statisticsOverlay.classList.contains('open')) statisticsOverlay.classList.remove('open');
     });
 
     if (ArcanumMapData.length > 0) {
@@ -973,6 +1017,7 @@ function loadImage(index, arrivalViewOverride, restorePosition) {
         }
         applyActiveFilters(); 
         if (questListPanel.classList.contains('open')) renderQuestPanel();
+        if (statisticsOverlay.classList.contains('open')) renderStatisticsPanel();
     };
     img.onerror = () => {
         img.style.display = 'none';
@@ -1060,10 +1105,10 @@ function buildQuestListForCurrentMap() {
                 // (not an NPC) - otherwise its "description" is that person's own bio, not quest text
                 if (!foundCats.includes('quest') || foundCats.includes('npc')) return null;
                 claimedQuestTexts.add(entry);
-                return { title: entry, description: found.label.description || '', target: entry };
+                return { title: entry, description: found.label.description || '', target: entry, part: found.label.part || null };
             }
             if (entry.target) claimedQuestTexts.add(entry.target);
-            return { title: entry.questName || entry.target || 'Quest', description: entry.questDescription || '', target: entry.target };
+            return { title: entry.questName || entry.target || 'Quest', description: entry.questDescription || '', target: entry.target, part: entry.part || null };
         }).filter(Boolean);
 
         if (quests.length === 0) return;
@@ -1079,7 +1124,7 @@ function buildQuestListForCurrentMap() {
             if (cats.includes('npc')) return false; // already represented as its own NPC group above
             return !claimedQuestTexts.has(label.text);
         })
-        .map(label => ({ title: label.text, description: label.description || '', ownLabel: label }));
+        .map(label => ({ title: label.text, description: label.description || '', ownLabel: label, part: label.part || null }));
 
     return { npcGroups, unassigned };
 }
@@ -1101,7 +1146,7 @@ function renderQuestPanel() {
             <div class="quest-panel-npc-name" data-npc-index="${gi}">🧑 ${group.npcLabel.text}</div>`;
         group.quests.forEach((q, qi) => {
             html += `<div class="quest-panel-quest-item" data-npc-index="${gi}" data-quest-index="${qi}">
-                <div class="quest-panel-quest-title">📜 ${q.title}</div>
+                <div class="quest-panel-quest-title">📜 ${q.title}${buildQuestPartBadge(q.part)}</div>
                 ${q.description ? `<div class="quest-panel-quest-desc">${q.description}</div>` : ''}
             </div>`;
         });
@@ -1112,7 +1157,7 @@ function renderQuestPanel() {
         html += `<div class="quest-panel-section-label">Other quests</div>`;
         unassigned.forEach((q, ui) => {
             html += `<div class="quest-panel-quest-item" data-unassigned-index="${ui}">
-                <div class="quest-panel-quest-title">📜 ${q.title}</div>
+                <div class="quest-panel-quest-title">📜 ${q.title}${buildQuestPartBadge(q.part)}</div>
                 ${q.description ? `<div class="quest-panel-quest-desc">${q.description}</div>` : ''}
             </div>`;
         });
@@ -1140,6 +1185,85 @@ function renderQuestPanel() {
         el.addEventListener('click', () => {
             const ui = parseInt(el.getAttribute('data-unassigned-index'), 10);
             jumpToLabelOnCurrentMap(unassigned[ui].ownLabel);
+        });
+    });
+}
+
+function buildStatisticsForCurrentMap() {
+    const selectedMap = ArcanumMapData.find(m => m.filename === currentMapFilename);
+    if (!selectedMap || !selectedMap.labels) return { entries: [], npcCount: 0, shopCount: 0, raceCounts: {}, sexCounts: {} };
+
+    const entries = selectedMap.labels.filter(label => {
+        const cats = Array.isArray(label.category) ? label.category : (label.category ? [label.category] : []);
+        return cats.includes('npc') || cats.includes('shop');
+    });
+
+    let npcCount = 0, shopCount = 0;
+    const raceCounts = {};
+    const sexCounts = {};
+
+    entries.forEach(label => {
+        const cats = Array.isArray(label.category) ? label.category : (label.category ? [label.category] : []);
+        if (cats.includes('npc')) npcCount++;
+        if (cats.includes('shop')) shopCount++;
+
+        if (label.race) {
+            raceCounts[label.race] = (raceCounts[label.race] || 0) + 1;
+        }
+        if (label.sex) {
+            const key = String(label.sex).trim().toLowerCase();
+            const normalized = (key === 'm' || key === 'male') ? 'Male' : (key === 'f' || key === 'female') ? 'Female' : label.sex;
+            sexCounts[normalized] = (sexCounts[normalized] || 0) + 1;
+        }
+    });
+
+    return { entries, npcCount, shopCount, raceCounts, sexCounts };
+}
+
+function renderStatisticsPanel() {
+    const selectedMap = ArcanumMapData.find(m => m.filename === currentMapFilename);
+    statisticsMapName.textContent = selectedMap ? selectedMap.displayName : '';
+
+    const { entries, npcCount, shopCount, raceCounts, sexCounts } = buildStatisticsForCurrentMap();
+
+    if (entries.length === 0) {
+        statisticsContent.innerHTML = '<div class="quest-panel-empty">No NPCs or shops found on this map.</div>';
+        return;
+    }
+
+    const raceItems = Object.entries(raceCounts).sort((a, b) => b[1] - a[1]).map(([race, count]) => `<li>${race}: ${count}</li>`).join('');
+    const sexItems = Object.entries(sexCounts).map(([sex, count]) => `<li>${sex}: ${count}</li>`).join('');
+
+    const rows = entries.map((label, i) => {
+        const sexDisplay = label.sex ? (SEX_EMOJI[String(label.sex).trim().toLowerCase()] || label.sex) : '&mdash;';
+        const raceDisplay = label.race || '&mdash;';
+        const levelDisplay = (label.level !== undefined && label.level !== null && label.level !== '') ? label.level : '&mdash;';
+        return `<tr data-stat-index="${i}">
+            <td>${label.text}</td>
+            <td>${sexDisplay}</td>
+            <td>${raceDisplay}</td>
+            <td>${levelDisplay}</td>
+        </tr>`;
+    }).join('');
+
+    statisticsContent.innerHTML = `
+        <div class="stats-summary">
+            <div class="stats-summary-count"><strong>${npcCount}</strong>NPC${npcCount !== 1 ? 's' : ''}</div>
+            <div class="stats-summary-count"><strong>${shopCount}</strong>Shop${shopCount !== 1 ? 's' : ''}</div>
+            ${raceItems ? `<div class="stats-summary-group"><span class="stats-summary-label">By Race</span><ul>${raceItems}</ul></div>` : ''}
+            ${sexItems ? `<div class="stats-summary-group"><span class="stats-summary-label">By Sex</span><ul>${sexItems}</ul></div>` : ''}
+        </div>
+        <table class="stats-table">
+            <thead><tr><th>Name</th><th>Sex</th><th>Race</th><th>Level</th></tr></thead>
+            <tbody>${rows}</tbody>
+        </table>
+    `;
+
+    statisticsContent.querySelectorAll('tr[data-stat-index]').forEach(tr => {
+        tr.addEventListener('click', () => {
+            const idx = parseInt(tr.getAttribute('data-stat-index'), 10);
+            statisticsOverlay.classList.remove('open');
+            jumpToLabelOnCurrentMap(entries[idx]);
         });
     });
 }
@@ -1187,9 +1311,19 @@ function renderSingleLabel(label, isPending) {
         const descHtmlMain = label.description ? `<p style="margin:0;">${label.description}</p>` : '';
 
         const statsRowHtml = buildLabelStatsRowHtml(label);
-        const portraitSrc = label.portrait || (label.race ? `Textures/${label.race}.png` : '');
+        let portraitSrc = label.portrait;
+        if (!portraitSrc && popupCats.includes('altar')) portraitSrc = 'Textures/altar.png';
+        if (!portraitSrc && popupCats.includes('chest')) portraitSrc = 'Textures/chest.png';
+        if (!portraitSrc && label.race) portraitSrc = `Textures/${label.race}.png`;
         const portraitHtml = portraitSrc ? `<img class="popup-portrait" src="${portraitSrc}" alt="" onerror="this.style.display='none'">` : '';
-        const headerHtml = `<div class="popup-header">${portraitHtml}<div class="popup-header-text"><h4>${label.text}</h4>${statsRowHtml}</div></div>`;
+        const godTypeHtml = label.godType ? `<div class="altar-god-type">${label.godType}</div>` : '';
+        let chestStatusHtml = '';
+        if (label.chestState === 'locked') {
+            chestStatusHtml = label.chestKey
+                ? `<div class="chest-status-row">Opens with <span class="chest-key-link" data-chest-key="${label.chestKey}">${label.chestKey}</span></div>`
+                : `<div class="chest-status-row">Locked</div>`;
+        }
+        const headerHtml = `<div class="popup-header">${portraitHtml}<div class="popup-header-text"><h4>${label.text}${buildQuestPartBadge(label.part)}</h4>${godTypeHtml}${chestStatusHtml}${statsRowHtml}</div></div>`;
 
         let shopInfoHtml = "";
         if (popupCats.includes('shop') && (label.shopType || typeof label.shopMarkup === 'number')) {
@@ -1203,22 +1337,13 @@ function renderSingleLabel(label, isPending) {
             shopInfoHtml = `<div class="shop-info-block">${shopTypeHtml}${shopMarkupHtml}</div>`;
         }
 
-        let inventoryHtml = "";
-        if (Array.isArray(label.inventory) && label.inventory.length > 0) {
-            const itemsHtml = label.inventory.map((item, i) => {
-                const isObject = typeof item !== 'string';
-                const name = isObject ? item.name : item;
-                const tier = (isObject && item.tier) ? item.tier : 'regular';
-                const color = ITEM_TIER_COLORS[tier] || ITEM_TIER_COLORS.regular;
-                const clickable = isObject && item.image;
-                const cls = clickable ? ' class="inventory-item-clickable"' : '';
-                const dataAttr = clickable ? ` data-inventory-index="${i}"` : '';
-                return `<li${cls}${dataAttr} style="color:${color};">${name}</li>`;
-            }).join('');
-            inventoryHtml = `<div class="npc-inventory-block">
-                <div class="npc-inventory-title">Inventory</div>
-                <ul class="npc-inventory-list">${itemsHtml}</ul>
-            </div>`;
+        const inventoryHtml = buildItemListHtml(label.inventory, 'Inventory', 'inventory');
+        const offeringHtml = buildItemListHtml(label.offering, 'Offering', 'offering');
+        const blessingHtml = buildItemListHtml(label.blessing, 'Blessing', 'blessing');
+
+        let inscriptionHtml = "";
+        if (label.inscription) {
+            inscriptionHtml = `<div class="npc-inventory-block"><span class="inventory-item-clickable altar-inscription-label">📜 Altar Inscription</span></div>`;
         }
         
         let travelButtonHtml = "";
@@ -1230,7 +1355,7 @@ function renderSingleLabel(label, isPending) {
         let linkedButtonsHtml = "";
         if (Array.isArray(label.linkedLabels) && label.linkedLabels.length > 0) {
             const blocks = label.linkedLabels.map((entry, i) => {
-                let title, icon, titleColor, descHtml;
+                let title, icon, titleColor, descHtml, targetText, partValue;
 
                 if (typeof entry === 'string') {
                     // Plain form: links straight to another label, showing THAT label's own info
@@ -1243,31 +1368,37 @@ function renderSingleLabel(label, isPending) {
                     icon = (cat && CATEGORY_EMOJI[cat]) ? CATEGORY_EMOJI[cat] : '🔗';
                     titleColor = (cat && CATEGORY_COLORS[cat]) ? CATEGORY_COLORS[cat] : '#ffd700';
                     descHtml = (found && found.label.description) ? `<p class="linked-quest-desc">${found.label.description}</p>` : '';
+                    targetText = entry;
+                    partValue = found ? found.label.part : null;
                 } else {
-                    // Inline form: { questName, questDescription, target, category? } - the quest's own
+                    // Inline form: { questName, questDescription, target, category?, part? } - the quest's own
                     // name/description live here directly, separate from wherever "target" actually is
                     const cat = entry.category || 'quest';
                     title = entry.questName || entry.target || 'Quest';
                     icon = CATEGORY_EMOJI[cat] || '📜';
                     titleColor = CATEGORY_COLORS[cat] || '#ffaa00';
                     descHtml = entry.questDescription ? `<p class="linked-quest-desc">${entry.questDescription}</p>` : '';
+                    targetText = entry.target || null;
+                    partValue = entry.part || null;
                 }
 
-                return `<div class="linked-quest-block">
-                    <div class="linked-quest-title" style="color:${titleColor};">${icon} ${title}</div>
+                // Only clickable when there's actually somewhere to send you
+                const blockClass = targetText ? 'linked-quest-block clickable-quest-block' : 'linked-quest-block';
+                const dataAttr = targetText ? ` data-link-index="${i}"` : '';
+
+                return `<div class="${blockClass}"${dataAttr}>
+                    <div class="linked-quest-title" style="color:${titleColor};">${icon} ${title}${buildQuestPartBadge(partValue)}</div>
                     ${descHtml}
-                    <button class="travel-link-btn linked-label-btn" data-link-index="${i}">🧭 Go to Location</button>
                 </div>`;
             }).join('');
-            const headingLabel = label.linkedLabels.length > 1 ? 'Quests:' : 'Quest:';
-            linkedButtonsHtml = `<div class="popup-links-heading">${headingLabel}</div>${blocks}`;
+            linkedButtonsHtml = blocks;
         }
         
-        popup.innerHTML = `<span class="close-btn">&times;</span>${headerHtml}${shopInfoHtml}${inventoryHtml}${descHtmlMain}${travelButtonHtml}${linkedButtonsHtml}`;
+        popup.innerHTML = `<span class="close-btn">&times;</span>${headerHtml}${shopInfoHtml}${inscriptionHtml}${inventoryHtml}${offeringHtml}${blessingHtml}${descHtmlMain}${travelButtonHtml}${linkedButtonsHtml}`;
         popup.querySelector('.close-btn').addEventListener('click', (el) => { el.stopPropagation(); popup.remove(); });
         
         if (label.targetMapFilename) {
-            popup.querySelector('.travel-link-btn:not(.linked-label-btn)').addEventListener('click', (el) => {
+            popup.querySelector('.travel-link-btn').addEventListener('click', (el) => {
                 el.stopPropagation();
                 let viewOverride = null;
                 if (typeof label.targetX === 'number') {
@@ -1278,9 +1409,10 @@ function renderSingleLabel(label, isPending) {
         }
 
         if (Array.isArray(label.linkedLabels)) {
-            popup.querySelectorAll('.linked-label-btn').forEach((btn, i) => {
-                btn.addEventListener('click', (el) => {
+            popup.querySelectorAll('.clickable-quest-block').forEach(blockEl => {
+                blockEl.addEventListener('click', (el) => {
                     el.stopPropagation();
+                    const i = parseInt(blockEl.getAttribute('data-link-index'), 10);
                     const entry = label.linkedLabels[i];
                     const targetText = (typeof entry === 'string') ? entry : entry.target;
                     if (targetText) travelToLinkedLabel(targetText);
@@ -1288,15 +1420,35 @@ function renderSingleLabel(label, isPending) {
             });
         }
 
-        if (Array.isArray(label.inventory)) {
-            popup.querySelectorAll('.inventory-item-clickable').forEach(el => {
-                el.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const idx = parseInt(el.getAttribute('data-inventory-index'), 10);
-                    const item = label.inventory[idx];
-                    if (item && item.image) showItemImage(item.image);
-                });
+        popup.querySelectorAll('.inventory-item-clickable[data-item-field]').forEach(el => {
+            el.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const fieldName = el.getAttribute('data-item-field');
+                const idx = parseInt(el.getAttribute('data-item-index'), 10);
+                const items = label[fieldName];
+                const item = items && items[idx];
+                if (item && item.image) showItemImage(item.image);
             });
+        });
+
+        if (label.inscription) {
+            const inscriptionEl = popup.querySelector('.altar-inscription-label');
+            if (inscriptionEl) {
+                inscriptionEl.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    showItemImage(label.inscription);
+                });
+            }
+        }
+
+        if (label.chestKey) {
+            const chestKeyEl = popup.querySelector('.chest-key-link');
+            if (chestKeyEl) {
+                chestKeyEl.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    travelToLinkedLabel(label.chestKey);
+                });
+            }
         }
 
         container.appendChild(popup);
@@ -1514,16 +1666,29 @@ function buildLabelCodeLine(labelData) {
     if (labelData.age !== undefined && labelData.age !== null && labelData.age !== '') {
         parts.push(typeof labelData.age === 'number' ? `age: ${labelData.age}` : `age: "${labelData.age}"`);
     }
+    if (labelData.godType) parts.push(`godType: "${labelData.godType}"`);
+    if (labelData.inscription) parts.push(`inscription: "${labelData.inscription}"`);
+    if (labelData.chestState) parts.push(`chestState: "${labelData.chestState}"`);
+    if (labelData.chestKey) parts.push(`chestKey: "${labelData.chestKey}"`);
+    if (labelData.part !== undefined && labelData.part !== null && labelData.part !== '') {
+        parts.push(typeof labelData.part === 'number' ? `part: ${labelData.part}` : `part: "${labelData.part}"`);
+    }
+    const serializeItemList = (items) => items.map(item => {
+        if (typeof item === 'string') return `"${item}"`;
+        const objParts = [];
+        if (item.name) objParts.push(`name: "${item.name}"`);
+        if (item.image) objParts.push(`image: "${item.image}"`);
+        if (item.tier) objParts.push(`tier: "${item.tier}"`);
+        return `{ ${objParts.join(', ')} }`;
+    }).join(', ');
     if (Array.isArray(labelData.inventory) && labelData.inventory.length > 0) {
-        const serializedItems = labelData.inventory.map(item => {
-            if (typeof item === 'string') return `"${item}"`;
-            const objParts = [];
-            if (item.name) objParts.push(`name: "${item.name}"`);
-            if (item.image) objParts.push(`image: "${item.image}"`);
-            if (item.tier) objParts.push(`tier: "${item.tier}"`);
-            return `{ ${objParts.join(', ')} }`;
-        });
-        parts.push(`inventory: [${serializedItems.join(', ')}]`);
+        parts.push(`inventory: [${serializeItemList(labelData.inventory)}]`);
+    }
+    if (Array.isArray(labelData.offering) && labelData.offering.length > 0) {
+        parts.push(`offering: [${serializeItemList(labelData.offering)}]`);
+    }
+    if (Array.isArray(labelData.blessing) && labelData.blessing.length > 0) {
+        parts.push(`blessing: [${serializeItemList(labelData.blessing)}]`);
     }
     if (labelData.targetMapFilename) parts.push(`targetMapFilename: "${labelData.targetMapFilename}"`);
     if (typeof labelData.targetX === 'number' && !isNaN(labelData.targetX)) parts.push(`targetX: ${labelData.targetX}`);
@@ -1536,6 +1701,9 @@ function buildLabelCodeLine(labelData) {
             if (entry.questDescription) objParts.push(`questDescription: "${entry.questDescription}"`);
             if (entry.target) objParts.push(`target: "${entry.target}"`);
             if (entry.category) objParts.push(`category: "${entry.category}"`);
+            if (entry.part !== undefined && entry.part !== null && entry.part !== '') {
+                objParts.push(typeof entry.part === 'number' ? `part: ${entry.part}` : `part: "${entry.part}"`);
+            }
             return `{ ${objParts.join(', ')} }`;
         });
         parts.push(`linkedLabels: [${serializedEntries.join(', ')}]`);
