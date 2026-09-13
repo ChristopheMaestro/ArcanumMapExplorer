@@ -1067,7 +1067,7 @@ function travelToLinkedLabel(searchText) {
     // The overworld's own x/y are in the special W/S grid, not raw pixels like every other
     // map's defaultView/arrival coordinates - rather than mis-convert it, just use that
     // map's default view when the link happens to land on the world map itself.
-    const viewOverride = (map.typemap === "overworld") ? null : { x: label.x, y: label.y, zoom: 1.5 };
+    const viewOverride = (map.typemap === "overworld") ? null : { x: label.x, y: label.y, zoom: 1 };
     travelToMapByFilename(map.displayName, viewOverride);
 }
 
@@ -1189,23 +1189,47 @@ function renderQuestPanel() {
     });
 }
 
+function getStatisticsSourceMaps(selectedMap) {
+    if (selectedMap.modGroup === 'World Map') {
+        // The Arcanum overworld itself: aggregate every Cities/Quest locations/Other locations
+        // map plus their submaps, rather than the World Map's own (mostly waypoint) labels
+        const groups = new Set(['Cities', 'Quest locations', 'Other locations']);
+        const topMaps = ArcanumMapData.filter(m => groups.has(m.modGroup));
+        const topFilenames = new Set(topMaps.map(m => m.filename));
+        const subMaps = ArcanumMapData.filter(m => m.parentFilename && topFilenames.has(m.parentFilename));
+        return [...topMaps, ...subMaps];
+    }
+    // Normal case: this map plus its own direct submaps
+    const subMaps = ArcanumMapData.filter(m => m.parentFilename === selectedMap.filename);
+    return [selectedMap, ...subMaps];
+}
+
 function buildStatisticsForCurrentMap() {
     const selectedMap = ArcanumMapData.find(m => m.filename === currentMapFilename);
-    if (!selectedMap || !selectedMap.labels) return { entries: [], npcCount: 0, shopCount: 0, raceCounts: {}, sexCounts: {} };
+    if (!selectedMap) return { entries: [], npcCount: 0, shopCount: 0, followerCount: 0, raceCounts: {}, sexCounts: {} };
 
-    const entries = selectedMap.labels.filter(label => {
-        const cats = Array.isArray(label.category) ? label.category : (label.category ? [label.category] : []);
-        return cats.includes('npc') || cats.includes('shop');
+    const sourceMaps = getStatisticsSourceMaps(selectedMap);
+
+    const entries = [];
+    sourceMaps.forEach(map => {
+        if (!map.labels) return;
+        map.labels.forEach(label => {
+            const cats = Array.isArray(label.category) ? label.category : (label.category ? [label.category] : []);
+            if (cats.includes('npc') || cats.includes('shop') || cats.includes('followers')) {
+                entries.push({ label, mapDisplayName: map.displayName, mapFilename: map.filename });
+            }
+        });
     });
 
-    let npcCount = 0, shopCount = 0;
+    let npcCount = 0, shopCount = 0, followerCount = 0;
     const raceCounts = {};
     const sexCounts = {};
 
-    entries.forEach(label => {
+    entries.forEach(({ label }) => {
         const cats = Array.isArray(label.category) ? label.category : (label.category ? [label.category] : []);
         if (cats.includes('npc')) npcCount++;
         if (cats.includes('shop')) shopCount++;
+        if (cats.includes('followers')) followerCount++;
 
         if (label.race) {
             raceCounts[label.race] = (raceCounts[label.race] || 0) + 1;
@@ -1217,55 +1241,130 @@ function buildStatisticsForCurrentMap() {
         }
     });
 
-    return { entries, npcCount, shopCount, raceCounts, sexCounts };
+    return { entries, npcCount, shopCount, followerCount, raceCounts, sexCounts };
+}
+
+let statsEntries = [];
+let statsSortColumn = null;
+let statsSortDirection = 'asc';
+
+function getStatsSortValue(entry, key) {
+    const { label, mapDisplayName } = entry;
+    switch (key) {
+        case 'name': return (label.text || '').toLowerCase();
+        case 'sex': return (label.sex || '').toLowerCase();
+        case 'race': return (label.race || '').toLowerCase();
+        case 'level': {
+            if (typeof label.level === 'number') return label.level;
+            const parsed = parseFloat(label.level);
+            return isNaN(parsed) ? -Infinity : parsed;
+        }
+        case 'location': return (mapDisplayName || '').toLowerCase();
+        default: return '';
+    }
+}
+
+function renderStatsTableBody() {
+    let sortedEntries = statsEntries.slice();
+    if (statsSortColumn) {
+        sortedEntries.sort((a, b) => {
+            const va = getStatsSortValue(a, statsSortColumn);
+            const vb = getStatsSortValue(b, statsSortColumn);
+            if (va < vb) return statsSortDirection === 'asc' ? -1 : 1;
+            if (va > vb) return statsSortDirection === 'asc' ? 1 : -1;
+            return 0;
+        });
+    }
+
+    const rows = sortedEntries.map(entry => {
+        const { label, mapDisplayName } = entry;
+        const cats = Array.isArray(label.category) ? label.category : (label.category ? [label.category] : []);
+        const iconsHtml = cats.map(c => CATEGORY_EMOJI[c] || '').filter(Boolean).join('');
+        const sexDisplay = label.sex ? (SEX_EMOJI[String(label.sex).trim().toLowerCase()] || label.sex) : '&mdash;';
+        const raceDisplay = label.race || '&mdash;';
+        const levelDisplay = (label.level !== undefined && label.level !== null && label.level !== '') ? label.level : '&mdash;';
+        return `<tr data-stat-entry-index="${statsEntries.indexOf(entry)}">
+            <td>${iconsHtml ? `<span class="stats-row-icons">${iconsHtml}</span>` : ''}${label.text}</td>
+            <td>${sexDisplay}</td>
+            <td>${raceDisplay}</td>
+            <td>${levelDisplay}</td>
+            <td>${mapDisplayName}</td>
+        </tr>`;
+    }).join('');
+
+    const tbody = document.getElementById('stats-table-body');
+    tbody.innerHTML = rows;
+
+    statisticsContent.querySelectorAll('th[data-sort-key]').forEach(th => {
+        th.classList.toggle('sorted-asc', th.getAttribute('data-sort-key') === statsSortColumn && statsSortDirection === 'asc');
+        th.classList.toggle('sorted-desc', th.getAttribute('data-sort-key') === statsSortColumn && statsSortDirection === 'desc');
+    });
+
+    tbody.querySelectorAll('tr[data-stat-entry-index]').forEach(tr => {
+        tr.addEventListener('click', () => {
+            const idx = parseInt(tr.getAttribute('data-stat-entry-index'), 10);
+            const entry = statsEntries[idx];
+            statisticsOverlay.classList.remove('open');
+            if (entry.mapFilename === currentMapFilename) {
+                jumpToLabelOnCurrentMap(entry.label);
+            } else {
+                travelToMapByFilename(entry.mapDisplayName, { x: entry.label.x, y: entry.label.y, zoom: 1.5 });
+            }
+        });
+    });
 }
 
 function renderStatisticsPanel() {
     const selectedMap = ArcanumMapData.find(m => m.filename === currentMapFilename);
     statisticsMapName.textContent = selectedMap ? selectedMap.displayName : '';
 
-    const { entries, npcCount, shopCount, raceCounts, sexCounts } = buildStatisticsForCurrentMap();
+    const { entries, npcCount, shopCount, followerCount, raceCounts, sexCounts } = buildStatisticsForCurrentMap();
+    statsEntries = entries;
+    statsSortColumn = null;
+    statsSortDirection = 'asc';
 
     if (entries.length === 0) {
-        statisticsContent.innerHTML = '<div class="quest-panel-empty">No NPCs or shops found on this map.</div>';
+        statisticsContent.innerHTML = '<div class="quest-panel-empty">No NPCs, Shops, or Followers found here.</div>';
         return;
     }
 
     const raceItems = Object.entries(raceCounts).sort((a, b) => b[1] - a[1]).map(([race, count]) => `<li>${race}: ${count}</li>`).join('');
     const sexItems = Object.entries(sexCounts).map(([sex, count]) => `<li>${sex}: ${count}</li>`).join('');
 
-    const rows = entries.map((label, i) => {
-        const sexDisplay = label.sex ? (SEX_EMOJI[String(label.sex).trim().toLowerCase()] || label.sex) : '&mdash;';
-        const raceDisplay = label.race || '&mdash;';
-        const levelDisplay = (label.level !== undefined && label.level !== null && label.level !== '') ? label.level : '&mdash;';
-        return `<tr data-stat-index="${i}">
-            <td>${label.text}</td>
-            <td>${sexDisplay}</td>
-            <td>${raceDisplay}</td>
-            <td>${levelDisplay}</td>
-        </tr>`;
-    }).join('');
-
     statisticsContent.innerHTML = `
         <div class="stats-summary">
             <div class="stats-summary-count"><strong>${npcCount}</strong>NPC${npcCount !== 1 ? 's' : ''}</div>
             <div class="stats-summary-count"><strong>${shopCount}</strong>Shop${shopCount !== 1 ? 's' : ''}</div>
+            <div class="stats-summary-count"><strong>${followerCount}</strong>Follower${followerCount !== 1 ? 's' : ''}</div>
             ${raceItems ? `<div class="stats-summary-group"><span class="stats-summary-label">By Race</span><ul>${raceItems}</ul></div>` : ''}
             ${sexItems ? `<div class="stats-summary-group"><span class="stats-summary-label">By Sex</span><ul>${sexItems}</ul></div>` : ''}
         </div>
         <table class="stats-table">
-            <thead><tr><th>Name</th><th>Sex</th><th>Race</th><th>Level</th></tr></thead>
-            <tbody>${rows}</tbody>
+            <thead><tr>
+                <th data-sort-key="name">Name</th>
+                <th data-sort-key="sex">Sex</th>
+                <th data-sort-key="race">Race</th>
+                <th data-sort-key="level">Level</th>
+                <th data-sort-key="location">Location</th>
+            </tr></thead>
+            <tbody id="stats-table-body"></tbody>
         </table>
     `;
 
-    statisticsContent.querySelectorAll('tr[data-stat-index]').forEach(tr => {
-        tr.addEventListener('click', () => {
-            const idx = parseInt(tr.getAttribute('data-stat-index'), 10);
-            statisticsOverlay.classList.remove('open');
-            jumpToLabelOnCurrentMap(entries[idx]);
+    statisticsContent.querySelectorAll('th[data-sort-key]').forEach(th => {
+        th.addEventListener('click', () => {
+            const key = th.getAttribute('data-sort-key');
+            if (statsSortColumn === key) {
+                statsSortDirection = statsSortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                statsSortColumn = key;
+                statsSortDirection = 'asc';
+            }
+            renderStatsTableBody();
         });
     });
+
+    renderStatsTableBody();
 }
 
 // Part 4

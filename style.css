@@ -94,6 +94,7 @@ body {
     border-bottom: 1px solid #4a3e2e;
     padding: 10px 20px;
     display: flex;
+    flex-wrap: wrap;
     gap: 10px;
     align-items: center;
     z-index: 5;
@@ -1202,8 +1203,8 @@ img {
     border: 2px solid #4a3e2e;
     border-radius: 6px;
     box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.8);
-    width: 640px;
-    max-width: 90vw;
+    width: 880px;
+    max-width: 92vw;
     max-height: 85vh;
     display: flex;
     flex-direction: column;
@@ -1284,12 +1285,33 @@ img {
     font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+}
+
+.stats-table th:hover {
+    color: #fff3c4;
+}
+
+.stats-table th.sorted-asc::after {
+    content: ' \25B2';
+    font-size: 9px;
+}
+
+.stats-table th.sorted-desc::after {
+    content: ' \25BC';
+    font-size: 9px;
 }
 
 .stats-table td {
     padding: 6px 8px;
     border-bottom: 1px solid #2d251c;
     color: #e5dac1;
+}
+
+.stats-row-icons {
+    margin-right: 6px;
 }
 
 .stats-table tbody tr {
