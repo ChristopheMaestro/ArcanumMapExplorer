@@ -9,6 +9,59 @@ body {
     width: 100vw;
 }
 
+#script-error-panel {
+    position: fixed;
+    z-index: 10000;
+    top: 16px;
+    right: 16px;
+    width: min(720px, calc(100vw - 32px));
+    max-height: calc(100vh - 32px);
+    overflow: auto;
+    padding: 16px;
+    box-sizing: border-box;
+    background: #2b1717;
+    border: 2px solid #e74c3c;
+    color: #f8e8d8;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55);
+    font-family: sans-serif;
+}
+
+#script-error-panel h2 {
+    margin: 0 0 8px;
+    color: #ffb3a7;
+    font-size: 18px;
+}
+
+#script-error-panel strong {
+    color: #ffd0c8;
+}
+
+.script-error-message,
+.script-error-location {
+    margin-top: 6px;
+    font-size: 13px;
+}
+
+.script-error-location {
+    color: #ffd166;
+    font-family: monospace;
+}
+
+.script-error-source {
+    margin: 12px 0 0;
+    padding: 10px;
+    overflow-x: auto;
+    background: #180f0f;
+    color: #eadbd2;
+    font: 12px/1.5 Consolas, monospace;
+    white-space: pre;
+}
+
+.script-error-line-failed {
+    color: #ff8f84;
+    background: rgba(231, 76, 60, 0.28);
+}
+
 /* Left Side Menu styling */
 #sidebar {
     width: 320px;
@@ -121,6 +174,17 @@ body {
     background-color: #15120d;
     color: #665c45;
     border-color: #4a3e2e;
+}
+
+.copy-actions {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+}
+
+.copy-actions .toggle-btn {
+    flex: 1;
+    min-width: 0;
 }
 
 .music-control {
@@ -344,6 +408,12 @@ img {
     border-bottom: 1px solid #4a3e2e;
 }
 
+.popup-header-only {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
 .popup-portrait {
     width: 48px;
     height: 48px;
@@ -365,10 +435,21 @@ img {
     border-bottom: none;
 }
 
+.popup-header.has-master .popup-header-text h4 {
+    margin-bottom: 0;
+}
+
 .label-stats-row {
     font-size: 12px;
     color: #c9bd9a;
     margin: 0;
+}
+
+.label-master {
+    margin: 0 0 2px 0;
+    color: #f1c40f;
+    font-size: 12px;
+    font-style: italic;
 }
 
 .altar-god-type {
@@ -1010,6 +1091,18 @@ img {
 .map-label.cat-bounty:hover {
     background-color: #e84393;
     color: #1f0f16;
+}
+
+/* 🎓 Master Category Styling Card Profile */
+.map-label.cat-master {
+    border-color: #f1c40f;
+    background-color: rgba(45, 37, 14, 0.95);
+    color: #ffeaa7;
+    --label-color: #f1c40f;
+}
+.map-label.cat-master:hover {
+    background-color: #f1c40f;
+    color: #2d250e;
 }
 
 /* Sidebar High-Level Mod Category Selection Tabs */

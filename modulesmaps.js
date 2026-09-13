@@ -6,7 +6,6 @@ const ModulesMapData = [
     filename: "Modules/BuriedSecrets.jpg",
     displayName: "Buried Secrets",
     modGroup: "Buried Secrets",
-    typemap: "local",
     //defaultView: { x: 2085, y: 706, zoom: 0.8},
     //background: "url('Textures/Water.png') repeat",
     labels: []
@@ -15,7 +14,6 @@ const ModulesMapData = [
     filename: "Modules/Hellgate.png",
     displayName: "Hellgate",
     modGroup: "Hellgate",
-    typemap: "local",
     //defaultView: { x: 2085, y: 706, zoom: 0.8},
     background: "#000000",
     labels: []
@@ -24,7 +22,6 @@ const ModulesMapData = [
     filename: "Modules/Hellgate-Cave.png",
     displayName: "Hellgate - Cave",
     modGroup: "Hellgate",
-    typemap: "local",
     //defaultView: { x: 2085, y: 706, zoom: 0.8},
     background: "#000000",
     labels: []
@@ -33,7 +30,6 @@ const ModulesMapData = [
     filename: "Modules/TombTolGurdurCity.jpg",
     displayName: "City",
     modGroup: "Tomb of Tol Gurdur",
-    typemap: "local",
     defaultView: { x: 901, y: 531, zoom: 0.8},
     labels: [
       { x: 2691, y: 1761, text: "Teleport to Underground", description: "", category: "waypoint", targetMapFilename: "Underground"},
@@ -43,7 +39,6 @@ const ModulesMapData = [
     filename: "Modules/TombTolGurdurUnderground.jpg",
     displayName: "Underground",
     modGroup: "Tomb of Tol Gurdur",
-    typemap: "local",
     defaultView: { x: 3890, y: 2352, zoom: 0.8},
     background: "#000000",
     labels: []
@@ -52,7 +47,6 @@ const ModulesMapData = [
     filename: "Modules/TreasureIsland.jpg",
     displayName: "Treasure Island",
     modGroup: "Treasure Island",
-    typemap: "local",
     background: "url('Textures/Water.png') repeat",
     labels: [
       { x: 5890, y: 595, text: "Shop", description: "", category: "shop" },
@@ -86,7 +80,6 @@ const ModulesMapData = [
     filename: "Modules/TreasureUnderground.png",
     displayName: "Treasure Island Underground",
     modGroup: "Treasure Island",
-    typemap: "local",
     defaultView: { x: 2085, y: 706, zoom: 0.8},
     background: "#000000",
     labels: [
@@ -101,7 +94,6 @@ const ModulesMapData = [
     filename: "Modules/Vormantown.jpg",
     displayName: "Vormantown",
     modGroup: "Vormantown",
-    typemap: "local",
     //defaultView: { x: 2085, y: 706, zoom: 0.8},
     background: "url('Textures/Water.png') repeat",
     labels: []

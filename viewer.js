@@ -3,11 +3,36 @@
 // Merge the three per-tab data files (arcanummaps.js, cerestoredmaps.js, modulesmaps.js)
 // into the single ArcanumMapData array the rest of this file expects. Each guard falls
 // back to an empty array so a syntax error in just one file doesn't take down the others.
-const ArcanumMapData = [
+function normalizeMapMetadata(maps) {
+    const mapsByFilename = new Map(maps.map(map => [map.filename, map]));
+    const resolvingGroups = new Set();
+
+    function resolveModGroup(map) {
+        if (!map.parentFilename) return map.modGroup;
+        const parent = mapsByFilename.get(map.parentFilename);
+        if (!parent || resolvingGroups.has(map.filename)) return map.modGroup;
+
+        resolvingGroups.add(map.filename);
+        const parentGroup = resolveModGroup(parent);
+        resolvingGroups.delete(map.filename);
+        return parentGroup || map.modGroup;
+    }
+
+    return maps.map(map => ({
+        ...map,
+        typemap: map.typemap || 'local',
+        modGroup: resolveModGroup(map)
+    }));
+}
+
+const ArcanumMapData = normalizeMapMetadata([
     ...(typeof ArcanumCitiesMapData !== 'undefined' ? ArcanumCitiesMapData : []),
     ...(typeof CERestoredMapData !== 'undefined' ? CERestoredMapData : []),
     ...(typeof ModulesMapData !== 'undefined' ? ModulesMapData : [])
-];
+]);
+const ItemDataByName = new Map(
+    (typeof ArcanumItemData !== 'undefined' ? ArcanumItemData : []).map(item => [item.name, item])
+);
 
 const menuContainer = document.getElementById('menu-container');
 const viewport = document.getElementById('viewport');
@@ -19,11 +44,14 @@ const creatorPanel = document.getElementById('creator-panel');
 const coordDisplay = document.getElementById('coord-display');
 const newLabelText = document.getElementById('new-label-text');
 const newLabelDesc = document.getElementById('new-label-desc');
+const newLabelMaster = document.getElementById('new-label-master');
 const newLabelLinks = document.getElementById('new-label-links');
 const addToPreviewBtn = document.getElementById('add-to-preview-btn');
-const copyEditsBtn = document.getElementById('copy-edits-btn');
+const copyAllBtn = document.getElementById('copy-all-btn');
+const copyNewBtn = document.getElementById('copy-new-btn');
 const categoryField = document.getElementById('category-field');
 const newLabelCategoryChecks = document.querySelectorAll('.new-label-cat-chk');
+const masterFields = document.getElementById('master-fields');
 const waypointFields = document.getElementById('waypoint-fields');
 const newLabelTargetMap = document.getElementById('new-label-target-map');
 const newLabelTargetX = document.getElementById('new-label-target-x');
@@ -44,19 +72,7 @@ const altViewIcon = document.getElementById('altViewIcon');
 let isShowingAltView = false;
 
 const filterDropdownBtn = document.getElementById('filterDropdownBtn');
-const filterDropdownContent = document.getElementById('filterDropdownContent');
-const chkQuest = document.getElementById('chk-quest');
-const chkFollowers = document.getElementById('chk-followers');
-const chkShop = document.getElementById('chk-shop');
-const chkWaypoint = document.getElementById('chk-waypoint');
-const chkKey = document.getElementById('chk-key');
-const chkNpc = document.getElementById('chk-npc');
-const chkChest = document.getElementById('chk-chest');
-const chkInformation = document.getElementById('chk-information');
-const chkAltar = document.getElementById('chk-altar');
-const chkBounty = document.getElementById('chk-bounty');
-const chkOverworldAll = document.getElementById('chk-overworld-all');
-const lblOverworldAll = document.getElementById('lbl-overworld-all');
+let labelsVisible = true;
 
 const mapCoordinatesHud = document.getElementById('map-coordinates-hud');
 const hudValW = document.getElementById('hud-val-w');
@@ -129,12 +145,14 @@ let suppressNextLabelClick = false;
 
 // Labels added in this editing session, not yet part of the map's own labels array
 let pendingNewLabels = [];
+let modifiedLabels = new Set();
 
 let clickMapX = 0;
 let clickMapY = 0;
 let currentMapFilename = ""; 
 let currentMapType = ""; 
 let activeModCategory = "arcanum"; 
+let pendingAutoOpenLabelText = null;
 
 let currentMusicPath = null;
 let isMusicMuted = false;
@@ -142,20 +160,6 @@ let musicVolume = 0.5;
 
 const minScale = 0.05;
 const maxScale = 12;
-
-const filterRegistry = {
-    quest: true,
-    followers: true,
-    shop: true,
-    waypoint: true,
-    key: true,
-    npc: true,
-    chest: true,
-    information: true,
-    altar: true,
-    bounty: true,
-    overworldAll: true
-};
 
 const CATEGORY_EMOJI = {
     quest: '📜',
@@ -167,7 +171,8 @@ const CATEGORY_EMOJI = {
     chest: '📦',
     information: 'ℹ️',
     altar: '🕯️',
-    bounty: '💰'
+    bounty: '💰',
+    master: '🎓'
 };
 
 const CATEGORY_COLORS = {
@@ -180,7 +185,8 @@ const CATEGORY_COLORS = {
     chest: '#8b5a2b',
     information: '#95a5a6',
     altar: '#6c5ce7',
-    bounty: '#e84393'
+    bounty: '#e84393',
+    master: '#f1c40f'
 };
 
 // Shop markup severity tags - checked highest threshold first, so a markup of 250
@@ -228,17 +234,23 @@ function buildLabelStatsRowHtml(label) {
     return parts.length > 0 ? `<div class="label-stats-row">${parts.join(' &middot; ')}</div>` : '';
 }
 
+function buildLabelMasterHtml(label) {
+    return label.master ? `<div class="label-master">${label.master}</div>` : '';
+}
+
 // Shared renderer for inventory-like item lists (inventory / offering / blessing) - each entry is
 // either a plain string (regular tier, not clickable) or { name, image?, tier? }. fieldName is used
 // to route clicks back to the right array on the label object when opening a clickable item's image.
 function buildItemListHtml(items, sectionTitle, fieldName) {
     if (!Array.isArray(items) || items.length === 0) return '';
     const itemsHtml = items.map((item, i) => {
-        const isObject = typeof item !== 'string';
-        const name = isObject ? item.name : item;
-        const tier = (isObject && item.tier) ? item.tier : 'regular';
+        const itemData = typeof item === 'string' ? { name: item } : item;
+        const catalogItem = ItemDataByName.get(itemData.name) || {};
+        const resolvedItem = { ...catalogItem, ...itemData };
+        const name = resolvedItem.name;
+        const tier = resolvedItem.tier || 'regular';
         const color = ITEM_TIER_COLORS[tier] || ITEM_TIER_COLORS.regular;
-        const clickable = isObject && item.image;
+        const clickable = Boolean(resolvedItem.image);
         const cls = clickable ? ' class="inventory-item-clickable"' : '';
         const dataAttr = clickable ? ` data-item-field="${fieldName}" data-item-index="${i}"` : '';
         return `<li${cls}${dataAttr} style="color:${color};">${name}</li>`;
@@ -578,30 +590,11 @@ function initViewer() {
 
     filterDropdownBtn.addEventListener('click', (e) => {
         e.stopPropagation();
-        const isOpen = filterDropdownContent.style.display === 'block';
-        filterDropdownContent.style.display = isOpen ? 'none' : 'block';
-    });
-
-    document.addEventListener('click', () => {
-        filterDropdownContent.style.display = 'none';
-    });
-
-    const processFilterChange = (key, checkbox) => {
-        filterRegistry[key] = checkbox.checked;
+        labelsVisible = !labelsVisible;
+        filterDropdownBtn.textContent = labelsVisible ? 'Hide labels' : 'Display labels';
+        filterDropdownBtn.classList.toggle('active-tool', !labelsVisible);
         applyActiveFilters();
-    };
-
-    chkQuest.addEventListener('change', () => processFilterChange('quest', chkQuest));
-    chkFollowers.addEventListener('change', () => processFilterChange('followers', chkFollowers));
-    chkShop.addEventListener('change', () => processFilterChange('shop', chkShop));
-    chkWaypoint.addEventListener('change', () => processFilterChange('waypoint', chkWaypoint));
-    chkKey.addEventListener('change', () => processFilterChange('key', chkKey));
-    chkNpc.addEventListener('change', () => processFilterChange('npc', chkNpc));
-    chkChest.addEventListener('change', () => processFilterChange('chest', chkChest));
-    chkInformation.addEventListener('change', () => processFilterChange('information', chkInformation));
-    chkAltar.addEventListener('change', () => processFilterChange('altar', chkAltar));
-    chkBounty.addEventListener('change', () => processFilterChange('bounty', chkBounty));
-    chkOverworldAll.addEventListener('change', () => processFilterChange('overworldAll', chkOverworldAll));
+    });
 
 
 // Part 2
@@ -632,6 +625,7 @@ function initViewer() {
             const cats = getSelectedNewLabelCategories();
             waypointFields.style.display = cats.includes('waypoint') ? 'flex' : 'none';
             shopFields.style.display = cats.includes('shop') ? 'flex' : 'none';
+                masterFields.style.display = cats.includes('master') ? 'flex' : 'none';
         });
     });
 
@@ -661,6 +655,7 @@ function initViewer() {
                 else delete editingLabel.category;
 
                 if (cats.includes('waypoint')) {
+                    delete editingLabel.description;
                     const targetMapName = newLabelTargetMap.value;
                     if (targetMapName) editingLabel.targetMapFilename = targetMapName; else delete editingLabel.targetMapFilename;
                     const tX = newLabelTargetX.value.trim();
@@ -682,9 +677,17 @@ function initViewer() {
                     delete editingLabel.shopType;
                     delete editingLabel.shopMarkup;
                 }
+
+                if (cats.includes('master')) {
+                    const masterValue = newLabelMaster.value.trim();
+                    if (masterValue) editingLabel.master = masterValue; else delete editingLabel.master;
+                } else {
+                    delete editingLabel.master;
+                }
             }
 
             const wasPending = pendingNewLabels.includes(editingLabel);
+            if (!wasPending) modifiedLabels.add(editingLabel);
             editingLabelDomEls.forEach(el => el.remove());
             renderSingleLabel(editingLabel, wasPending);
 
@@ -696,9 +699,10 @@ function initViewer() {
         const newLabelObj = {
             x: clickMapX,
             y: clickMapY,
-            text: labelTitle,
-            description: labelDescription
+            text: labelTitle
         };
+
+        if (!cats.includes('waypoint')) newLabelObj.description = labelDescription;
 
         if (linkedText) {
             newLabelObj.linkedLabels = linkedText.split(',').map(s => s.trim()).filter(Boolean);
@@ -724,6 +728,10 @@ function initViewer() {
                 const markupVal = newLabelShopMarkup.value.trim();
                 if (markupVal !== '') newLabelObj.shopMarkup = parseFloat(markupVal);
             }
+            if (cats.includes('master')) {
+                const masterValue = newLabelMaster.value.trim();
+                if (masterValue) newLabelObj.master = masterValue;
+            }
         }
 
         renderSingleLabel(newLabelObj, true);
@@ -733,6 +741,7 @@ function initViewer() {
         // similar labels is quick - only the free-text fields reset between placements.
         newLabelText.value = '';
         newLabelDesc.value = '';
+        newLabelMaster.value = '';
         newLabelLinks.value = '';
         newLabelTargetX.value = '';
         newLabelTargetY.value = '';
@@ -744,22 +753,29 @@ function initViewer() {
         stopEditingLabel();
     });
 
-    copyEditsBtn.addEventListener('click', () => {
+    const copyLabels = (button, labels) => {
         const selectedMap = ArcanumMapData.find(m => m.filename === currentMapFilename);
         if (!selectedMap) return;
-        const allLabels = [...(selectedMap.labels || []), ...pendingNewLabels];
-        const lines = allLabels.map(l => `  ${buildLabelCodeLine(l)}`).join('\n');
-        const fullText = `labels: [\n${lines}\n]`;
+        const lines = labels.map(label => `\t\t\t${buildLabelCodeLine(label)}`).join('\n');
 
         if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(fullText).then(() => {
-                flashButtonText(copyEditsBtn, '✓ Copied!');
+            navigator.clipboard.writeText(lines).then(() => {
+                flashButtonText(button, '✓ Copied!');
             }).catch(() => {
-                window.prompt('Copy this text:', fullText);
+                window.prompt('Copy this text:', lines);
             });
         } else {
-            window.prompt('Copy this text:', fullText);
+            window.prompt('Copy this text:', lines);
         }
+    };
+
+    copyAllBtn.addEventListener('click', () => {
+        const selectedMap = ArcanumMapData.find(m => m.filename === currentMapFilename);
+        copyLabels(copyAllBtn, selectedMap ? (selectedMap.labels || []) : []);
+    });
+
+    copyNewBtn.addEventListener('click', () => {
+        copyLabels(copyNewBtn, [...modifiedLabels, ...pendingNewLabels]);
     });
 
     zoomInBtn.addEventListener('click', (e) => { e.stopPropagation(); executeButtonZoom(true); });
@@ -791,25 +807,8 @@ function initViewer() {
 }
 
 function applyActiveFilters() {
-    if (currentMapType === "overworld") {
-        const elements = container.querySelectorAll('.arcanum-world-dot, .arcanum-world-text');
-        elements.forEach(el => {
-            if (filterRegistry.overworldAll) el.classList.remove('filter-hidden');
-            else el.classList.add('filter-hidden');
-        });
-    } else {
-        const localElements = container.querySelectorAll('.map-label');
-        localElements.forEach(el => {
-            const catString = el.getAttribute('data-category') || 'uncategorized';
-            const cats = catString.split(' ');
-            const shouldShow = cats.some(cat => filterRegistry[cat] === true || cat === 'uncategorized');
-            if (shouldShow) {
-                el.classList.remove('filter-hidden');
-            } else {
-                el.classList.add('filter-hidden');
-            }
-        });
-    }
+    const elements = container.querySelectorAll('.arcanum-world-dot, .arcanum-world-text, .map-label');
+    elements.forEach(el => el.classList.toggle('filter-hidden', !labelsVisible));
     clearActivePopups();
 }
 
@@ -928,39 +927,19 @@ function loadImage(index, arrivalViewOverride, restorePosition) {
         hudBoxW.style.display = 'inline-flex';
         hudBoxS.style.display = 'inline-flex';
         hudBoxZoom.style.display = 'none';
-        lblOverworldAll.style.display = 'flex';
-        chkQuest.parentElement.style.display = 'none';
-        chkFollowers.parentElement.style.display = 'none';
-        chkShop.parentElement.style.display = 'none';
-        chkWaypoint.parentElement.style.display = 'none';
-        chkKey.parentElement.style.display = 'none';
-        chkNpc.parentElement.style.display = 'none';
-        chkChest.parentElement.style.display = 'none';
-        chkInformation.parentElement.style.display = 'none';
-        chkAltar.parentElement.style.display = 'none';
-        chkBounty.parentElement.style.display = 'none';
         categoryField.style.display = 'none';
         waypointFields.style.display = 'none';
         shopFields.style.display = 'none';
+        masterFields.style.display = 'none';
     } else {
         mapCoordinatesHud.style.display = 'flex';
         hudBoxW.style.display = 'none';
         hudBoxS.style.display = 'none';
         hudBoxZoom.style.display = 'inline-flex';
-        lblOverworldAll.style.display = 'none';
-        chkQuest.parentElement.style.display = 'flex';
-        chkFollowers.parentElement.style.display = 'flex';
-        chkShop.parentElement.style.display = 'flex';
-        chkWaypoint.parentElement.style.display = 'flex';
-        chkKey.parentElement.style.display = 'flex';
-        chkNpc.parentElement.style.display = 'flex';
-        chkChest.parentElement.style.display = 'flex';
-        chkInformation.parentElement.style.display = 'flex';
-        chkAltar.parentElement.style.display = 'flex';
-        chkBounty.parentElement.style.display = 'flex';
         categoryField.style.display = 'flex';
         waypointFields.style.display = getSelectedNewLabelCategories().includes('waypoint') ? 'flex' : 'none';
         shopFields.style.display = getSelectedNewLabelCategories().includes('shop') ? 'flex' : 'none';
+        masterFields.style.display = getSelectedNewLabelCategories().includes('master') ? 'flex' : 'none';
     }
 
     let primaryTargetIndex = index;
@@ -1015,9 +994,18 @@ function loadImage(index, arrivalViewOverride, restorePosition) {
         if (selectedMap.labels) {
             selectedMap.labels.forEach(label => renderSingleLabel(label));
         }
+
         applyActiveFilters(); 
         if (questListPanel.classList.contains('open')) renderQuestPanel();
         if (statisticsOverlay.classList.contains('open')) renderStatisticsPanel();
+
+        if (pendingAutoOpenLabelText) {
+            const labelMatch = container.querySelector(`[data-label-text="${CSS.escape(pendingAutoOpenLabelText)}"]`);
+            if (labelMatch) {
+                pendingAutoOpenLabelText = null;
+                labelMatch.click();
+            }
+        }
     };
     img.onerror = () => {
         img.style.display = 'none';
@@ -1025,15 +1013,16 @@ function loadImage(index, arrivalViewOverride, restorePosition) {
     };
 }
 
-function travelToMapByFilename(targetName, arrivalViewOverride) {
+function travelToMapByFilename(targetName, arrivalViewOverride, autoOpenLabelText = null) {
     const matchedIndex = ArcanumMapData.findIndex(map => map.displayName === targetName);
     if (matchedIndex !== -1) {
         const targetMap = ArcanumMapData[matchedIndex];
-        
+        pendingAutoOpenLabelText = autoOpenLabelText || null;
+
         let targetCategory = "modules";
         if (checkMapCategoryMatch(targetMap, "arcanum")) targetCategory = "arcanum";
         else if (checkMapCategoryMatch(targetMap, "cerestored")) targetCategory = "cerestored";
-        
+
         if (targetCategory !== activeModCategory) {
             activeModCategory = targetCategory;
             document.getElementById('tab-arcanum').classList.toggle('active-tab', targetCategory === 'arcanum');
@@ -1042,19 +1031,44 @@ function travelToMapByFilename(targetName, arrivalViewOverride) {
             renderGroupedFileList();
         }
 
-        loadImage(matchedIndex, arrivalViewOverride);
+        const normalizedView = arrivalViewOverride
+            ? { ...arrivalViewOverride, zoom: 1 }
+            : (targetMap.defaultView ? { ...targetMap.defaultView, zoom: 1 } : { x: 0, y: 0, zoom: 1 });
+
+        loadImage(matchedIndex, normalizedView);
     } else {
         alert(`Travel target failed: "${targetName}" is not registered inside your maps.js file (no map with that displayName).`);
     }
 }
 
+function normalizeLabelText(value) {
+    if (value === null || value === undefined) return '';
+    return String(value).replace(/[\u2018\u2019]/g, "'").replace(/\s+/g, ' ').trim().toLowerCase();
+}
+
 function findLabelAnywhereByText(searchText) {
+    const target = normalizeLabelText(searchText);
+    if (!target) return null;
+
+    let fallback = null;
+
     for (const map of ArcanumMapData) {
-        if (!map.labels) continue;
-        const found = map.labels.find(l => l.text === searchText);
-        if (found) return { map, label: found };
+        if (!Array.isArray(map.labels)) continue;
+        for (const label of map.labels) {
+            if (!label || typeof label !== 'object' || !label.text) continue;
+
+            const labelText = normalizeLabelText(label.text);
+            if (!labelText) continue;
+
+            if (labelText === target) return { map, label };
+            if (!fallback) {
+                const containsTarget = labelText.includes(target) || target.includes(labelText);
+                if (containsTarget) fallback = { map, label };
+            }
+        }
     }
-    return null;
+
+    return fallback;
 }
 
 function travelToLinkedLabel(searchText) {
@@ -1068,7 +1082,7 @@ function travelToLinkedLabel(searchText) {
     // map's defaultView/arrival coordinates - rather than mis-convert it, just use that
     // map's default view when the link happens to land on the world map itself.
     const viewOverride = (map.typemap === "overworld") ? null : { x: label.x, y: label.y, zoom: 1 };
-    travelToMapByFilename(map.displayName, viewOverride);
+    travelToMapByFilename(map.displayName, viewOverride, searchText);
 }
 
 // --- Quest list panel: all quests on the current map, grouped by the NPC that gives them ---
@@ -1088,45 +1102,32 @@ function buildQuestListForCurrentMap() {
     const selectedMap = ArcanumMapData.find(m => m.filename === currentMapFilename);
     if (!selectedMap || !selectedMap.labels) return { npcGroups: [], unassigned: [] };
 
-    const claimedQuestTexts = new Set();
     const npcGroups = [];
 
-    selectedMap.labels.forEach(npcLabel => {
-        const cats = Array.isArray(npcLabel.category) ? npcLabel.category : (npcLabel.category ? [npcLabel.category] : []);
-        if (!cats.includes('npc')) return;
-        if (!Array.isArray(npcLabel.linkedLabels) || npcLabel.linkedLabels.length === 0) return;
+    selectedMap.labels.forEach(questLabel => {
+        const cats = Array.isArray(questLabel.category) ? questLabel.category : (questLabel.category ? [questLabel.category] : []);
+        if (!cats.includes('quest')) return;
 
-        const quests = npcLabel.linkedLabels.map(entry => {
+        const quests = (Array.isArray(questLabel.linkedLabels) ? questLabel.linkedLabels : []).map(entry => {
             if (typeof entry === 'string') {
                 const found = findLabelAnywhereByText(entry);
                 if (!found) return null;
                 const foundCats = Array.isArray(found.label.category) ? found.label.category : (found.label.category ? [found.label.category] : []);
-                // Only treat this as a quest entry if the resolved label is actually a quest
-                // (not an NPC) - otherwise its "description" is that person's own bio, not quest text
                 if (!foundCats.includes('quest') || foundCats.includes('npc')) return null;
-                claimedQuestTexts.add(entry);
                 return { title: entry, description: found.label.description || '', target: entry, part: found.label.part || null };
             }
-            if (entry.target) claimedQuestTexts.add(entry.target);
-            return { title: entry.questName || entry.target || 'Quest', description: entry.questDescription || '', target: entry.target, part: entry.part || null };
+            return { title: entry.questName || entry.target || questLabel.text, description: entry.questDescription || '', target: entry.target || null, part: entry.part || null };
         }).filter(Boolean);
 
-        if (quests.length === 0) return;
-        npcGroups.push({ npcLabel, quests });
+        if (quests.length === 0) {
+            quests.push({ title: questLabel.text, description: questLabel.description || '', target: null, ownLabel: questLabel, part: questLabel.part || null });
+        }
+        npcGroups.push({ npcLabel: questLabel, quests });
     });
 
     npcGroups.sort((a, b) => a.npcLabel.text.localeCompare(b.npcLabel.text));
 
-    const unassigned = selectedMap.labels
-        .filter(label => {
-            const cats = Array.isArray(label.category) ? label.category : (label.category ? [label.category] : []);
-            if (!cats.includes('quest')) return false;
-            if (cats.includes('npc')) return false; // already represented as its own NPC group above
-            return !claimedQuestTexts.has(label.text);
-        })
-        .map(label => ({ title: label.text, description: label.description || '', ownLabel: label, part: label.part || null }));
-
-    return { npcGroups, unassigned };
+    return { npcGroups, unassigned: [] };
 }
 
 function renderQuestPanel() {
@@ -1178,6 +1179,7 @@ function renderQuestPanel() {
             const qi = parseInt(el.getAttribute('data-quest-index'), 10);
             const quest = npcGroups[gi].quests[qi];
             if (quest.target) travelToLinkedLabel(quest.target);
+            else if (quest.ownLabel) jumpToLabelOnCurrentMap(quest.ownLabel);
         });
     });
 
@@ -1411,6 +1413,7 @@ function renderSingleLabel(label, isPending) {
 
         const statsRowHtml = buildLabelStatsRowHtml(label);
         let portraitSrc = label.portrait;
+        if (popupCats.includes('chest') && label.text === 'Junk Pile') portraitSrc = 'Textures/junkpile.png';
         if (!portraitSrc && popupCats.includes('altar')) portraitSrc = 'Textures/altar.png';
         if (!portraitSrc && popupCats.includes('chest')) portraitSrc = 'Textures/chest.png';
         if (!portraitSrc && label.race) portraitSrc = `Textures/${label.race}.png`;
@@ -1422,8 +1425,6 @@ function renderSingleLabel(label, isPending) {
                 ? `<div class="chest-status-row">Opens with <span class="chest-key-link" data-chest-key="${label.chestKey}">${label.chestKey}</span></div>`
                 : `<div class="chest-status-row">Locked</div>`;
         }
-        const headerHtml = `<div class="popup-header">${portraitHtml}<div class="popup-header-text"><h4>${label.text}${buildQuestPartBadge(label.part)}</h4>${godTypeHtml}${chestStatusHtml}${statsRowHtml}</div></div>`;
-
         let shopInfoHtml = "";
         if (popupCats.includes('shop') && (label.shopType || typeof label.shopMarkup === 'number')) {
             const shopTypeHtml = label.shopType ? `<div class="shop-info-type">${label.shopType}</div>` : '';
@@ -1492,6 +1493,22 @@ function renderSingleLabel(label, isPending) {
             }).join('');
             linkedButtonsHtml = blocks;
         }
+
+        const hasPopupBody = [
+            chestStatusHtml,
+            shopInfoHtml,
+            inscriptionHtml,
+            inventoryHtml,
+            offeringHtml,
+            blessingHtml,
+            descHtmlMain,
+            travelButtonHtml,
+            linkedButtonsHtml
+        ].some(Boolean);
+        const headerClass = hasPopupBody ? 'popup-header' : 'popup-header popup-header-only';
+        const masterHtml = buildLabelMasterHtml(label);
+        const masterHeaderClass = label.master ? ' has-master' : '';
+        const headerHtml = `<div class="${headerClass}${masterHeaderClass}">${portraitHtml}<div class="popup-header-text"><h4>${label.text}${buildQuestPartBadge(label.part)}</h4>${masterHtml}${godTypeHtml}${chestStatusHtml}${statsRowHtml}</div></div>`;
         
         popup.innerHTML = `<span class="close-btn">&times;</span>${headerHtml}${shopInfoHtml}${inscriptionHtml}${inventoryHtml}${offeringHtml}${blessingHtml}${descHtmlMain}${travelButtonHtml}${linkedButtonsHtml}`;
         popup.querySelector('.close-btn').addEventListener('click', (el) => { el.stopPropagation(); popup.remove(); });
@@ -1525,7 +1542,11 @@ function renderSingleLabel(label, isPending) {
                 const fieldName = el.getAttribute('data-item-field');
                 const idx = parseInt(el.getAttribute('data-item-index'), 10);
                 const items = label[fieldName];
-                const item = items && items[idx];
+                const rawItem = items && items[idx];
+                const itemName = typeof rawItem === 'string' ? rawItem : rawItem?.name;
+                const item = typeof rawItem === 'string'
+                    ? ItemDataByName.get(itemName)
+                    : { ...(ItemDataByName.get(itemName) || {}), ...rawItem };
                 if (item && item.image) showItemImage(item.image);
             });
         });
@@ -1744,9 +1765,10 @@ function buildLabelCodeLine(labelData) {
     const parts = [
         `x: ${labelData.x}`,
         `y: ${labelData.y}`,
-        `text: "${labelData.text}"`,
-        `description: "${labelData.description || ''}"`
+        `text: "${labelData.text}"`
     ];
+    if (labelData.description) parts.push(`description: "${labelData.description}"`);
+    if (labelData.master) parts.push(`master: "${labelData.master}"`);
     if (labelData.category) {
         if (Array.isArray(labelData.category)) {
             parts.push(`category: [${labelData.category.map(c => `"${c}"`).join(', ')}]`);
@@ -1773,12 +1795,7 @@ function buildLabelCodeLine(labelData) {
         parts.push(typeof labelData.part === 'number' ? `part: ${labelData.part}` : `part: "${labelData.part}"`);
     }
     const serializeItemList = (items) => items.map(item => {
-        if (typeof item === 'string') return `"${item}"`;
-        const objParts = [];
-        if (item.name) objParts.push(`name: "${item.name}"`);
-        if (item.image) objParts.push(`image: "${item.image}"`);
-        if (item.tier) objParts.push(`tier: "${item.tier}"`);
-        return `{ ${objParts.join(', ')} }`;
+        return `"${typeof item === 'string' ? item : item.name}"`;
     }).join(', ');
     if (Array.isArray(labelData.inventory) && labelData.inventory.length > 0) {
         parts.push(`inventory: [${serializeItemList(labelData.inventory)}]`);
@@ -1824,6 +1841,7 @@ function startEditingLabel(label) {
 
     newLabelText.value = label.text || '';
     newLabelDesc.value = label.description || '';
+    newLabelMaster.value = label.master || '';
 
     const stringLinks = Array.isArray(label.linkedLabels) ? label.linkedLabels.filter(e => typeof e === 'string') : [];
     newLabelLinks.value = stringLinks.join(', ');
@@ -1833,6 +1851,7 @@ function startEditingLabel(label) {
         newLabelCategoryChecks.forEach(cb => { cb.checked = cats.includes(cb.value); });
 
         waypointFields.style.display = cats.includes('waypoint') ? 'flex' : 'none';
+        masterFields.style.display = cats.includes('master') ? 'flex' : 'none';
         newLabelTargetMap.value = label.targetMapFilename || '';
         newLabelTargetX.value = (typeof label.targetX === 'number') ? label.targetX : '';
         newLabelTargetY.value = (typeof label.targetY === 'number') ? label.targetY : '';
@@ -1857,6 +1876,7 @@ function stopEditingLabel() {
     editingIndicator.style.display = 'none';
     newLabelText.value = '';
     newLabelDesc.value = '';
+    newLabelMaster.value = '';
     newLabelLinks.value = '';
     newLabelTargetX.value = '';
     newLabelTargetY.value = '';

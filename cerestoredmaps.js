@@ -53,14 +53,12 @@ const CERestoredMapData = [
     filename: "Arcanum CE Restored/OldBlindMaster.png",
     displayName: "Old Blind Master",
     modGroup: "Arcanum CE Restored",
-    typemap: "local",
     labels: []
   },
   {
     filename: "Arcanum CE Restored/FanGraveyard.png",
     displayName: "Fan Graveyard",
     modGroup: "Arcanum CE Restored",
-    typemap: "local",
     defaultView: { x: 1922, y: 280, zoom: 1 },
     labels: []
   },
@@ -71,14 +69,12 @@ const CERestoredMapData = [
     filename: "Forgotten Places/ForgottenPlaces-AcereraksTombOutside.png",
     displayName: "Acererak's Tomb",
     modGroup: "Forgotten Places",
-    typemap: "local",
     labels: []
   },
   {
     filename: "Forgotten Places/ForgottenPlaces-BigWoodsLodge.png",
     displayName: "Big Woods Lodge",
     modGroup: "Forgotten Places",
-    typemap: "local",
     defaultView: { x: 970, y: 1098, zoom: 1},
     labels: []
   },
@@ -86,7 +82,6 @@ const CERestoredMapData = [
     filename: "Forgotten Places/ForgottenPlaces-Brandybuck.jpg",
     displayName: "Brandybuck",
     modGroup: "Forgotten Places",
-    typemap: "local",
     defaultView: { x: 3383, y: 4382, zoom: 1},
     labels: []
   },
@@ -94,7 +89,6 @@ const CERestoredMapData = [
     filename: "Forgotten Places/ForgottenPlaces-Cotswold.png",
     displayName: "Cotswold",
     modGroup: "Forgotten Places",
-    typemap: "local",
     defaultView: { x: 865, y: 1028, zoom: 1},
     labels: []
   },
@@ -102,7 +96,6 @@ const CERestoredMapData = [
     filename: "Forgotten Places/ForgottenPlaces-Leahbo.jpg",
     displayName: "Leahbo",
     modGroup: "Forgotten Places",
-    typemap: "local",
     defaultView: { x: 865, y: 1028, zoom: 1},
     labels: []
   },
@@ -110,7 +103,6 @@ const CERestoredMapData = [
     filename: "Forgotten Places/ForgottenPlaces-Lynchbany.jpg",
     displayName: "Lynchbany",
     modGroup: "Forgotten Places",
-    typemap: "local",
     defaultView: { x: 2761, y: 2824, zoom: 1},
     labels: []
   },
@@ -118,21 +110,18 @@ const CERestoredMapData = [
     filename: "Forgotten Places/ForgottenPlaces-Marsyona.png",
     displayName: "Marsyona",
     modGroup: "Forgotten Places",
-    typemap: "local",
     labels: []
   },
   {
     filename: "Forgotten Places/ForgottenPlaces-MerchantsFair.png",
     displayName: "Merchant's Faire",
     modGroup: "Forgotten Places",
-    typemap: "local",
     labels: []
   },
   {
     filename: "Forgotten Places/ForgottenPlaces-PlainwickePlantation.jpg",
     displayName: "Plainwicke Plantation",
     modGroup: "Forgotten Places",
-    typemap: "local",
     defaultView: { x: 7132, y: 4143, zoom: 1},
     labels: []
   },
@@ -140,7 +129,6 @@ const CERestoredMapData = [
     filename: "Forgotten Places/ForgottenPlaces-PortRuins-1.png",
     displayName: "Port Ruins (1)",
     modGroup: "Forgotten Places",
-    typemap: "local",
     defaultView: { x: 1306, y: 581, zoom: 1},
     labels: []
   },
@@ -148,7 +136,6 @@ const CERestoredMapData = [
     filename: "Forgotten Places/ForgottenPlaces-PortRuins-2.png",
     displayName: "Port Ruins (2)",
     modGroup: "Forgotten Places",
-    typemap: "local",
     defaultView: { x: 798, y: 719, zoom: 1},
     labels: []
   },
@@ -156,28 +143,24 @@ const CERestoredMapData = [
     filename: "Forgotten Places/ForgottenPlaces-TempterOfFate.png",
     displayName: "The Tempter of Fate",
     modGroup: "Forgotten Places",
-    typemap: "local",
     labels: []
   },
   {
     filename: "Forgotten Places/ForgottenPlaces-TheCavernOfMadness.png",
     displayName: "The Cavern of Madness",
     modGroup: "Forgotten Places",
-    typemap: "local",
     labels: []
   },
   {
     filename: "Forgotten Places/ForgottenPlaces-Vaselan.png",
     displayName: "Vaselan",
     modGroup: "Forgotten Places",
-    typemap: "local",
     labels: []
   },
   {
     filename: "Forgotten Places/ForgottenPlaces-WellOfLostSouls.jpg",
     displayName: "Well of Lost Souls",
     modGroup: "Forgotten Places",
-    typemap: "local",
     defaultView: { x: 8550, y: 2796, zoom: 1},
     labels: []
   },

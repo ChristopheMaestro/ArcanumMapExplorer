@@ -38,6 +38,11 @@
             <label>Description Note</label>
             <textarea id="new-label-desc" placeholder="Historical information..."></textarea>
 
+            <div id="master-fields" class="field-row" style="display:none;">
+                <label>Master</label>
+                <input type="text" id="new-label-master" placeholder="e.g., Master of Fire">
+            </div>
+
             <div class="field-row">
                 <label>Linked Label(s) - optional</label>
                 <input type="text" id="new-label-links" placeholder="Exact text of other label(s), comma-separated">
@@ -56,6 +61,7 @@
                     <label><input type="checkbox" class="new-label-cat-chk" value="information"> ℹ️ Information</label>
                     <label><input type="checkbox" class="new-label-cat-chk" value="altar"> 🕯️ Altar</label>
                     <label><input type="checkbox" class="new-label-cat-chk" value="bounty"> 💰 Bounty</label>
+                    <label><input type="checkbox" class="new-label-cat-chk" value="master"> 🎓 Master</label>
                 </div>
             </div>
 
@@ -92,30 +98,17 @@
             
             <button id="add-to-preview-btn" class="toggle-btn" style="width:100%;">+ Add Label</button>
             <button id="cancel-edit-btn" class="toggle-btn" style="width:100%; display:none;">Cancel Edit</button>
-            <button id="copy-edits-btn" class="toggle-btn" style="width:100%;">📋 Copy Edits</button>
+            <div class="copy-actions">
+                <button id="copy-all-btn" class="toggle-btn">📋 Copy All</button>
+                <button id="copy-new-btn" class="toggle-btn">📋 Copy New</button>
+            </div>
         </div>
     </div>
 
     <!-- Right Side Global Workspace Area -->
     <div id="main-viewer">
         <div id="control-bar">
-            <!-- Filter drawer multiselect panel deck dropdown link option -->
-            <div class="filter-dropdown">
-                <button id="filterDropdownBtn" class="toggle-btn">Filter Labels ▾</button>
-                <div id="filterDropdownContent" class="dropdown-content">
-                    <label><input type="checkbox" id="chk-quest" checked> Quest</label>
-                    <label><input type="checkbox" id="chk-followers" checked> Followers</label>
-                    <label><input type="checkbox" id="chk-shop" checked> Shop</label>
-                    <label><input type="checkbox" id="chk-waypoint" checked> Waypoint</label>
-                    <label><input type="checkbox" id="chk-key" checked> Key</label>
-                    <label><input type="checkbox" id="chk-npc" checked> NPC</label>
-                    <label><input type="checkbox" id="chk-chest" checked> Chest</label>
-                    <label><input type="checkbox" id="chk-information" checked> Information</label>
-                    <label><input type="checkbox" id="chk-altar" checked> Altar</label>
-                    <label><input type="checkbox" id="chk-bounty" checked> Bounty</label>
-                    <label id="lbl-overworld-all" style="display:none;"><input type="checkbox" id="chk-overworld-all" checked> World Locations</label>
-                </div>
-            </div>
+            <button id="filterDropdownBtn" class="toggle-btn">Hide labels</button>
             
             <!-- Renamed button link element configuration -->
             <button id="toggleCreatorModeBtn" class="toggle-btn">Label Editor</button>
@@ -192,23 +185,76 @@
          before the data files load, since viewer.js (which reports it) loads after them -->
     <script>
         window.__mapsJsLoadErrors = [];
-        window.addEventListener('error', function(e) {
-            if (e.filename && e.filename.indexOf('maps.js') !== -1) {
-                const shortName = e.filename.split('/').pop();
-                window.__mapsJsLoadErrors.push({
-                    file: shortName,
-                    message: e.message,
-                    line: e.lineno,
-                    column: e.colno
-                });
+        window.__recordScriptError = function(message, source, line, column) {
+            if (!source || !/\.js(?:$|\?)/i.test(source)) return;
+            const shortName = source.split('/').pop().split('?')[0];
+            const key = `${source}:${line || 0}:${column || 0}:${message || ''}`;
+            if (window.__mapsJsLoadErrors.some(error => error.key === key)) return;
+            const error = {
+                key,
+                file: shortName,
+                message: message || 'The file could not be parsed.',
+                line,
+                column,
+                source
+            };
+            window.__mapsJsLoadErrors.push(error);
+            window.__showScriptError(error);
+        };
+        window.__showScriptError = function(error) {
+            let panel = document.getElementById('script-error-panel');
+            if (!panel) {
+                panel = document.createElement('section');
+                panel.id = 'script-error-panel';
+                document.body.appendChild(panel);
             }
+
+            panel.innerHTML = '';
+            const title = document.createElement('h2');
+            title.textContent = 'JavaScript file error';
+            const file = document.createElement('strong');
+            file.textContent = error.file || 'Unknown file';
+            const message = document.createElement('div');
+            message.className = 'script-error-message';
+            message.textContent = error.message || 'The file could not be parsed.';
+            const location = document.createElement('div');
+            location.className = 'script-error-location';
+            location.textContent = error.line ? `Line ${error.line}${error.column ? `, column ${error.column}` : ''}` : '';
+            const source = document.createElement('pre');
+            source.className = 'script-error-source';
+            source.textContent = 'Loading source context...';
+            panel.append(title, file, message, location, source);
+
+            if (!error.source || !error.line) return;
+            fetch(error.source).then(response => response.text()).then(text => {
+                const lines = text.split(/\r?\n/);
+                const start = Math.max(1, error.line - 3);
+                const end = Math.min(lines.length, error.line);
+                source.innerHTML = '';
+                for (let number = start; number <= end; number++) {
+                    const line = document.createElement('div');
+                    line.className = number === error.line ? 'script-error-line-failed' : '';
+                    line.textContent = `${String(number).padStart(String(end).length, ' ')} | ${lines[number - 1]}`;
+                    source.appendChild(line);
+                }
+            }).catch(() => {
+                source.textContent = 'Source context could not be loaded.';
+            });
+        };
+        window.addEventListener('error', function(e) {
+            window.__recordScriptError(e.message, e.filename, e.lineno, e.colno);
         });
+        window.onerror = function(message, source, line, column) {
+            window.__recordScriptError(message, source, line, column);
+            return false;
+        };
     </script>
 
     <!-- Load data asset manifests - one per mod-category tab -->
     <script src="arcanummaps.js"></script>
     <script src="cerestoredmaps.js"></script>
     <script src="modulesmaps.js"></script>
+    <script src="items.js"></script>
 
     <!-- Load clean separated engine logic script file -->
     <script src="viewer.js"></script>

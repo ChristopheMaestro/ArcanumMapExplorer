@@ -116,7 +116,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/Ashburysmall.jpg",
     displayName: "Ashbury",
     modGroup: "Cities",
-    typemap: "local",
     music: "music/Towns.mp3", // Good
     defaultView: { x: 4116, y: 3252, zoom: 1 },
     labels: [
@@ -136,11 +135,11 @@ const ArcanumCitiesMapData = [
       // Shop (All checked and good)
       { x: 4978, y: 2614, text: "Gun Smith", sex: "male", race: "Human", level: 33, category: "shop", shopType: "Gun store", shopMarkup: 100 },
       { x: 3920, y: 2543, text: "Peony the Herbalist", sex: "female", race: "Human", level: 32, category: "shop", shopType: "Herbalist", shopMarkup: 90, inventory: ["Mechanical Dagger"] },
-      { x: 3970, y: 3041, text: "General Store Clerk", sex: "female", race: "Human", level: 29, inventory: [{name:"Shocking Dagger", tier:"magick"}], category: "shop", shopType: "General Store", shopMarkup: 100, inventory: [{name: "Shocking Dagger", tier: "magick"}] },
-      { x: 4345, y: 2945, text: "Elf Shopkeeper", sex: "female", race: "Elf", level: 28, category: "shop", shopType: "Magic shop", shopMarkup: 100, inventory: [{name:"Divining Staff", tier:"magick"}, {name:"Magick Robes", tier:"magick"}] },
-      { x: 4636, y: 2806, text: "Fenwick the Tailor", sex: "male", race: "Half-Elf", level: 23, category: "shop", shopType: "Tailor", shopMarkup: 90, inventory: [{name:"Mage's Dagger", tier:"magick"}] },
+      { x: 3970, y: 3041, text: "General Store Clerk", sex: "female", race: "Human", level: 29, inventory: ["Shocking Dagger"], category: "shop", shopType: "General Store", shopMarkup: 100, inventory: ["Shocking Dagger"] },
+      { x: 4345, y: 2945, text: "Elf Shopkeeper", sex: "female", race: "Elf", level: 28, category: "shop", shopType: "Magic shop", shopMarkup: 100, inventory: ["Divining Staff", "Magick Robes"] },
+      { x: 4636, y: 2806, text: "Fenwick the Tailor", sex: "male", race: "Half-Elf", level: 23, category: "shop", shopType: "Tailor", shopMarkup: 90, inventory: ["Mage’s Dagger"] },
       { x: 4450, y: 2711, text: "Blacksmith", sex: "male", race: "Human", level: 34, category: "shop", shopType: "Blacksmith", shopMarkup: 110, inventory: ["Machined Gauntlets"] },
-      { x: 5763, y: 2928, text: "Elven Trader", sex: "male", race: "Elf", level: 35, category: "shop", shopType: "Elven Trader", shopMarkup: 100, inventory: [{name:"Shaman's Staff", tier: "magick"}, {name:"Scroll of Call Earth Elemental", tier:"magick"}, {name:"Scroll of Teleportation", tier:"magick"}] },
+      { x: 5763, y: 2928, text: "Elven Trader", sex: "male", race: "Elf", level: 35, category: "shop", shopType: "Elven Trader", shopMarkup: 100, inventory: ["Shaman's Staff", "Scroll of Call Earth Elemental", "Scroll of Teleportation"] },
       { x: 5605, y: 2781, text: "Raymond Pierce", sex: "male", race: "Human", level: 28, category: "shop", shopType: "Glasses", shopMarkup: 100, description: "If you didn't get a pair of Wheel Clan spectacles from Thorvald on the Isle of Despair, you can get Raymond Pierce to make them in his shop. Just ask him what sorts of wares he carries, and then ask him to make you some custom spectacles. He'll charge you 1000 gold and also require a kathorn crystal." },
       { x: 4650, y: 4618, text: "Wise Woman", sex: "female", race: "Halfling", level: 37, category: "shop", shopType: "Nomad", shopMarkup: 150 },
 
@@ -175,7 +174,7 @@ const ArcanumCitiesMapData = [
           { questName: "", questDescription: "Load the 5 large boulders located in Theo Brightstart's field onto his cart.", target: "" }
         ]
       },
-      { x: 5486, y: 4176, text: "William Thorndop", sex: "male", race: "Human", level: 48, inventory: ["Looking Glass Rifle"], description: "Firearms Master", category: ["quest", "npc"],
+      { x: 5486, y: 4176, text: "William Thorndop", sex: "male", race: "Human", level: 48, master: "Firearms Master", inventory: ["Looking Glass Rifle"], category: ["quest", "npc", "master"],
         linkedLabels: [
           { questName: "", questDescription: "Kill the entire Willbecker Gang and release their hostage, Mrs. Rolland, unharmed.", target: "Mrs. Rolland" }
         ]
@@ -201,7 +200,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/BlackRoot.jpg",
     displayName: "Black Root",
     modGroup: "Cities",
-    typemap: "local",
     labels: [
       // Waypoints
       { x: 4224, y: 1820, text: "Train Conductor (Black Root)", sex: "male", race: "Human", level: 1, description: "Tarant / Ashbury. 75 gold per party member.", category: ["npc"] },
@@ -213,11 +211,11 @@ const ArcanumCitiesMapData = [
       
       // Shop
       { x: 3912, y: 2885, text: "Garret Almstead", sex: "male", race: "Half-Orc", level: 38, shopType: "Blacksmith", shopMarkup: 110, inventory: ["Dwarven Gauntlets", "Almstead's Axe", "Key to Garret Almstead's Trunk"], category: ["quest", "shop", "key"] },
-      { x: 3575, y: 3080, text: "Tailor", sex: "female", race: "Human", level: 24, shopType: "Tailor", shopMarkup: 90, inventory: [{name:"Enchanted Gown", tier:"magick"}], category: ["shop"] },
+      { x: 3575, y: 3080, text: "Tailor", sex: "female", race: "Human", level: 24, shopType: "Tailor", shopMarkup: 90, inventory: ["Enchanted Gown"], category: ["shop"] },
       { x: 5032, y: 2161, text: "General Store Clerk", sex: "male", race: "Human", level: 34, shopType: "General Store", shopMarkup: 110, category: ["shop"] },
       { x: 4383, y: 3109, text: "Inventor", sex: "male", race: "Human", level: 33, shopType: "Inventor", shopMarkup: 110, category: ["shop"] },
       { x: 5496, y: 2376, text: "Junk Dealer", shopType: "Junk Dealer", sex: "Male", race: "Half-Orc", level: 30, shopMarkup: 200, category: ["shop"] },
-      { x: 4360, y: 2355, text: "Herbalist", sex: "female", race: "Elf", level: 27, inventory: [{name:"Staff of Healing", tier:"magick"}], shopType: "Herbalist", shopMarkup: 90, category: ["shop"] },
+      { x: 4360, y: 2355, text: "Herbalist", sex: "female", race: "Elf", level: 27, inventory: ["Staff of Healing"], shopType: "Herbalist", shopMarkup: 90, category: ["shop"] },
       { x: 3083, y: 2915, text: "Dierdre, the Magick Shop Clerk", sex: "female", race: "Half-Elf", level: 34, shopType: "Magic Shop", shopMarkup: 100, category: ["shop"] },
 
       // Quests
@@ -233,7 +231,7 @@ const ArcanumCitiesMapData = [
           { questName: "", questDescription: "D'ak Taan the thief wants you to rob the Hedgewizard's chest. If successful, he will give you stolen items from Black Root.", target: "Tugal the Hedgewizard" },
           { questName: "", questDescription: "D'ak Taan the thief wants you to obtain poison from Grunwalde. If successful, he will give you stolen items from Black Root.", target: "Grunwalde" }
         ] },
-      { x: 2331, y: 3399, text: "Tugal the Hedgewizard", sex: "male", race: "Gnome", level: 14, inventory:[{name:"Scroll of Summon Undead", tier:"magick"}], category: ["quest", "npc"], target: "D'ak Taan" },
+      { x: 2331, y: 3399, text: "Tugal the Hedgewizard", sex: "male", race: "Gnome", level: 14, inventory:["Scroll of Summon Undead"], category: ["quest", "npc"], target: "D'ak Taan" },
       { x: 2213, y: 3361, text: "Wood Chest", inventory: ["Small Statuette"], category: ["quest", "chest"] },
       { x: 4627, y: 3224, text: "Grunwalde", sex: "male", race: "Human", level: 25, inventory: ["Envenomed Sword", "Grunwalde's Poison"], category: ["quest", "npc"], target: "D'ak Taan" },
 
@@ -255,12 +253,12 @@ const ArcanumCitiesMapData = [
       },
 
       // Other quests
-      { x: 5458, y: 3392, text: "Mrs. Lydia Cameron", sex: "female", race: "Human", level: 28, inventory: [{name:"Mage’s Dagger", tier:"magick"}, "Chapeau of Magnetic Inversion"], category: ["quest", "npc"],
+      { x: 5458, y: 3392, text: "Mrs. Lydia Cameron", sex: "female", race: "Human", level: 28, inventory: ["Mage’s Dagger", "Chapeau of Magnetic Inversion"], category: ["quest", "npc"],
         linkedLabels: [
           { questName: "Find Liam Cameron", questDescription: "When you talk to Mrs. Cameron, she'll tell you that her son Liam has gone missing from his workshop. Then she'll mark the location of his workshop on your map.", target: "Dresser (Liam’s Workshop)", part: 1 }
         ]
       },
-      { x: 3248, y: 2623, text: "Kietzel Pierce (Black Root)", sex: "male", race: "Half-Elf", level: 48, description: "Master Bowman", category: ["quest", "npc"],
+      { x: 3248, y: 2623, text: "Kietzel Pierce (Black Root)", sex: "male", race: "Half-Elf", level: 48, master: "Master Bowman", category: ["quest", "npc", "master"],
         linkedLabels: [
           { questName: "Find Dudley Crosston", questDescription: "Kietzel ask to find Dudley Crosston, and let him know where Kietzel has gone.", target: "Dudley Crosston", part: 1 },
           "Kietzel Pierce (Caladon)"
@@ -276,7 +274,7 @@ const ArcanumCitiesMapData = [
           { questName: "Retrieve Azram’s Star" , questDescription: "Retrieve Azram’s Star from K’na Tha for Clarissa Shalmo in Black Root.", target: "Chest (Azram’s Star)" }
         ]
       },
-      { x: 2028, y: 3570, text: "Tyron's Note", inventory: [{name:"Tyron's Note", image: "Textures/Notes/1190 - Tyron's Note.png"}], category: "quest", linkedLabels: [
+      { x: 2028, y: 3570, text: "Tyron's Note", inventory: ["Tyron's Note"], category: "quest", linkedLabels: [
           { questName: "The Ren'ar Siamese Twins", questDescription: "Tyron has vanished! Report back to Matt de Cesare.", target: "Matt de Cesare", part: "IV"}
         ]
       },
@@ -303,7 +301,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/Caladonsmall.jpg",
     displayName: "Caladon",
     modGroup: "Cities",
-    typemap: "local",
     music: "music/Caladon.mp3",
     defaultView: { x: 3596, y: 3305, zoom: 1 },
     labels: [
@@ -436,7 +433,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/Dernholm.jpg",
     displayName: "Dernholm",
     modGroup: "Cities",
-    typemap: "local",
     defaultView: { x: 3141, y: 2792, zoom: 1 },
     labels: [
       // Waypoints
@@ -473,7 +469,7 @@ const ArcanumCitiesMapData = [
           { questName: "Gladys' Ring", questDescription: "Bernard will explain to you about Gladys ''game''.", target: "Gladys", part: 3 }
         ]
       },
-      { x: 3794, y: 1939, text: "Lianna", sex: "female", race: "Human", level: 35, inventory: [{name: "Sword of Baltar", tier: "magick"}], category: ["quest", "npc"],
+      { x: 3794, y: 1939, text: "Lianna", sex: "female", race: "Human", level: 35, inventory: ["Sword of Baltar"], category: ["quest", "npc"],
         linkedLabels: [
           { questName: "Tell Lianna Pel Dar about Maximillian", questDescription: "Find Warren Pel Dar of Cumbria and tell him that Maximillian still lives on the Isle of Despair.", part: 2 },
           { questName: "Tell Lianna Pel Dar about Maximillian", questDescription: "Find Warren Lianna Pel Dar of Cumbria and tell her that Maximillian still lives on the Isle of Despair.", part: 2 }
@@ -485,7 +481,7 @@ const ArcanumCitiesMapData = [
           { questName: "Free the Ghost of Bessie Toone", questDescription: "Sarah Toone will reward you with a Magickal Sword for returning the mine to her.", part: 6 }
         ]
       },
-      { x: 4926, y: 1505, text: "Sir Garrick Stout", sex: "male", race: "Human", level: 45, description: "Melee Master", inventory: [{name: "Scroll of Disperse Magick", tier: "magick"}, "Basic Platemail"], category: ["quest", "npc"],
+      { x: 4926, y: 1505, text: "Sir Garrick Stout", sex: "male", race: "Human", level: 45, description: "Melee Master", inventory: ["Scroll of Disperse Magick", "Basic Platemail"], category: ["quest", "npc"],
         linkedLabels: [
           { questName: "Adkin Chambers and Sir Garrick Stout", questDescription: "Find the Lady Druella, get her to agree to marry Sir Garrick Stout, and return her to him.", target: "Lady Druella", part: 2 },
           { questName: "Adkin Chambers and Sir Garrick Stout", questDescription: "Take the healing potion to Adkin Chambers and restore his sight.  Also, tell him Lady Druella's location.", target: "Adkin Chambers", part: 4 }       
@@ -514,7 +510,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/IsleOfDespair.jpg",
     displayName: "Isle of Despair",
     modGroup: "Cities",
-    typemap: "local",
     music: "music/Isle_of_Despair.mp3",
     defaultView: { x: 3593, y: 4071, zoom: 1 },
     labels: [
@@ -537,7 +532,7 @@ const ArcanumCitiesMapData = [
           "Captain Edward Teach (Ashbury)"
         ]
       },
-      { x: 2836, y: 3708, text: "Village Guard", sex: "male", race: "Human", level: 20, inventory: [{name: "Serpentine Necklace", tier: "hexed"}, "Key to the Gates of the Isle of Despair"], category: ["quest", "npc", "key"],
+      { x: 2836, y: 3708, text: "Village Guard", sex: "male", race: "Human", level: 20, inventory: ["Serpentine Necklace", "Key to the Gates of the Isle of Despair"], category: ["quest", "npc", "key"],
         linkedLabels: [
           { questName: "", questDescription: "The village guard on Isle of Despair wants you to kill the Sorcerous Beast.", target: "The Sorcerous Beast" }
         ]
@@ -574,7 +569,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/Qintarra.png",
     displayName: "Qintarra",
     modGroup: "Cities",
-    typemap: "local",
     music: "music/Qintarra.mp3",
     defaultView: { x: 1938, y: 1431, zoom: 1 },
     labels: [
@@ -615,7 +609,7 @@ const ArcanumCitiesMapData = [
       },
       { x: 2135, y: 1905, text: "Fawn", sex: "female", race: "Elf", level: 44, description: "Master Healer.", shopType: "Magic Shop", shopMarkup: 100, category: ["shop", "information"] },
       { x: 1879, y: 2035, text: "Whysper", sex: "female", race: "Elf", level: 19, category: ["quest", "npc"] },
-      { x: 3064, y: 1993, text: "Ellumyn", sex: "male", race: "Elf", level: 23, inventory:[{name: "Ellumyn's Bow", tier: "magick"}], shopType: "Magic Shop", shopMarkup: 300, category: ["quest", "shop"],
+      { x: 3064, y: 1993, text: "Ellumyn", sex: "male", race: "Elf", level: 23, inventory:["Ellumyn's Bow"], shopType: "Magic Shop", shopMarkup: 300, category: ["quest", "shop"],
         linkedLabels: [
           { questName: "", questDescription: "Ellumyn wants you to retrieve some mithril from the caves of the Wheel Clan.", target: "" },
         ]
@@ -631,7 +625,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/Roseborough.jpg",
     displayName: "Roseborough",
     modGroup: "Cities",
-    typemap: "local",
     music: "music/Villages.mp3",
     defaultView: { x: 5594, y: 2974, zoom: 1 },
     labels: [
@@ -641,7 +634,7 @@ const ArcanumCitiesMapData = [
 
       // Shops
       { x: 8431, y: 2866, text: "Gnome Shopkeeper", sex: "male", race: "Gnome", level: 24,  category: "shop", shopType: "General Store", shopMarkup: 110 },
-      { x: 8794, y: 2047, text: "Blacksmith", sex: "male", race: "Human", level: 31, category: "shop", shopType: "Blacksmith", shopMarkup: 110, inventory: [{name:"Screaming Shield", tier:"magick"}, "Power Axe"] },
+      { x: 8794, y: 2047, text: "Blacksmith", sex: "male", race: "Human", level: 31, category: "shop", shopType: "Blacksmith", shopMarkup: 110, inventory: ["Screaming Shield", "Power Axe"] },
 
       // Shop signs
       { x: 8537, y: 2953, text: "Roseborough Gift Shoppe", category: ["information"] },
@@ -691,7 +684,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/ShroudedHills.jpg",
     displayName: "Shrouded Hills",
     modGroup: "Cities",
-    typemap: "local",
 
     music: "music/Towns.mp3", // Good
     // background: None
@@ -729,7 +721,7 @@ const ArcanumCitiesMapData = [
         ]
       },
       { x: 7089, y: 2359, text: "Gnome Shopkeeper", sex: "male", race: "Gnome", level: 18, shopType: "General Store", shopMarkup: 110, category: "shop" },
-      { x: 9693, y: 1666, text: "Wise Woman", sex: "female", race: "Human", level: 22, shopType: "Nomad", shopMarkup: 150, inventory: [{name: "Witch's Dagger", tier: "magick"}], category: "shop" },
+      { x: 9693, y: 1666, text: "Wise Woman", sex: "female", race: "Human", level: 22, shopType: "Nomad", shopMarkup: 150, inventory: ["Witch's Dagger"], category: "shop" },
 
       // Quests
       { x: 7241, y: 2765, text: "Jongle Dunne", sex: "male", race: "Halfling", level: 13, category: ["quest", "npc"],
@@ -754,7 +746,7 @@ const ArcanumCitiesMapData = [
           { questName: "The Thieves and the Bridge", questDescription: "Destroy the bridge materials and return to Lukan.", target:"Lukan the Witless" , part: 3 }
         ]
       },
-      { x: 8278, y: 2640, text: "Jacob Bens", sex: "male", race: "Half-Orc", level: 5, inventory: [{name:"Note (Safe Combination)", image:"Textures/Notes/1040 - Safe Combination.png"}], category: ["quest", "npc"],
+      { x: 8278, y: 2640, text: "Jacob Bens", sex: "male", race: "Half-Orc", level: 5, inventory: ["Note (Safe Combination)"], category: ["quest", "npc"],
         linkedLabels: [
           { questName: "Rob the Bank", questDescription: "Jacob Bens in Shrouded Hills wants you to steal the local mining company’s payroll from the bank’s safe.", target: "Combination safe", part: 1 }
         ]
@@ -771,7 +763,7 @@ const ArcanumCitiesMapData = [
           { questName: "Free the Ghost of Bessie Toone", questDescription: "Percival Toone will reward you 500 coins for returning him the deed. However, he will mention plans to sell the mine again.", part: 6 }
         ]
       },
-      { x: 8851, y: 2680, text: "Joachim’s Note to Virgil", inventory: [{name:"Joachim’s Note to Virgil", image:"Textures/Notes/1080 - Joachim's Note to Virgil.png"}], category: "quest",
+      { x: 8851, y: 2680, text: "Joachim’s Note to Virgil", inventory: ["Joachim’s Note to Virgil"], category: "quest",
         linkedLabels: [
           { questName: "Elder Joachim’s paper trail", questDescription: "", target: "Telegraph Operator", part: 2 }
         ]
@@ -794,7 +786,7 @@ const ArcanumCitiesMapData = [
       { x: 7757, y: 2465, text: "Bank Teller", sex: "female", race: "Human", level: 8, inventory: ["Shrouded Hills Bank Key"], category: ["key", "npc"] },
       { x: 8220, y: 2666, text: "Innkeeper", sex: "male", race: "Human", level: 1, category: "npc" },
       { x: 8151, y: 2160, text: "William Radclife", sex: "male", race: "Gnome", level: 3, category: "npc" },
-      { x: 11664, y: 853, text: "William Radclife (Bridge)", sex: "male", race: "Gnome", level: 3, inventory: [{name:"Note: The IFS Zephyr has crashed", image:"Textures/Notes/1150 - William Radcliffe.png"}], category: "npc" },
+      { x: 11664, y: 853, text: "William Radclife (Bridge)", sex: "male", race: "Gnome", level: 3, inventory: ["Note: The IFS Zephyr has crashed"], category: "npc" },
       { x: 8345, y: 2567, text: "Bartender", sex: "male", race: "Human", level: 18, category: "npc" },
     ]
   },
@@ -802,7 +794,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/Stillwater.jpg",
     displayName: "Stillwater",
     modGroup: "Cities",
-    typemap: "local",
     music: "music/Villages.mp3", // Good
     defaultView: { x: 2816, y: 2407, zoom: 1 },
     labels: [
@@ -812,7 +803,7 @@ const ArcanumCitiesMapData = [
 
       // Shops
       { x: 1978, y: 3831, text: "General Store Clerk", sex: "male", race: "Gnome", level: 29, category: "shop", shopType: "General Store", shopMarkup: 110 },
-      { x: 2278, y: 3130, text: "Richard Leeks", sex: "male", race: "Human", level: 35, category: ["shop", "quest"], shopType: "Blacksmith", shopMarkup: 110, inventory: [{name:"2x Stillwater Blade", tier:"magick"}, "Tempered Shield"],
+      { x: 2278, y: 3130, text: "Richard Leeks", sex: "male", race: "Human", level: 35, category: ["shop", "quest"], shopType: "Blacksmith", shopMarkup: 110, inventory: ["Stillwater Blade", "Stillwater Blade", "Tempered Shield"],
         linkedLabels: [
           { questName: "Rescue Cyrus", questDescription: "Richard Leeks, the blacksmith in Stillwater, wants you to find his friend Cyrus.", target: "Puddles of blood and footprints", part: 1 }
         ]
@@ -849,7 +840,7 @@ const ArcanumCitiesMapData = [
         ]
       },
              
-      { x: 2271, y: 2586, text: "Myrth", sex: "male", race: "Elf", level: 20, inventory:[{name:"Amulet of N’Tala", tier:"magick"}], category: ["npc", "quest"],
+      { x: 2271, y: 2586, text: "Myrth", sex: "male", race: "Elf", level: 20, inventory:["Amulet of N’Tala"], category: ["npc", "quest"],
         linkedLabels: [
           { questName: "The Stillwater Giant", questDescription: "Myrth, an elf residing in Stillwater, instructs you to perform a rite of passage, killing a Stillwater Giant and bringing its pelt to him. He directs you to Stanley Xavier Hippington, living directly North from his house.", target: "Stanley Xavier Hippington", part: 1 },
           { questName: "Find the Amulet of N’Tala", questDescription: "The amulet can be obtained from Myrth either by stealing it or by taking it from his corpse after killing him.", target: "Gaylin", part: 2 }
@@ -880,7 +871,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/Tarant.png",
     displayName: "Tarant",
     modGroup: "Cities",
-    typemap: "local",
     music: "music/Tarant.mp3",
     defaultView: { x: 3338, y: 2537, zoom: 1 },
     labels: [
@@ -919,16 +909,16 @@ const ArcanumCitiesMapData = [
 
       // Shops
       { x: 3546, y: 2326, text: "Castleton the General Store Clerk", sex: "male", race: "Human", level: 27, shopType: "General Store", shopMarkup: 100, inventory: ["Helmet of Strength"], category: "shop" },
-      { x: 3688, y: 2254, text: "Thurston the Tailor", sex: "male", race: "Elf", level: 17, shopType: "Tailor", shopMarkup: 90, inventory: [{name: "Negociator's Ring", tier: "magick"}], category: "shop" },
+      { x: 3688, y: 2254, text: "Thurston the Tailor", sex: "male", race: "Elf", level: 17, shopType: "Tailor", shopMarkup: 90, inventory: ["Negociator's Ring"], category: "shop" },
       { x: 3985, y: 2094, text: "Geoffrey the Inventor", sex: "male", race: "Human", level: 37, shopType: "Inventor", shopMarkup: 100, category: "shop" },
       { x: 4054, y: 2060, text: "Anna the Herbalist", sex: "female", race: "Human", level: 23, shopType: "Herbalist", shopMarkup: 90, category: "shop" },
       { x: 3932, y: 2486, text: "Junk Dealer", sex: "male", race: "Human", level: 30, shopType: "Junk Dealer", shopMarkup: 200, category: "shop" },
       { x: 3905, y: 1863, text: "Wallow the Quality Blacksmith", sex: "male", race: "Dwarf", level: 33, shopType: "Blacksmith", shopMarkup: 100, category: "shop" },
       { x: 3782, y: 1797, text: "Smythe the Gun Smith", sex: "male", race: "Human", level: 31, shopType: "Gun Store", shopMarkup: 100, category: "shop" },
       { x: 2297, y: 2808, text: "Mellin Bungerton", sex: "male", race: "Halfling", level: 18, shopType: "Junk Dealer", shopMarkup: 300, category: "shop" },
-      { x: 4523, y: 1634, text: "Magick Shop Clerk", sex: "male", race: "Elf", level: 38, shopType: "Magick Shop", shopMarkup: 100, inventory: ["Magick Shoppe Key. Tarant", {name: "Blessed Bow", tier: "magick"}, {name: "Magick Robes", tier: "magick"}], category: ["shop", "key"] },
-      { x: 4405, y: 1556, text: "Xe'rad the Magickal Smith", sex: "male", race: "Human", level: 34, shopType: "Magickal Smith", inventory: [{name: "Screaming Scimtar", tier: "magick"}], shopMarkup: 100, category: ["shop"] },
-      { x: 4598, y: 1524, text: "Zeramin the Magick Shop Clerk", sex: "female", race: "Elf", level: 42, shopType: "Magick Shop", shopMarkup: 100, inventory: ["Magick Shoppe Key. Tarant", {name: "Mage's Staff", tier: "magick"}, {name: "Ashen Robes", tier: "magick"}, {name: "Scroll of Teleportation", tier: "magick"}], category: ["shop", "key"] },
+      { x: 4523, y: 1634, text: "Magick Shop Clerk", sex: "male", race: "Elf", level: 38, shopType: "Magick Shop", shopMarkup: 100, inventory: ["Magick Shoppe Key. Tarant", "Blessed Bow", "Magick Robes"], category: ["shop", "key"] },
+      { x: 4405, y: 1556, text: "Xe'rad the Magickal Smith", sex: "male", race: "Human", level: 34, shopType: "Magickal Smith", inventory: ["Screaming Scimtar"], shopMarkup: 100, category: ["shop"] },
+      { x: 4598, y: 1524, text: "Zeramin the Magick Shop Clerk", sex: "female", race: "Elf", level: 42, shopType: "Magick Shop", shopMarkup: 100, inventory: ["Magick Shoppe Key. Tarant", "Mage's Staff", "Ashen Robes", "Scroll of Teleportation"], category: ["shop", "key"] },
       { x: 4570, y: 2347, text: "Halfling Shopkeeper", sex: "male", race: "Halfling", level: 20, shopType: "Black Market", shopMarkup: 100, category: "shop" },
       { x: 5783, y: 1666, text: "Factory Foreman", sex: "male", race: "Human", level: 30, shopType: "Inventor", shopMarkup: 100, category: "shop" },
       { x: 5628, y: 2752, text: "Wise Woman", sex: "female", race: "Gnome", level: 31, shopType: "Nomad", shopMarkup: 150, category: "shop" },
@@ -1203,7 +1193,7 @@ const ArcanumCitiesMapData = [
       { x: 4001, y: 1367, text: "Wendell Wellington", sex: "male", race: "Gnome", level: 10, category: ["quest", "npc"] },
       { x: 4870, y: 1664, text: "H. T. Parnell", sex: "male", race: "Human", level: 19, inventory: ["Key for Stillwater Giant Case"], category: ["quest", "npc", "key"] },
       { x: 4821, y: 1615, text: "Stillwater Giant display case", inventory: ["Stillwater Giant Pelt"], category: ["quest", "chest", "key"] },
-      { x: 4676, y: 1240, text: "Ancient iron chest", inventory: ["Map: The Place of Lost Voices", "3x Ancient iron drums"], category: ["quest", "chest"] },
+      { x: 4676, y: 1240, text: "Ancient iron chest", inventory: ["Map: The Place of Lost Voices", "Ancient Iron Drums", "Ancient Iron Drums", "Ancient Iron Drums"], category: ["quest", "chest"] },
       { x: 4744, y: 1166, text: "Dr. Tristan Fenwick", sex: "male", race: "Gnome", level: 24, category: ["quest", "npc"] },
 
       // Thief underground
@@ -1245,7 +1235,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/TheBedokaanVillage.jpg",
     displayName: "The Bedokaan Village",
     modGroup: "Cities",
-    typemap: "local",
     labels: [
       { x: 2154, y: 599, text: "Kan Kerai", sex: "Male", race: "Bedokaan", level: 45, category: ["quest", "npc"],
         linkedLabels: [
@@ -1266,23 +1255,22 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/TsenAng.png",
     displayName: "T’sen-Ang",
     modGroup: "Cities",
-    typemap: "local",
     defaultView: { x: 2294, y: 1344, zoom: 1 },
     labels: [
       { x: 2347, y: 1314, text: "T'sen-Ang - Entrance", description: "", category: "waypoint", targetMapFilename: "T’sen-Ang Entrance", targetX: 1072, targetY: 511 },
       { x: 2360, y: 710, text: "M'in Gorad Chamber", description: "", category: "waypoint", targetMapFilename: "M'in Gorad Chamber", targetX: 137, targetY: 316 },
 
-      { x: 1468, y: 979, text: "Z'an Al'urin", sex: "female", race: "Dark Elf", level: 29, portrait: "Textures/zanalurin.gif", description: "Z'an is an evil spellcaster (earth, force, and temporal). If you tell her your name, she might agree to join you.", inventory: [{name: "Magick Robes", tier: "magick"}], category: "followers" },
+      { x: 1468, y: 979, text: "Z'an Al'urin", sex: "female", race: "Dark Elf", level: 29, portrait: "Textures/zanalurin.gif", description: "Z'an is an evil spellcaster (earth, force, and temporal). If you tell her your name, she might agree to join you.", inventory: ["Magick Robes"], category: "followers" },
       { x: 1305, y: 472, text: "Maug Maulman", sex: "male", race: "Half-Ogre", level: 31, category: ["quest", "npc"], linkedLabels: ["T'val N'or"],
         linkedLabels: [
           { questName: "", questDescription: "Kill the dark elf mage T'val N'or in order to break the spell holding the half ogre slaves.", target: "T'val N'or" }
         ]
       },
-      { x: 888, y: 627, text: "T'val N'or", sex: "male", race: "Dark Elf", level: 33, inventory: [{name: "Mystic Traveler's Cloak", tier: "magick"}, {name: "Scroll of Sense Invisible/Traps", tier: "magick"}, {name: "Scroll of Call Earth Elemental", tier: "magick"}, {name: "Scroll of Disarm", tier: "magick"}], category: ["quest", "npc"] },
+      { x: 888, y: 627, text: "T'val N'or", sex: "male", race: "Dark Elf", level: 33, inventory: ["Mystic Traveler's Cloak", "Scroll of Sense Invisible/Traps", "Scroll of Call Earth Elemental", "Scroll of Disarm"], category: ["quest", "npc"] },
 
       { x: 2104, y: 790, text: "Gideon Laier", sex: "male", race: "Human", level: 45, description: "After learning the fate of the BMC and leaving M'in Gorad's residence, you'll run into Gideon Laier, the First Blade of the Molochean Hand. He'll recognize who you are. If you know something of the history of the Molochean Hand, you might be able to convince Laier to leave you alone by telling him that he's essentially working for Arronax. However, since Gideon is wearing some nice equipment, you might want to let him attack you so you can get it. None of the dark elves will come to his aid. Oddly, the conversation with Laier will go the same whether you've joined up with the dark elves or not. If you have read Joachim's book and learned about First Assassin Trellian, then you can confront Gideon about the Hand repeating the mistakes of the past (''The Hand hasn't always been this way...'') . He will promise to call off the attacks on you, and if Vollinger is in your party, he will out him as a Hand assassin and offer him to you as a permanent companion, to make up for the Hand's attempts on your life.", category: ["npc", "information"] },
 
-      { x: 818, y: 590, text: "Chest", inventory: [{name: "Blade of Vicious Haste", tier: "hexed"}], category: "chest" },
+      { x: 818, y: 590, text: "Chest", inventory: ["Blade of Vicious Haste"], category: "chest" },
 
     ]
   },
@@ -1290,7 +1278,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/Tulla.jpg",
     displayName: "Tulla",
     modGroup: "Cities",
-    typemap: "local",
     music: "music/Tulla.mp3",
     defaultView: { x: 676, y: 2431, zoom: 1 },
     labels: [
@@ -1313,7 +1300,7 @@ const ArcanumCitiesMapData = [
       },
 
       // NPCs
-      { x: 662, y: 2350, text: "Elf Guard", sex: "Male", race: "Elf", level: 50, inventory:[{name: "Magick Robes", tier: "magick"}], category: "npc" },
+      { x: 662, y: 2350, text: "Elf Guard", sex: "Male", race: "Elf", level: 50, inventory:["Magick Robes"], category: "npc" },
 
       // Information
       { x: 1837, y: 1775, text: "1 - Star", description: "", category: "information" },
@@ -1327,7 +1314,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/Vooriden.png",
     displayName: "Vooriden",
     modGroup: "Cities",
-    typemap: "local",
     music: "music/Villages.mp3", // Good
     defaultView: { x: 1031, y: 496, zoom: 1 },
     labels: [
@@ -1348,7 +1334,6 @@ const ArcanumCitiesMapData = [
       image: "ArcanumBase/WheelClan.png"
     },
     modGroup: "Cities",
-    typemap: "local",
     defaultView: { x: 1111, y: 604 }, // Good
     labels: [
       { x: 1213, y: 487, text: "Reveal the gate", description: "The entrance is hidden until the player stands in a crude square and dons a pair of Wheel Clan Spectacles.", category: "information" },
@@ -1361,7 +1346,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/ALairOfGyrDolours.jpg",
     displayName: "A Lair of Gyr Dolours",
     modGroup: "Quest locations",
-    typemap: "local",
     music: "", // CONFIRMED - No music.
     defaultView: {x: 737, y: 1221},
     labels: [
@@ -1372,7 +1356,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/ArbalahsHouse.png",
     displayName: "Arbalah’s House",
     modGroup: "Quest locations",
-    typemap: "local",
     music: "", // CONFIRMED - No music.
     defaultView: { x: 1031, y: 605, zoom: 1 },
     labels: [
@@ -1385,11 +1368,10 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/AMysteriousLocation.png",
     displayName: "A mysterious location",
     modGroup: "Quest locations",
-    typemap: "local",
     music: "", // CONFIRMED - No music.
     defaultView: { x: 796, y: 1211, zoom: 1 },
     labels: [
-      { x: 1333, y: 838, text: "Hollow Stump", inventory: [{name: "Prowling Master Note 3", image:"Textures/Notes/1120 - Prowling Master 3.png"}], category: ["quest", "chest"],
+      { x: 1333, y: 838, text: "Hollow Stump", inventory: ["Prowling Master Note 3"], category: ["quest", "chest"],
         linkedLabels: [
           { questName: "Find the Master of Prowling", questDescription: "Read the Prowling Master Note 3 and return to the Mushroom Inn.", target: "Fire", part: 4 }
         ]
@@ -1400,7 +1382,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/AncientMaze.jpg",
     displayName: "Ancient Maze",
     modGroup: "Other locations",
-    typemap: "local",
     music: "", // CONFIRMED - No music.
     defaultView: { x: 2662, y: 1730 },
     labels: [
@@ -1417,7 +1398,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/AncientRuins.png",
     displayName: "Ancient Ruins",
     modGroup: "Other locations",
-    typemap: "local",
     defaultView: { x: 655, y: 493, zoom: 1 },
     labels: [
       { x: 835, y: 390, text: "Mystic Chest", description: "", category: ["chest"] },
@@ -1427,7 +1407,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/AncientShipwreck.jpg",
     displayName: "Ancient Shipwreck",
     modGroup: "Other locations",
-    typemap: "local",
     music: "", // CONFIRMED - No music.
     defaultView: {}, // Good
     labels: [
@@ -1438,7 +1417,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/AncientTemple.png",
     displayName: "Ancient Temple",
     modGroup: "Quest locations",
-    typemap: "local",
     defaultView: { x: 1026, y: 849, zoom: 1 }, // Good
     labels: [
       { x: 1107, y: 315, text: "Ancient Temple - Underground", description: "", category: "waypoint", targetMapFilename: "Ancient Temple - Underground", targetX: 1798, targetY: 223},
@@ -1448,7 +1426,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/BoatLandingOnThanatos.jpg",
     displayName: "Boat Landing on Thanatos",
     modGroup: "Quest locations",
-    typemap: "local",
     // music:
     defaultView: { x: 1483, y: 831, zoom: 1 },
     labels: [
@@ -1459,7 +1436,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/BolosAltar.png",
     displayName: "Bolo’s Altar",
     modGroup: "Other locations",
-    typemap: "local",
     // music: "",
     defaultView: { x: 763, y: 587, zoom: 1 },
     // background: "#000000",
@@ -1471,7 +1447,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/CrashSite.jpg",
     displayName: "Crash Site",
     modGroup: "Quest locations",
-    typemap: "local",
     music: "music/Wilderness.mp3", // Good
     defaultView: { x: 2145, y: 1331, zoom: 1 }, // Good
     background: "#000000", // Good
@@ -1498,7 +1473,7 @@ const ArcanumCitiesMapData = [
           { questName: "Heavier than air machines can fly", questDescription: "Find proof for Hieronymous Maxim that his heavier than air machines actually flew.", target: "Hieronymous Maxim", part: 2 }
         ]
       },
-      { x: 2872, y: 1312, text: "Wilhemina Carpenter", sex: "female", race: "Human", level: 1, inventory: [{ name: "Wilhemina's Note to Jared", image: "Textures/Notes/1160 - Wilhemina's note to Jared.png" }], category: ["npc", "quest"], 
+      { x: 2872, y: 1312, text: "Wilhemina Carpenter", sex: "female", race: "Human", level: 1, inventory: ["Wilhemina's Note to Jared"], category: ["npc", "quest"], 
         linkedLabels: [
           { questName: "Jared & Wilhemina", questDescription: "Discover the fate of Wilhemina, girlfriend of Jared the guard.", target: "Jared", part: 2 }
         ]
@@ -1522,7 +1497,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/DarkElfCamp.jpg",
     displayName: "Dark Elf Camp",
     modGroup: "Quest locations",
-    typemap: "local",
     // music:
     // defaultView: {},
     labels: [
@@ -1533,7 +1507,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/DungeonOfTheDragonPool.jpg",
     displayName: "Dungeon of the Dragon Pool",
     modGroup: "Quest locations",
-    typemap: "local",
     music: "", // CONFIRMED - No music.
     defaultView: { x: 1294, y: 1343, zoom: 1 }, // Good
     labels: [
@@ -1544,7 +1517,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/ElvenRuins.png",
     displayName: "Elven Ruins",
     modGroup: "Quest locations",
-    typemap: "local",
     //music: 
     defaultView: { x: 837, y: 611, zoom: 1 },
     labels: [
@@ -1555,7 +1527,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/FalconsAche.png",
     displayName: "Falcon’s Ache",
     modGroup: "Quest locations",
-    typemap: "local",
     //music: 
     defaultView: { x: 1541, y: 645, zoom: 1 },
     //background: "#000000",
@@ -1568,19 +1539,17 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/ForbiddenPit.png",
     displayName: "Forbidden Pit",
     modGroup: "Other locations",
-    typemap: "local",
     music: "", // CONFIRMED - No music.
     defaultView: { x: 1076, y: 399, zoom: 1 },
     //background: "#000000",
     labels: [
-      { x: 867, y: 559, text: "Junk Pile", inventory: [{name: "Ring of Poison Resistance", tier: "magick"}], category: "chest", portrait: "Textures/junkpile.png" },
+      { x: 867, y: 559, text: "Junk Pile", inventory: ["Ring of Poison Resistance"], category: "chest" },
     ]
   },
   {
     filename: "ArcanumBase/GatewayToTheWastes.png",
     displayName: "Gateway to the Wastes",
     modGroup: "Quest locations",
-    typemap: "local",
     //music: 
     defaultView: { x: 438, y: 1357, zoom: 1 },
     labels: [
@@ -1595,20 +1564,18 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/GorgothPass.jpg",
     displayName: "Gorgoth Pass",
     modGroup: "Quest locations",
-    typemap: "local",
     music: "", // CONFIRMED - No music.
     defaultView: { x: 902, y: 3703, zoom: 1 },
     labels: [
       { x: 3747, y: 1558, text: "Kaitan's altar", description: "", category: "altar" },
       { x: 3506, y: 1640, text: "Geode", description: "A geode is on the ground. It's the item needed for the altar.", category: "information" },
-      { x: 2835, y: 2774, text: "Human Noble", sex: "male", race: "Human", level: 1, inventory: [{name:"Consuming Plate Mail", tier: "hexed"}], category: "npc" },
+      { x: 2835, y: 2774, text: "Human Noble", sex: "male", race: "Human", level: 1, inventory: ["Consuming Plate Mail"], category: "npc" },
     ],
   },
   {
     filename: "ArcanumBase/HalfOgreIsland.jpg",
     displayName: "Half Ogre Island",
     modGroup: "Quest locations",
-    typemap: "local",
     //music: 
     defaultView: { x: 877, y: 2074, zoom: 1 },
     labels: [
@@ -1619,7 +1586,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/HardinsPass.jpg",
     displayName: "Hardin’s Pass",
     modGroup: "Quest locations",
-    typemap: "local",
     //music: 
     //defaultView: { x: 2145, y: 1331, zoom: 1 },
     //background: "#000000",
@@ -1629,7 +1595,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/KerlinsAltar.png",
     displayName: "Kerlin’s Altar",
     modGroup: "Other locations",
-    typemap: "local",
     // music: "",
     defaultView: { x: 813, y: 464, zoom: 1 },
     // background: "#000000",
@@ -1639,7 +1604,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/KnaThaEntrance.png",
     displayName: "K’na Tha",
     modGroup: "Quest locations",
-    typemap: "local",
     // music: "",
     defaultView: { x: 511, y: 552, zoom: 1 },
     labels: [
@@ -1650,7 +1614,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/Kree.jpg",
     displayName: "Kree",
     modGroup: "Quest locations",
-    typemap: "local",
     music: "music/Isle_of_Despair.mp3", // Good
     defaultView: { x: 790, y: 2067, zoom: 1 }, // Good
     labels: [
@@ -1667,7 +1630,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/NasrudinRestingPlace.jpg",
     displayName: "Land Bridge",
     modGroup: "Quest locations",
-    typemap: "local",
     defaultView: { x: 1435, y: 735, zoom: 1 },
     labels: [],
   },
@@ -1675,7 +1637,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/LetheWyvernSighting.jpg",
     displayName: "Lethe Wyvern Sighting",
     modGroup: "Quest locations",
-    typemap: "local",
     music: "", // CONFIRMED - No music.
     defaultView: { x: 1506, y: 1622, zoom: 1 }, // Good
     labels: [
@@ -1690,11 +1651,10 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/LiamsWorkshop.jpg",
     displayName: "Liam’s Workshop",
     modGroup: "Quest locations",
-    typemap: "local",
     music: "", // CONFIRMED - No music.
     defaultView: { x: 3850, y: 570, zoom: 1 }, // Good
     labels: [
-      { x: 3299, y: 572, text: "Wood Chest", inventory: ["Magickal trap", {name: "Scroll of disperse magick", tier: "magick"}], category: "chest" },
+      { x: 3299, y: 572, text: "Wood Chest", inventory: ["Magickal trap", "Scroll of Disperse Magick"], category: "chest" },
       { x: 3397, y: 554, text: "Dresser (Liam’s Workshop)", inventory: ["Liam Cameron's Journal"], category: ["quest","chest"],
         linkedLabels: [
           { questName: "Find Liam Cameron", questDescription: "Destroy the portal described in Liam Cameron's journal.", target: "Portal", part: 2 }
@@ -1708,7 +1668,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/MysteriousRuinsOfTheWastes.jpg",
     displayName: "Mysterious ruins of the wastes",
     modGroup: "Quest locations",
-    typemap: "local",
     defaultView: { x: 799, y: 983, zoom: 1 }, // Good
     labels: [
       { x: 1072, y: 811, text: "Items", description: "Sprocket", category: ["quest", "chest"], linkedLabels: ["Weldo Rubin"] },
@@ -1718,7 +1677,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/NasrudinRestingPlace.jpg",
     displayName: "Nasrudin’s Resting Place",
     modGroup: "Quest locations",
-    typemap: "local",
     defaultView: { x: 3144, y: 2443, zoom: 1 }, // Good
     labels: [
       { x: 3210, y: 2374, text: "Nasrudin", sex: "male", race: "Elf", level: 50, category: ["quest", "npc"],
@@ -1734,7 +1692,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/RazorsPointe.png",
     displayName: "Razor’s Pointe",
     modGroup: "Quest locations",
-    typemap: "local",
     defaultView: { x: 1615, y: 594, zoom: 1 },
     labels: [
       { x: 1241, y: 1359, text: "Body of Princess Aria", inventory: ["Amulet - CHECK NAME"], category: ["quest", "chest"], 
@@ -1749,7 +1706,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/RuinsOfSzaboEntrance.png",
     displayName: "Ruins of Szabo",
     modGroup: "Quest locations",
-    typemap: "local",
     //defaultView: { x: 1615, y: 594, zoom: 1 },
     labels: [
       { x: 767, y: 498, text: "Ruins of Szabo - Level 1", category: "waypoint", targetMapFilename: "Ruins of Szabo - Level 1", targetX: 450, targetY: 797},
@@ -1763,7 +1719,6 @@ const ArcanumCitiesMapData = [
         image: "ArcanumBase/SecretEntranceToTheIronClan-Open.png"
     },
     modGroup: "Quest locations",
-    typemap: "local",
     defaultView: { x: 1039, y: 461, zoom: 1 },
     labels: [
       { x: 1296, y: 480, text: "Gate to the Iron Clan", category: "waypoint", targetMapFilename: "Iron Clan - Gate" },
@@ -1774,7 +1729,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/SecretVillage.png",
     displayName: "Secret Village",
     modGroup: "Other locations",
-    typemap: "local",
     //defaultView: { x: 1615, y: 594, zoom: 1 },
     labels: [],
   },  
@@ -1782,7 +1736,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/ShadesBeach.png",
     displayName: "Shades Beach",
     modGroup: "Quest locations",
-    typemap: "local",
     defaultView: { x: 1617, y: 1238, zoom: 1 },
     labels: [],
   },
@@ -1790,7 +1743,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/SimonFahrkusShack.png",
     displayName: "Simon Fahrkus’ Shack",
     modGroup: "Quest locations",
-    typemap: "local",
     music: "", // CONFIRMED - No music.
     defaultView: { x: 705, y: 555, zoom: 1 },
     labels: [
@@ -1805,7 +1757,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/SmallCamp.png",
     displayName: "Small Camp",
     modGroup: "Other locations",
-    typemap: "local",
     music: "", // CONFIRMED - No music.
     defaultView: { x: 816, y: 711, zoom: 1 },
     // background: "#000000",
@@ -1817,7 +1768,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/SmallPond.jpg",
     displayName: "Small Pond",
     modGroup: "Other locations",
-    typemap: "local",
     // music: "",
     // defaultView: { x: 816, y: 711, zoom: 1 },
     // background: "#000000",
@@ -1829,7 +1779,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/StonecutterClan.png",
     displayName: "Stonecutter Clan",
     modGroup: "Quest locations",
-    typemap: "local",
     // music: "",
     // defaultView: { x: 816, y: 711, zoom: 1 },
     // background: "#000000",
@@ -1841,18 +1790,16 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/StrangeCeremony.png",
     displayName: "Strange Ceremony",
     modGroup: "Other locations",
-    typemap: "local",
     music: "", // CONFIRMED - No music.
     defaultView: { x: 1137, y: 713, zoom: 1 }, // Good
     labels: [
-      { x: 697, y: 563, text: "Kite Berserker", inventory: [{name: "Shadow Hand Dagger", tier: "hexed"}], category: "information" },
+      { x: 697, y: 563, text: "Kite Berserker", inventory: ["Shadow Hand Dagger"], category: "information" },
     ]
   },
   {
     filename: "ArcanumBase/StrangePond.jpg",
     displayName: "Strange Pond",
     modGroup: "Other locations",
-    typemap: "local",
     //music: No music here.
     defaultView: { x: 2532, y: 562, zoom: 1 },
     labels: [
@@ -1863,7 +1810,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/StringyPetesCove.jpg",
     displayName: "Stringy Pete’s Cove",
     modGroup: "Quest locations",
-    typemap: "local",
     music: "", // CONFIRMED - No music.
     defaultView: { x: 1957, y: 242, zoom: 1 },
     labels: [
@@ -1882,7 +1828,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/StringyPetesTreasure.png",
     displayName: "Stringy Pete’s Treasure",
     modGroup: "Quest locations",
-    typemap: "local",
     music: "", // CONFIRMED - No music.
     defaultView: { x: 1193, y: 1446, zoom: 1 }, // Good
     labels: [
@@ -1894,7 +1839,6 @@ const ArcanumCitiesMapData = [
     displayName: "The Bangellian Deeps",
     modGroup: "Quest locations",
     // music: no music here
-    typemap: "local",
     defaultView: { x: 977, y: 975, zoom: 1 }, // Good
     labels: [
       { x: 1111, y: 896, text: "The Bangellian Deeps - Inside", description: "", category: "waypoint", targetMapFilename: "The Bangellian Deeps - Inside", targetX: 1227, targetY: 1340 },
@@ -1904,7 +1848,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/TheBlackMountainMines.png",
     displayName: "The Black Mountain Mines",
     modGroup: "Quest locations",
-    typemap: "local",
     background: "#000000",
     defaultView: { x: 1264, y: 925, zoom: 1 },
     labels: [],
@@ -1913,7 +1856,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/TheBog.jpg",
     displayName: "The Bog",
     modGroup: "Other locations",
-    typemap: "local",
     //music: No music here.
     defaultView: { x: 1396, y: 1442, zoom: 1 },
     labels: [
@@ -1924,7 +1866,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/TheBrokenCathedral.png",
     displayName: "The Broken Cathedral",
     modGroup: "Other locations",
-    typemap: "local",
     music: "", // CONFIRMED - No music.
     defaultView: { x: 868, y: 598, zoom: 1 },
     labels: [
@@ -1935,7 +1876,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/TheCastleOfSnelNfa.png",
     displayName: "The Castle of S’nel N’fa",
     modGroup: "Quest locations",
-    typemap: "local",
     // music: No music here.
     // defaultView: { x: 1396, y: 1442, zoom: 1 },
     labels: [],
@@ -1944,7 +1884,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/TheColdPlace.jpg",
     displayName: "The Cold Place",
     modGroup: "Other locations",
-    typemap: "local",
     defaultView: { x: 911, y: 1701, zoom: 1 },
     labels: [],
   },
@@ -1952,7 +1891,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/TheHomeOfMaximillian.png",
     displayName: "The Home of Maximillian",
     modGroup: "Quest locations",
-    typemap: "local",
     // music: No music here.
     // defaultView: { x: 1396, y: 1442, zoom: 1 },
     labels: [
@@ -1969,7 +1907,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/TheLairofBellerogrim.png",
     displayName: "The Lair of Bellerogrim",
     modGroup: "Quest locations",
-    typemap: "local",
     background: "#000000",
     defaultView: { x: 1051, y: 936, zoom: 1 },
     labels: [
@@ -1981,7 +1918,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/TheLairOfTheBogaroth.png",
     displayName: "The Lair of the Bogaroth",
     modGroup: "Quest locations",
-    typemap: "local",
     defaultView: { x: 880, y: 646, zoom: 1 },
     labels: [
         { x: 830, y: 354, text: "Bogaroth", description: "", category: "quest", linkedLabels: ["Nasrudin"]},
@@ -1992,7 +1928,6 @@ const ArcanumCitiesMapData = [
     displayName: "The Old Lagoon",
     modGroup: "Other locations",
     // music: no music here
-    typemap: "local",
     defaultView: { x: 1917, y: 1048, zoom: 1 },
     labels: [],
   },
@@ -2001,7 +1936,6 @@ const ArcanumCitiesMapData = [
     displayName: "The Pit of Fires",
     modGroup: "Quest locations",
     music: "music/Villages.mp3", // Good
-    typemap: "local",
     defaultView: { x: 1098, y: 606, zoom: 1 },
     labels: [],
   },
@@ -2009,7 +1943,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/ThePlaceOfLostVoices.jpg",
     displayName: "The Place of Lost Voices",
     modGroup: "Quest locations",
-    typemap: "local",
     background: "#000000",
     defaultView: { x: 4793, y: 734, zoom: 1 }, // Good
     labels: [],
@@ -2018,7 +1951,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/ThePoachersCamp.png",
     displayName: "The Poachers Camp",
     modGroup: "Quest locations",
-    typemap: "local",
     // background: "#000000",
     // defaultView: { x: 7612, y: 2443, zoom: 1 },
     labels: [],
@@ -2027,11 +1959,10 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/TheRubyGlade.png",
     displayName: "The Ruby Glade",
     modGroup: "Quest locations",
-    typemap: "local",
     defaultView: { x: 2832, y: 2096, zoom: 1 }, // Good
     labels: [
       { x: 1534, y: 1360, text: "Altar (Ruby Glade)", inventory: ["Great Ruby of K'alru"], category: ["quest", "chest"], linkedLabels: ["Gildor Nightwalk"] },
-      { x: 1501, y: 1408, text: "Half Elf Noble", sex: "female", race: "Half-Elf", level: 1, inventory: ["Heavy Barbarian's Blade", {name: "Arcane Gauntlets", tier: "magick"}, {name: "Hero's Weakness Barbarian Armor", tier: "hexed"}], category: "npc" },
+      { x: 1501, y: 1408, text: "Half Elf Noble", sex: "female", race: "Half-Elf", level: 1, inventory: ["Heavy Barbarian's Blade", "Arcane Gauntlets", "Hero's Weakness Barbarian Armor"], category: "npc" },
 
       { x: 1740, y: 1555, text: "Warning Stone", description: "If you walk past the stones without adequate stealth (either invisible or having 5 full ranks (20/20) in Prowling and not wearing any -NP gear), then six greater demons will appear and attack you.", category: ["information"] },
       { x: 1264, y: 1487, text: "Warning Stone", description: "If you walk past the stones without adequate stealth (either invisible or having 5 full ranks (20/20) in Prowling and not wearing any -NP gear), then six greater demons will appear and attack you.", category: ["information"] },
@@ -2046,7 +1977,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/TheWilliamsonHomestead.png",
     displayName: "The Williamson Homestead",
     modGroup: "Quest locations",
-    typemap: "local",
     music: "", // CONFIRMED - No music.
     defaultView: { x: 1306, y: 323, zoom: 1 }, // Good
     labels: [
@@ -2058,7 +1988,6 @@ const ArcanumCitiesMapData = [
     displayName: "The Women’s Camp",
     modGroup: "Quest locations",
     // music: no music here
-    typemap: "local",
     // defaultView: { x: 1306, y: 323, zoom: 1 },
     labels: [],
   },
@@ -2067,7 +1996,6 @@ const ArcanumCitiesMapData = [
     displayName: "Thieves Cave",
     modGroup: "Quest locations",
     // music: no music here
-    typemap: "local",
     // defaultView: { x: 1306, y: 323, zoom: 1 },
     labels: [],
   },
@@ -2075,7 +2003,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/TorgsAltar.png",
     displayName: "Torg’s Altar",
     modGroup: "Other locations",
-    typemap: "local",
     // music: "",
     defaultView: { x: 763, y: 587, zoom: 1 },
     labels: [
@@ -2086,11 +2013,10 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/TorinQuarry.png",
     displayName: "Torin Quarry",
     modGroup: "Quest locations",
-    typemap: "local",
     // music: "", // CONFIRMED - No music.
     defaultView: { x: 1470, y: 762, zoom: 1 },
     labels: [
-      { x: 820, y: 479, text: "Elf Villager", sex: "male", race: "Elf", level: 1, inventory: [{name: "Magick Bow", tier: "magick"}, {name: "Helmet of Yzar's Cost", tier: "hexed"}, {name: "Dagger of Speed", tier: "magick"}], category: "npc" },
+      { x: 820, y: 479, text: "Elf Villager", sex: "male", race: "Elf", level: 1, inventory: ["Magick Bow", "Helmet of Yzar's Cost", "Dagger of Speed"], category: "npc" },
       { x: 810, y: 380, text: "Stone", category: "quest",
         linkedLabels: [
           { questName: "A new stone for Halcyon's Altar", questDescription: "Return with the stone to Edwin Wallows.", target: "Edwin Wallows", part: 2 }
@@ -2102,7 +2028,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/UnchartedCave.png",
     displayName: "Uncharted Cave",
     modGroup: "Other locations",
-    typemap: "local",
     music: "", // CONFIRMED - No music.
     defaultView: { x: 999, y: 487, zoom: 1 }, // Good
     labels: [
@@ -2113,7 +2038,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/VillageOfTheAshlagTribe.png",
     displayName: "Village of the Ashlag Tribe",
     modGroup: "Other locations",
-    typemap: "local",
     defaultView: { x: 868, y: 598, zoom: 1 },
     labels: [
       { x: 1232, y: 225, text: "Arcane Chest", description: "", category: "chest" },
@@ -2124,7 +2048,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/VendigrothRuinssmall.jpg",
     displayName: "Vendigroth Ruins",
     modGroup: "Quest locations",
-    typemap: "local",
     defaultView: { x: 868, y: 598, zoom: 1 },
     labels: [],
   },
@@ -2132,7 +2055,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/VoidMainIsland.png",
     displayName: "Void",
     modGroup: "Quest locations",
-    typemap: "local",
     background: "#100B07",
     // defaultView: { x: 868, y: 598, zoom: 1 },
     labels: [],
@@ -2141,7 +2063,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/VollingersMeetingPlace.png",
     displayName: "Vollinger’s Meeting Place",
     modGroup: "Quest locations",
-    typemap: "local",
     // music: "", No music here it seems
     defaultView: { x: 852, y: 617, zoom: 1 },
     labels: [
@@ -2152,7 +2073,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/WolfCave.png",
     displayName: "Wolf Cave",
     modGroup: "Other locations",
-    typemap: "local",
     music: "", // CONFIRMED - No music.
     defaultView: { x: 502, y: 828, zoom: 1 }, // Good
     labels: [
@@ -2166,7 +2086,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/AncientTempleLevel1.png",
     parentFilename: "ArcanumBase/AncientTemple.png",
     displayName: "Ancient Temple - Underground",
-    typemap: "local",
     defaultView: { x: 1798, y: 223, zoom: 1 },
     background: "#000000",
     labels: [
@@ -2182,7 +2101,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/Ashbury-Crematorium1.png",
     parentFilename: "ArcanumBase/Ashburysmall.jpg",
     displayName: "Ashbury Crematorium - Level 1",
-    typemap: "local",
     defaultView: { x: 623, y: 412, zoom: 1 },
     background: "#000000",
     labels: [
@@ -2194,7 +2112,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/Ashbury-Crematorium2.png",
     parentFilename: "ArcanumBase/Ashburysmall.jpg",
     displayName: "Ashbury Crematorium - Level 2",
-    typemap: "local",
     defaultView: { x: 1339, y: 1240, zoom: 1 },
     background: "#000000",
     labels: [
@@ -2206,7 +2123,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/Ashbury-Crematorium3.png",
     parentFilename: "ArcanumBase/Ashburysmall.jpg",
     displayName: "Ashbury Crematorium - Level 3",
-    typemap: "local",
     defaultView: { x: 338, y: 617, zoom: 1 },
     background: "#000000",
     labels: [
@@ -2223,7 +2139,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/AshburyHauntedCastleGroundfloor.png",
     parentFilename: "ArcanumBase/Ashburysmall.jpg",
     displayName: "Haunted Castle - Ground Floor",
-    typemap: "local",
     defaultView: { x: 761, y: 1163, zoom: 1 },
     background: "#000000",
     labels: [],
@@ -2231,7 +2146,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/AshburyHauntedCastleBasement.png",
     displayName: "Haunted Castle - Basement",
-    typemap: "local",
     //defaultView: { x: 761, y: 1163, zoom: 1 },
     parentFilename: "ArcanumBase/Ashburysmall.jpg",
     background: "#000000",
@@ -2240,7 +2154,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/AshburyHauntedCastleUpstairs.png",
     displayName: "Haunted Castle - Upstairs",
-    typemap: "local",
     //defaultView: { x: 761, y: 1163, zoom: 1 },
     parentFilename: "ArcanumBase/Ashburysmall.jpg",
     background: "#000000",
@@ -2249,7 +2162,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/Ashbury-ScienticiansUnderground.png",
     displayName: "Scienticians Underground",
-    typemap: "local",
     defaultView: { x: 655, y: 408, zoom: 1 },
     parentFilename: "ArcanumBase/Ashburysmall.jpg",
     background: "#000000",
@@ -2266,7 +2178,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/Caladon-CastleDownstairs.jpg",
     displayName: "Caladon Castle - Downstairs",
-    typemap: "local",
     background: "#000000",
     defaultView: {},
     parentFilename: "ArcanumBase/Caladonsmall.jpg",
@@ -2274,7 +2185,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/Caladon-CastleMainFloor.jpg",
     displayName: "Caladon Castle - Main Floor",
-    typemap: "local",
     // music: ?
     background: "#000000",
     // defaultView: {},
@@ -2290,7 +2200,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/Caladon-CastleUpstairs.jpg",
     displayName: "Caladon Castle - Upstairs",
-    typemap: "local",
     // music: ?
     background: "#000000",
     // defaultView: {},
@@ -2306,7 +2215,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/Caladon-CastleVents.jpg",
     displayName: "Caladon Castle - Vents",
-    typemap: "local",
     // music: ?
     background: "#000000",
     // defaultView: {},
@@ -2316,7 +2224,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/Caladon-PanariiTempleCatacombs.png",
     displayName: "Caladon Panarii Temple - Catacombs",
-    typemap: "local",
     // music: ?
     background: "#000000",
     // defaultView: {},
@@ -2328,7 +2235,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/Caladon-PanariiTemple.png",
     displayName: "Caladon Panarii Temple - Level 1",
-    typemap: "local",
     // music: ?
     background: "#000000", // Good
     defaultView: { x: 206, y: 964 }, // Good
@@ -2350,7 +2256,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/Caladon-PanariiTempleLevel2.png",
     displayName: "Caladon Panarii Temple - Level 2",
-    typemap: "local",
     // music: ?
     background: "#000000", // Good
     defaultView: { x: 99, y: 534 }, // Good
@@ -2368,7 +2273,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/Caladon-PanariiTempleLevel3.png",
     displayName: "Caladon Panarii Temple - Level 3",
-    typemap: "local",
     // music: ?
     background: "#000000", // Good
     defaultView: { x: 174, y: 362 }, // Good
@@ -2386,7 +2290,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/Caladon-Sewers.jpg",
     displayName: "Caladon - Sewers",
-    typemap: "local",
     // music: ?
     background: "#000000",
     // defaultView: {},
@@ -2418,7 +2321,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/Caladon-GuardhouseBasement.png",
     displayName: "Guardhouse Basement",
-    typemap: "local",
     // music: ?
     background: "#000000",
     defaultView: { x: 1081, y: 645 }, // Good
@@ -2430,7 +2332,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/Caladon-HighSecurityPrison.png",
     displayName: "High Security Prison",
-    typemap: "local",
     // music: ?
     background: "#000000",
     defaultView: { x: 2034, y: 957 }, // Good
@@ -2447,7 +2348,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/Caladon-MafiaUnderground.png",
     displayName: "Mafia Underground",
-    typemap: "local",
     // music: ?
     background: "#000000",
     defaultView: { x: 429, y: 598 }, // Good
@@ -2459,7 +2359,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/Caladon-SandersBasement.png",
     displayName: "Sanders Basement",
-    typemap: "local",
     // music: ?
     background: "#000000",
     defaultView: { x: 833, y: 349 },
@@ -2471,7 +2370,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/CaladonTrapDisarmDungeon.png",
     displayName: "Trap Disarm Dungeon",
-    typemap: "local",
     // music: ?
     background: "#000000",
     defaultView: { x: 2840, y: 1431 },
@@ -2482,7 +2380,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/CrashSite-Cave.png",
     parentFilename: "ArcanumBase/CrashSite.jpg",
     displayName: "Crash Site - Cave",
-    typemap: "local",
     defaultView: { x: 266, y: 583, zoom: 1 }, // Good
     music: "music/Mines.mp3", // Good
     background: "#000000", // Good
@@ -2505,7 +2402,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/DernholmCastle.png",
     displayName: "Dernholm Castle",
-    typemap: "local",
     defaultView: { x: 704, y: 956 }, // Good
     music: "", // CONFIRMED - No music.
     background: "#000000", // Good
@@ -2528,7 +2424,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/DernholmPits.png",
     displayName: "Dernholm Pits",
-    typemap: "local",
     defaultView: { x: 341, y: 1317 }, // Good
     // music: ?
     background: "#000000",
@@ -2541,7 +2436,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/DungeonOfTheDragonPoolLevel1.png",
     displayName: "Dungeon of the Dragon Pool - Level 1",
-    typemap: "local",
     defaultView: { x: 164, y: 836 }, // Good
     background: "#000000",
     music: "", // CONFIRMED - No music.
@@ -2562,7 +2456,6 @@ const ArcanumCitiesMapData = [
     {
     filename: "ArcanumBase/DungeonOfTheDragonPoolLevel2.png",
     displayName: "Dungeon of the Dragon Pool - Level 2",
-    typemap: "local",
     defaultView: { x: 807, y: 279 }, // Good
     background: "#000000", // Good
     parentFilename: "ArcanumBase/DungeonOfTheDragonPool.jpg",
@@ -2574,7 +2467,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/ElvenRuinsUnderground.png",
     displayName: "Elven Ruins - Underground",
-    typemap: "local",
     // music: 
     defaultView: { x: 1870, y: 382, zoom: 1 },
     parentFilename: "ArcanumBase/ElvenRuins.png",
@@ -2591,7 +2483,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/KnaThaLevel1.jpg",
     displayName: "K’na Tha - Level 1",
-    typemap: "local",
     //defaultView: { x: ?, y: ?},
     parentFilename: "ArcanumBase/KnaThaEntrance.png",
     //background: "#000000",
@@ -2602,7 +2493,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/RoseboroughInn.png",
     displayName: "Roseborough Inn",
-    typemap: "local",
     background: "#000000",
     defaultView: { x: 562, y: 858 }, // Good
     parentFilename: "ArcanumBase/Roseborough.jpg",
@@ -2616,7 +2506,7 @@ const ArcanumCitiesMapData = [
           { questName: "Photograph the Lethe Wyvern", questDescription: "Trevor Lynwood, a journalist for the Tarantian, needs you to get a photograph of the elusive Lethe Wyvern.", target: "Lethe Wyvern", part: 1 },
         ] 
       },
-      { x: 891, y: 807, text: "Jason C. Guy", sex: "male", race: "Half-Elf", level: 22, description: "Specialist on the Ring of Brodgar", inventory: [{name:"Scroll of Major Healing", tier: "magick"}, {name:"Scroll of Call Air Elemental", tier: "magick"}, "Roseborough Inn Room Key"], category: ["quest", "npc", "key"],
+      { x: 891, y: 807, text: "Jason C. Guy", sex: "male", race: "Half-Elf", level: 22, description: "Specialist on the Ring of Brodgar", inventory: ["Scroll of Major Healing", "Scroll of Call Air Elemental", "Roseborough Inn Room Key"], category: ["quest", "npc", "key"],
         linkedLabels: [  
           { questName: "Technology and Magick", questDescription: "Help Jason C. Guy to prove that technology and magic gain power in cycles.", target: "" },
         ] 
@@ -2628,7 +2518,7 @@ const ArcanumCitiesMapData = [
       { x: 317, y: 505, text: "Elf Villager", sex: "male", race: "Elf", level: 26, inventory:["Elven Hunter Bow", "Unidentified Boots"], category: "npc" },
       { x: 252, y: 477, text: "Bartender", sex: "male", race: "Human", level: 28, inventory: ["Unidentified ring", "Unidentified staff"], category: "npc" },
       { x: 273, y: 585, text: "Human Villager", sex: "female", race: "Human", level: 17, inventory: ["Medallion of Beauty"], category: "npc" },
-      { x: 1439, y: 264, text: "Innkeeper", sex: "male", race: "Half-Elf", level: 29, inventory: ["Ring of protection", "Unidentified staff"], category: "npc" },
+      { x: 1439, y: 264, text: "Innkeeper", sex: "male", race: "Half-Elf", level: 29, inventory: ["Ring of Protection", "Unidentified staff"], category: "npc" },
 
       // Chests
       { x: 1417, y: 305, text: "Chest", inventory: ["Medallion of Beauty"], category: "chest" },
@@ -2639,7 +2529,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/RuinsOfSzaboLevel1.png",
     displayName: "Ruins of Szabo - Level 1",
-    typemap: "local",
     background: "#000000",
     //defaultView: {},
     parentFilename: "ArcanumBase/RuinsOfSzaboEntrance.png",
@@ -2650,7 +2539,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/RuinsOfSzaboLevel2.png",
     displayName: "Ruins of Szabo - Level 2",
-    typemap: "local",
     background: "#000000",
     //defaultView: {},
     parentFilename: "ArcanumBase/RuinsOfSzaboEntrance.png",
@@ -2659,7 +2547,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/SecretEntranceToTheIronClanGate.jpg",
     displayName: "Iron Clan - Gate",
-    typemap: "local",
     background: "#000000",
     //defaultView: {},
     parentFilename: "ArcanumBase/SecretEntranceToTheIronClan.png",
@@ -2668,7 +2555,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/SecretEntranceToTheIronClanGateThroneHall.jpg",
     displayName: "Iron Clan - Throne Hall",
-    typemap: "local",
     background: "#000000",
     //defaultView: {},
     parentFilename: "ArcanumBase/SecretEntranceToTheIronClan.png",
@@ -2677,7 +2563,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/ShroudedHillsTemple.png",
     displayName: "Panarii Temple",
-    typemap: "local",
     music: "music/Mines.mp3", // Good
     background: "#000000",
     defaultView: { x: 545, y: 599, zoom: 1 }, // Good
@@ -2695,7 +2580,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/ShroudedHillsBessieToone.png",
     displayName: "Bessie Toone Mine",
-    typemap: "local",
     background: "#000000",
     defaultView: { x: 1697, y: 805, zoom: 1 }, // Good
     parentFilename: "ArcanumBase/ShroudedHills.jpg",
@@ -2713,14 +2597,13 @@ const ArcanumCitiesMapData = [
         ]
       },
       { x: 746, y: 452, text: "Magick Chest", category: "chest" },
-      { x: 811, y: 488, text: "Mine Cart", inventory: [{name:"Hexed Dagger", tier:"hexed"}], category: "chest" },
+      { x: 811, y: 488, text: "Mine Cart", inventory: ["Hexed Dagger"], category: "chest" },
     ]
   },
 
   {
     filename: "ArcanumBase/StillwaterGiantsCave.png",
     displayName: "Stillwater Giants Cave",
-    typemap: "local",
     background: "#000000",
     parentFilename: "ArcanumBase/Stillwater.jpg",
     labels: [
@@ -2731,7 +2614,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/StillwaterDrogsCave.png",
     displayName: "Drogs Cave",
-    typemap: "local",
     background: "#000000",
     parentFilename: "ArcanumBase/Stillwater.jpg",
     labels: [
@@ -2750,7 +2632,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/StonecutterClanLevel1.png",
     displayName: "Stonecutter Clan - Level 1",
-    typemap: "local",
     parentFilename: "ArcanumBase/StonecutterClan.png",
     background: "#000000",
     labels: [
@@ -2761,7 +2642,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/StonecutterClanLevel2.png",
     displayName: "Stonecutter Clan - Level 2",
-    typemap: "local",
     parentFilename: "ArcanumBase/StonecutterClan.png",
     background: "#000000",
     labels: [
@@ -2771,7 +2651,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/Tarant-BatesTunnel.png",
     displayName: "Bates Tunnel",
-    typemap: "local",
     parentFilename: "ArcanumBase/Tarant.png",
     background: "#000000",
     labels: [
@@ -2782,7 +2661,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/TarantBatesMansionLevel1.png",
     displayName: "Bates Mansion Level 1",
-    typemap: "local",
     parentFilename: "ArcanumBase/Tarant.png",
     background: "#000000",
     defaultView: { x: 415, y: 593 },
@@ -2794,16 +2672,15 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/TarantBatesMansionLevel2.png",
     displayName: "Bates Mansion Level 2",
-    typemap: "local",
     parentFilename: "ArcanumBase/Tarant.png",
     background: "#000000",
     labels: [
+      { x: 639, y: 523, text: "Bates Mansion - Level 1", category: "waypoint", targetMapFilename: "Bates Mansion Level 1" },
       { x: 560, y: 327, text: "Chukka", sex: "Male", level: 16, race: "Ogre", portrait: "Textures/chukka.gif", description: "Although Chukka can only join just prior to exploring the Isle of Despair, he can rejoin after waiting or being disbanded anytime after that.", category: "followers" },
       { x: 541, y: 363, text: "Gilbert Bates", sex: "Male", race: "Human", level: 20, category: ["quest", "npc"],
         linkedLabels: [
           { questName: "", questDescription: "Search the mines of the Black Mountain Clan for clues to their whereabouts, and report back to Bates.", target: "Gudmund Ore Bender" },
           { questName: "Investigate the Isle of Despair", questDescription: "Look for the Black Mountain Clan on the Isle of Despair.", target: "Captain Edward Teach (Ashbury)", part: 2},
-          { x: 639, y: 523, text: "Bates Mansion - Level 1", category: "waypoint", targetMapFilename: "Bates Mansion Level 1" }
         ]
       },
       { x: 797, y: 145, text: "Chest (Gilbert Bates)", inventory: ["Journal of Gilbert Bates"], category: ["quest", "chest"],
@@ -2817,7 +2694,6 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/TarantCityHall.png",
     displayName: "Hall of Records",
     modGroup: "Cities",
-    typemap: "local",
     parentFilename: "ArcanumBase/Tarant.png",
     background: "#000000",
     labels: [
@@ -2833,7 +2709,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/Tarant_02.jpg",
     displayName: "Tarant New Sewers",
-    typemap: "local",
     music: "music/Tarant_Sewers.mp3",
     parentFilename: "ArcanumBase/Tarant.png",
     background: "#000000",
@@ -2854,7 +2729,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/Tarant_03.jpg",
     displayName: "Tarant Old Sewers",
-    typemap: "local",
     background: "#000000",
     music: "music/Tarant_Sewers.mp3",
     parentFilename: "ArcanumBase/Tarant.png",
@@ -2868,7 +2742,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/TarantPSchuylersLevel1.png",
     displayName: "P. Schuyler & Sons - Level 1",
-    typemap: "local",
     parentFilename: "ArcanumBase/Tarant.png",
     background: "#000000",
     labels: []
@@ -2876,7 +2749,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/TarantPSchuylersLevel2.png",
     displayName: "P. Schuyler & Sons - Level 2",
-    typemap: "local",
     parentFilename: "ArcanumBase/Tarant.png",
     background: "#000000",
     labels: []
@@ -2884,7 +2756,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/TarantPSchuylersLevel3.png",
     displayName: "P. Schuyler & Sons - Level 3",
-    typemap: "local",
     parentFilename: "ArcanumBase/Tarant.png",
     background: "#000000",
     labels: [
@@ -2901,7 +2772,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/TheBangellianDeepsInside.png",
     displayName: "The Bangellian Deeps - Inside",
-    typemap: "local",
     background: "#000000",
     defaultView: { x: 1227, y: 1340, zoom: 1 }, // Good
     parentFilename: "ArcanumBase/TheBangellianDeepsOutside.png",
@@ -2916,7 +2786,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/TheBlackMountainMinesEntrance.jpg",
     displayName: "The Black Mountain Mines - Entrance",
-    typemap: "local",
     background: "#000000",
     //defaultView: {},
     parentFilename: "ArcanumBase/TheBlackMountainMines.png",
@@ -2925,7 +2794,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/TheBlackMountainMinesLevel1.jpg",
     displayName: "The Black Mountain Mines - Level 1",
-    typemap: "local",
     background: "#000000",
     defaultView: { x: 108, y: 614, zoom: 1 },
     parentFilename: "ArcanumBase/TheBlackMountainMines.png",
@@ -2934,7 +2802,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/TheBlackMountainMinesLevel2.jpg",
     displayName: "The Black Mountain Mines - Level 2",
-    typemap: "local",
     background: "#000000",
     defaultView: { x: 773, y: 405, zoom: 1 },
     parentFilename: "ArcanumBase/TheBlackMountainMines.png",
@@ -2943,7 +2810,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/TheBlackMountainMinesLevel3.jpg",
     displayName: "The Black Mountain Mines - Level 3",
-    typemap: "local",
     background: "#000000",
     defaultView: { x: 1254, y: 941, zoom: 1 },
     parentFilename: "ArcanumBase/TheBlackMountainMines.png",
@@ -2959,7 +2825,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/TheCastleOfSnelNfaInside.png",
     displayName: "The Castle of S’nel N’fa - Inside",
-    typemap: "local",
     background: "#000000",
     //defaultView: {},
     parentFilename: "ArcanumBase/TheCastleOfSnelNfa.png",
@@ -2968,14 +2833,12 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/TheLairofBellerogrimEntrance.jpg",
     displayName: "The Lair of Bellerogrim - Entrance",
-    typemap: "local",
     parentFilename: "ArcanumBase/TheLairofBellerogrim.png",
     labels: []
   },  
   {
     filename: "ArcanumBase/TheLairofBellerogrimUnderground.png",
     displayName: "The Lair of Bellerogrim - Underground",
-    typemap: "local",
     background: "#000000",
     parentFilename: "ArcanumBase/TheLairofBellerogrim.png",
     labels: []
@@ -2983,7 +2846,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/ThePitOfFiresInside.png",
     displayName: "The Pit of Fires - Inside",
-    typemap: "local",
     background: "#000000",
     parentFilename: "ArcanumBase/ThePitOfFires.png",
     labels: []
@@ -2991,7 +2853,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/ThePlaceOfLostVoicesEntrance.png",
     displayName: "The Place of Lost Voices - Entrance",
-    typemap: "local",
     background: "#000000",
     parentFilename: "ArcanumBase/ThePlaceOfLostVoices.jpg",
     labels: []
@@ -2999,7 +2860,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/ThievesCaveInside.png",
     displayName: "Thieves Cave - Inside",
-    typemap: "local",
     background: "#000000",
     parentFilename: "ArcanumBase/ThievesCaveOutside.png",
     labels: [
@@ -3013,7 +2873,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/TsenAngEntrance.png",
     displayName: "T’sen-Ang Entrance",
-    typemap: "local",
     parentFilename: "ArcanumBase/TsenAng.png",
     labels: [
       // Waypoints
@@ -3030,7 +2889,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/TsenAngMinGoradChamber.png",
     displayName: "M'in Gorad Chamber",
-    typemap: "local",
     background: "#000000",
     parentFilename: "ArcanumBase/TsenAng.png",
     labels: [
@@ -3038,7 +2896,7 @@ const ArcanumCitiesMapData = [
       { x: 137, y: 316, text: "T’sen-Ang", description: "", category: "waypoint", targetMapFilename: "T’sen-Ang", targetX: 2360, targetY: 710 },
 
       // NPCs
-      { x: 280, y: 278, text: "M’in Gorad", sex: "female", race: "Dark Elf", level: 40, inventory: ["Note of K'an Hua to M'in Gorad"], category: ["quest", "npc"],
+      { x: 280, y: 278, text: "M’in Gorad", sex: "female", race: "Dark Elf", level: 40, inventory: ["Note to M'in Gorad from K'an Hua"], category: ["quest", "npc"],
         linkedLabels: [
           { questName: "Main quest - Evil road", questDescription: "Kill all of the inhabitants of Stillwater."},
           { questName: "Main quest - Evil road", questDescription: "I am meant to travel to Caladon and speak with the high priest of the Panarii, K'an Hua. He is to be found in his office inside the Panarii temple there.", target: "K'an Hua" },
@@ -3050,7 +2908,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/TullaInside.png",
     displayName: "Tulla - Main Floor",
-    typemap: "local",
     background: "#000000",
     music: "music/Tulla.mp3",
     defaultView: { x: 836, y: 1410, zoom: 1 },
@@ -3061,8 +2918,8 @@ const ArcanumCitiesMapData = [
       { x: 2192, y: 604, text: "Simeons Hallway", category: "waypoint", targetMapFilename: "Simeons Hallway" },
 
       // NPCs
-      { x: 742, y: 995, text: "Liam Raymond, Meta Master", sex: "male", race: "Human", level: 50, inventory: ["Scroll of Disperce Magick", "Scroll of Bonds of Magic", "Arcane Sword", "Arcane Robes", "Mastery Medallion of Meta"], category: "npc" },
-      { x: 413, y: 807, text: "S'Btin'ka, Morph Master", sex: "female", race: "Half-Elf", level: 50, inventory: ["Arcane robes", "Arcane Bow", "Scroll of Polymorph", "Scroll of Flesh to Stone", "Lycanthrope Restorative"], category: ["quest", "npc"], 
+      { x: 742, y: 995, text: "Liam Raymond, Meta Master", sex: "male", race: "Human", level: 50, inventory: ["Scroll of Disperse Magick", "Scroll of Bonds of Magic", "Arcane Sword", "Arcane Robes", "Mastery Medallion of Meta"], category: "npc" },
+      { x: 413, y: 807, text: "S'Btin'ka, Morph Master", sex: "female", race: "Half-Elf", level: 50, inventory: ["Arcane Robes", "Arcane Bow", "Scroll of Polymorph", "Scroll of Flesh to Stone", "Lycanthrope Restorative"], category: ["quest", "npc"], 
         linkedLabels: [
           { questName: "Discover what is killing David's rabbits", questDescription: "Buy a Lycanthrope Restorative (or steal it) from S'Btin'ka and return to David Wit.", target: "David Wit", part: 4 } 
         ]
@@ -3083,7 +2940,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/TullaSimeonsHallway.png",
     displayName: "Simeons Hallway",
-    typemap: "local",
     background: "#000000",
     parentFilename: "ArcanumBase/Tulla.jpg",
     labels: []
@@ -3091,7 +2947,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/TullaSimeonsChamber.jpg",
     displayName: "Simeons Chamber",
-    typemap: "local",
     background: "#000000",
     parentFilename: "ArcanumBase/Tulla.jpg",
     labels: [
@@ -3106,20 +2961,18 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/UnchartedCave-Inside.png",
     displayName: "Uncharted Cave - Inside",
-    typemap: "local",
     music: "", // CONFIRMED - No music.
     defaultView: { x: 136 , y: 417 , zoom: 1 }, // Good
     background: "#000000",
     parentFilename: "ArcanumBase/UnchartedCave.png",
     labels: [
-      { x: 622, y: 141, text: "Junk Pile", description: "Magick Ring", category: "chest" },
+      { x: 622, y: 141, text: "Junk Pile", inventory: ["Magick Ring"], category: "chest" },
       { x: 136, y: 417, text: "Uncharted Cave", description: "", category: "waypoint", targetMapFilename: "Uncharted Cave" },
     ]
   },
   {
     filename: "ArcanumBase/Vendigroth.Ruins_02.jpg",
     displayName: "Vendigroth Ruins - Level 1",
-    typemap: "local",
     parentFilename: "ArcanumBase/VendigrothRuinssmall.jpg",
     background: "#000000",
     labels: []
@@ -3127,7 +2980,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/Vendigroth.Ruins_04.jpg",
     displayName: "Vendigroth Ruins - Level 2",
-    typemap: "local",
     parentFilename: "ArcanumBase/VendigrothRuinssmall.jpg",
     background: "#000000",
     labels: []
@@ -3135,7 +2987,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/Vendigroth.Ruins_03.jpg",
     displayName: "Vendigroth Ruins - Velorien’s Altar",
-    typemap: "local",
     parentFilename: "ArcanumBase/VendigrothRuinssmall.jpg",
     background: "#000000",
     labels: []
@@ -3143,7 +2994,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/Vendigroth.Ruins_05.jpg",
     displayName: "Vendigroth Ruins - Laboratory",
-    typemap: "local",
     parentFilename: "ArcanumBase/VendigrothRuinssmall.jpg",
     background: "#000000",
     labels: []
@@ -3151,7 +3001,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/VoidHubIsland.png",
     displayName: "Void - Hub Island",
-    typemap: "local",
     parentFilename: "ArcanumBase/VoidMainIsland.png",
     background: "#100B07",
     labels: []
@@ -3159,7 +3008,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/VoidIslandStairs.png",
     displayName: "Void - Arronax Prison Island",
-    typemap: "local",
     parentFilename: "ArcanumBase/VoidMainIsland.png",
     background: "#100B07",
     labels: []
@@ -3167,7 +3015,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/VoidArayaIsland.png",
     displayName: "Void - Araya Island 1",
-    typemap: "local",
     parentFilename: "ArcanumBase/VoidMainIsland.png",
     background: "#0E0A07",
     labels: []
@@ -3175,7 +3022,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/VoidArayaIsland2.png",
     displayName: "Void - Araya Island 2",
-    typemap: "local",
     parentFilename: "ArcanumBase/VoidMainIsland.png",
     background: "#0E0A07",
     labels: []
@@ -3183,7 +3029,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/VoidBaneOfKreeIsland.png",
     displayName: "Void - Bane of Kree Island",
-    typemap: "local",
     parentFilename: "ArcanumBase/VoidMainIsland.png",
     background: "#0E0A07",
     labels: []
@@ -3191,7 +3036,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/VoidGorgothIsland.png",
     displayName: "Void - Gorgoth Island",
-    typemap: "local",
     parentFilename: "ArcanumBase/VoidMainIsland.png",
     background: "#100B07",
     labels: []
@@ -3199,7 +3043,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/VoidKerghanCastleOutside.png",
     displayName: "Void - Kerghan’s Castle Island",
-    typemap: "local",
     parentFilename: "ArcanumBase/VoidMainIsland.png",
     background: "#100B07",
     labels: []
@@ -3207,7 +3050,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/VoidKrakaTurIsland.png",
     displayName: "Void - Kraka-tur Island",
-    typemap: "local",
     parentFilename: "ArcanumBase/VoidMainIsland.png",
     background: "#0E0A07",
     labels: []
@@ -3215,7 +3057,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/VoidIslandCave.png",
     displayName: "Void - Kryggyrd’s Falchion Island",
-    typemap: "local",
     parentFilename: "ArcanumBase/VoidMainIsland.png",
     background: "#0E0A07",
     labels: []
@@ -3223,7 +3064,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/VoidArronax.png",
     displayName: "Arronax Prison",
-    typemap: "local",
     parentFilename: "ArcanumBase/VoidMainIsland.png",
     background: "#000000",
     labels: [
@@ -3238,7 +3078,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/VoidCaveofKryggyrdsFalchion.png",
     displayName: "Cave of the Kryggyrd’s Falchion",
-    typemap: "local",
     parentFilename: "ArcanumBase/VoidMainIsland.png",
     background: "#000000",
     labels: []
@@ -3246,7 +3085,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/VoidKerghanCastleLevel1.png",
     displayName: "Kerghan’s Castle - Level 1",
-    typemap: "local",
     parentFilename: "ArcanumBase/VoidMainIsland.png",
     background: "#000000",
     labels: []
@@ -3254,7 +3092,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/VoidKerghanCastleLevel2.png",
     displayName: "Kerghan’s Castle - Level 2",
-    typemap: "local",
     parentFilename: "ArcanumBase/VoidMainIsland.png",
     background: "#000000",
     labels: []
@@ -3262,7 +3099,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/VoidKerghanCastleLevel3.png",
     displayName: "Kerghan’s Castle - Level 3",
-    typemap: "local",
     parentFilename: "ArcanumBase/VoidMainIsland.png",
     background: "#000000",
     labels: []
@@ -3270,7 +3106,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/VoidKerghanCastleFinalLevel.png",
     displayName: "Kerghan’s Chambers",
-    typemap: "local",
     parentFilename: "ArcanumBase/VoidMainIsland.png",
     background: "#000000",
     labels: [
@@ -3284,7 +3119,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/VollingersMeetingPlaceBasement.png",
     displayName: "Vollinger’s Meeting Place - Basement",
-    typemap: "local",
     //defaultView: { x: 761, y: 1163, zoom: 1 },
     parentFilename: "ArcanumBase/VollingersMeetingPlace.png",
     background: "#000000",
@@ -3296,7 +3130,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/WheelClanLevel1.png",
     displayName: "Wheel Clan - Level 1",
-    typemap: "local",
     background: "#000000",
     parentFilename: "ArcanumBase/WheelClan.png",
     labels: [
@@ -3307,7 +3140,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/WheelClanMainHall.jpg",
     displayName: "Wheel Clan - Main Hall",
-    typemap: "local",
     background: "#000000",
     parentFilename: "ArcanumBase/WheelClan.png",
     labels: []
@@ -3315,7 +3147,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/WheelClanCommecialDistrict.jpg",
     displayName: "Wheel Clan - Commercial District",
-    typemap: "local",
     parentFilename: "ArcanumBase/WheelClan.png",
     labels: [
       { x: 1544, y: 1036, text: "Vegard Molten Flow", sex: "male", race: "Dwarf", category: ["quest", "npc"],
@@ -3338,7 +3169,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/WheelClanThroneHall.jpg",
     displayName: "Wheel Clan - Throne Hall",
-    typemap: "local",
     parentFilename: "ArcanumBase/WheelClan.png",
     labels: [
       { x: 853, y: 614, text: "Randver Thunder Stone", sex: "male", race: "Dwarf", level: 20, category: ["quest", "npc"] },
@@ -3347,7 +3177,6 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/WheelClanLoghairesChamber.png",
     displayName: "Loghaire's Chambers",
-    typemap: "local",
     background: "#000000",
     parentFilename: "ArcanumBase/WheelClan.png",
     labels: [
@@ -3362,14 +3191,12 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/WheelClanMine.jpg",
     displayName: "Wheel Clan - Mine",
-    typemap: "local",
     parentFilename: "ArcanumBase/WheelClan.png",
     labels: []
   },
   {
     filename: "ArcanumBase/WolfCaveInside.png",
     displayName: "Wolf Cave - Inside",
-    typemap: "local",
     //defaultView: { x: 761, y: 1163, zoom: 1 },
     parentFilename: "ArcanumBase/WolfCave.png",
     background: "#000000",
