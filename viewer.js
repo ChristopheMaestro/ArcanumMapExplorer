@@ -95,6 +95,10 @@ const statisticsOverlay = document.getElementById('statistics-overlay');
 const statisticsMapName = document.getElementById('statistics-mapname');
 const statisticsContent = document.getElementById('statistics-content');
 const statisticsClose = document.getElementById('statistics-close');
+const questsTableOverlay = document.getElementById('quests-table-overlay');
+const questsTableMapName = document.getElementById('quests-table-mapname');
+const questsTableContent = document.getElementById('quests-table-content');
+const questsTableClose = document.getElementById('quests-table-close');
 const itemImageOverlay = document.getElementById('item-image-overlay');
 const itemImageOverlayImg = document.getElementById('item-image-overlay-img');
 
@@ -519,8 +523,14 @@ function initViewer() {
     });
 
     questListBtn.addEventListener('click', () => {
-        const isOpen = questListPanel.classList.toggle('open');
-        if (isOpen) renderQuestPanel();
+        const selectedMap = ArcanumMapData.find(m => m.filename === currentMapFilename);
+        if (selectedMap && selectedMap.modGroup === 'World Map') {
+            const isOpen = questsTableOverlay.classList.toggle('open');
+            if (isOpen) renderQuestsTable();
+        } else {
+            const isOpen = questListPanel.classList.toggle('open');
+            if (isOpen) renderQuestPanel();
+        }
     });
 
     questPanelClose.addEventListener('click', () => {
@@ -540,10 +550,19 @@ function initViewer() {
         if (e.target === statisticsOverlay) statisticsOverlay.classList.remove('open');
     });
 
+    questsTableClose.addEventListener('click', () => {
+        questsTableOverlay.classList.remove('open');
+    });
+
+    questsTableOverlay.addEventListener('click', (e) => {
+        if (e.target === questsTableOverlay) questsTableOverlay.classList.remove('open');
+    });
+
     itemImageOverlay.addEventListener('click', hideItemImage);
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && itemImageOverlay.style.display === 'flex') hideItemImage();
         if (e.key === 'Escape' && statisticsOverlay.classList.contains('open')) statisticsOverlay.classList.remove('open');
+        if (e.key === 'Escape' && questsTableOverlay.classList.contains('open')) questsTableOverlay.classList.remove('open');
     });
 
     if (ArcanumMapData.length > 0) {
@@ -998,6 +1017,7 @@ function loadImage(index, arrivalViewOverride, restorePosition) {
         applyActiveFilters(); 
         if (questListPanel.classList.contains('open')) renderQuestPanel();
         if (statisticsOverlay.classList.contains('open')) renderStatisticsPanel();
+        if (questsTableOverlay.classList.contains('open')) renderQuestsTable();
 
         if (pendingAutoOpenLabelText) {
             const labelMatch = container.querySelector(`[data-label-text="${CSS.escape(pendingAutoOpenLabelText)}"]`);
@@ -1098,8 +1118,7 @@ function jumpToLabelOnCurrentMap(label) {
     }
 }
 
-function buildQuestListForCurrentMap() {
-    const selectedMap = ArcanumMapData.find(m => m.filename === currentMapFilename);
+function buildQuestListForMap(selectedMap) {
     if (!selectedMap || !selectedMap.labels) return { npcGroups: [], unassigned: [] };
 
     const npcGroups = [];
@@ -1128,6 +1147,11 @@ function buildQuestListForCurrentMap() {
     npcGroups.sort((a, b) => a.npcLabel.text.localeCompare(b.npcLabel.text));
 
     return { npcGroups, unassigned: [] };
+}
+
+function buildQuestListForCurrentMap() {
+    const selectedMap = ArcanumMapData.find(m => m.filename === currentMapFilename);
+    return buildQuestListForMap(selectedMap);
 }
 
 function renderQuestPanel() {
@@ -1189,6 +1213,127 @@ function renderQuestPanel() {
             jumpToLabelOnCurrentMap(unassigned[ui].ownLabel);
         });
     });
+}
+
+// --- Quests table modal: flat, sortable list of every quest across a region (used on the World
+// Map, where the side panel above has no single map's worth of quests to group by) ---
+
+function buildAllQuestsRows(selectedMap) {
+    const sourceMaps = getStatisticsSourceMaps(selectedMap);
+    const rows = [];
+    sourceMaps.forEach(map => {
+        const { npcGroups } = buildQuestListForMap(map);
+        npcGroups.forEach(group => {
+            group.quests.forEach(quest => {
+                rows.push({
+                    questName: quest.title,
+                    connectedLabelName: group.npcLabel.text,
+                    mapDisplayName: map.displayName,
+                    mapFilename: map.filename,
+                    target: quest.target || null,
+                    ownLabel: quest.ownLabel || null
+                });
+            });
+        });
+    });
+    return rows;
+}
+
+let questsTableRows = [];
+let questsTableSortColumn = null;
+let questsTableSortDirection = 'asc';
+
+function getQuestsTableSortValue(row, key) {
+    switch (key) {
+        case 'quest': return (row.questName || '').toLowerCase();
+        case 'connected': return (row.connectedLabelName || '').toLowerCase();
+        case 'location': return (row.mapDisplayName || '').toLowerCase();
+        default: return '';
+    }
+}
+
+function renderQuestsTableBody() {
+    let sorted = questsTableRows.slice();
+    if (questsTableSortColumn) {
+        sorted.sort((a, b) => {
+            const va = getQuestsTableSortValue(a, questsTableSortColumn);
+            const vb = getQuestsTableSortValue(b, questsTableSortColumn);
+            if (va < vb) return questsTableSortDirection === 'asc' ? -1 : 1;
+            if (va > vb) return questsTableSortDirection === 'asc' ? 1 : -1;
+            return 0;
+        });
+    }
+
+    const rowsHtml = sorted.map(row => `<tr data-quest-row-index="${questsTableRows.indexOf(row)}">
+        <td>${row.questName}</td>
+        <td>${row.connectedLabelName || '&mdash;'}</td>
+        <td>${row.mapDisplayName}</td>
+    </tr>`).join('');
+
+    const tbody = document.getElementById('quests-table-body');
+    tbody.innerHTML = rowsHtml;
+
+    questsTableContent.querySelectorAll('th[data-sort-key]').forEach(th => {
+        th.classList.toggle('sorted-asc', th.getAttribute('data-sort-key') === questsTableSortColumn && questsTableSortDirection === 'asc');
+        th.classList.toggle('sorted-desc', th.getAttribute('data-sort-key') === questsTableSortColumn && questsTableSortDirection === 'desc');
+    });
+
+    tbody.querySelectorAll('tr[data-quest-row-index]').forEach(tr => {
+        tr.addEventListener('click', () => {
+            const idx = parseInt(tr.getAttribute('data-quest-row-index'), 10);
+            const row = questsTableRows[idx];
+            questsTableOverlay.classList.remove('open');
+            if (row.target) {
+                travelToLinkedLabel(row.target);
+            } else if (row.ownLabel) {
+                if (row.mapFilename === currentMapFilename) {
+                    jumpToLabelOnCurrentMap(row.ownLabel);
+                } else {
+                    travelToMapByFilename(row.mapDisplayName, { x: row.ownLabel.x, y: row.ownLabel.y, zoom: 1.5 });
+                }
+            }
+        });
+    });
+}
+
+function renderQuestsTable() {
+    const selectedMap = ArcanumMapData.find(m => m.filename === currentMapFilename);
+    questsTableMapName.textContent = selectedMap ? selectedMap.displayName : '';
+
+    questsTableRows = selectedMap ? buildAllQuestsRows(selectedMap) : [];
+    questsTableSortColumn = null;
+    questsTableSortDirection = 'asc';
+
+    if (questsTableRows.length === 0) {
+        questsTableContent.innerHTML = '<div class="quest-panel-empty">No quests found.</div>';
+        return;
+    }
+
+    questsTableContent.innerHTML = `
+        <table class="stats-table">
+            <thead><tr>
+                <th data-sort-key="quest">Quest Name</th>
+                <th data-sort-key="connected">Label Name</th>
+                <th data-sort-key="location">Map Location</th>
+            </tr></thead>
+            <tbody id="quests-table-body"></tbody>
+        </table>
+    `;
+
+    questsTableContent.querySelectorAll('th[data-sort-key]').forEach(th => {
+        th.addEventListener('click', () => {
+            const key = th.getAttribute('data-sort-key');
+            if (questsTableSortColumn === key) {
+                questsTableSortDirection = questsTableSortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                questsTableSortColumn = key;
+                questsTableSortDirection = 'asc';
+            }
+            renderQuestsTableBody();
+        });
+    });
+
+    renderQuestsTableBody();
 }
 
 function getStatisticsSourceMaps(selectedMap) {

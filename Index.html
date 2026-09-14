@@ -181,6 +181,18 @@
         </div>
     </div>
 
+    <!-- Modal overlay: sortable table of every quest across a region - used on the World Map,
+         where the usual NPC-grouped side panel has nothing of its own to group by -->
+    <div id="quests-table-overlay">
+        <div class="statistics-panel">
+            <div class="statistics-header">
+                <h3>Quests — <span id="quests-table-mapname"></span></h3>
+                <span id="quests-table-close" class="quest-panel-close-btn">&times;</span>
+            </div>
+            <div id="quests-table-content"></div>
+        </div>
+    </div>
+
     <!-- Catches a maps-data syntax/parse error before it happens - must be registered
          before the data files load, since viewer.js (which reports it) loads after them -->
     <script>

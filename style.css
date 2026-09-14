@@ -1291,6 +1291,20 @@ img {
     display: flex;
 }
 
+#quests-table-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.75);
+    z-index: 150;
+    align-items: center;
+    justify-content: center;
+}
+
+#quests-table-overlay.open {
+    display: flex;
+}
+
 .statistics-panel {
     background-color: #17130e;
     border: 2px solid #4a3e2e;
@@ -1320,6 +1334,11 @@ img {
 }
 
 #statistics-content {
+    padding: 15px;
+    overflow-y: auto;
+}
+
+#quests-table-content {
     padding: 15px;
     overflow-y: auto;
 }
