@@ -38,6 +38,27 @@ const menuContainer = document.getElementById('menu-container');
 const viewport = document.getElementById('viewport');
 const container = document.getElementById('pan-container');
 const img = document.getElementById('zoomImage');
+
+// Chunked-map support: for maps with `chunked: true`, `filename` points to a folder of tiles
+// named "<chunkPrefix>_<pixelX>_<pixelY>.(jpg|png)" instead of a single image. This div stands in
+// for `img` as the map's full-size backdrop; individual tile <img> elements are absolutely
+// positioned inside it and are only created once they enter (or approach) the viewport.
+const chunkContainer = document.createElement('div');
+chunkContainer.id = 'chunk-container';
+chunkContainer.style.position = 'absolute';
+chunkContainer.style.top = '0';
+chunkContainer.style.left = '0';
+chunkContainer.style.display = 'none';
+container.appendChild(chunkContainer);
+
+let currentMapChunked = false;
+let currentMapTotalWidth = 0;
+let currentMapTotalHeight = 0;
+let currentChunkSize = 500;
+let currentChunkFolder = '';
+let currentChunkPrefix = '';
+let loadedChunkKeys = new Set();
+let currentMapLoaded = false; // true once either the single image or the chunk grid is ready - replaces the old img.src/display checks used to gate panning/zooming
 const toggleCreatorModeBtn = document.getElementById('toggleCreatorModeBtn');
 const toolStatus = document.getElementById('tool-status');
 const creatorPanel = document.getElementById('creator-panel');
@@ -54,6 +75,8 @@ const newLabelCategoryChecks = document.querySelectorAll('.new-label-cat-chk');
 const masterFields = document.getElementById('master-fields');
 const waypointFields = document.getElementById('waypoint-fields');
 const newLabelTargetMap = document.getElementById('new-label-target-map');
+const targetWaypointRow = document.getElementById('target-waypoint-row');
+const newLabelTargetWaypoint = document.getElementById('new-label-target-waypoint');
 const newLabelTargetX = document.getElementById('new-label-target-x');
 const newLabelTargetY = document.getElementById('new-label-target-y');
 const shopFields = document.getElementById('shop-fields');
@@ -271,17 +294,62 @@ function getSelectedNewLabelCategories() {
 
 function populateTargetMapOptions() {
     if (!newLabelTargetMap) return;
+    const previousValue = newLabelTargetMap.value;
+    newLabelTargetMap.innerHTML = '<option value="">— choose a map —</option>';
+
     const seen = new Set();
+    const uniqueMaps = [];
     ArcanumMapData.forEach(map => {
-        const optionValue = map.displayName;
         const dedupeKey = `${map.displayName}::${map.modGroup || ''}`;
         if (seen.has(dedupeKey)) return;
         seen.add(dedupeKey);
+        uniqueMaps.push(map);
+    });
+
+    // Only submaps of the map you're currently editing make sense as waypoint targets
+    // (e.g. an "enter the cellar" label on the city map).
+    const submapsOfCurrent = uniqueMaps.filter(map => map.parentFilename === currentMapFilename);
+
+    submapsOfCurrent.forEach(map => {
         const opt = document.createElement('option');
-        opt.value = optionValue;
+        opt.value = map.displayName;
         opt.textContent = map.modGroup ? `${map.displayName} — ${map.modGroup}` : map.displayName;
         newLabelTargetMap.appendChild(opt);
     });
+
+    if (previousValue && Array.from(newLabelTargetMap.options).some(o => o.value === previousValue)) {
+        newLabelTargetMap.value = previousValue;
+    }
+}
+
+function populateTargetWaypointOptions() {
+    if (!newLabelTargetWaypoint || !targetWaypointRow) return;
+    const previousValue = newLabelTargetWaypoint.value;
+    newLabelTargetWaypoint.innerHTML = '<option value="">— pick a waypoint on that map —</option>';
+
+    const targetMap = ArcanumMapData.find(m => m.displayName === newLabelTargetMap.value);
+    const labels = (targetMap && targetMap.labels) ? targetMap.labels : [];
+    // Index into the map's own labels array (rather than label text) so two waypoints that
+    // happen to share the same name on that map can still be told apart.
+    const waypointEntries = labels
+        .map((label, index) => ({ label, index }))
+        .filter(({ label }) => {
+            const cats = Array.isArray(label.category) ? label.category : (label.category ? [label.category] : []);
+            return cats.includes('waypoint');
+        });
+
+    targetWaypointRow.style.display = waypointEntries.length > 0 ? 'flex' : 'none';
+
+    waypointEntries.forEach(({ label, index }) => {
+        const opt = document.createElement('option');
+        opt.value = String(index);
+        opt.textContent = `${label.text} (${label.x}, ${label.y})`;
+        newLabelTargetWaypoint.appendChild(opt);
+    });
+
+    if (previousValue && Array.from(newLabelTargetWaypoint.options).some(o => o.value === previousValue)) {
+        newLabelTargetWaypoint.value = previousValue;
+    }
 }
 
 function populateShopTypeOptions() {
@@ -648,6 +716,19 @@ function initViewer() {
         });
     });
 
+    newLabelTargetMap.addEventListener('change', () => {
+        populateTargetWaypointOptions();
+    });
+
+    newLabelTargetWaypoint.addEventListener('change', () => {
+        if (!newLabelTargetWaypoint.value) return;
+        const targetMap = ArcanumMapData.find(m => m.displayName === newLabelTargetMap.value);
+        const label = targetMap && targetMap.labels && targetMap.labels[parseInt(newLabelTargetWaypoint.value, 10)];
+        if (!label) return;
+        newLabelTargetX.value = label.x;
+        newLabelTargetY.value = label.y;
+    });
+
     addToPreviewBtn.addEventListener('click', () => {
         const labelTitle = newLabelText.value.trim() || "New Marker Location";
         const labelDescription = newLabelDesc.value.trim();
@@ -764,6 +845,7 @@ function initViewer() {
         newLabelLinks.value = '';
         newLabelTargetX.value = '';
         newLabelTargetY.value = '';
+        if (newLabelTargetWaypoint) newLabelTargetWaypoint.value = '';
         newLabelShopType.value = '';
         newLabelShopMarkup.value = '';
     });
@@ -857,7 +939,7 @@ function checkMapCategoryMatch(map, categoryKey) {
 }
 
 function executeButtonZoom(isZoomIn) {
-    if (!img.src || img.style.display === 'none') return;
+    if (!currentMapLoaded) return;
     const zoomFactor = 1.3;
     let nextScale = isZoomIn ? scale * zoomFactor : scale / zoomFactor;
     if (nextScale < minScale || nextScale > maxScale) return;
@@ -920,8 +1002,8 @@ function loadImage(index, arrivalViewOverride, restorePosition) {
     const selectedMap = ArcanumMapData[index];
     currentMapFilename = selectedMap.filename; 
     currentMapType = selectedMap.typemap || ""; 
-    img.style.display = 'block';
-    img.src = selectedMap.filename; 
+    currentMapChunked = !!selectedMap.chunked;
+    currentMapLoaded = false;
 
     updateBackgroundMusic(selectedMap);
 
@@ -1000,37 +1082,67 @@ function loadImage(index, arrivalViewOverride, restorePosition) {
         }
     }
 
-    img.onload = () => {
-        if (restorePosition) {
-            scale = restorePosition.scale;
-            posX = restorePosition.posX;
-            posY = restorePosition.posY;
-            updateTransform();
-        } else {
-            const finalView = arrivalViewOverride || selectedMap.defaultView;
-            resetView(finalView);
-        }
-        if (selectedMap.labels) {
-            selectedMap.labels.forEach(label => renderSingleLabel(label));
-        }
-
-        applyActiveFilters(); 
-        if (questListPanel.classList.contains('open')) renderQuestPanel();
-        if (statisticsOverlay.classList.contains('open')) renderStatisticsPanel();
-        if (questsTableOverlay.classList.contains('open')) renderQuestsTable();
-
-        if (pendingAutoOpenLabelText) {
-            const labelMatch = container.querySelector(`[data-label-text="${CSS.escape(pendingAutoOpenLabelText)}"]`);
-            if (labelMatch) {
-                pendingAutoOpenLabelText = null;
-                labelMatch.click();
-            }
-        }
-    };
-    img.onerror = () => {
+    if (currentMapChunked) {
+        // Chunked maps have no single image to wait on - the tile grid's dimensions are
+        // known upfront from the map data, so we can finish loading immediately.
+        // Clear the previous map's onload/onerror and just hide the element rather than
+        // reassigning its src - img is invisible either way, and touching src risked firing
+        // a load/error cycle (possibly against a stale handler) for no reason.
+        img.onload = null;
+        img.onerror = null;
         img.style.display = 'none';
-        alert(`Could not find or render image: "${selectedMap.filename}"`);
-    };
+        setupChunkedMap(selectedMap);
+        currentMapLoaded = true;
+        finishMapLoad(selectedMap, arrivalViewOverride, restorePosition);
+    } else {
+        chunkContainer.style.display = 'none';
+        img.style.display = 'block';
+        img.src = selectedMap.filename;
+        img.onload = () => {
+            currentMapLoaded = true;
+            finishMapLoad(selectedMap, arrivalViewOverride, restorePosition);
+        };
+        img.onerror = () => {
+            img.style.display = 'none';
+            alert(`Could not find or render image: "${selectedMap.filename}"`);
+        };
+    }
+}
+
+function finishMapLoad(selectedMap, arrivalViewOverride, restorePosition) {
+    if (restorePosition) {
+        scale = restorePosition.scale;
+        posX = restorePosition.posX;
+        posY = restorePosition.posY;
+        updateTransform();
+    } else {
+        const finalView = arrivalViewOverride || selectedMap.defaultView;
+        resetView(finalView);
+    }
+    if (selectedMap.labels) {
+        selectedMap.labels.forEach(label => renderSingleLabel(label));
+    }
+
+    populateTargetMapOptions();
+
+    applyActiveFilters(); 
+    if (questListPanel.classList.contains('open')) renderQuestPanel();
+    if (statisticsOverlay.classList.contains('open')) renderStatisticsPanel();
+    if (questsTableOverlay.classList.contains('open')) renderQuestsTable();
+
+    if (pendingAutoOpenLabelText) {
+        const labelMatch = container.querySelector(`[data-label-text="${CSS.escape(pendingAutoOpenLabelText)}"]`);
+        if (labelMatch) {
+            pendingAutoOpenLabelText = null;
+            labelMatch.click();
+        }
+    }
+
+    // resetView()/updateTransform() above already schedules a chunk update via
+    // scheduleChunkUpdate(), and loadVisibleChunks() is a no-op until discoverChunkBounds()
+    // finishes probing the real tile grid (it calls loadVisibleChunks() itself once ready).
+    // This call just covers the case where bounds were already known (e.g. revisiting a map).
+    loadVisibleChunks();
 }
 
 function travelToMapByFilename(targetName, arrivalViewOverride, autoOpenLabelText = null) {
@@ -1227,11 +1339,13 @@ function buildAllQuestsRows(selectedMap) {
             group.quests.forEach(quest => {
                 rows.push({
                     questName: quest.title,
+                    description: quest.description || '',
                     connectedLabelName: group.npcLabel.text,
                     mapDisplayName: map.displayName,
                     mapFilename: map.filename,
                     target: quest.target || null,
-                    ownLabel: quest.ownLabel || null
+                    ownLabel: quest.ownLabel || null,
+                    part: (typeof quest.part === 'number') ? quest.part : null
                 });
             });
         });
@@ -1239,23 +1353,61 @@ function buildAllQuestsRows(selectedMap) {
     return rows;
 }
 
-let questsTableRows = [];
+// Collapses every row sharing the same quest name into one group. A group with more than one
+// row is a "multi-part" quest: it renders as a single [+] row (part count = the highest part
+// number seen) that expands to list each part's label/location, in ascending part order.
+function groupQuestsTableRows(rows) {
+    const groupsByName = new Map();
+    rows.forEach(row => {
+        const key = (row.questName || '').trim();
+        if (!groupsByName.has(key)) groupsByName.set(key, { questName: row.questName, rows: [] });
+        groupsByName.get(key).rows.push(row);
+    });
+
+    return Array.from(groupsByName.values()).map(group => {
+        const sortedRows = group.rows.slice().sort((a, b) => (a.part || 0) - (b.part || 0));
+        const isMultiPart = sortedRows.length > 1;
+        const partNumbers = sortedRows.map(r => r.part).filter(p => typeof p === 'number');
+        const partCount = isMultiPart
+            ? (partNumbers.length > 0 ? Math.max(...partNumbers) : sortedRows.length)
+            : null;
+        return { questName: group.questName, rows: sortedRows, isMultiPart, partCount };
+    });
+}
+
+let questsTableGroups = [];
 let questsTableSortColumn = null;
 let questsTableSortDirection = 'asc';
+let questsTableExpanded = new Set(); // quest names currently expanded
 
-function getQuestsTableSortValue(row, key) {
+function getQuestsTableSortValue(group, key) {
+    const representative = group.rows.find(r => r.part === 1) || group.rows[0];
     switch (key) {
-        case 'quest': return (row.questName || '').toLowerCase();
-        case 'connected': return (row.connectedLabelName || '').toLowerCase();
-        case 'location': return (row.mapDisplayName || '').toLowerCase();
+        case 'quest': return (group.questName || '').toLowerCase();
+        case 'part': return group.partCount || 0;
+        case 'connected': return (representative.connectedLabelName || '').toLowerCase();
+        case 'location': return (representative.mapDisplayName || '').toLowerCase();
         default: return '';
     }
 }
 
+function navigateToQuestRow(row) {
+    questsTableOverlay.classList.remove('open');
+    if (row.target) {
+        travelToLinkedLabel(row.target);
+    } else if (row.ownLabel) {
+        if (row.mapFilename === currentMapFilename) {
+            jumpToLabelOnCurrentMap(row.ownLabel);
+        } else {
+            travelToMapByFilename(row.mapDisplayName, { x: row.ownLabel.x, y: row.ownLabel.y, zoom: 1.5 });
+        }
+    }
+}
+
 function renderQuestsTableBody() {
-    let sorted = questsTableRows.slice();
+    let sortedGroups = questsTableGroups.slice();
     if (questsTableSortColumn) {
-        sorted.sort((a, b) => {
+        sortedGroups.sort((a, b) => {
             const va = getQuestsTableSortValue(a, questsTableSortColumn);
             const vb = getQuestsTableSortValue(b, questsTableSortColumn);
             if (va < vb) return questsTableSortDirection === 'asc' ? -1 : 1;
@@ -1264,11 +1416,41 @@ function renderQuestsTableBody() {
         });
     }
 
-    const rowsHtml = sorted.map(row => `<tr data-quest-row-index="${questsTableRows.indexOf(row)}">
-        <td>${row.questName}</td>
-        <td>${row.connectedLabelName || '&mdash;'}</td>
-        <td>${row.mapDisplayName}</td>
-    </tr>`).join('');
+    const rowsHtml = sortedGroups.map((group, gi) => {
+        if (!group.isMultiPart) {
+            const row = group.rows[0];
+            const descHtml = row.description ? `<div class="quest-subrow-desc">${row.description}</div>` : '';
+            return `<tr data-group-index="${gi}" data-row-index="0">
+                <td>${group.questName}${descHtml}</td>
+                <td>&mdash;</td>
+                <td>${row.connectedLabelName || '&mdash;'}</td>
+                <td>${row.mapDisplayName}</td>
+            </tr>`;
+        }
+
+        const isExpanded = questsTableExpanded.has(group.questName);
+        const partOneRow = group.rows.find(r => r.part === 1) || group.rows[0];
+        let html = `<tr class="quest-group-header" data-group-index="${gi}">
+            <td><span class="quest-group-toggle">${isExpanded ? '[-]' : '[+]'}</span> ${group.questName}</td>
+            <td>${group.partCount}</td>
+            <td>${partOneRow.connectedLabelName || '&mdash;'}</td>
+            <td>${partOneRow.mapDisplayName}</td>
+        </tr>`;
+
+        if (isExpanded) {
+            html += group.rows.map((row, ri) => {
+                const partBadge = row.part ? `<span class="quest-part-badge">Part ${row.part}</span>` : '&mdash;';
+                const descHtml = row.description ? `<div class="quest-subrow-desc">${row.description}</div>` : '';
+                return `<tr class="quest-group-subrow" data-group-index="${gi}" data-row-index="${ri}">
+                <td class="quest-subrow-cell">${partBadge}${descHtml}</td>
+                <td></td>
+                <td>${row.connectedLabelName || '&mdash;'}</td>
+                <td>${row.mapDisplayName}</td>
+            </tr>`;
+            }).join('');
+        }
+        return html;
+    }).join('');
 
     const tbody = document.getElementById('quests-table-body');
     tbody.innerHTML = rowsHtml;
@@ -1278,20 +1460,24 @@ function renderQuestsTableBody() {
         th.classList.toggle('sorted-desc', th.getAttribute('data-sort-key') === questsTableSortColumn && questsTableSortDirection === 'desc');
     });
 
-    tbody.querySelectorAll('tr[data-quest-row-index]').forEach(tr => {
+    tbody.querySelectorAll('tr.quest-group-header').forEach(tr => {
         tr.addEventListener('click', () => {
-            const idx = parseInt(tr.getAttribute('data-quest-row-index'), 10);
-            const row = questsTableRows[idx];
-            questsTableOverlay.classList.remove('open');
-            if (row.target) {
-                travelToLinkedLabel(row.target);
-            } else if (row.ownLabel) {
-                if (row.mapFilename === currentMapFilename) {
-                    jumpToLabelOnCurrentMap(row.ownLabel);
-                } else {
-                    travelToMapByFilename(row.mapDisplayName, { x: row.ownLabel.x, y: row.ownLabel.y, zoom: 1.5 });
-                }
+            const gi = parseInt(tr.getAttribute('data-group-index'), 10);
+            const group = sortedGroups[gi];
+            if (questsTableExpanded.has(group.questName)) {
+                questsTableExpanded.delete(group.questName);
+            } else {
+                questsTableExpanded.add(group.questName);
             }
+            renderQuestsTableBody();
+        });
+    });
+
+    tbody.querySelectorAll('tr[data-group-index]:not(.quest-group-header)').forEach(tr => {
+        tr.addEventListener('click', () => {
+            const gi = parseInt(tr.getAttribute('data-group-index'), 10);
+            const ri = parseInt(tr.getAttribute('data-row-index'), 10);
+            navigateToQuestRow(sortedGroups[gi].rows[ri]);
         });
     });
 }
@@ -1300,11 +1486,13 @@ function renderQuestsTable() {
     const selectedMap = ArcanumMapData.find(m => m.filename === currentMapFilename);
     questsTableMapName.textContent = selectedMap ? selectedMap.displayName : '';
 
-    questsTableRows = selectedMap ? buildAllQuestsRows(selectedMap) : [];
+    const rawRows = selectedMap ? buildAllQuestsRows(selectedMap) : [];
+    questsTableGroups = groupQuestsTableRows(rawRows);
     questsTableSortColumn = null;
     questsTableSortDirection = 'asc';
+    questsTableExpanded = new Set();
 
-    if (questsTableRows.length === 0) {
+    if (questsTableGroups.length === 0) {
         questsTableContent.innerHTML = '<div class="quest-panel-empty">No quests found.</div>';
         return;
     }
@@ -1313,6 +1501,7 @@ function renderQuestsTable() {
         <table class="stats-table">
             <thead><tr>
                 <th data-sort-key="quest">Quest Name</th>
+                <th data-sort-key="part">Part</th>
                 <th data-sort-key="connected">Label Name</th>
                 <th data-sort-key="location">Map Location</th>
             </tr></thead>
@@ -1336,6 +1525,15 @@ function renderQuestsTable() {
     renderQuestsTableBody();
 }
 
+function dedupeMapsByFilename(maps) {
+    const seen = new Set();
+    return maps.filter(m => {
+        if (seen.has(m.filename)) return false;
+        seen.add(m.filename);
+        return true;
+    });
+}
+
 function getStatisticsSourceMaps(selectedMap) {
     if (selectedMap.modGroup === 'World Map') {
         // The Arcanum overworld itself: aggregate every Cities/Quest locations/Other locations
@@ -1344,11 +1542,14 @@ function getStatisticsSourceMaps(selectedMap) {
         const topMaps = ArcanumMapData.filter(m => groups.has(m.modGroup));
         const topFilenames = new Set(topMaps.map(m => m.filename));
         const subMaps = ArcanumMapData.filter(m => m.parentFilename && topFilenames.has(m.parentFilename));
-        return [...topMaps, ...subMaps];
+        // A map can legitimately be both "top-level" (its own modGroup) and someone else's
+        // submap (e.g. Hall of Records is filed under Quest locations but parented to Tarant) -
+        // dedupe so its labels aren't counted twice.
+        return dedupeMapsByFilename([...topMaps, ...subMaps]);
     }
     // Normal case: this map plus its own direct submaps
     const subMaps = ArcanumMapData.filter(m => m.parentFilename === selectedMap.filename);
-    return [selectedMap, ...subMaps];
+    return dedupeMapsByFilename([selectedMap, ...subMaps]);
 }
 
 function buildStatisticsForCurrentMap() {
@@ -1998,6 +2199,7 @@ function startEditingLabel(label) {
         waypointFields.style.display = cats.includes('waypoint') ? 'flex' : 'none';
         masterFields.style.display = cats.includes('master') ? 'flex' : 'none';
         newLabelTargetMap.value = label.targetMapFilename || '';
+        populateTargetWaypointOptions();
         newLabelTargetX.value = (typeof label.targetX === 'number') ? label.targetX : '';
         newLabelTargetY.value = (typeof label.targetY === 'number') ? label.targetY : '';
 
@@ -2025,8 +2227,17 @@ function stopEditingLabel() {
     newLabelLinks.value = '';
     newLabelTargetX.value = '';
     newLabelTargetY.value = '';
-    newLabelShopType.value = '';
+    if (newLabelTargetWaypoint) newLabelTargetWaypoint.value = '';
     newLabelShopMarkup.value = '';
+}
+
+// Returns the current map's full pixel dimensions, regardless of whether it's a single
+// image (img.clientWidth/Height) or a chunked map (its declared total width/height).
+function getMapWidth() {
+    return currentMapChunked ? currentMapTotalWidth : img.clientWidth;
+}
+function getMapHeight() {
+    return currentMapChunked ? currentMapTotalHeight : img.clientHeight;
 }
 
 function resetView(viewOverride) {
@@ -2036,8 +2247,8 @@ function resetView(viewOverride) {
         posY = (viewport.clientHeight / 2) - (viewOverride.y * scale);
     } else {
         scale = 1;
-        posX = (viewport.clientWidth - img.clientWidth) / 2;
-        posY = (viewport.clientHeight / 2) - (img.clientHeight / 2);
+        posX = (viewport.clientWidth - getMapWidth()) / 2;
+        posY = (viewport.clientHeight / 2) - (getMapHeight() / 2);
     }
     updateTransform();
 }
@@ -2049,10 +2260,188 @@ function updateTransform() {
     container.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
     if (hudValZoom) hudValZoom.textContent = `${Math.round(scale * 100)}%`;
     saveViewerState();
+    scheduleChunkUpdate();
+}
+
+// --- Chunked map loading -------------------------------------------------
+// Splits a big map into <chunkSize>x<chunkSize> tiles named "<chunkPrefix>_<pixelX>_<pixelY>.jpg"
+// (falling back to .png). Only tiles overlapping the current viewport (plus a small margin)
+// are ever created, and only within the real extent of the tile grid - see chunk bounds
+// discovery below, which figures out where the grid actually ends before any tile is requested.
+
+function clearMapChunks() {
+    chunkContainer.innerHTML = '';
+    loadedChunkKeys = new Set();
+}
+
+let chunkBoundsReady = false;
+let discoveredMaxCol = -1;
+let discoveredMaxRow = -1;
+let chunkLoadGeneration = 0;
+
+// Resolves true/false for whether a tile exists at this base path (tries .jpg then .png).
+function chunkExistsAt(basePath) {
+    return new Promise(resolve => {
+        const probe = new Image();
+        probe.onload = () => resolve(true);
+        probe.onerror = () => {
+            if (probe.dataset.triedPng) { resolve(false); return; }
+            probe.dataset.triedPng = 'true';
+            probe.src = `${basePath}.png`;
+        };
+        probe.src = `${basePath}.jpg`;
+    });
+}
+
+// Binary search for the highest index (0..maxCandidate) whose tile exists, given index 0 exists.
+async function probeMaxChunkIndex(basePathForIndex, maxCandidate) {
+    if (maxCandidate <= 0) return maxCandidate;
+    if (!(await chunkExistsAt(basePathForIndex(maxCandidate)))) {
+        let lo = 0, hi = maxCandidate;
+        while (lo < hi) {
+            const mid = Math.ceil((lo + hi) / 2);
+            if (await chunkExistsAt(basePathForIndex(mid))) {
+                lo = mid;
+            } else {
+                hi = mid - 1;
+            }
+        }
+        return lo;
+    }
+    return maxCandidate; // the declared edge tile exists - trust the declared bound
+}
+
+// Finds the real last existing column (probing along row 0) and last existing row (probing
+// along column 0) before any viewport-driven tile loading starts, so we never request a tile
+// we already know is missing.
+async function discoverChunkBounds(selectedMap) {
+    const generation = ++chunkLoadGeneration;
+    chunkBoundsReady = false;
+
+    const declaredMaxCol = Math.ceil(currentMapTotalWidth / currentChunkSize) - 1;
+    const declaredMaxRow = Math.ceil(currentMapTotalHeight / currentChunkSize) - 1;
+
+    const [maxCol, maxRow] = await Promise.all([
+        probeMaxChunkIndex(i => `${currentChunkFolder}/${currentChunkPrefix}_${i * currentChunkSize}_0`, declaredMaxCol),
+        probeMaxChunkIndex(i => `${currentChunkFolder}/${currentChunkPrefix}_0_${i * currentChunkSize}`, declaredMaxRow)
+    ]);
+
+    if (generation !== chunkLoadGeneration) return; // user switched maps while we were probing
+
+    discoveredMaxCol = maxCol;
+    discoveredMaxRow = maxRow;
+    chunkBoundsReady = true;
+    loadVisibleChunks();
+}
+
+function setupChunkedMap(selectedMap) {
+    clearMapChunks();
+    currentMapTotalWidth = selectedMap.width;
+    currentMapTotalHeight = selectedMap.height;
+    currentChunkSize = selectedMap.chunkSize || 500;
+    currentChunkFolder = selectedMap.filename.replace(/\/+$/, '');
+    currentChunkPrefix = selectedMap.chunkPrefix || currentChunkFolder.split('/').pop();
+    chunkContainer.style.width = `${currentMapTotalWidth}px`;
+    chunkContainer.style.height = `${currentMapTotalHeight}px`;
+    chunkContainer.style.display = 'block';
+    discoverChunkBounds(selectedMap);
+}
+
+// How far (in unscaled map pixels) each tile should overshoot into its neighbor's space.
+// Sized so the overlap is always ~2 real screen pixels regardless of zoom level - a fixed
+// unscaled overlap (e.g. always 1px) shrinks to a fraction of a device pixel once zoomed out
+// far enough, which is exactly when the rounding-gap seam becomes visible.
+function getChunkOverlap() {
+    return Math.min(currentChunkSize / 4, Math.max(1, Math.ceil(2 / scale)));
+}
+
+function applyChunkOverlap(tile) {
+    const tw = parseFloat(tile.dataset.tileWidth);
+    const th = parseFloat(tile.dataset.tileHeight);
+    const overlap = getChunkOverlap();
+    tile.style.width = `${tw + overlap}px`;
+    tile.style.height = `${th + overlap}px`;
+}
+
+let lastOverlapScale = null;
+function refreshChunkOverlaps() {
+    if (!currentMapChunked || lastOverlapScale === scale) return;
+    lastOverlapScale = scale;
+    chunkContainer.querySelectorAll('.map-chunk-tile').forEach(applyChunkOverlap);
+}
+
+function loadChunk(col, row) {
+    if (!chunkBoundsReady) return; // don't request anything until we know the grid's real extent
+    if (col < 0 || row < 0 || col > discoveredMaxCol || row > discoveredMaxRow) return;
+
+    const key = `${col}_${row}`;
+    if (loadedChunkKeys.has(key)) return;
+    loadedChunkKeys.add(key);
+
+    const tileWidth = Math.min(currentChunkSize, currentMapTotalWidth - col * currentChunkSize);
+    const tileHeight = Math.min(currentChunkSize, currentMapTotalHeight - row * currentChunkSize);
+
+    const tile = document.createElement('img');
+    tile.className = 'map-chunk-tile';
+    tile.dataset.tileWidth = tileWidth;
+    tile.dataset.tileHeight = tileHeight;
+    tile.style.position = 'absolute';
+    tile.style.left = `${col * currentChunkSize}px`;
+    tile.style.top = `${row * currentChunkSize}px`;
+    applyChunkOverlap(tile);
+
+    const basePath = `${currentChunkFolder}/${currentChunkPrefix}_${col * currentChunkSize}_${row * currentChunkSize}`;
+    tile.onerror = () => {
+        if (tile.dataset.triedPng) {
+            // Shouldn't normally happen since discoverChunkBounds already checked the grid's
+            // real extent, but a sparse/irregular map could still be missing an interior tile -
+            // remove it rather than leave a broken-image icon, and don't retry.
+            tile.remove();
+            return;
+        }
+        tile.dataset.triedPng = 'true';
+        tile.src = `${basePath}.png`;
+    };
+    tile.src = `${basePath}.jpg`;
+
+    chunkContainer.appendChild(tile);
+}
+
+// The set of chunks strictly inside the viewport, plus a 1-chunk margin so panning/zooming
+// doesn't show blank tiles for a frame before the next update fires.
+function loadVisibleChunks() {
+    if (!currentMapChunked || !chunkBoundsReady) return;
+    const margin = 1;
+    const viewLeft = (-posX) / scale;
+    const viewTop = (-posY) / scale;
+    const viewRight = viewLeft + viewport.clientWidth / scale;
+    const viewBottom = viewTop + viewport.clientHeight / scale;
+
+    const colStart = Math.floor(viewLeft / currentChunkSize) - margin;
+    const colEnd = Math.floor(viewRight / currentChunkSize) + margin;
+    const rowStart = Math.floor(viewTop / currentChunkSize) - margin;
+    const rowEnd = Math.floor(viewBottom / currentChunkSize) + margin;
+
+    for (let row = rowStart; row <= rowEnd; row++) {
+        for (let col = colStart; col <= colEnd; col++) {
+            loadChunk(col, row);
+        }
+    }
+}
+
+let chunkUpdateScheduled = false;
+function scheduleChunkUpdate() {
+    if (!currentMapChunked || chunkUpdateScheduled) return;
+    chunkUpdateScheduled = true;
+    requestAnimationFrame(() => {
+        chunkUpdateScheduled = false;
+        loadVisibleChunks();
+        refreshChunkOverlaps();
+    });
 }
 
 viewport.addEventListener('wheel', (e) => {
-    if (!img.src || img.style.display === 'none') return;
+    if (!currentMapLoaded) return;
     e.preventDefault();
     const zoomFactor = 1.15;
     let nextScale = e.deltaY < 0 ? scale * zoomFactor : scale / zoomFactor;
@@ -2066,8 +2455,23 @@ viewport.addEventListener('wheel', (e) => {
     updateTransform();
 }, { passive: false });
 
+viewport.addEventListener('mousemove', (e) => {
+    if (!currentMapChunked || !currentMapLoaded) return;
+    const rect = container.getBoundingClientRect();
+    const mapX = (e.clientX - rect.left) / scale;
+    const mapY = (e.clientY - rect.top) / scale;
+    if (mapX < 0 || mapY < 0 || mapX > currentMapTotalWidth || mapY > currentMapTotalHeight) return;
+    const hoverCol = Math.floor(mapX / currentChunkSize);
+    const hoverRow = Math.floor(mapY / currentChunkSize);
+    for (let dr = -1; dr <= 1; dr++) {
+        for (let dc = -1; dc <= 1; dc++) {
+            loadChunk(hoverCol + dc, hoverRow + dr);
+        }
+    }
+});
+
 viewport.addEventListener('mousedown', (e) => {
-    if (!img.src || img.style.display === 'none') return;
+    if (!currentMapLoaded) return;
     if (isDraggingLabel) return; // safety net; label mousedown handlers stopPropagation so this shouldn't fire anyway
     isDragging = true;
     startX = e.clientX - posX;
@@ -2084,10 +2488,10 @@ viewport.addEventListener('click', (e) => {
         return;
     }
     if (isCreatorMode) {
-        const rect = img.getBoundingClientRect();
+        const rect = container.getBoundingClientRect();
         const clickX = Math.round((e.clientX - rect.left) / scale);
         const clickY = Math.round((e.clientY - rect.top) / scale);
-        if (clickX >= 0 && clickX <= img.clientWidth && clickY >= 0 && clickY <= img.clientHeight) {
+        if (clickX >= 0 && clickX <= getMapWidth() && clickY >= 0 && clickY <= getMapHeight()) {
             clickMapX = clickX;
             clickMapY = clickY;
             if (currentMapType === "overworld") {

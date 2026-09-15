@@ -15,7 +15,7 @@ const ArcanumCitiesMapData = [
       { x: 1098, y: 1441, text: "Black Root", description: "A border town.", targetMapFilename: "Black Root" }, // MAP OK
       { x: 1604, y: 1828, text: "Caladon", description: "A thriving feudal kingdom.", targetMapFilename: "Caladon" },
         // NEW MAP TO DO (Castle Main Floor; Upstairs; Vents)
-      { x: 1237, y: 1650, text: "Dernholm, capital of Cumbria", description: "Capital of Cumbria - A dying feudal kingdom.", targetMapFilename: "Dernholm" }, // MAP OK
+      { x: 1237, y: 1650, text: "Dernholm, capital of<br>Cumbria", description: "Capital of Cumbria - A dying feudal kingdom.", targetMapFilename: "Dernholm" }, // MAP OK
       { x: 323, y: 877, text: "Isle of Despair", description: "A penal colony.", targetMapFilename: "Isle of Despair" }, // MAP OK
         // To do: Pit
       { x: 1545, y: 656, text: "Qintarra", description: "A large elven community.", targetMapFilename: "Qintarra"}, // MAP OK
@@ -42,7 +42,7 @@ const ArcanumCitiesMapData = [
       { x: 629, y: 1593, text: "Boat Landing on Thanatos", description: "Landing for the Isle of Death.", targetMapFilename: "Boat Landing on Thanatos"},
       { x: 1453, y: 1289, text: "Crash Site", description: "The remains of the crashed blimp.", targetMapFilename: "Crash Site"},
       { x: 346, y: 679, text: "Dark Elf Camp", description: "The dark elves’ base camp near the ruins of Vendigroth.", targetMapFilename: "Dark Elf Camp"},
-      { x: 993, y: 790, text: "Dungeon of the Dragon Pool", description: "Source of Dragon’s Blood for reviving Torian Kel.", targetMapFilename: "Dungeon of the Dragon Pool" },
+      { x: 993, y: 790, text: "Dungeon of the Dragon<br>Pool", description: "Source of Dragon’s Blood for reviving Torian Kel.", targetMapFilename: "Dungeon of the Dragon Pool" },
       { x: 711, y: 1022, text: "Elven Ruins", description: "A place that may hold untold elven riches.", targetMapFilename: "Elven Ruins"},
       { x: 1627, y: 564, text: "Falcon’s Ache", description: "Elven holy ground, at the edge of the Glimmering Forest.", targetMapFilename: "Falcon’s Ache"},
       { x: 466, y: 741, text: "Gateway to the Wastes", description: "A bridge leading into the Vendigroth Wastes." , targetMapFilename: "Gateway to the Wastes"},
@@ -54,18 +54,18 @@ const ArcanumCitiesMapData = [
       { x: 720, y: 1886, text: "Land Bridge", description: "Beginning of the trail leading to the god of Thanatos.", targetMapFilename: "Land Bridge", targetX: 1435, targetY: 735},
       { x: 1580, y: 1009, text: "Lethe Wyvern Sighting", description: "Rumored lair of the lethe wyvern.", targetMapFilename: "Lethe Wyvern Sighting" },
       { x: 1179, y: 1465, text: "Liam’s Workshop", description: "Liam Cameron’s Workshop.", targetMapFilename: "Liam’s Workshop"},
-      { x: 474, y: 694, text: "Mysterious ruins of the wastes", description: "A location shown to you by Weldo Rubin.", targetMapFilename: "Myserious ruins of the wastes" },
+      { x: 474, y: 694, text: "Mysterious ruins of the<br>wastes", description: "A location shown to you by Weldo Rubin.", targetMapFilename: "Myserious ruins of the wastes" },
       { x: 721, y: 1890, text: "Nasrudin’s Resting Place", description: "Reputed to be the location of the remains of Nasrudin.", targetMapFilename: "Nasrudin’s Resting Place", targetX: 3144, targetY: 2443},
       // New map to do
       { x: 1503, y: 1771, text: "Razor’s Pointe", description: "Ships fear these treacherous waters that must be passed to navigate around the tip of Arcanum.", targetMapFilename: "Razor’s Pointe" },
       { x: 1025, y: 1333, text: "Ruins of Szabo", description: "Some ancient ruins.", targetMapFilename: "Ruins of Szabo"},
-      { x: 1514, y: 1184, text: "Secret Entrance to the Iron Clan", description: "The entrance to the legendary dwarven clan.", targetMapFilename: "Secret Entrance to the Iron Clan"},
+      { x: 1514, y: 1184, text: "Secret Entrance to the Iron<br>Clan", description: "The entrance to the legendary dwarven clan.", targetMapFilename: "Secret Entrance to the Iron Clan"},
       { x: 346, y: 827, text: "Shades Beach", description: "A place reputed to be full of strange objects.", targetMapFilename: "Shades Beach"},
       { x: 1450, y: 1325, text: "Simon Fahrkus’ Shack", description: "Simon Fahrkus’ Shack.", targetMapFilename: "Simon Fahrkus’ Shack"},
       { x: 1343, y: 887, text: "Stonecutter Clan", description: "The home of the Stonecutter Clan.", targetMapFilename: "Stonecutter Clan"},
       { x: 682, y: 1339, text: "Stringy Pete’s Cove", description: "A haunted cove.", targetMapFilename: "Stringy Pete’s Cover" },
       { x: 808, y: 1341, text: "Stringy Pete’s Treasure", description: "The final resting place of the infamous pirate’s bounty.", targetMapFilename: "Stringy Pete’s Treasure" },
-      { x: 1308, y: 754, text: "The Black Mountain Mines", description: "The abandoned home of the Black Mountain Clan.", targetMapFilename: "The Black Mountain Mines"},
+      { x: 1308, y: 754, text: "The Black Mountain<br>Mines", description: "The abandoned home of the Black Mountain Clan.", targetMapFilename: "The Black Mountain Mines"},
         // To do: checkup + new maps (level 1 - mines; 2 - city; 3 - castle)
       { x: 1178, y: 289, text: "The Bangellian Deeps", description: "The resting place of the Bangellian Scourge.", targetMapFilename: "The Bangellian Deeps"},
       { x: 1386, y: 640, text: "The Castle S’nel N’fa", description: "A trap filled ruin rumored to contain the staff of K’an Tau.", targetMapFilename: "The Castle S’nel N’fa" },
@@ -148,16 +148,36 @@ const ArcanumCitiesMapData = [
       { x: 7391, y: 1882, text: "Chester Miller, Mayor of Ashbury", category: ["quest", "npc"], level: 1, sex: "male", race: "Human", 
         linkedLabels: [{ questName: "Monument Planning", questDescription: "The Mayor of Ashbury will allow you to answer questions at this evenings Town Council meeting. Your answers must please as many people as possible.", target: "City Hall", part: 1 }, { questName: "Monument Planning", questDescription: "If the townspeople like all of your answers you'll receive 2300 experience, and you'll earn the reputation as an Orator of Ashbury.", part: 3 }] },
       { x: 7310, y: 1630, text: "City Hall", category: "quest", 
-        linkedLabels: [{ questName: "Monument Planning", questDescription: "Give the following answer to the quests: a) ''It is right and fitting that Ashbury should honor its heroes.''; b) ''Hierarchical design principals require a central location.''; c) ''An issue of municipal bonds would easily raise the funds.''; d) ''We will bid the project competitively and take the lowest bidder.''; d) ''Probably a metal statue of some kind. It will last longer.''; e) ''Take an inch and you have a mile.'' Then, return to Chest Miller.", target: "Chester Miller, Mayor of Ashbury", part: 2 }] },
+        linkedLabels: [{ questName: "Monument Planning", questDescription: "Give the following answer to the quests:<br>a) ''It is right and fitting that Ashbury should honor its heroes.'';<br>b) ''Hierarchical design principals require a central location.'';<br>c) ''An issue of municipal bonds would easily raise the funds.'';<br>d) ''We will bid the project competitively and take the lowest bidder.'';<br> e) ''Probably a metal statue of some kind. It will last longer.'';<br>f) ''Take an inch and you have a mile.''<br>Then, return to Chest Miller.", target: "Chester Miller, Mayor of Ashbury", part: 2 }] },
       { x: 6643, y: 3429, text: "Theo Brightstart", category: ["quest", "npc"], level: 24, sex: "male", race: "Halfling", 
-        linkedLabels: [{ questName: "Kill the Wild Pigs", questDescription: "Kill the 3 wild pigs that keep eating Theo Brightstart's corn crop.", part: 1 }, { questName: "Move the Boulders", questDescription: "Load the 5 large boulders located in Theo Brightstart's field onto his cart.", part: 1 }] },
+        linkedLabels: [
+          { questName: "Kill the Wild Pigs", questDescription: "Kill the 3 wild pigs that keep eating Theo Brightstart's corn crop.", part: 1 },
+          { questName: "Move the Boulders", questDescription: "Load the 5 large boulders located in Theo Brightstart's field onto his cart.", part: 1 }
+        ]
+      },
+      { x: 5860, y: 3174, text: "Three wild pigs", category: "quest",
+        linkedLabels: [
+          { questName: "Kill the Wild Pigs", questDescription: "After having killed the pigs, return to Theo and he will reward you 50 coins (or 75 if you negociate).", target: "Theo Brightstart", part: 2 }
+        ]
+      },
+      { x: 6789, y: 3701, text: "Five boulders", category: "quest",
+        linkedLabels: [
+          { questName: "Move the Boulders", questDescription: "Moving the boulders requires at least 12 strength, as they are very heavy. Theo will pay you 50 or 100 coins for your efforts.", target: "Theo Brightstart", part: 2 }
+        ]
+      },
       { x: 8294, y: 3609, text: "William Thorndop", master: "Firearms Master", category: ["quest", "npc", "master"], level: 48, sex: "male", race: "Human", inventory: ["Looking Glass Rifle"], 
         linkedLabels: [{ questName: "Rescue Mrs. Rolland Unharmed", questDescription: "Kill the entire Willbecker Gang and release their hostage, Mrs. Rolland, unharmed.", target: "Mrs. Rolland", part: 1 }] },
+      { x: 10155, y: 3120, text: "Mrs. Rolland", category: ["quest", "npc"],
+        linkedLabels: [
+          { questName: "Rescue Mrs. Rolland Unharmed", questDescription: "Save Mrs. Rolland. If she dies (and even if you resurrect her afterwards), the quest will be botched and you won't receive your training.", target: "Mrs. Rolland", part: 2 }
+        ]
+      },
       { x: 9734, y: 1775, text: "Captain Edward Teach (Ashbury)", category: ["quest", "npc"], level: 23, sex: "male", race: "Human", 
-        linkedLabels: [{ questName: "Investigate the Isle of Despair", questDescription: "Edward Teach will take you to the Isle of Despair, for free if you work with Gilbert Bates, or for 500 coins.", target: "Captain Edward Teach (Isle of Despair)", part: 2 }] },
+        linkedLabels: [{ questName: "Investigate the Isle of Despair", questDescription: "Edward Teach will take you to the Isle of Despair, for free if you work with Gilbert Bates, or for 500 coins.", target: "Captain Edward Teach (Isle of Despair)", part: 3 }] },
       { x: 9633, y: 1807, text: "Barrel", category: ["quest", "chest"], chestState: "locked", inventory: ["The Hand"], 
         linkedLabels: [{ questName: "The Hand", questDescription: "Get the book ''The Hand'' for Ogdin", target: "Ogdin", part: 1 }] },
-      { x: 6409, y: 1806, text: "Kendrick Wales", description: "The first time you talk to him, Wales will let you know that he's the author of The Curse of T'sen-Ang, but he won't tell you anything about the book. Later you'll get to read a copy of the book, and learn how Wales picked up the information to write it.", category: ["quest", "npc"], level: 1, sex: "male", race: "Gnome" },
+      { x: 6409, y: 1806, text: "Kendrick Wales", description: "The first time you talk to him, Wales will let you know that he's the author of The Curse of T'sen-Ang, but he won't tell you anything about the book. Later you'll get to read a copy of the book, and learn how Wales picked up the information to write it.", category: ["quest", "npc"], level: 1, sex: "male", race: "Gnome",
+        linkedLabels: [{ questName: "Investigation for Lillian Misk", questDescription: "", target: "", part: "" }] },
 
       // Other
       { x: 4774, y: 1988, text: "Infernal Hammer", description: "Guarded by two fire elementals.", category: "information", inventory: ["Infernal Hammer"] },    
@@ -178,7 +198,11 @@ const ArcanumCitiesMapData = [
       { x: 4727, y: 3785, text: "Franklin Payne", sex: "Male", race: "Human", level: 35, portrait: "Textures/franklinpayne.gif", description: "Franklin Payne will only show up after you've visited T'sen-Ang and learned the fate of the Black Mountain Clan . If you ask him the most dangerous place he's ever been, he'll say Thanatos. At that point you can invite him to come along with you to Thanatos, even if you joined the dark elves and thus can't go to Thanatos.", inventory: ["Elephant Gun", "Mithril Chainmail"], category: ["followers", "information"] },
       
       // Shop
-      { x: 3912, y: 2885, text: "Garret Almstead", sex: "male", race: "Half-Orc", level: 38, shopType: "Blacksmith", shopMarkup: 110, inventory: ["Dwarven Gauntlets", "Almstead's Axe", "Key to Garret Almstead's Trunk"], category: ["quest", "shop", "key"] },
+      { x: 3912, y: 2885, text: "Garret Almstead", sex: "male", race: "Half-Orc", level: 38, shopType: "Blacksmith", shopMarkup: 110, inventory: ["Dwarven Gauntlets", "Almstead's Axe", "Key to Garret Almstead's Trunk"], category: ["quest", "shop", "key"],
+        linkedLabels: [
+          { questName: "Retrieve the Strongbox", questDescription: "", target: "", part: 2 }
+        ]
+      },
       { x: 3575, y: 3080, text: "Tailor", sex: "female", race: "Human", level: 24, shopType: "Tailor", shopMarkup: 90, inventory: ["Enchanted Gown"], category: ["shop"] },
       { x: 5032, y: 2161, text: "General Store Clerk", sex: "male", race: "Human", level: 34, shopType: "General Store", shopMarkup: 110, category: ["shop"] },
       { x: 4383, y: 3109, text: "Inventor", sex: "male", race: "Human", level: 33, shopType: "Inventor", shopMarkup: 110, category: ["shop"] },
@@ -190,7 +214,7 @@ const ArcanumCitiesMapData = [
       // Black Root Taxes
       { x: 7180, y: 2486, text: "Mayor of Black Root", sex: "male", race: "Human", level: 10, inventory: ["Chest of Gold"], category: ["quest", "npc"],
         linkedLabels: [
-          { questName: "Black Root taxes", questDescription: "Black Root Mayor won't give you the taxes unless you retrieve his ceremonial silver dagger.", target: "King Praetor" },
+          { questName: "Collect Black Root's Taxes for King Praetor", questDescription: "Black Root Mayor won't give you the taxes unless you retrieve his ceremonial silver dagger.", target: "King Praetor", part: 2 },
           { questName: "Retrieve the ceremonial silver dagger", questDescription: "The Mayor of Black Root wants you to find his badge of office, a ceremonial silver dagger, stolen by a local gang of thieves.", target: "D'ak Taan", part: 1 }
         ] },
       { x: 3164, y: 1271, text: "D'ak Taan", sex: "male", race: "Elf", level: 21, category: ["quest", "npc"],
@@ -199,24 +223,36 @@ const ArcanumCitiesMapData = [
           { questName: "Retrieve the ceremonial silver dagger", questDescription: "D'ak Taan the thief wants you to rob the Hedgewizard's chest. If successful, he will give you stolen items from Black Root.", target: "Tugal the Hedgewizard", part: 3 },
           { questName: "Retrieve the ceremonial silver dagger", questDescription: "D'ak Taan the thief wants you to obtain poison from Grunwalde. If successful, he will give you stolen items from Black Root.", target: "Grunwalde", part: 3 }
         ] },
-      { x: 2331, y: 3399, text: "Tugal the Hedgewizard", sex: "male", race: "Gnome", level: 14, inventory:["Scroll of Summon Undead"], category: ["quest", "npc"], target: "D'ak Taan" },
-      { x: 2213, y: 3361, text: "Wood Chest", inventory: ["Small Statuette"], category: ["quest", "chest"] },
-      { x: 4627, y: 3224, text: "Grunwalde", sex: "male", race: "Human", level: 25, inventory: ["Envenomed Sword", "Grunwalde's Poison"], category: ["quest", "npc"], target: "D'ak Taan" },
+      { x: 2331, y: 3399, text: "Tugal the Hedgewizard", sex: "male", race: "Gnome", level: 14, inventory:["Scroll of Summon Undead"], category: ["quest", "npc"],
+        linkedLabels: [
+          { questName: "Retrieve the ceremonial silver dagger", questDescription: "Tugal the Hedgewizard is a paranoid little man. He won't let you get his statuette. Take care of him and lockpick or destroy his chest.", target: "Wood Chest (Tugal)", part: 4 }
+        ]
+      },
+      { x: 2213, y: 3361, text: "Wood Chest (Tugal)", inventory: ["Small Statuette"], category: ["quest", "chest"],
+        linkedLabels: [
+          { questName: "Retrieve the ceremonial silver dagger", questDescription: "After retrieving the small statuette, return to D'ak Taan.", target: "D'ak Taan", part: 5 }
+        ]
+      },
+      { x: 4627, y: 3224, text: "Grunwalde", sex: "male", race: "Human", level: 25, inventory: ["Envenomed Sword", "Grunwalde's Poison"], category: ["quest", "npc"],
+        linkedLabels: [
+          { questName: "Retrieve the ceremonial silver dagger", questDescription: "", target: "D'ak Taan", part: 5 }
+        ]
+      },
 
       // Ancient Game
       { x: 8125, y: 2907, text: "Naked Halfling (1)", sex: "male", race: "Halfling", level: 1, description: "A strange halfling seems to have included you in an ancient game.", category: ["quest", "npc"], 
         linkedLabels: [
-          { questName: "Ancient Game", questDescription: "A painted face, hands with no bones. My oldest brother was made of stones. What am I? Correct answer: A clock.", target: "Naked Halfling (2)", part: 1 },
+          { questName: "Ancient Game", questDescription: "A painted face, hands with no bones. My oldest brother was made of stones. What am I?<br>Correct answer: A clock.", target: "Naked Halfling (2)", part: 1 },
         ]
       },
       { x: 1947, y: 1610, text: "Naked Halfling (2)", sex: "male", race: "Halfling", level: 1, category: ["quest", "npc"],
         linkedLabels: [
-          { questName: "Ancient Game", questDescription: "Death to one, while birthing another - trees begin to shiver around its grandmother. What am I? Correct answer: Spring.", target: "Naked Halfling (3)", part: 2 }
+          { questName: "Ancient Game", questDescription: "Death to one, while birthing another - trees begin to shiver around its grandmother. What am I?<br>Correct answer: Spring.", target: "Naked Halfling (3)", part: 2 }
         ]
       },
       { x: 1783, y: 920, text: "Naked Halfling (3)", sex: "male", race: "Halfling", level: 50, category: ["quest", "npc"],
         linkedLabels: [
-          { questName: "Ancient Game", questDescription: "Causing wounds, and cleansing. History dies from its rinsing. Life or scars is its blessing. What am I? Correct answer: Fire", part: 3 }
+          { questName: "Ancient Game", questDescription: "Causing wounds, and cleansing. History dies from its rinsing. Life or scars is its blessing. What am I?<br>Correct answer: Fire", part: 3 }
         ]
       },
 
@@ -234,16 +270,16 @@ const ArcanumCitiesMapData = [
       },
       { x: 3568, y: 2664, text: "Daniel Hallaway", sex: "male", race: "Human", level: 32, category: ["quest", "npc"],
         linkedLabels: [
-          { questName: "Retrieve the Strongbox", questDescription: "The innkeeper wants you to bring back his strong box from the blacksmith.", target: "Garret Almstead" }
+          { questName: "Retrieve the Strongbox", questDescription: "The innkeeper wants you to bring back his strong box from the blacksmith.", target: "Garret Almstead", part: 1 }
         ] 
       },
       { x: 3184, y: 2665, text: "Clarissa Shalmo", sex: "female", race: "Half-Orc", level: 47, master: "Master of Throwing", category: ["quest", "npc", "master"],
         linkedLabels: [
-          { questName: "Retrieve Azram’s Star" , questDescription: "Retrieve Azram’s Star from K’na Tha for Clarissa Shalmo in Black Root.", target: "" }
+          { questName: "Retrieve Azram’s Star" , questDescription: "Retrieve Azram’s Star from K’na Tha for Clarissa Shalmo in Black Root.", target: "Altar (Azram’s Star)", part: 1 }
         ]
       },
       { x: 2028, y: 3570, text: "Tyron's Note", inventory: ["Tyron's Note"], category: "quest", linkedLabels: [
-          { questName: "The Ren'ar Siamese Twins", questDescription: "Tyron has vanished! Report back to Matt de Cesare.", target: "Matt de Cesare", part: 4}
+          { questName: "The Ren'ar Siamese Twins", questDescription: "Tyron has vanished, leaving behind a mysterious note. Report back to Matt de Cesare.", target: "Matt de Cesare", part: 4}
         ]
       },
       { x: 5575, y: 2040, text: "Killian Drake", sex: "male", race: "Human", level: 45, description: "Killian Drake only appears if you are a Master of Gambling. You can win a boat from him.", category: ["npc"] },
@@ -303,7 +339,7 @@ const ArcanumCitiesMapData = [
       },
       { x: 4836, y: 1928, text: "Lillian Misk", sex: "female", race: "Human", level: 21, category: ["quest", "npc"],
         linkedLabels: [
-          { questName: "Investigation for Lillian Misk", questDescription: "Lillian Misk wants an investigation into who disclosed the information concerning the ownership of ''Horror Among the Dark Elves'' by her late husband.", target: "" }
+          { questName: "Investigation for Lillian Misk", questDescription: "Lillian Misk wants an investigation into who disclosed the information concerning the ownership of ''Horror Among the Dark Elves'' by her late husband.", target: "", part: 1 }
         ]
       },
       { x: 6384, y: 1799, text: "Edward Willoughsby (Caladon)", sex: "male", race: "Gnome", level: 45, category: ["quest", "npc"],
@@ -327,12 +363,26 @@ const ArcanumCitiesMapData = [
           { questName: "Caladon Thieves Underground", questDescription: "Adam Maxwell, a member of the Thieves Underground, has asked you to heist the priceless Necklace of Queen K'na S'ea from the museum in Caladon.", target: "", part: 3 }
         ]
       },
+      { x: 4732, y: 1870, text: "Locked Case", chestState: "locked", description: "Divinations and Magicks for the Adept Wizard", category: ["quest", "chest"],
+        linkedLabels: [
+          { questName: "Caladon Thieves Underground", questDescription: "Retrieve the book from its locked case", target: "Adam Maxwell", part: 2 }
+        ]
+      },
+      { x: 5513, y: 598, text: "Safe", chestState: "locked", inventory: ["Necklace of Queen K'na S'ea"], category: ["chest", "quest"],
+        linkedLabels: [
+          { questName: "Caladon Thieves Underground", questDescription: "Steal the necklace, defeat the Mechanized Arachnids, and return to Adam Maxwell.", target: "Adam Maxwell", part: 4 }
+        ]
+      },
       { x: 5456, y: 2009, text: "Ryan Sanders", sex: "male", race: "Human", level: 17, category: ["quest", "npc"],
         linkedLabels: [
           { questName: "Kill Jonathan Sanders", questDescription: "Ryan Sanders wants you to kill his father, Jonathan Sanders. He will pay you 1,000 coin when the job is complete.", target: "Jonathan Sanders", part: 1 }
         ]
       },  
-      { x: 5200, y: 1714, text: "Jonathan Sanders", sex: "male", race: "Human", level: 31, category: ["quest", "npc"], linkedLabels: ["Ryan Sanders"] },
+      { x: 5200, y: 1714, text: "Jonathan Sanders", sex: "male", race: "Human", level: 31, category: ["quest", "npc"],
+        linkedLabels: [
+          { questName: "Kill Jonathan Sanders", questDescription: "Kill Jonathan Sanders and return to Ryan Sanders.", target: "Ryan Sanders", part: 2 }
+        ]
+      },
       { x: 2182, y: 3781, text: "David Wit", sex: "male", race: "Human", level: 17, category: ["quest", "npc"],
         linkedLabels: [
           { questName: "Discover what is killing David's rabbits", questDescription: "David Wit would like you to discover what is killing his rabbits.", target: "Cynthia Wit", part: 1 },
@@ -346,16 +396,21 @@ const ArcanumCitiesMapData = [
       },
       { x: 1229, y: 2891, text: "Hieronymous Maxim", sex: "male", race: "Human", level: 45, master: "Master Repair", category: ["quest", "npc", "master"],
         linkedLabels: [
-          { questName: "Heavier than air machines can fly", questDescription: "Find proof for Hieronymous Maxim that his heavier than air machines actually flew.", target: "Isaac Zapruder", part: 1 }
+          { questName: "Heavier than air machines can fly", questDescription: "Find proof for Hieronymous Maxim that his heavier than air machines actually flew.", target: "Isaac Zapruder", part: 1 },
+          { questName: "Heavier than air machines can fly", questDescription: "To thank you for proving his machines can fly, Hieronymous Maxim will offer you to be trained as a master of repair.", part: 3 }
         ]
       },
       { x: 6337, y: 739, text: "Arthur Tyron", sex: "male", race: "Human", level: 1, category: ["quest", "npc"],
         linkedLabels: [
-          { questName: "The Ren'ar Siamese Twins", questDescription: "Arthur Tyron needs you to find proof of half ogre breeding being done on ''Half Ogre Island''.", target: "Safe (Half Ogre Island)", part: 6 }
+          { questName: "The Ren'ar Siamese Twins", questDescription: "Arthur Tyron needs you to find proof of Half-Ogre breeding that was done on the ''Half-Ogre Island''.", target: "Safe (Half Ogre Island)", part: 6 }
+        ]
+      },
+      { x: 6298, y: 696, text: "Gnome City Dweller", sex: "male", race: "Gnome", level: 45, category: ["quest", "npc"],
+        linkedLabels: [
+          { questName: "The Ren'ar Siamese Twins", questDescription: "Arthur Tyron has disappeared. In his place is a gnome that has been waiting for you, and will tell you all about the Half-Ogre conspiracy.", part: 8 }
         ]
       },
       { x: 3843, y: 1855, text: "Grave of Victor Misk", description: "Book purchased at the Roseborough Gift Shop.", category: ["quest", "chest"] },
-      { x: 4732, y: 1870, text: "Locked Case", description: "Divinations and Magicks for the Adept Wizard", category: ["quest", "chest"], linkedLabels: ["Adam Maxwell"] },
       { x: 4743, y: 1964, text: "Display case", description: "The Book of Durin's Truth", category: ["quest", "chest"] },
       { x: 6262, y: 3558, text: "Bullors", sex: "male", race: "Dwarf", level: 20, category: ["quest", "npc"],
         linkedLabels: [
@@ -388,7 +443,6 @@ const ArcanumCitiesMapData = [
       { x: 3899, y: 2304, text: "Chest", inventory: ["Magick Necklace"], category: ["chest", "bounty"] },
       { x: 5510, y: 3451, text: "Crate", inventory: ["Post Bound For Tarant"], category: ["chest", "bounty"] },
       { x: 7424, y: 1805, text: "Cabinet", chestState: "locked", inventory: ["Ryan Marshall's Police Record"], category: ["chest", "bounty"] },
-      { x: 5513, y: 598, text: "Safe", inventory: ["Necklace of Queen K'na S'ea"], category: ["chest", "quest"] },
 
       // Information
       { x: 4298, y: 1706, text: "Grave of Lawrence Brummond", description: "Virgil, born Virgil Brummond, grew up in Caladon with his brother Lawrence Brummond as a local drifter and criminal-associate. After losing in a gamble, his brother was beaten to death, whereby Virgil fled from Caladon until he was taken in by Elder Joachim, and underwent a complete transformation by embracing the Panarii Religion. He is sent to escort the supposed reincarnation of Nasurdin back Shrouded Hills.", category: ["information"] },
@@ -490,7 +544,7 @@ const ArcanumCitiesMapData = [
        },
       { x: 1504, y: 3105, text: "Thorvald Two Stones", sex: "Male", race: "Dwarf", level: 23, portrait: "Textures/thorvald.gif", inventory: ["Key to Thorvald's Chest", "Wheel Clan Spectacles"], category: ["quest", "followers", "key"],
         linkedLabels: [
-          { questName: "Investigate the Isle of Despair", questDescription: "The Black Mountain Clan was never sent to the Isle of Despair!", part: 4 },          
+          { questName: "Investigate the Isle of Despair", questDescription: "The Black Mountain Clan was never sent to the Isle of Despair!", part: 5 },          
           { questName: "Investigate the Wheel Clan", questDescription: "Investigate the Wheel Clan for further information about the Black Mountain Clan.", target: "Reveal the Gate", part: 1 },
           { questName: "", questDescription: "Tell The Wheel Clan of Thorvald's incarceration on The Isle of Despair.", target: "" }
         ]
@@ -499,7 +553,7 @@ const ArcanumCitiesMapData = [
       // Quests
       { x: 3813, y: 4071, text: "Captain Edward Teach (Isle of Despair)", sex: "male", race: "Human", level: 23, category: ["quest", "npc"],
         linkedLabels: [
-          { questName: "Investigate the Isle of Despair", questDescription: "Now that you are on the Isle of Despair, go and talk with Thorvald.", target: "Thorvald Two Stones", part: 3 },
+          { questName: "Investigate the Isle of Despair", questDescription: "Now that you are on the Isle of Despair, go and talk with Thorvald.", target: "Thorvald Two Stones", part: 4 },
           "Captain Edward Teach (Ashbury)"
         ]
       },
@@ -520,7 +574,7 @@ const ArcanumCitiesMapData = [
       },
       { x: 1836, y: 3281, text: "Ogdin", sex: "male", race: "Half-Ogre", level: 40, inventory: ["Key to Thorvald's House"], category: ["quest", "key", "npc"],
         linkedLabels: [
-          { questName: "The Hand", questDescription: "Ogdin wishes you to bring the book ''The Hand'' to him.", part: 2 }
+          { questName: "The Hand", questDescription: "Ogdin will let you meet with Thorvald without having to fight in the pit if you bring him the book ''The Hand''.", part: 2 }
         ]
       },
       { x: 2054, y: 3320, text: "Gorrin, Master of the Pit", sex: "male", race: "Human", level: 24, category: ["quest", "npc"] },
@@ -656,7 +710,10 @@ const ArcanumCitiesMapData = [
     ]
   },
   {
-    filename: "ArcanumBase/ShroudedHills.jpg",
+    filename: "ArcanumBase/ShroudedHills",
+    chunked: true,
+    width: 14000,
+    height: 5000,
     displayName: "Shrouded Hills",
     modGroup: "Cities",
     music: "music/Towns.mp3", // Good
@@ -691,8 +748,8 @@ const ArcanumCitiesMapData = [
       { x: 7083, y: 1515, text: "Gaylin", sex: "female", race: "Elf", level: 24, shopType: "Herbalist", shopMarkup: 90, category: ["shop", "quest"],
         linkedLabels: [
           { questName: "Find the Amulet of N’Tala", questDescription: "If, in my travels, I happen across the ancient elven amulet of N’Tala, Gaylin has offered to pay me a handsome reward for its return.", target: "Myrth", part: 1 },
-          { questName: "Find the Amulet of N’Tala", questDescription: "Gaylin will reward you 1000 coins for finding the amulet of N’Tala, and will reveal the location of Qintarra.", target: "Raven", part: 3 }
-
+          { questName: "Find the Amulet of N’Tala", questDescription: "Gaylin will reward you 1000 coins for finding the amulet of N’Tala.", part: 3 },
+          { questName: "Find Qintarra", questDescription: "If you are searching for Qintarra, completing the Amulet of N’Tala quest will also make Gaylin tell you where the city is.", target: "Raven", part: 2 }
         ]
       },
       { x: 7089, y: 2359, text: "Gnome Shopkeeper", sex: "male", race: "Gnome", level: 18, shopType: "General Store", shopMarkup: 110, category: "shop" },
@@ -723,7 +780,8 @@ const ArcanumCitiesMapData = [
       },
       { x: 8278, y: 2640, text: "Jacob Bens", sex: "male", race: "Half-Orc", level: 5, inventory: ["Note (Safe Combination)"], category: ["quest", "npc"],
         linkedLabels: [
-          { questName: "Rob the Bank", questDescription: "Jacob Bens in Shrouded Hills wants you to steal the local mining company’s payroll from the bank’s safe.", target: "Combination safe", part: 1 }
+          { questName: "Rob the Bank", questDescription: "Jacob Bens in Shrouded Hills wants you to steal the local mining company’s payroll from the bank’s safe.", target: "Combination safe", part: 1 },
+          { questName: "Rob the Bank", questDescription: "Give Jacob Bens his share of 250 gold or else he will rat you out.", part: 3 }
         ]
       },
       { x: 7768, y: 2508, text: "Bank robber", sex: "male", race: "Human", level: 3, category: "quest",
@@ -740,7 +798,7 @@ const ArcanumCitiesMapData = [
       },
       { x: 8851, y: 2680, text: "Joachim’s Note to Virgil", inventory: ["Joachim’s Note to Virgil"], category: "quest",
         linkedLabels: [
-          { questName: "Elder Joachim’s paper trail", questDescription: "", target: "Telegraph Operator", part: 2 }
+          { questName: "Elder Joachim’s paper trail", questDescription: "", target: "Telegraph Operator", part: 3 }
         ]
       },
       { x: 7733, y: 2386, text: "Combination safe", chestState: "locked", description: "This looks to be a combination safe. There is no keyhole.", category: ["quest", "chest"],
@@ -811,7 +869,7 @@ const ArcanumCitiesMapData = [
 
       { x: 2389, y: 3537, text: "Innkeeper (Stillwater)", sex: "male", race: "Gnome", level: 35, category: ["quest", "npc"], 
         linkedLabels: [
-          { questName: "Elder Joachim’s paper trail", questDescription: "Elder Joachim left a telegram at the inn of Stillwater.", target: "", part: 3 }
+          { questName: "Elder Joachim’s paper trail", questDescription: "Elder Joachim left a telegram at the inn of Stillwater.", target: "", part: 4 }
         ]
       },
              
@@ -986,7 +1044,7 @@ const ArcanumCitiesMapData = [
       },
       { x: 4242, y: 1687, text: "Frederick T. Fitzgerald", sex: "male", race: "Gnome", level: 48, master: "Master of Spotting Traps", category: ["quest", "npc", "master"],
         linkedLabels: [
-          { questName: "Get the staff of K’an T’au", questDescription: "F. Fitzgerald, the master of Spotting Traps, wants you to get the staff of K'an T'au from the castle of S'nel N'fa. In exchange, he will give you master training.", target: "", part: 1 }
+          { questName: "Get the staff of K’an T’au", questDescription: "F. Fitzgerald, the master of Spotting Traps, wants you to get the staff of K'an T'au from the castle of S'nel N'fa. In exchange, he will give you master training.", target: "Chest (Staff of K'an T'au)", part: 1 }
         ]
       },
       { x: 3814, y: 2170, text: "J.M. Morat", sex: "male", race: "Gnome", level: 32, master: "Haggle master", category: ["quest", "npc", "master"],
@@ -1067,12 +1125,12 @@ const ArcanumCitiesMapData = [
         linkedLabels: [
           { questName: "The Ren'ar Siamese Twins", questDescription: "Sir M. de Cesare wants you to find the skulls of the Ren'ar siamese twins and bring them to him. He believes they may be in a warehouse in Tarant somewhere.", target: "Barrel (Ren'ar Twins)", part: 1},
           { questName: "The Ren'ar Siamese Twins", questDescription: "You need to find Arthur Tyron and bring him the siamese twin skulls as proof of a larger conspiracy. His last known address was in Black Root.", target: "Tyron's Note", part: 3 },
-          { questName: "The Ren'ar Siamese Twins", questDescription: "Search for Arthur Tyron in Caladon.", target: "Arthur Tyron", part: 5 }
+          { questName: "The Ren'ar Siamese Twins", questDescription: "Search for Arthur Tyron in Caladon. He lives on 22 Dragon's Turnabout", target: "Arthur Tyron", part: 5 }
         ]
       },
-      { x: 5077, y: 2420, text: "Barrel (Ren'ar Twins)", inventory: ["The Skulls of the Ren'ar Siamese Twins"], category: ["quest", "chest"],
+      { x: 5077, y: 2420, text: "Barrel (Ren'ar Twins)", chestState: "locked", inventory: ["The Skulls of the Ren'ar Siamese Twins"], category: ["quest", "chest"],
         linkedLabels: [
-          { questName: "The Ren'ar Siamese Twins", questDescription: "Return with the skulls to Matt de Cesare.", target: "Matt de Cesare", part: 2 }
+          { questName: "The Ren'ar Siamese Twins", questDescription: "Picklock or destroy the barrel, get the skulls and return to Matt de Cesare.", target: "Matt de Cesare", part: 2 }
         ]
       },
       { x: 3264, y: 2193, text: "Edward Willoughsby", sex: "male", race: "Gnome", level: 45, category: ["quest", "npc"],
@@ -1244,11 +1302,14 @@ const ArcanumCitiesMapData = [
       { x: 1468, y: 979, text: "Z'an Al'urin", sex: "female", race: "Dark Elf", level: 29, portrait: "Textures/zanalurin.gif", description: "Z'an is an evil spellcaster (earth, force, and temporal). If you tell her your name, she might agree to join you.", inventory: ["Magick Robes"], category: "followers" },
       { x: 1305, y: 472, text: "Maug Maulman", sex: "male", race: "Half-Ogre", level: 31, category: ["quest", "npc"], linkedLabels: ["T'val N'or"],
         linkedLabels: [
-          { questName: "Free the Half-Ogre Slaves", questDescription: "Kill the dark elf mage T'val N'or in order to break the spell holding the half ogre slaves.", target: "T'val N'or" }
+          { questName: "Free the Half-Ogre Slaves", questDescription: "Kill the dark elf mage T'val N'or in order to break the spell holding the half ogre slaves.", target: "T'val N'or", part: 1 }
         ]
       },
-      { x: 888, y: 627, text: "T'val N'or", sex: "male", race: "Dark Elf", level: 33, inventory: ["Mystic Traveler's Cloak", "Scroll of Sense Invisible/Traps", "Scroll of Call Earth Elemental", "Scroll of Disarm"], category: ["quest", "npc"] },
-
+      { x: 888, y: 627, text: "T'val N'or", sex: "male", race: "Dark Elf", level: 33, inventory: ["Mystic Traveler's Cloak", "Scroll of Sense Invisible/Traps", "Scroll of Call Earth Elemental", "Scroll of Disarm"], category: ["quest", "npc"],
+        linkedLabels: [
+          { questName: "Free the Half-Ogre Slaves", questDescription: "Kill the dark elf mage T'val N'or in order to break the spell holding the half ogre slaves.", target: "T'val N'or", part: 2 }
+        ]
+      },
       { x: 2104, y: 790, text: "Gideon Laier", sex: "male", race: "Human", level: 45, description: "After learning the fate of the BMC and leaving M'in Gorad's residence, you'll run into Gideon Laier, the First Blade of the Molochean Hand. He'll recognize who you are. If you know something of the history of the Molochean Hand, you might be able to convince Laier to leave you alone by telling him that he's essentially working for Arronax. However, since Gideon is wearing some nice equipment, you might want to let him attack you so you can get it. None of the dark elves will come to his aid. Oddly, the conversation with Laier will go the same whether you've joined up with the dark elves or not. If you have read Joachim's book and learned about First Assassin Trellian, then you can confront Gideon about the Hand repeating the mistakes of the past (''The Hand hasn't always been this way...'') . He will promise to call off the attacks on you, and if Vollinger is in your party, he will out him as a Hand assassin and offer him to you as a permanent companion, to make up for the Hand's attempts on your life.", category: ["npc", "information"] },
 
       { x: 818, y: 590, text: "Chest", inventory: ["Blade of Vicious Haste"], category: "chest" },
@@ -1300,10 +1361,14 @@ const ArcanumCitiesMapData = [
     labels: [
       { x: 1249, y: 314, text: "Edwin Wallows", sex: "male", race: "Gnome", level: 1, category: ["quest", "npc"],
         linkedLabels: [
-          { questName: "A new stone for Halcyon's Altar", questDescription: "Edwin Wallows of the Halcyon Order in Vooriden wants you to retrieve a new altar stone from Torin Quarry.", target: "Stone", part: 1 }
+          { questName: "A new stone for Halcyon's Altar", questDescription: "Edwin Wallows of the Halcyon Order in Vooriden wants you to retrieve a new altar stone from Torin Quarry.", target: "Murgo", part: 1 }
         ]
       },
-      { x: 955, y: 487, text: "Murgo", sex: "male", race: "Half-Ogre", level: 30, portrait: "Textures/murgo.gif", description: "Half-Ogre helper to the priests of Halcyon. He'll join you group as a temporary follower if you accept a quest to restore the altar. However he will leave the group once you return to Vooriden, or if you deviate from the quest.", category: ["quest", "followers"] },
+      { x: 955, y: 487, text: "Murgo", sex: "male", race: "Half-Ogre", level: 30, portrait: "Textures/murgo.gif", category: ["quest", "followers"],
+        linkedLabels: [
+          { questName: "A new stone for Halcyon's Altar", questDescription: "For this quest, you can recruit Murgo as a temporary follower. Murgo will leave the group once you return to Vooriden, or if you deviate from the quest.", target: "Stone", part: 2 }
+        ]
+      },
       { x: 1343, y: 248, text: "Altar of Halcyon", description: "", category: ["altar"] },
     ]
   },
@@ -1415,7 +1480,11 @@ const ArcanumCitiesMapData = [
     // music:
     defaultView: { x: 1483, y: 831, zoom: 1 },
     labels: [
-      { x: 1199, y: 1230, text: "Barrel", description: "Contains a journal from a previous adventurer. Reading the journal will give you the locations of the Village of the Ashlag Tribe and the Thanatos Land Bridge.", category: ["quest", "chest"] },
+      { x: 1199, y: 1230, text: "Barrel", category: ["quest", "chest"], 
+        linkedLabels: [
+          { questName: "Find Nasrudin", questDescription: "Contains a journal from a previous adventurer. Reading the journal will give you the locations of the Village of the Ashlag Tribe and the Thanatos Land Bridge.", target: "Nasrudin", part: 2 }
+        ]
+      },
     ],
   },
   {
@@ -1441,9 +1510,9 @@ const ArcanumCitiesMapData = [
       { x: 3239, y: 894, text: "Crash Site - Cave", category: "waypoint", targetMapFilename: "Crash Site - Cave" },
 
       // Followers
-      { x: 2179, y: 1308, text: "Virgil", sex: "Male", race: "Human", level: 1, portrait: "Textures/virgil.gif", category: "followers",
+      { x: 2179, y: 1308, text: "Virgil", sex: "Male", race: "Human", level: 1, portrait: "Textures/virgil.gif", category: ["followers", "quest"],
         linkedLabels: [
-          { questName: "Elder Joachim’s paper trail", questDescription: "", target: "Joachim’s Note to Virgil", part: 1 }
+          { questName: "Elder Joachim’s paper trail", questDescription: "Meet with Elder Joachim in Shrouded Hills.", target: "Joachim’s Note to Virgil", part: 1 }
         ]
       },
 
@@ -1455,8 +1524,8 @@ const ArcanumCitiesMapData = [
       },
       { x: 2353, y: 1112, text: "Isaac Zapruder", sex: "male", race: "Human", level: 1, inventory: ["Camera"], category: ["npc", "quest"],
         linkedLabels: [
-          { questName: "Find a camera or Bessie Toone paraphernalia", questDescription: "Ristezze the Importer wants you to find a camera OR some Bessie Toone paraphenalia. In return, he will give you information about P. Schuyler & Sons.", target: "Ristezze", part: 2 },
-          { questName: "Heavier than air machines can fly", questDescription: "Find proof for Hieronymous Maxim that his heavier than air machines actually flew.", target: "Hieronymous Maxim", part: 2 }
+          { questName: "Find a camera or Bessie Toone paraphernalia", questDescription: "You can bring back Isaac Zapruder's camera to Ristezze, but doing so will prevent you from completing a quest in Caladon.", target: "Ristezze", part: 2 },
+          { questName: "Heavier than air machines can fly", questDescription: "Isaac Zapruder took a film of the Half-Ogre attacking the attack - this is a good enough proof for Hieronymous Maxim.", target: "Hieronymous Maxim", part: 2 }
         ]
       },
       { x: 2872, y: 1312, text: "Wilhemina Carpenter", sex: "female", race: "Human", level: 1, inventory: ["Wilhemina's Note to Jared"], category: ["npc", "quest"], 
@@ -1557,7 +1626,7 @@ const ArcanumCitiesMapData = [
     music: "", // CONFIRMED - No music.
     defaultView: { x: 902, y: 3703, zoom: 1 },
     labels: [
-      { x: 3747, y: 1558, text: "Kaitan's altar", description: "", category: "altar" },
+      { x: 3747, y: 1558, text: "Kaitan's altar", category: "altar" },
       { x: 3506, y: 1640, text: "Geode", description: "A geode is on the ground. It's the item needed for the altar.", category: "information" },
       { x: 2835, y: 2774, text: "Human Noble", sex: "male", race: "Human", level: 1, inventory: ["Consuming Plate Mail"], category: "npc" },
     ],
@@ -1569,8 +1638,12 @@ const ArcanumCitiesMapData = [
     //music: 
     defaultView: { x: 877, y: 2074, zoom: 1 },
     labels: [
-      { x: 3094, y: 1041, text: "Safe (Half Ogre Island)", description: "Contains the journal. When you pick it up you'll gain a fate point.", category: ["quest", "chest"], linkedLabels: ["Arthur Tyron"] },
-    ],
+      { x: 3094, y: 1041, text: "Safe (Half Ogre Island)", description: "", category: ["quest", "chest"], 
+        linkedLabels: [
+          { questName: "The Ren'ar Siamese Twins", questDescription: "You find in the safe a Laboratory Journal (picking it up make you gain a fate point). Reading it, you discover the attrocities that were commited on the island. Return to Arthur Tyron to report on your discoveries.", target: "Gnome City Dweller", part: 7 },
+        ]
+      },
+    ]
   },
   {
     filename: "ArcanumBase/HardinsPass.jpg",
@@ -1696,7 +1769,7 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/RuinsOfSzaboEntrance.png",
     displayName: "Ruins of Szabo",
     modGroup: "Quest locations",
-    //defaultView: { x: 1615, y: 594, zoom: 1 },
+    defaultView: { x: 529, y: 911, zoom: 1 }, // Good-ish
     labels: [
       { x: 767, y: 498, text: "Ruins of Szabo - Level 1", category: "waypoint", targetMapFilename: "Ruins of Szabo - Level 1", targetX: 450, targetY: 797},
     ]
@@ -1868,7 +1941,9 @@ const ArcanumCitiesMapData = [
     modGroup: "Quest locations",
     // music: No music here.
     // defaultView: { x: 1396, y: 1442, zoom: 1 },
-    labels: [],
+    labels: [
+      { x: 1182, y: 1246, text: "The Castle of S'nel N'fa - Inside", category: "waypoint", targetMapFilename: "The Castle of S’nel N’fa - Inside" },
+    ],
   },
   {
     filename: "ArcanumBase/TheColdPlace.jpg",
@@ -1953,7 +2028,11 @@ const ArcanumCitiesMapData = [
     modGroup: "Quest locations",
     defaultView: { x: 2832, y: 2096, zoom: 1 }, // Good
     labels: [
-      { x: 1534, y: 1360, text: "Altar (Ruby Glade)", inventory: ["Great Ruby of K'alru"], category: ["quest", "chest"], linkedLabels: ["Gildor Nightwalk"] },
+      { x: 1534, y: 1360, text: "Altar (Ruby Glade)", inventory: ["Great Ruby of K'alru"], category: ["quest", "chest"],
+        linkedLabels: [
+          { questName: "Retrieving the Ruby", questDescription: "", target: "Gildor Nightwalk", part: 2 }
+        ]
+      },
       { x: 1501, y: 1408, text: "Half Elf Noble", sex: "female", race: "Half-Elf", level: 1, inventory: ["Heavy Barbarian's Blade", "Arcane Gauntlets", "Hero's Weakness Barbarian Armor"], category: "npc" },
 
       { x: 1740, y: 1555, text: "Warning Stone", description: "If you walk past the stones without adequate stealth (either invisible or having 5 full ranks (20/20) in Prowling and not wearing any -NP gear), then six greater demons will appear and attack you.", category: ["information"] },
@@ -2013,7 +2092,7 @@ const ArcanumCitiesMapData = [
       { x: 820, y: 479, text: "Elf Villager", sex: "male", race: "Elf", level: 1, inventory: ["Magick Bow", "Helmet of Yzar's Cost", "Dagger of Speed"], category: "npc" },
       { x: 810, y: 380, text: "Stone", category: "quest",
         linkedLabels: [
-          { questName: "A new stone for Halcyon's Altar", questDescription: "Return with the stone to Edwin Wallows.", target: "Edwin Wallows", part: 2 }
+          { questName: "A new stone for Halcyon's Altar", questDescription: "Return with the stone to Edwin Wallows.", target: "Edwin Wallows", part: 3 }
         ]
       },
     ]
@@ -2186,7 +2265,7 @@ const ArcanumCitiesMapData = [
     labels: [
       { x: 775, y: 323, text: "Vernon", sex: "male", race: "Human", level: 15, inventory:["Vernon's key"], category: ["quest","npc","key"],
       linkedLabels: [
-        { questName: "Assassinating King Farad", questDescription: "Heinrich Jenks wants you to assassinate King Farad of Caladon.", target: "King Farad", part: 3}
+        { questName: "Assassinating King Farad", questDescription: "Heinrich Jenks wants you to assassinate King Farad of Caladon.", target: "King Farad", part: 4}
         ],
       },
     ],
@@ -2201,7 +2280,7 @@ const ArcanumCitiesMapData = [
     labels: [
       { x: 855, y: 185, text: "King Farad", sex: "male", race: "Human", category: ["quest", "npc"],
         linkedLabels: [
-          { questName: "Assassinating King Farad", questDescription: "Congratulations, you are a regicide. Return to Heinrich Jenks to collect your dirty money.", target: "Heinrich Jenks", part: 4}
+          { questName: "Assassinating King Farad", questDescription: "Congratulations, you are a regicide. Return to Heinrich Jenks to collect your dirty money.", target: "Heinrich Jenks", part: 5 }
         ],
       },
     ]
@@ -2237,10 +2316,15 @@ const ArcanumCitiesMapData = [
       { x: 723, y: 659, text: "Alexander the Acolyte", sex: "male", race: "Human", level: 45, category: ["quest", "npc"] },
       { x: 888, y: 504, text: "Hadrian the Archaeologist", sex: "male", race: "Gnome", level: 30, category: ["quest", "npc"],
         linkedLabels: [
-          { questName: "", questDescription: "Hadrian the Archaeologist wants you to bring back a piece of Nasrudin's skeleton.", target: "Nasrudin’s Sarcophagus" }
+          { questName: "Nasrudin’s Sarcophagus", questDescription: "Hadrian the Archaeologist wants you to bring back a piece of Nasrudin's skeleton.", target: "Nasrudin’s Sarcophagus", part: 1 },
+          { questName: "Nasrudin’s Sarcophagus", questDescription: "Hardian is confused: the supposed skull of Nasrudin belongs to a human, not an elf. A finger is also missing - is that the body of Mannox? He tells you to go ask Gunther for a translation of the writings.", target: "Gunther Willhelm", part: 4 }
         ]
       },
-      { x: 1067, y: 626, text: "Gunther Willhelm", sex: "male", race: "Human", level: 30, inventory:["Note discrepensy archaeon"], category: ["quest", "npc"] },
+      { x: 1067, y: 626, text: "Gunther Willhelm", sex: "male", race: "Human", level: 30, inventory:["Note discrepensy archaeon"], category: ["quest", "npc"],
+        linkedLabels: [
+          { questName: "Nasrudin’s Sarcophagus", questDescription: "Gunther translate the writing as meaning ''Mirror'' or ''Truth''.", target: "", part: 5 }
+        ]
+      },
       { x: 1795, y: 124, text: "Caladon Panarii Temple - Level 2", description: "", category: "waypoint", targetMapFilename: "Caladon Panarii Temple - Level 2" },
       { x: 1148, y: 112, text: "Caladon Panarii Temple - Level 3", description: "", category: "waypoint", targetMapFilename: "Caladon Panarii Temple - Level 3" },
       { x: 206, y: 964, text: "Caladon", description: "", category: "waypoint", targetMapFilename: "Caladon" },
@@ -2260,8 +2344,16 @@ const ArcanumCitiesMapData = [
       { x: 99, y: 534, text: "Caladon Panarii Temple - Level 1", category: "waypoint", targetMapFilename: "Caladon Panarii Temple - Level 1", targetX: 1795, targetY: 124 },
 
       // Quests
-      { x: 1053, y: 193, text: "Nasrudin's Sarcophagus", inventory: ["Skull from the Tomb of Nasrudin"], category: ["quest", "chest"] },
-      { x: 1071, y: 161, text: "Sarcophagus", description: "TRUTH", category: "quest" },
+      { x: 1053, y: 193, text: "Nasrudin’s Sarcophagus", inventory: ["Skull from the Tomb of Nasrudin"], category: ["quest", "chest"], 
+        linkedLabels: [
+          { questName: "Nasrudin’s Sarcophagus", questDescription: "", target: "Blood writings", part: 2 }
+        ]
+      },
+      { x: 1071, y: 161, text: "Blood writings", category: "quest",
+        linkedLabels: [
+          { questName: "Nasrudin’s Sarcophagus", questDescription: "", target: "", part: 3 }
+        ]
+      },
     ]
   },
   {
@@ -2522,7 +2614,13 @@ const ArcanumCitiesMapData = [
     //defaultView: { x: ?, y: ?},
     parentFilename: "ArcanumBase/KnaThaEntrance.png",
     //background: "#000000",
-    labels: [],
+    labels: [
+      { x: 2091, y: 1209, text: "Altar (Azram’s Star)", category: ["quest", "chest"],
+        linkedLabels: [
+          { questName: "Retrieve Azram’s Star" , questDescription: "Bring Azram’s Star to Clarissa Shalmo and she will train you.", target: "Altar (Azram’s Star)", part: 2 }
+        ]
+      },
+    ],
   },
   {
     filename: "ArcanumBase/QintarraSilverLadyChambers.png",
@@ -2579,19 +2677,27 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/RuinsOfSzaboLevel1.png",
     displayName: "Ruins of Szabo - Level 1",
     background: "#000000",
-    //defaultView: {},
+    defaultView: { x: 450, y: 797 }, // Good
     parentFilename: "ArcanumBase/RuinsOfSzaboEntrance.png",
     labels: [
       { x: 450, y: 797, text: "Ruins of Szabo - Entrance", category: "waypoint", targetMapFilename: "Ruins of Szabo", targetX: 767, targetY: 498 },
+      { x: 875, y: 98, text: "Ruins of Szabo - Level 2", category: "waypoint", targetMapFilename: "Ruins of Szabo - Level 2" },
     ]
   },
   {
     filename: "ArcanumBase/RuinsOfSzaboLevel2.png",
     displayName: "Ruins of Szabo - Level 2",
     background: "#000000",
-    //defaultView: {},
+    defaultView: { x: 138, y: 362 },
     parentFilename: "ArcanumBase/RuinsOfSzaboEntrance.png",
-    labels: [],
+    labels: [
+      { x: 887, y: 195, text: "Chest (Bow of Ecclesiastes)", inventory: ["Bow of Ecclesiastes"], category: ["quest", "chest"],
+        linkedLabels: [
+          { questName: "Find the Bow of Ecclesiates", questDescription: "Return to Kietzel Pierce with the Bow and receive your master training.", target: "Kietzel Pierce (Caladon)", part: 2 }
+        ]
+      },
+      { x: 1426, y: 427, text: "Ruins of Szabo - Level 2", category: ["waypoint"], targetMapFilename: "Ruins of Szabo - Level 2", targetX: 838, targetY: 210 },
+    ],
   },
   {
     filename: "ArcanumBase/SecretEntranceToTheIronClanGate.jpg",
@@ -2615,12 +2721,12 @@ const ArcanumCitiesMapData = [
     music: "music/Mines.mp3", // Good
     background: "#000000",
     defaultView: { x: 545, y: 599, zoom: 1 }, // Good
-    parentFilename: "ArcanumBase/ShroudedHills.jpg",
+    parentFilename: "ArcanumBase/ShroudedHills",
     labels: [
       { x: 545, y: 599, text: "Shrouded Hills", category: "waypoint", targetMapFilename: "Shrouded Hills", targetX: 5914, targetY: 3147 },
       { x: 1085, y: 279, text: "Control Box", category: "quest",
         linkedLabels: [
-          { questName: "Destroy the Town's Steam Machine", questDescription: "Return to Jongle Dunne for a reward", target: "Jongle Dunne", part: 2}
+          { questName: "Destroy the Town's Steam Engine", questDescription: "Return to Jongle Dunne for a reward", target: "Jongle Dunne", part: 2}
         ]
       },
       { x: 1104, y: 315, text: "Hervor", sex: "male", race: "Dwarf", level: 5, description: "Herver will rat you out if you destroy the steam machine but leave him alive.", category: "npc" },
@@ -2631,15 +2737,19 @@ const ArcanumCitiesMapData = [
     displayName: "Bessie Toone Mine",
     background: "#000000",
     defaultView: { x: 1697, y: 805, zoom: 1 }, // Good
-    parentFilename: "ArcanumBase/ShroudedHills.jpg",
+    parentFilename: "ArcanumBase/ShroudedHills",
     labels: [
       { x: 1697, y: 805, text: "Shrouded Hills", category: "waypoint", targetMapFilename: "Shrouded Hills", targetX: 2179, targetY: 3272 },
       { x: 455, y: 655, text: "Bessie Toone", sex: "Female", race: "Ghost", level: 1, description: "Sarah, my dear Sarah...", category: "quest", 
         linkedLabels: [
           {questName: "Free the Ghost of Bessie Toone", questDescription: "Return to Percival and ask him who Sarah is.", target: "Percival Toone", part: 2}
         ]
-      },,
-      { x: 462, y: 578, text: "Metal Can", inventory: ["Bessie Toone's Boot"], category: ["quest", "chest"], linkedLabels: ["Ristezze"] },
+      },
+      { x: 462, y: 578, text: "Metal Can", inventory: ["Bessie Toone's Boot"], category: ["quest", "chest"],
+        linkedLabels: [
+          { questName: "Find a camera or Bessie Toone paraphernalia", questDescription: "Retrieve the Bessie Toone's Boot and give it to Ristezze.", target: "Ristezze", part: 2 }
+        ]
+      },
       { x: 2070, y: 469, text: "Barrel (Sprocket)", inventory: ["...groth sprocket", "Dynamite"], category: ["quest", "chest"], 
         linkedLabels: [
           {questName: "Fix the Town's Steam Engine", questDescription: "Return with the sprocket to Constable Owens.", target: "Constable Owens", part: 2}
@@ -2879,7 +2989,14 @@ const ArcanumCitiesMapData = [
     background: "#000000",
     //defaultView: {},
     parentFilename: "ArcanumBase/TheCastleOfSnelNfa.png",
-    labels: [],
+    labels: [
+      { x: 693, y: 1020, text: "The Castle of S’nel N’fa", category: "waypoint", targetMapFilename: "The Castle of S’nel N’fa", targetX: 1182, targetY: 1246 },
+      { x: 1833, y: 407, text: "Chest (Staff of K'an T'au)", inventory: "Staff of K’an T’au", category: ["quest", "chest"],
+        linkedLabels: [
+          { questName: "Get the staff of K’an T’au", questDescription: "Return the Staff to Frederick to receive your training.", target: "Frederick T. Fitzgerald", part: 2 }
+        ]
+      },
+    ],
   },
   {
     filename: "ArcanumBase/TheLairofBellerogrimEntrance.jpg",

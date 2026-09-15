@@ -47,7 +47,7 @@ const ModulesMapData = [
     filename: "Modules/TreasureIsland.jpg",
     displayName: "Treasure Island",
     modGroup: "Treasure Island",
-    defaultView: { x: 4711, y: 1804 }
+    defaultView: { x: 4711, y: 1804 },
     background: "url('Textures/Water.png') repeat",
     labels: [
       { x: 5890, y: 595, text: "Shop", description: "", category: "shop" },

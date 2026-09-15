@@ -241,6 +241,18 @@ body {
     display: inline-block;
 }
 
+#chunk-container {
+    top: 0;
+    left: 0;
+}
+
+.map-chunk-tile {
+    position: absolute;
+    display: block;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
 img {
     display: block;
     user-select: none;
@@ -1433,4 +1445,36 @@ img {
 
 .stats-table tbody tr:hover td {
     background-color: rgba(255, 215, 0, 0.07);
+}
+
+.quest-group-header td:first-child {
+    color: #ffd700;
+    font-weight: bold;
+}
+
+.quest-group-toggle {
+    display: inline-block;
+    width: 18px;
+    color: #b39449;
+    font-weight: bold;
+}
+
+.quest-group-subrow td {
+    background-color: rgba(0, 0, 0, 0.15);
+}
+
+.quest-group-subrow:hover td {
+    background-color: rgba(255, 215, 0, 0.07);
+}
+
+.quest-subrow-cell {
+    padding-left: 22px !important;
+}
+
+.quest-subrow-desc {
+    margin-top: 4px;
+    font-size: 12px;
+    color: #b3a483;
+    font-style: italic;
+    white-space: normal;
 }
