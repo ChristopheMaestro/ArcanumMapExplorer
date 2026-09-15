@@ -166,6 +166,7 @@ let isDraggingLabel = false;
 let draggedLabelData = null;
 let draggedLabelElements = null;
 let draggedLabelCoordMode = "local";
+let draggedLabelCoordKeys = { xKey: "x", yKey: "y" };
 let dragLastScreenX = 0;
 let dragLastScreenY = 0;
 let suppressNextLabelClick = false;
@@ -201,6 +202,35 @@ const CATEGORY_EMOJI = {
     bounty: '💰',
     master: '🎓'
 };
+
+const CATEGORY_LABELS = {
+    quest: 'Quest',
+    followers: 'Followers',
+    shop: 'Shop',
+    waypoint: 'Waypoint',
+    key: 'Key',
+    npc: 'NPC',
+    chest: 'Chest',
+    information: 'Information',
+    altar: 'Altar',
+    bounty: 'Bounty',
+    master: 'Master'
+};
+
+// Canonical display order for a label's categories - so a label authored as
+// ["followers", "quest"] and one authored as ["quest", "followers"] always render their
+// icons/colors in the same order, instead of whatever order they happen to appear in the
+// source js file.
+const CATEGORY_ORDER = Object.keys(CATEGORY_EMOJI);
+
+function getOrderedCategories(categoryValue) {
+    const cats = Array.isArray(categoryValue) ? categoryValue.filter(Boolean) : (categoryValue ? [categoryValue] : []);
+    return cats.slice().sort((a, b) => {
+        const ia = CATEGORY_ORDER.indexOf(a);
+        const ib = CATEGORY_ORDER.indexOf(b);
+        return (ia === -1 ? CATEGORY_ORDER.length : ia) - (ib === -1 ? CATEGORY_ORDER.length : ib);
+    });
+}
 
 const CATEGORY_COLORS = {
     quest: '#ffaa00',
@@ -1379,6 +1409,52 @@ let questsTableGroups = [];
 let questsTableSortColumn = null;
 let questsTableSortDirection = 'asc';
 let questsTableExpanded = new Set(); // quest names currently expanded
+let questsTableLocationIndexMap = new Map(); // map filename -> default sort-bucket position
+let questsTableLocationInfoMap = new Map(); // map filename -> { displayName, isSub }
+
+// Default (unsorted) ordering for the quests table: Cities first (each city's submaps'
+// quests listed right after it), then Quest locations, then Other locations - mirroring
+// how getStatisticsSourceMaps aggregates the World Map. Non-World-Map callers just get the
+// selected map followed by its own submaps. A map that is both a top-level entry and someone
+// else's submap (e.g. Hall of Records, filed under Quest locations but parented to Tarant)
+// keeps only its first-seen bucket, matching the dedupe behavior used elsewhere.
+function buildQuestsTableLocationOrder(selectedMap) {
+    const order = [];
+    if (!selectedMap) return order;
+
+    if (selectedMap.modGroup === 'World Map') {
+        const groupOrder = ['Cities', 'Quest locations', 'Other locations'];
+        groupOrder.forEach(modGroup => {
+            const topMaps = ArcanumMapData.filter(m => m.modGroup === modGroup);
+            topMaps.forEach(topMap => {
+                order.push({ filename: topMap.filename, displayName: topMap.displayName, isSub: false, parentFilename: null });
+                const subMaps = ArcanumMapData.filter(m => m.parentFilename === topMap.filename);
+                subMaps.forEach(subMap => {
+                    order.push({ filename: subMap.filename, displayName: subMap.displayName, isSub: true, parentFilename: topMap.filename });
+                });
+            });
+        });
+    } else {
+        order.push({ filename: selectedMap.filename, displayName: selectedMap.displayName, isSub: false, parentFilename: null });
+        const subMaps = ArcanumMapData.filter(m => m.parentFilename === selectedMap.filename);
+        subMaps.forEach(subMap => {
+            order.push({ filename: subMap.filename, displayName: subMap.displayName, isSub: true, parentFilename: selectedMap.filename });
+        });
+    }
+    return order;
+}
+
+function getQuestsTableGroupMapFilename(group) {
+    const representative = group.rows.find(r => r.part === 1) || group.rows[0];
+    return representative.mapFilename;
+}
+
+function getQuestsTableGroupLocationIndex(group) {
+    const filename = getQuestsTableGroupMapFilename(group);
+    return questsTableLocationIndexMap.has(filename)
+        ? questsTableLocationIndexMap.get(filename)
+        : Number.MAX_SAFE_INTEGER;
+}
 
 function getQuestsTableSortValue(group, key) {
     const representative = group.rows.find(r => r.part === 1) || group.rows[0];
@@ -1406,6 +1482,7 @@ function navigateToQuestRow(row) {
 
 function renderQuestsTableBody() {
     let sortedGroups = questsTableGroups.slice();
+    let showLocationHeaders = false;
     if (questsTableSortColumn) {
         sortedGroups.sort((a, b) => {
             const va = getQuestsTableSortValue(a, questsTableSortColumn);
@@ -1414,13 +1491,52 @@ function renderQuestsTableBody() {
             if (va > vb) return questsTableSortDirection === 'asc' ? 1 : -1;
             return 0;
         });
+    } else {
+        // Default view: Cities (with their submaps' quests right below), then Quest
+        // locations, then Other locations - alphabetical by quest name within each map.
+        showLocationHeaders = true;
+        sortedGroups.sort((a, b) => {
+            const ia = getQuestsTableGroupLocationIndex(a);
+            const ib = getQuestsTableGroupLocationIndex(b);
+            if (ia !== ib) return ia - ib;
+            return (a.questName || '').toLowerCase().localeCompare((b.questName || '').toLowerCase());
+        });
     }
 
+    let lastLocationFilename = null;
+    let lastTopLevelFilename = null;
     const rowsHtml = sortedGroups.map((group, gi) => {
+        let headerHtml = '';
+        if (showLocationHeaders) {
+            const filename = getQuestsTableGroupMapFilename(group);
+            if (filename !== lastLocationFilename) {
+                const info = questsTableLocationInfoMap.get(filename);
+
+                // If this map is a submap and we haven't shown its parent's header yet
+                // (e.g. the parent city itself has no quests of its own, only its submaps
+                // do), show the parent header first so the section isn't missing its heading.
+                if (info && info.isSub && info.parentFilename !== lastTopLevelFilename) {
+                    const parentInfo = questsTableLocationInfoMap.get(info.parentFilename);
+                    const parentDisplayName = parentInfo ? parentInfo.displayName : '';
+                    if (parentDisplayName) {
+                        headerHtml += `<tr class="quest-location-header"><td colspan="4">${parentDisplayName}</td></tr>`;
+                    }
+                    lastTopLevelFilename = info.parentFilename;
+                }
+
+                const displayName = info ? info.displayName : (group.rows[0].mapDisplayName || '');
+                const subClass = info && info.isSub ? ' sub' : '';
+                headerHtml += `<tr class="quest-location-header${subClass}"><td colspan="4">${displayName}</td></tr>`;
+
+                lastLocationFilename = filename;
+                if (!info || !info.isSub) lastTopLevelFilename = filename;
+            }
+        }
+
         if (!group.isMultiPart) {
             const row = group.rows[0];
             const descHtml = row.description ? `<div class="quest-subrow-desc">${row.description}</div>` : '';
-            return `<tr data-group-index="${gi}" data-row-index="0">
+            return headerHtml + `<tr data-group-index="${gi}" data-row-index="0">
                 <td>${group.questName}${descHtml}</td>
                 <td>&mdash;</td>
                 <td>${row.connectedLabelName || '&mdash;'}</td>
@@ -1430,7 +1546,7 @@ function renderQuestsTableBody() {
 
         const isExpanded = questsTableExpanded.has(group.questName);
         const partOneRow = group.rows.find(r => r.part === 1) || group.rows[0];
-        let html = `<tr class="quest-group-header" data-group-index="${gi}">
+        let html = headerHtml + `<tr class="quest-group-header" data-group-index="${gi}">
             <td><span class="quest-group-toggle">${isExpanded ? '[-]' : '[+]'}</span> ${group.questName}</td>
             <td>${group.partCount}</td>
             <td>${partOneRow.connectedLabelName || '&mdash;'}</td>
@@ -1491,6 +1607,15 @@ function renderQuestsTable() {
     questsTableSortColumn = null;
     questsTableSortDirection = 'asc';
     questsTableExpanded = new Set();
+
+    questsTableLocationIndexMap = new Map();
+    questsTableLocationInfoMap = new Map();
+    buildQuestsTableLocationOrder(selectedMap).forEach((entry, i) => {
+        if (!questsTableLocationIndexMap.has(entry.filename)) {
+            questsTableLocationIndexMap.set(entry.filename, i);
+            questsTableLocationInfoMap.set(entry.filename, entry);
+        }
+    });
 
     if (questsTableGroups.length === 0) {
         questsTableContent.innerHTML = '<div class="quest-panel-empty">No quests found.</div>';
@@ -1595,6 +1720,20 @@ function buildStatisticsForCurrentMap() {
 let statsEntries = [];
 let statsSortColumn = null;
 let statsSortDirection = 'asc';
+let statsCategoryFilter = new Set(); // categories currently selected in the icon legend (OR filter); empty = show all
+
+function getStatsEntryCategories(entry) {
+    return getOrderedCategories(entry.label.category);
+}
+
+// Which category icons actually appear among the current entries, in CATEGORY_EMOJI's order.
+function getStatsPresentCategories(entries) {
+    const present = new Set();
+    entries.forEach(entry => {
+        getStatsEntryCategories(entry).forEach(c => { if (CATEGORY_EMOJI[c]) present.add(c); });
+    });
+    return Object.keys(CATEGORY_EMOJI).filter(c => present.has(c));
+}
 
 function getStatsSortValue(entry, key) {
     const { label, mapDisplayName } = entry;
@@ -1613,7 +1752,10 @@ function getStatsSortValue(entry, key) {
 }
 
 function renderStatsTableBody() {
-    let sortedEntries = statsEntries.slice();
+    let sortedEntries = statsEntries.filter(entry => {
+        if (statsCategoryFilter.size === 0) return true;
+        return getStatsEntryCategories(entry).some(c => statsCategoryFilter.has(c));
+    });
     if (statsSortColumn) {
         sortedEntries.sort((a, b) => {
             const va = getStatsSortValue(a, statsSortColumn);
@@ -1626,7 +1768,7 @@ function renderStatsTableBody() {
 
     const rows = sortedEntries.map(entry => {
         const { label, mapDisplayName } = entry;
-        const cats = Array.isArray(label.category) ? label.category : (label.category ? [label.category] : []);
+        const cats = getStatsEntryCategories(entry);
         const iconsHtml = cats.map(c => CATEGORY_EMOJI[c] || '').filter(Boolean).join('');
         const sexDisplay = label.sex ? (SEX_EMOJI[String(label.sex).trim().toLowerCase()] || label.sex) : '&mdash;';
         const raceDisplay = label.race || '&mdash;';
@@ -1641,7 +1783,7 @@ function renderStatsTableBody() {
     }).join('');
 
     const tbody = document.getElementById('stats-table-body');
-    tbody.innerHTML = rows;
+    tbody.innerHTML = rows || `<tr class="stats-empty-row"><td colspan="5">No entries match the selected filter.</td></tr>`;
 
     statisticsContent.querySelectorAll('th[data-sort-key]').forEach(th => {
         th.classList.toggle('sorted-asc', th.getAttribute('data-sort-key') === statsSortColumn && statsSortDirection === 'asc');
@@ -1670,6 +1812,7 @@ function renderStatisticsPanel() {
     statsEntries = entries;
     statsSortColumn = null;
     statsSortDirection = 'asc';
+    statsCategoryFilter = new Set();
 
     if (entries.length === 0) {
         statisticsContent.innerHTML = '<div class="quest-panel-empty">No NPCs, Shops, or Followers found here.</div>';
@@ -1679,6 +1822,17 @@ function renderStatisticsPanel() {
     const raceItems = Object.entries(raceCounts).sort((a, b) => b[1] - a[1]).map(([race, count]) => `<li>${race}: ${count}</li>`).join('');
     const sexItems = Object.entries(sexCounts).map(([sex, count]) => `<li>${sex}: ${count}</li>`).join('');
 
+    // Icon legend: only the category icons actually present here. Clicking one (or several)
+    // filters the table below to entries carrying any of the selected categories.
+    const legendCategories = getStatsPresentCategories(entries);
+    const legendHtml = legendCategories.length ? `
+        <div class="stats-summary-group stats-legend-group">
+            <span class="stats-summary-label">Legend</span>
+            <div class="stats-legend-icons">
+                ${legendCategories.map(c => `<span class="stats-legend-icon" data-category="${c}" title="${CATEGORY_LABELS[c] || c}"><span class="stats-legend-icon-emoji">${CATEGORY_EMOJI[c]}</span><span class="stats-legend-icon-label">${CATEGORY_LABELS[c] || c}</span></span>`).join('')}
+            </div>
+        </div>` : '';
+
     statisticsContent.innerHTML = `
         <div class="stats-summary">
             <div class="stats-summary-count"><strong>${npcCount}</strong>NPC${npcCount !== 1 ? 's' : ''}</div>
@@ -1686,6 +1840,7 @@ function renderStatisticsPanel() {
             <div class="stats-summary-count"><strong>${followerCount}</strong>Follower${followerCount !== 1 ? 's' : ''}</div>
             ${raceItems ? `<div class="stats-summary-group"><span class="stats-summary-label">By Race</span><ul>${raceItems}</ul></div>` : ''}
             ${sexItems ? `<div class="stats-summary-group"><span class="stats-summary-label">By Sex</span><ul>${sexItems}</ul></div>` : ''}
+            ${legendHtml}
         </div>
         <table class="stats-table">
             <thead><tr>
@@ -1712,6 +1867,19 @@ function renderStatisticsPanel() {
         });
     });
 
+    statisticsContent.querySelectorAll('.stats-legend-icon').forEach(el => {
+        el.addEventListener('click', () => {
+            const category = el.getAttribute('data-category');
+            if (statsCategoryFilter.has(category)) {
+                statsCategoryFilter.delete(category);
+            } else {
+                statsCategoryFilter.add(category);
+            }
+            el.classList.toggle('active');
+            renderStatsTableBody();
+        });
+    });
+
     renderStatsTableBody();
 }
 
@@ -1727,7 +1895,8 @@ function clearActivePopups() {
     popups.forEach(p => p.remove());
 }
 
-function attachLabelDragHandlers(labelData, elements, coordMode) {
+function attachLabelDragHandlers(labelData, elements, coordMode, coordKeys) {
+    const keys = coordKeys || { xKey: "x", yKey: "y" };
     elements.forEach(el => {
         el.addEventListener('mousedown', (e) => {
             if (!isCreatorMode) return;
@@ -1736,8 +1905,12 @@ function attachLabelDragHandlers(labelData, elements, coordMode) {
             draggedLabelData = labelData;
             draggedLabelElements = elements;
             draggedLabelCoordMode = coordMode;
+            draggedLabelCoordKeys = keys;
             dragLastScreenX = e.clientX;
             dragLastScreenY = e.clientY;
+            // Dragging a label also opens/refreshes it in the editor, same as clicking it,
+            // so its fields are there to tweak as soon as you start moving it.
+            startEditingLabel(labelData);
         });
     });
 }
@@ -1924,6 +2097,12 @@ function renderSingleLabel(label, isPending) {
         const renderX = (img.clientWidth / 2000) * (2000 - label.x);
         const renderY = (img.clientHeight / 2000) * label.y;
 
+        // Optional independent placement for the text, separate from the point (dot). Falls
+        // back to the dot's position when the label has no textX/textY set.
+        const hasTextPosition = typeof label.textX === 'number' && typeof label.textY === 'number';
+        const textRenderX = hasTextPosition ? (img.clientWidth / 2000) * (2000 - label.textX) : renderX;
+        const textRenderY = hasTextPosition ? (img.clientHeight / 2000) * label.textY : renderY;
+
         let hoverTooltip = null;
         let hoverTimeout = null;
         const showHoverTooltip = () => {
@@ -1979,17 +2158,17 @@ function renderSingleLabel(label, isPending) {
         txt.className = 'arcanum-world-text';
         if (isPending) txt.classList.add('pending-label');
         txt.innerHTML = `<span>${label.text}</span>`;
-        txt.style.left = `${renderX}px`; txt.style.top = `${renderY}px`;
+        txt.style.left = `${textRenderX}px`; txt.style.top = `${textRenderY}px`;
         txt.setAttribute('data-label-text', label.text);
         txt.addEventListener('mouseenter', showHoverTooltip);
         txt.addEventListener('mouseleave', hideHoverTooltip);
         txt.addEventListener('click', handleWorldLabelClick);
-        
-        txt.setAttribute('data-raw-x', renderX);
-        txt.setAttribute('data-raw-y', renderY);
 
         container.appendChild(txt);
-        attachLabelDragHandlers(label, [dot, txt], "overworld");
+        // The dot is dragged against x/y (the point); the text is dragged against its own
+        // textX/textY, so the two can be positioned independently.
+        attachLabelDragHandlers(label, [dot], "overworld", { xKey: "x", yKey: "y" });
+        attachLabelDragHandlers(label, [txt], "overworld", { xKey: "textX", yKey: "textY" });
     } else {
         const labelElement = document.createElement('div');
         labelElement.className = 'map-label';
@@ -1997,7 +2176,7 @@ function renderSingleLabel(label, isPending) {
         labelElement.style.left = `${label.x}px`;
         labelElement.style.top = `${label.y}px`;
         
-        const cats = Array.isArray(label.category) ? label.category.filter(Boolean) : (label.category ? [label.category] : []);
+        const cats = getOrderedCategories(label.category);
         const dataCatString = cats.length ? cats.join(' ') : 'uncategorized';
         labelElement.setAttribute('data-category', dataCatString);
         labelElement.setAttribute('data-label-text', label.text);
@@ -2053,66 +2232,14 @@ function renderSingleLabel(label, isPending) {
 
 // Part 5
 
-function resolveOverworldLabelCollisions() {
-    if (currentMapType !== "overworld") return;
-    
-    const labels = Array.from(container.querySelectorAll('.arcanum-world-text'));
-    const allocatedBoxes = [];
-
-    labels.sort((a, b) => parseFloat(a.getAttribute('data-raw-y')) - parseFloat(b.getAttribute('data-raw-y')));
-
-    labels.forEach(label => {
-        const rawX = parseFloat(label.getAttribute('data-raw-x'));
-        const rawY = parseFloat(label.getAttribute('data-raw-y'));
-        
-        const textString = label.textContent || "";
-        const approxWidth = (textString.length * 12) + 20; 
-        const approxHeight = 26; 
-
-        let currentOffsetY = 0;
-        let collisionDetected = true;
-        let attempts = 0;
-
-        while (collisionDetected && attempts < 15) {
-            collisionDetected = false;
-            
-            const testMinX = rawX + 12;
-            const testMaxX = testMinX + approxWidth;
-            const testMinY = rawY - (approxHeight / 2) + currentOffsetY;
-            const testMaxY = testMinY + approxHeight;
-
-            for (const box of allocatedBoxes) {
-                const overlapX = testMinX < box.maxX && testMaxX > box.minX;
-                const overlapY = testMinY < box.maxY && testMaxY > box.minY;
-
-                if (overlapX && overlapY) {
-                    collisionDetected = true;
-                    currentOffsetY += 24; 
-                    attempts++;
-                    break;
-                }
-            }
-
-            if (!collisionDetected) {
-                allocatedBoxes.push({
-                    minX: testMinX,
-                    maxX: testMaxX,
-                    minY: testMinY,
-                    maxY: testMaxY
-                });
-
-                label.style.top = `${rawY + currentOffsetY}px`;
-            }
-        }
-    });
-}
-
 function buildLabelCodeLine(labelData) {
     const parts = [
         `x: ${labelData.x}`,
         `y: ${labelData.y}`,
         `text: "${labelData.text}"`
     ];
+    if (typeof labelData.textX === 'number' && !isNaN(labelData.textX)) parts.push(`textX: ${labelData.textX}`);
+    if (typeof labelData.textY === 'number' && !isNaN(labelData.textY)) parts.push(`textY: ${labelData.textY}`);
     if (labelData.description) parts.push(`description: "${labelData.description}"`);
     if (labelData.master) parts.push(`master: "${labelData.master}"`);
     if (labelData.category) {
@@ -2519,21 +2646,20 @@ window.addEventListener('mousemove', (e) => {
             const newTop = parseFloat(el.style.top) + dy;
             el.style.left = `${newLeft}px`;
             el.style.top = `${newTop}px`;
-            if (el.hasAttribute('data-raw-x')) el.setAttribute('data-raw-x', newLeft);
-            if (el.hasAttribute('data-raw-y')) el.setAttribute('data-raw-y', newTop);
         });
 
         const refEl = draggedLabelElements[0];
         const finalLeft = parseFloat(refEl.style.left);
         const finalTop = parseFloat(refEl.style.top);
+        const { xKey, yKey } = draggedLabelCoordKeys;
         if (draggedLabelCoordMode === "overworld") {
             const normalizedX = (finalLeft / img.clientWidth) * 2000;
             const normalizedY = (finalTop / img.clientHeight) * 2000;
-            draggedLabelData.x = Math.round(2000 - normalizedX);
-            draggedLabelData.y = Math.round(normalizedY);
+            draggedLabelData[xKey] = Math.round(2000 - normalizedX);
+            draggedLabelData[yKey] = Math.round(normalizedY);
         } else {
-            draggedLabelData.x = Math.round(finalLeft);
-            draggedLabelData.y = Math.round(finalTop);
+            draggedLabelData[xKey] = Math.round(finalLeft);
+            draggedLabelData[yKey] = Math.round(finalTop);
         }
         return;
     }
@@ -2559,11 +2685,5 @@ window.addEventListener('mouseup', () => {
 
 window.addEventListener('DOMContentLoaded', () => {
     initViewer();
-    
-    const targetObserver = new MutationObserver(() => {
-        if (typeof resolveOverworldLabelCollisions === 'function') {
-            resolveOverworldLabelCollisions();
-        }
-    });
-    targetObserver.observe(container, { childList: true });
 });
+

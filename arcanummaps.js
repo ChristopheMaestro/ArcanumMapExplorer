@@ -1,7 +1,7 @@
 // Arcanum CE Restored - Map Database Manifest (Arcanum: Cities, Quest locations, Other locations)
 const ArcanumCitiesMapData = [
   {
-    filename: "World Map/ArcanumWorldMap.jpg",
+    filename: "ArcanumBase/ArcanumWorldMap.jpg",
     displayName: "Arcanum World Map",
     modGroup: "World Map",
     typemap: "overworld",
@@ -1400,7 +1400,7 @@ const ArcanumCitiesMapData = [
     music: "", // CONFIRMED - No music.
     defaultView: {x: 737, y: 1221},
     labels: [
-      { x: 1602, y: 524, text: "Lady Druella", sex: "female", race: "Half-Elf", level: 17, portrait: "Textures/druella.png", description: "", category: ["quest", "followers"] },
+      { x: 1602, y: 524, text: "Lady Druella", sex: "female", race: "Half-Elf", level: 17, portrait: "Textures/druella.png", description: "", category: ["followers", "quest"] },
     ],
   },
   {
