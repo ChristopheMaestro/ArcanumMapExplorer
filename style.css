@@ -1,3 +1,12 @@
+/* Custom font used for the World Map location labels */
+@font-face {
+    font-family: "FlareserifRoman";
+    src: url("Fonts/Flareserif821-BT-Roman.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -319,10 +328,10 @@ img {
 .arcanum-world-text {
     position: absolute;
     color: #ffffff;
-    font-family: "Times New Roman", "Times", "Georgia", serif;
-    font-size: 22px;
-    font-weight: bold;
-    letter-spacing: 0.4px;
+    font-family: "FlareserifRoman", "Times New Roman", "Times", "Georgia", serif;
+    font-size: 17px;
+    font-weight: normal;
+    letter-spacing: 0.45px;
     white-space: nowrap;
     text-transform: none;
     
@@ -464,6 +473,15 @@ img {
     font-style: italic;
 }
 
+/* Follower type line - same treatment as .label-master (italic, right below the name),
+   just tinted to match the Followers category color instead of Master's. */
+.label-follower-type {
+    margin: 0 0 2px 0;
+    color: #5dade2;
+    font-size: 12px;
+    font-style: italic;
+}
+
 .altar-god-type {
     font-style: italic;
     font-size: 12px;
@@ -499,6 +517,28 @@ img {
     border: 1px solid #ffaa00;
     color: #ffaa00;
     vertical-align: middle;
+}
+
+/* The "reward" part badge (shown when a quest step's part is set to "reward" instead of
+   a number) reuses the same badge shape but in green, to stand apart from numbered parts. */
+.quest-reward-badge {
+    background-color: rgba(46, 204, 113, 0.15);
+    border-color: #2ecc71;
+    color: #2ecc71;
+}
+
+/* Main quest (✨) / master quest (🎓) markers - side quests get neither the icon nor
+   any extra color, so they stay visually quiet next to these. */
+.quest-type-marker {
+    margin-left: 4px;
+}
+
+.quest-type-marker.quest-type-main {
+    filter: drop-shadow(0 0 2px rgba(255, 215, 0, 0.7));
+}
+
+.quest-type-marker.quest-type-master {
+    filter: drop-shadow(0 0 2px rgba(241, 196, 15, 0.6));
 }
 
 .info-popup .close-btn {
@@ -744,6 +784,18 @@ img {
     gap: 4px;
 }
 
+/* Sex / Race / Level: three compact fields sharing a single row, at the top of the form,
+   so they don't eat up vertical space the way three stacked field-rows would. */
+.stats-fields-row {
+    display: flex;
+    gap: 8px;
+}
+
+.stats-fields-row .field-row {
+    flex: 1;
+    min-width: 0;
+}
+
 #creator-panel .waypoint-subfields {
     border-left: 2px solid #4a3e2e;
     padding-left: 10px;
@@ -753,27 +805,85 @@ img {
     gap: 10px;
 }
 
-.category-checkboxes {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px 14px;
+/* Label Editor category picker - styled to match the Statistics panel's icon legend:
+   a 2-column grid of clickable icon+name pills, dim until selected. */
+.category-icon-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4px 10px;
 }
 
-.category-checkboxes label {
+.category-icon-pill {
     display: flex;
     align-items: center;
     gap: 6px;
-    color: #f1e4c3;
     font-size: 13px;
-    text-transform: none;
-    font-weight: normal;
+    line-height: 1;
+    padding: 5px 7px;
+    border-radius: 4px;
+    border: 1px solid transparent;
     cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.15s, background-color 0.15s, border-color 0.15s;
     user-select: none;
 }
 
-.category-checkboxes input[type="checkbox"] {
-    accent-color: #ffd700;
+.category-icon-pill input[type="checkbox"] {
+    display: none;
+}
+
+.category-icon-pill-emoji {
+    font-size: 15px;
+}
+
+.category-icon-pill-label {
+    color: #d4c5a1;
+    text-transform: none;
+    font-weight: normal;
+    font-size: 13px;
+}
+
+.category-icon-pill:hover {
+    opacity: 0.85;
+}
+
+.category-icon-pill.active {
+    opacity: 1;
+    background-color: rgba(255, 215, 0, 0.12);
+    border-color: #b39449;
+}
+
+/* Label Text row: text input plus the 💡 button that reveals the Description Note field */
+.label-text-row {
+    display: flex;
+    gap: 6px;
+    align-items: stretch;
+}
+
+.label-text-row input {
+    flex: 1;
+}
+
+.icon-toggle-btn {
+    background: #2b2418;
+    border: 1px solid #4a3e2e;
+    border-radius: 3px;
+    font-size: 15px;
+    line-height: 1;
+    padding: 0 10px;
     cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.15s, background-color 0.15s, border-color 0.15s;
+}
+
+.icon-toggle-btn:hover {
+    opacity: 0.85;
+}
+
+.icon-toggle-btn.active {
+    opacity: 1;
+    background-color: rgba(255, 215, 0, 0.12);
+    border-color: #b39449;
 }
 
 #creator-panel textarea {
@@ -1397,6 +1507,40 @@ img {
     align-items: flex-end;
 }
 
+/* Quests table filter bar: Location select + Quest Type icon-legend, reusing the same
+   stats-legend-icon chip look (dim until active) as the Statistics panel's category legend.
+   Kept to a single row: Location on the left, Quest Type pinned to the right. */
+.quests-table-filters {
+    align-items: flex-end;
+    flex-wrap: nowrap;
+    gap: 14px;
+}
+
+.quests-table-filters .stats-summary-group {
+    min-width: 0;
+}
+
+.quests-table-location-select {
+    background-color: #211c14;
+    border: 1px solid #4a3e2e;
+    color: #f1e4c3;
+    padding: 5px 6px;
+    border-radius: 3px;
+    font-family: "Georgia", serif;
+    font-size: 12px;
+    cursor: pointer;
+    max-width: 220px;
+}
+
+/* Higher specificity than .stats-legend-icons (a 2-col/4-row grid, meant for the Statistics
+   panel's 8-category grid) so this single row of 3 quest-type buttons stays a flex row
+   instead of being pulled into that grid layout by class-order cascade. */
+.quests-table-filters .quest-type-filter-icons {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 4px 14px;
+}
+
 .stats-legend-icons {
     display: grid;
     grid-template-columns: repeat(2, auto);
@@ -1513,6 +1657,38 @@ img {
 .quest-group-header td:first-child {
     color: #ffd700;
     font-weight: bold;
+}
+
+/* Main quest rows get a warm gold tint + left accent so they stand out at a glance from
+   the rest of a location's quest list; master quest rows get a cooler, subtler treatment.
+   Background lives on the <tr> (not each <td>) so there's no seam at cell boundaries under
+   border-collapse, and the accent border only touches the first (name) column.
+   Scoped with #quests-table-body so they win over the shared .stats-table hover rule. */
+#quests-table-body tr.quest-row-main {
+    background-color: rgba(255, 215, 0, 0.1);
+}
+
+#quests-table-body tr.quest-row-main td:first-child {
+    color: #ffd700;
+    font-weight: bold;
+    border-left: 3px solid #ffd700;
+}
+
+#quests-table-body tr.quest-row-main:hover {
+    background-color: rgba(255, 215, 0, 0.2);
+}
+
+#quests-table-body tr.quest-row-master {
+    background-color: rgba(241, 196, 15, 0.06);
+}
+
+#quests-table-body tr.quest-row-master td:first-child {
+    color: #f1c40f;
+    border-left: 3px solid #f1c40f;
+}
+
+#quests-table-body tr.quest-row-master:hover {
+    background-color: rgba(241, 196, 15, 0.13);
 }
 
 .quest-location-header td {

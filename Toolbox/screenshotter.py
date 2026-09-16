@@ -14,7 +14,7 @@ from pynput import keyboard as pynput_keyboard
 DEBUG = False                # ENABLED: Generates side-by-side diagnostic images for every single stitch check
 
 horizontal_hold_time = 3  # Seconds to hold RIGHT/LEFT
-vertical_hold_time   = 3  # Seconds to hold DOWN
+vertical_hold_time   = 2  # Seconds to hold DOWN
 
 steps_per_row = 10          # Shots per row before snaking down
 toggle_key = 'q'            # Key to start / stop and stitch

@@ -1,7 +1,7 @@
 // Arcanum CE Restored - Map Database Manifest (CE Restored)
 const CERestoredMapData = [
   {
-    filename: "World Map/ArcanumWorldMap.jpg",
+    filename: "ArcanumBase/ArcanumWorldMap.jpg",
     displayName: "Arcanum Forgotten Places",
     modGroup: "CE Restored World Map",
     typemap: "overworld",
@@ -33,6 +33,7 @@ const CERestoredMapData = [
       { x: 654, y: 687, text: "Ancient Trail", description: "" }, // Together
         // Work ongoing - map really too big (long!), maybe should be split in two with Mines?
       { x: 295, y: 727, text: "Port Ruins", description: "", targetMapFilename: "Port Ruins (3)" },
+        // Temporary map
 
       { x: 1261, y: 1727, text: "Norleigh Seahold", description: "" }, // Empty (Boat)
       { x: 1301, y: 1795, text: "Brookeside Plantation", description: "" }, // Empty (Sign welcome)
@@ -137,6 +138,13 @@ const CERestoredMapData = [
     displayName: "Port Ruins (2)",
     modGroup: "Forgotten Places",
     defaultView: { x: 798, y: 719, zoom: 1},
+    labels: []
+  },
+  {
+    filename: "Forgotten Places/ForgottenPlaces-PortRuins-3.jpg",
+    displayName: "Port Ruins (3)",
+    modGroup: "Forgotten Places",
+    defaultView: { x: 649, y: 3082 }, // Good for temp image
     labels: []
   },
   {

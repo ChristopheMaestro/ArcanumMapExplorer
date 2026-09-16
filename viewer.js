@@ -34,6 +34,27 @@ const ItemDataByName = new Map(
     (typeof ArcanumItemData !== 'undefined' ? ArcanumItemData : []).map(item => [item.name, item])
 );
 
+// A map object can optionally carry `altViews`: an array of { displayName, defaultView }
+// entries. These let the same filename/labels/quests show up as more than one menu entry
+// (e.g. two names for the same location) without duplicating the map data - only the name
+// and the starting view differ. This resolves either a map's own displayName or one of its
+// altViews' displayNames, returning the map plus whichever displayName/defaultView matched.
+function resolveMapEntryByDisplayName(name) {
+    for (let index = 0; index < ArcanumMapData.length; index++) {
+        const map = ArcanumMapData[index];
+        if (map.displayName === name) {
+            return { map, index, displayName: map.displayName, defaultView: map.defaultView };
+        }
+        if (Array.isArray(map.altViews)) {
+            const alt = map.altViews.find(a => a.displayName === name);
+            if (alt) {
+                return { map, index, displayName: alt.displayName, defaultView: alt.defaultView || map.defaultView };
+            }
+        }
+    }
+    return null;
+}
+
 const menuContainer = document.getElementById('menu-container');
 const viewport = document.getElementById('viewport');
 const container = document.getElementById('pan-container');
@@ -64,15 +85,29 @@ const toolStatus = document.getElementById('tool-status');
 const creatorPanel = document.getElementById('creator-panel');
 const coordDisplay = document.getElementById('coord-display');
 const newLabelText = document.getElementById('new-label-text');
+const toggleDescBtn = document.getElementById('toggle-desc-btn');
+const descriptionField = document.getElementById('description-field');
 const newLabelDesc = document.getElementById('new-label-desc');
 const newLabelMaster = document.getElementById('new-label-master');
 const newLabelLinks = document.getElementById('new-label-links');
+const genericLinksField = document.getElementById('generic-links-field');
+const questFields = document.getElementById('quest-fields');
+const newLabelQuestName = document.getElementById('new-label-quest-name');
+const newLabelQuestDesc = document.getElementById('new-label-quest-desc');
+const newLabelQuestTarget = document.getElementById('new-label-quest-target');
+const newLabelQuestPart = document.getElementById('new-label-quest-part');
 const addToPreviewBtn = document.getElementById('add-to-preview-btn');
 const copyAllBtn = document.getElementById('copy-all-btn');
 const copyNewBtn = document.getElementById('copy-new-btn');
 const categoryField = document.getElementById('category-field');
 const newLabelCategoryChecks = document.querySelectorAll('.new-label-cat-chk');
 const masterFields = document.getElementById('master-fields');
+const followerFields = document.getElementById('follower-fields');
+const newLabelFollowerType = document.getElementById('new-label-follower-type');
+const statsFields = document.getElementById('stats-fields');
+const newLabelSex = document.getElementById('new-label-sex');
+const newLabelRace = document.getElementById('new-label-race');
+const newLabelLevel = document.getElementById('new-label-level');
 const waypointFields = document.getElementById('waypoint-fields');
 const newLabelTargetMap = document.getElementById('new-label-target-map');
 const targetWaypointRow = document.getElementById('target-waypoint-row');
@@ -82,6 +117,10 @@ const newLabelTargetY = document.getElementById('new-label-target-y');
 const shopFields = document.getElementById('shop-fields');
 const newLabelShopType = document.getElementById('new-label-shop-type');
 const newLabelShopMarkup = document.getElementById('new-label-shop-markup');
+const chestFields = document.getElementById('chest-fields');
+const newLabelChestState = document.getElementById('new-label-chest-state');
+const chestKeyRow = document.getElementById('chest-key-row');
+const newLabelChestKey = document.getElementById('new-label-chest-key');
 const cancelEditBtn = document.getElementById('cancel-edit-btn');
 const editingIndicator = document.getElementById('editing-indicator');
 const editingLabelName = document.getElementById('editing-label-name');
@@ -146,6 +185,7 @@ let musicFadeRAF = null;
 const MUSIC_FADE_MS = 1800;
 
 let domElementsRegistry = []; 
+let altMenuEntries = []; // { index, displayName, el } for each altViews menu entry currently rendered
 let scale = 1;
 let posX = 0;
 let posY = 0;
@@ -178,6 +218,7 @@ let modifiedLabels = new Set();
 let clickMapX = 0;
 let clickMapY = 0;
 let currentMapFilename = ""; 
+let currentDisplayName = ""; // the displayName of whichever entry (primary or altViews) is currently showing
 let currentMapType = ""; 
 let activeModCategory = "arcanum"; 
 let pendingAutoOpenLabelText = null;
@@ -275,8 +316,28 @@ const ITEM_TIER_COLORS = {
     hexed: '#e67e22'
 };
 
+// The "part" field on a quest is normally a number ("Part 1", "Part 2", ...), but also
+// accepts the sentinel string "reward" for the step where the quest's reward is handed
+// out - rendered as a distinct green "Reward" badge instead of "Part N".
 function buildQuestPartBadge(part) {
-    return part ? ` <span class="quest-part-badge">Part ${part}</span>` : '';
+    if (!part) return '';
+    if (part === 'reward') return ` <span class="quest-part-badge quest-reward-badge">Reward</span>`;
+    return ` <span class="quest-part-badge">Part ${part}</span>`;
+}
+
+// A quest can optionally be flagged as the main storyline (✨) or a quest to become a
+// master of a discipline (🎓). Plain side quests get no marker at all.
+const QUEST_TYPE_MARKER = {
+    main: '✨',
+    master: '🎓'
+};
+const QUEST_TYPE_COLOR = {
+    main: '#ffd700',
+    master: '#f1c40f'
+};
+
+function buildQuestTypeMarker(questType) {
+    return QUEST_TYPE_MARKER[questType] ? ` <span class="quest-type-marker quest-type-${questType}">${QUEST_TYPE_MARKER[questType]}</span>` : '';
 }
 
 function buildLabelStatsRowHtml(label) {
@@ -293,6 +354,19 @@ function buildLabelStatsRowHtml(label) {
 
 function buildLabelMasterHtml(label) {
     return label.master ? `<div class="label-master">${label.master}</div>` : '';
+}
+
+// A follower's type is one of a fixed set of values, rendered the same way as the Master
+// line - an italic line right below the label's name.
+const FOLLOWER_TYPE_LABELS = {
+    regular: 'Regular Follower',
+    special: 'Special Follower',
+    temporary: 'Temporary Follower'
+};
+
+function buildLabelFollowerTypeHtml(label) {
+    const text = FOLLOWER_TYPE_LABELS[label.followerType];
+    return text ? `<div class="label-follower-type">${text}</div>` : '';
 }
 
 // Shared renderer for inventory-like item lists (inventory / offering / blessing) - each entry is
@@ -322,6 +396,113 @@ function getSelectedNewLabelCategories() {
     return Array.from(newLabelCategoryChecks).filter(cb => cb.checked).map(cb => cb.value);
 }
 
+// Sex/Race/Level only make sense for categories that represent a person - NPC, Shop
+// (shopkeepers), Followers, and Master trainers all qualify.
+function categoriesUseStatsFields(cats) {
+    return cats.includes('npc') || cats.includes('shop') || cats.includes('followers') || cats.includes('master');
+}
+
+// Category checkboxes are visually hidden - keeps their pill's highlighted state in sync
+// with the (possibly programmatically-set) checked value. Call after any change that
+// doesn't go through the checkbox's own "change" event (e.g. loading a label for editing).
+function syncCategoryPillActiveStates() {
+    newLabelCategoryChecks.forEach(cb => {
+        const pill = cb.closest('.category-icon-pill');
+        if (pill) pill.classList.toggle('active', cb.checked);
+    });
+}
+
+// Shows/hides the Description Note field behind the 💡 toggle next to Label Text, and
+// keeps the button's own highlighted state in sync.
+function setDescriptionFieldVisible(visible) {
+    if (!descriptionField || !toggleDescBtn) return;
+    descriptionField.style.display = visible ? 'flex' : 'none';
+    toggleDescBtn.classList.toggle('active', visible);
+}
+
+// A chest's key is an item name that some label carries in its Inventory (an NPC, shop,
+// or another chest) - the picker surfaces inventory items whose name contains "key" (a
+// heuristic, since item data carries no explicit type flag), split into "in this location"
+// (the current map, its parent if it's a submap, and that parent's other submaps) versus
+// everywhere else, so the locally-relevant ones surface first. Clicking the resulting
+// "Opens With" link travels to whichever label's inventory has that exact item name
+// (see findLabelCarryingItem) - not to a same-named label placed on the map.
+function getInventoryKeyOptionsForCurrentLocation() {
+    const selectedMap = ArcanumMapData.find(m => m.filename === currentMapFilename);
+    if (!selectedMap) return { local: [], other: [] };
+
+    const topMap = selectedMap.parentFilename
+        ? (ArcanumMapData.find(m => m.filename === selectedMap.parentFilename) || selectedMap)
+        : selectedMap;
+
+    const groupFilenames = new Set([topMap.filename]);
+    ArcanumMapData.forEach(m => { if (m.parentFilename === topMap.filename) groupFilenames.add(m.filename); });
+
+    const seen = new Set();
+    const local = [];
+    const other = [];
+
+    ArcanumMapData.forEach(map => {
+        if (!Array.isArray(map.labels)) return;
+        map.labels.forEach(label => {
+            if (!Array.isArray(label.inventory)) return;
+            label.inventory.forEach(item => {
+                const name = typeof item === 'string' ? item : (item && item.name);
+                if (!name || seen.has(name) || !name.toLowerCase().includes('key')) return;
+                seen.add(name);
+                const entry = { text: name, mapDisplayName: map.displayName };
+                (groupFilenames.has(map.filename) ? local : other).push(entry);
+            });
+        });
+    });
+
+    local.sort((a, b) => a.text.localeCompare(b.text));
+    other.sort((a, b) => a.text.localeCompare(b.text));
+
+    return { local, other };
+}
+
+function populateChestKeyOptions() {
+    if (!newLabelChestKey) return;
+    const previousValue = newLabelChestKey.value;
+    newLabelChestKey.innerHTML = '<option value="">— no key needed —</option>';
+
+    const { local, other } = getInventoryKeyOptionsForCurrentLocation();
+
+    if (local.length > 0) {
+        const localGroup = document.createElement('optgroup');
+        localGroup.label = 'In this location';
+        local.forEach(entry => {
+            const opt = document.createElement('option');
+            opt.value = entry.text;
+            opt.textContent = entry.text;
+            localGroup.appendChild(opt);
+        });
+        newLabelChestKey.appendChild(localGroup);
+    }
+
+    if (other.length > 0) {
+        const otherGroup = document.createElement('optgroup');
+        otherGroup.label = 'Elsewhere';
+        other.forEach(entry => {
+            const opt = document.createElement('option');
+            opt.value = entry.text;
+            opt.textContent = `${entry.text} (${entry.mapDisplayName})`;
+            otherGroup.appendChild(opt);
+        });
+        newLabelChestKey.appendChild(otherGroup);
+    }
+
+    if (previousValue && Array.from(newLabelChestKey.options).some(o => o.value === previousValue)) {
+        newLabelChestKey.value = previousValue;
+    }
+}
+
+function updateChestKeyRowVisibility() {
+    if (!chestKeyRow || !newLabelChestState) return;
+    chestKeyRow.style.display = newLabelChestState.value === 'locked' ? 'flex' : 'none';
+}
+
 function populateTargetMapOptions() {
     if (!newLabelTargetMap) return;
     const previousValue = newLabelTargetMap.value;
@@ -336,15 +517,48 @@ function populateTargetMapOptions() {
         uniqueMaps.push(map);
     });
 
-    // Only submaps of the map you're currently editing make sense as waypoint targets
-    // (e.g. an "enter the cellar" label on the city map).
+    // Submaps of the map you're currently editing make sense as waypoint targets (e.g.
+    // an "enter the cellar" label on the city map). If the current map is itself a submap,
+    // its parent is also a sensible target (e.g. an "exit to the street" label inside that
+    // cellar), so it's listed first and flagged as the parent - and so are its sibling
+    // submaps (other interiors under that same parent, e.g. a tunnel connecting two
+    // dungeon sections), flagged as siblings.
+    const currentMap = ArcanumMapData.find(m => m.filename === currentMapFilename);
     const submapsOfCurrent = uniqueMaps.filter(map => map.parentFilename === currentMapFilename);
+    const parentOfCurrent = (currentMap && currentMap.parentFilename)
+        ? uniqueMaps.find(map => map.filename === currentMap.parentFilename)
+        : null;
+    const siblingsOfCurrent = (currentMap && currentMap.parentFilename)
+        ? uniqueMaps.filter(map => map.parentFilename === currentMap.parentFilename && map.filename !== currentMapFilename)
+        : [];
+    const targetMapEntries = parentOfCurrent
+        ? [parentOfCurrent, ...siblingsOfCurrent, ...submapsOfCurrent]
+        : submapsOfCurrent;
 
-    submapsOfCurrent.forEach(map => {
+    targetMapEntries.forEach(map => {
+        const isParent = !!parentOfCurrent && map.filename === parentOfCurrent.filename;
+        const isSibling = siblingsOfCurrent.some(s => s.filename === map.filename);
         const opt = document.createElement('option');
         opt.value = map.displayName;
-        opt.textContent = map.modGroup ? `${map.displayName} — ${map.modGroup}` : map.displayName;
+        const label = isParent ? `↑ ${map.displayName} (parent map)`
+            : isSibling ? `↔ ${map.displayName} (sibling map)`
+            : map.displayName;
+        opt.textContent = map.modGroup ? `${label} — ${map.modGroup}` : label;
         newLabelTargetMap.appendChild(opt);
+
+        // Each altViews entry is its own selectable destination (same filename/labels,
+        // different name + starting view), so list it right after the primary entry.
+        if (Array.isArray(map.altViews)) {
+            map.altViews.forEach(alt => {
+                const altOpt = document.createElement('option');
+                altOpt.value = alt.displayName;
+                const altLabel = isParent ? `↑ ${alt.displayName} (parent map)`
+                    : isSibling ? `↔ ${alt.displayName} (sibling map)`
+                    : alt.displayName;
+                altOpt.textContent = map.modGroup ? `${altLabel} — ${map.modGroup}` : altLabel;
+                newLabelTargetMap.appendChild(altOpt);
+            });
+        }
     });
 
     if (previousValue && Array.from(newLabelTargetMap.options).some(o => o.value === previousValue)) {
@@ -357,7 +571,8 @@ function populateTargetWaypointOptions() {
     const previousValue = newLabelTargetWaypoint.value;
     newLabelTargetWaypoint.innerHTML = '<option value="">— pick a waypoint on that map —</option>';
 
-    const targetMap = ArcanumMapData.find(m => m.displayName === newLabelTargetMap.value);
+    const resolvedTarget = resolveMapEntryByDisplayName(newLabelTargetMap.value);
+    const targetMap = resolvedTarget ? resolvedTarget.map : null;
     const labels = (targetMap && targetMap.labels) ? targetMap.labels : [];
     // Index into the map's own labels array (rather than label text) so two waypoints that
     // happen to share the same name on that map can still be told apart.
@@ -399,6 +614,40 @@ function populateShopTypeOptions() {
     });
 }
 
+// Collects every quest name already in use (from inline linkedLabels quest entries, from
+// string references to another quest label, and from quest labels with no linkedLabels at
+// all - where the label's own text IS the quest name) so the Quest Name field can suggest
+// existing quests instead of risking a typo'd duplicate.
+function populateQuestNameOptions() {
+    const datalist = document.getElementById('quest-name-options');
+    if (!datalist) return;
+    const names = new Set();
+    ArcanumMapData.forEach(map => {
+        if (!Array.isArray(map.labels)) return;
+        map.labels.forEach(label => {
+            const cats = Array.isArray(label.category) ? label.category : (label.category ? [label.category] : []);
+            if (!cats.includes('quest')) return;
+            if (Array.isArray(label.linkedLabels) && label.linkedLabels.length > 0) {
+                label.linkedLabels.forEach(entry => {
+                    if (typeof entry === 'string') {
+                        if (entry.trim()) names.add(entry.trim());
+                    } else if (entry && entry.questName) {
+                        names.add(String(entry.questName).trim());
+                    }
+                });
+            } else if (label.text) {
+                names.add(label.text.trim());
+            }
+        });
+    });
+    datalist.innerHTML = '';
+    [...names].filter(Boolean).sort().forEach(name => {
+        const opt = document.createElement('option');
+        opt.value = name;
+        datalist.appendChild(opt);
+    });
+}
+
 // Local file safe reloading configuration bypasses origin security rules
 window.hotReloadMapDatabase = function() {
     window.location.reload();
@@ -424,16 +673,23 @@ function saveViewerState() {
         try {
             localStorage.setItem(VIEWER_STATE_KEY, JSON.stringify({
                 mapFilename: currentMapFilename,
+                displayName: currentDisplayName,
                 modCategory: activeModCategory,
                 scale: scale,
                 posX: posX,
-                posY: posY
+                posY: posY,
+                menuScrollTop: menuContainer.scrollTop
             }));
         } catch (e) {
             // Storage full/unavailable - nothing we can do, fail silently
         }
     }, 250);
 }
+
+// Persist the location list's scroll position as the user scrolls it, so it can be restored
+// after a reload - without this, only actions that already call saveViewerState (loading a
+// map, panning/zooming) would pick up whatever the scroll happened to be at the time.
+menuContainer.addEventListener('scroll', saveViewerState);
 
 // --- Background music ---
 const MUSIC_SETTINGS_KEY = 'arcanumMusicSettings';
@@ -533,14 +789,16 @@ function parseShareLink() {
     const params = new URLSearchParams(window.location.hash.substring(1));
     const mapName = params.get('map');
     if (!mapName) return null;
-    const matchIndex = ArcanumMapData.findIndex(m => m.displayName === mapName);
-    if (matchIndex === -1) return null;
+    const resolved = resolveMapEntryByDisplayName(mapName);
+    if (!resolved) return null;
 
     const x = parseFloat(params.get('x'));
     const y = parseFloat(params.get('y'));
     const zoom = parseFloat(params.get('zoom'));
-    const view = (!isNaN(x) && !isNaN(y) && !isNaN(zoom)) ? { x, y, zoom } : null;
-    return { index: matchIndex, view };
+    // Explicit x/y/zoom in the link wins; otherwise fall back to whichever entry (primary
+    // or altViews) the "map" name resolved to, so an alt-name link opens at its own view.
+    const view = (!isNaN(x) && !isNaN(y) && !isNaN(zoom)) ? { x, y, zoom } : resolved.defaultView;
+    return { index: resolved.index, view, displayName: resolved.displayName };
 }
 
 function flashButtonText(btn, message) {
@@ -602,7 +860,7 @@ function initViewer() {
         if (!selectedMap) return;
         const center = getCurrentMapCenter();
         const params = new URLSearchParams();
-        params.set('map', selectedMap.displayName);
+        params.set('map', currentDisplayName || selectedMap.displayName);
         params.set('x', center.x);
         params.set('y', center.y);
         params.set('zoom', center.zoom.toFixed(3));
@@ -667,11 +925,14 @@ function initViewer() {
         let startIndex = 0;
         let restorePosition = null;
         let arrivalView = null;
+        let displayNameToRestore = null;
+        let savedMenuScrollTop = null;
 
         const shared = parseShareLink();
         if (shared) {
             startIndex = shared.index;
             arrivalView = shared.view;
+            displayNameToRestore = shared.displayName;
             const sharedMap = ArcanumMapData[startIndex];
             if (checkMapCategoryMatch(sharedMap, "arcanum")) activeModCategory = "arcanum";
             else if (checkMapCategoryMatch(sharedMap, "cerestored")) activeModCategory = "cerestored";
@@ -685,9 +946,13 @@ function initViewer() {
                 const savedIndex = ArcanumMapData.findIndex(m => m.filename === saved.mapFilename);
                 if (savedIndex !== -1) {
                     startIndex = savedIndex;
+                    displayNameToRestore = saved.displayName || null;
                     if (saved.modCategory) activeModCategory = saved.modCategory;
                     if (typeof saved.scale === 'number' && typeof saved.posX === 'number' && typeof saved.posY === 'number') {
                         restorePosition = { scale: saved.scale, posX: saved.posX, posY: saved.posY };
+                    }
+                    if (typeof saved.menuScrollTop === 'number') {
+                        savedMenuScrollTop = saved.menuScrollTop;
                     }
                 }
             }
@@ -700,7 +965,15 @@ function initViewer() {
         renderGroupedFileList();
         populateTargetMapOptions();
         populateShopTypeOptions();
-        loadImage(startIndex, arrivalView, restorePosition);
+        populateQuestNameOptions();
+        loadImage(startIndex, arrivalView, restorePosition, displayNameToRestore);
+
+        // Restore the location list's scroll position last, after renderGroupedFileList and
+        // loadImage have both finished building the menu (including the active map's submenu),
+        // so nothing afterward resets it back to the top.
+        if (savedMenuScrollTop !== null) {
+            menuContainer.scrollTop = savedMenuScrollTop;
+        }
     } else {
         menuContainer.innerHTML = '<div style="text-align:center;color:#888;padding:20px;">No maps registered.</div>';
     }
@@ -737,14 +1010,41 @@ function initViewer() {
         }
     });
 
+    if (toggleDescBtn) {
+        toggleDescBtn.addEventListener('click', () => {
+            const isVisible = descriptionField.style.display !== 'none';
+            setDescriptionFieldVisible(!isVisible);
+        });
+    }
+
     newLabelCategoryChecks.forEach(cb => {
         cb.addEventListener('change', () => {
             const cats = getSelectedNewLabelCategories();
             waypointFields.style.display = cats.includes('waypoint') ? 'flex' : 'none';
             shopFields.style.display = cats.includes('shop') ? 'flex' : 'none';
                 masterFields.style.display = cats.includes('master') ? 'flex' : 'none';
+                followerFields.style.display = cats.includes('followers') ? 'flex' : 'none';
+                statsFields.style.display = categoriesUseStatsFields(cats) ? 'flex' : 'none';
+            questFields.style.display = cats.includes('quest') ? 'flex' : 'none';
+            genericLinksField.style.display = cats.includes('quest') ? 'none' : 'flex';
+            chestFields.style.display = cats.includes('chest') ? 'flex' : 'none';
+            if (cats.includes('chest')) {
+                populateChestKeyOptions();
+                updateChestKeyRowVisibility();
+            }
+            syncCategoryPillActiveStates();
         });
     });
+
+    if (newLabelChestState) {
+        newLabelChestState.addEventListener('change', () => {
+            updateChestKeyRowVisibility();
+            populateChestKeyOptions();
+        });
+    }
+
+    // Initial pill highlight to match whatever categories are checked by default in the HTML.
+    syncCategoryPillActiveStates();
 
     newLabelTargetMap.addEventListener('change', () => {
         populateTargetWaypointOptions();
@@ -759,6 +1059,29 @@ function initViewer() {
         newLabelTargetY.value = label.y;
     });
 
+// Parses the Quest Part field: the sentinel word "reward" (any case) becomes the string
+// 'reward' (see buildQuestPartBadge), anything else is parsed as the usual part number.
+function parseQuestPartValue(raw) {
+    const trimmed = (raw || '').trim();
+    if (!trimmed) return null;
+    if (trimmed.toLowerCase() === 'reward') return 'reward';
+    return parseInt(trimmed, 10);
+}
+
+function buildQuestEntryFromFields() {
+    const questNameVal = newLabelQuestName.value.trim();
+    const questDescVal = newLabelQuestDesc.value.trim();
+    const questTargetVal = newLabelQuestTarget.value.trim();
+    const questPartVal = newLabelQuestPart.value.trim();
+    if (!questNameVal && !questDescVal && !questTargetVal && !questPartVal) return null;
+    const entry = {};
+    if (questNameVal) entry.questName = questNameVal;
+    if (questDescVal) entry.questDescription = questDescVal;
+    if (questTargetVal) entry.target = questTargetVal;
+    if (questPartVal !== '') entry.part = parseQuestPartValue(questPartVal);
+    return entry;
+}
+
     addToPreviewBtn.addEventListener('click', () => {
         const labelTitle = newLabelText.value.trim() || "New Marker Location";
         const labelDescription = newLabelDesc.value.trim();
@@ -770,14 +1093,32 @@ function initViewer() {
             editingLabel.text = labelTitle;
             editingLabel.description = labelDescription;
 
-            // Preserve any object-form linked entries (e.g. Myrth-style multi-quest objects) -
-            // the text field only ever represents the simple string-form links
-            const preservedObjectLinks = Array.isArray(editingLabel.linkedLabels)
-                ? editingLabel.linkedLabels.filter(e => typeof e !== 'string') : [];
-            const newStringLinks = linkedText ? linkedText.split(',').map(s => s.trim()).filter(Boolean) : [];
-            const combinedLinks = [...newStringLinks, ...preservedObjectLinks];
-            if (combinedLinks.length > 0) editingLabel.linkedLabels = combinedLinks;
-            else delete editingLabel.linkedLabels;
+            // Quest category: linkedLabels holds a single structured quest object built
+            // from the Quest Name/Description/Target/Part fields, replacing whatever was
+            // there before. Any other category: the Linked Label(s) field only ever
+            // represents simple string-form links - preserve any object-form entries
+            // (e.g. Myrth-style multi-quest objects) that might already be there from
+            // hand-edited maps.js data.
+            if (cats.includes('quest')) {
+                const questEntry = buildQuestEntryFromFields();
+                if (questEntry) {
+                    // questType (✨ main / 🎓 master) has no field in this form - it's set by
+                    // hand in maps.js, so preserve it rather than silently dropping it on save.
+                    const previousObjectEntry = Array.isArray(editingLabel.linkedLabels)
+                        ? editingLabel.linkedLabels.find(e => e && typeof e === 'object') : null;
+                    if (previousObjectEntry && previousObjectEntry.questType) questEntry.questType = previousObjectEntry.questType;
+                    editingLabel.linkedLabels = [questEntry];
+                } else {
+                    delete editingLabel.linkedLabels;
+                }
+            } else {
+                const preservedObjectLinks = Array.isArray(editingLabel.linkedLabels)
+                    ? editingLabel.linkedLabels.filter(e => typeof e !== 'string') : [];
+                const newStringLinks = linkedText ? linkedText.split(',').map(s => s.trim()).filter(Boolean) : [];
+                const combinedLinks = [...newStringLinks, ...preservedObjectLinks];
+                if (combinedLinks.length > 0) editingLabel.linkedLabels = combinedLinks;
+                else delete editingLabel.linkedLabels;
+            }
 
             if (currentMapType !== "overworld") {
                 if (cats.length === 1) editingLabel.category = cats[0];
@@ -814,6 +1155,36 @@ function initViewer() {
                 } else {
                     delete editingLabel.master;
                 }
+
+                if (cats.includes('followers')) {
+                    const followerTypeValue = newLabelFollowerType.value;
+                    if (followerTypeValue) editingLabel.followerType = followerTypeValue; else delete editingLabel.followerType;
+                } else {
+                    delete editingLabel.followerType;
+                }
+
+                if (categoriesUseStatsFields(cats)) {
+                    const sexValue = newLabelSex.value;
+                    if (sexValue) editingLabel.sex = sexValue; else delete editingLabel.sex;
+                    const raceValue = newLabelRace.value;
+                    if (raceValue) editingLabel.race = raceValue; else delete editingLabel.race;
+                    const levelValue = newLabelLevel.value.trim();
+                    if (levelValue !== '') editingLabel.level = parseInt(levelValue, 10); else delete editingLabel.level;
+                } else {
+                    delete editingLabel.sex;
+                    delete editingLabel.race;
+                    delete editingLabel.level;
+                }
+
+                if (cats.includes('chest')) {
+                    const chestStateVal = newLabelChestState.value;
+                    if (chestStateVal) editingLabel.chestState = chestStateVal; else delete editingLabel.chestState;
+                    const chestKeyVal = newLabelChestKey.value;
+                    if (chestKeyVal) editingLabel.chestKey = chestKeyVal; else delete editingLabel.chestKey;
+                } else {
+                    delete editingLabel.chestState;
+                    delete editingLabel.chestKey;
+                }
             }
 
             const wasPending = pendingNewLabels.includes(editingLabel);
@@ -834,7 +1205,10 @@ function initViewer() {
 
         if (!cats.includes('waypoint')) newLabelObj.description = labelDescription;
 
-        if (linkedText) {
+        if (cats.includes('quest')) {
+            const questEntry = buildQuestEntryFromFields();
+            if (questEntry) newLabelObj.linkedLabels = [questEntry];
+        } else if (linkedText) {
             newLabelObj.linkedLabels = linkedText.split(',').map(s => s.trim()).filter(Boolean);
         }
 
@@ -862,6 +1236,24 @@ function initViewer() {
                 const masterValue = newLabelMaster.value.trim();
                 if (masterValue) newLabelObj.master = masterValue;
             }
+            if (cats.includes('followers')) {
+                const followerTypeValue = newLabelFollowerType.value;
+                if (followerTypeValue) newLabelObj.followerType = followerTypeValue;
+            }
+            if (categoriesUseStatsFields(cats)) {
+                const sexValue = newLabelSex.value;
+                if (sexValue) newLabelObj.sex = sexValue;
+                const raceValue = newLabelRace.value;
+                if (raceValue) newLabelObj.race = raceValue;
+                const levelValue = newLabelLevel.value.trim();
+                if (levelValue !== '') newLabelObj.level = parseInt(levelValue, 10);
+            }
+            if (cats.includes('chest')) {
+                const chestStateVal = newLabelChestState.value;
+                if (chestStateVal) newLabelObj.chestState = chestStateVal;
+                const chestKeyVal = newLabelChestKey.value;
+                if (chestKeyVal) newLabelObj.chestKey = chestKeyVal;
+            }
         }
 
         renderSingleLabel(newLabelObj, true);
@@ -871,13 +1263,25 @@ function initViewer() {
         // similar labels is quick - only the free-text fields reset between placements.
         newLabelText.value = '';
         newLabelDesc.value = '';
+        setDescriptionFieldVisible(false);
         newLabelMaster.value = '';
         newLabelLinks.value = '';
+        newLabelQuestName.value = '';
+        newLabelQuestDesc.value = '';
+        newLabelQuestTarget.value = '';
+        newLabelQuestPart.value = '';
         newLabelTargetX.value = '';
         newLabelTargetY.value = '';
         if (newLabelTargetWaypoint) newLabelTargetWaypoint.value = '';
         newLabelShopType.value = '';
         newLabelShopMarkup.value = '';
+        newLabelChestState.value = '';
+        newLabelChestKey.value = '';
+        newLabelSex.value = '';
+        newLabelRace.value = '';
+        newLabelLevel.value = '';
+        updateChestKeyRowVisibility();
+        populateQuestNameOptions();
     });
 
     cancelEditBtn.addEventListener('click', () => {
@@ -986,6 +1390,7 @@ function executeButtonZoom(isZoomIn) {
 function renderGroupedFileList() {
     menuContainer.innerHTML = '';
     domElementsRegistry = [];
+    altMenuEntries = [];
     const grouped = {};
     
     ArcanumMapData.forEach((map, index) => {
@@ -994,7 +1399,16 @@ function renderGroupedFileList() {
         
         const groupName = map.modGroup || 'Uncategorized Mod';
         if (!grouped[groupName]) grouped[groupName] = [];
-        grouped[groupName].push({ map, index });
+
+        // A map contributes its own entry plus one entry per altViews name - all treated
+        // as independent, identically-styled rows and sorted alphabetically together within
+        // the group, so an altViews entry doesn't stand out as "belonging" to the map above it.
+        grouped[groupName].push({ displayName: map.displayName, index, defaultView: map.defaultView, isAlt: false });
+        if (Array.isArray(map.altViews)) {
+            map.altViews.forEach(alt => {
+                grouped[groupName].push({ displayName: alt.displayName, index, defaultView: alt.defaultView, isAlt: true });
+            });
+        }
     });
     
     for (const modName in grouped) {
@@ -1006,21 +1420,29 @@ function renderGroupedFileList() {
         const ul = document.createElement('ul');
         ul.className = 'file-list';
         
-        grouped[modName].forEach(item => {
-            const li = document.createElement('li');
-            li.textContent = item.map.displayName;
-            li.addEventListener('click', () => loadImage(item.index));
-            ul.appendChild(li);
-            domElementsRegistry[item.index] = li;
-        });
+        grouped[modName]
+            .sort((a, b) => a.displayName.localeCompare(b.displayName))
+            .forEach(entry => {
+                const li = document.createElement('li');
+                li.textContent = entry.displayName;
+                li.addEventListener('click', () => loadImage(entry.index, entry.defaultView, null, entry.displayName));
+                ul.appendChild(li);
+
+                if (entry.isAlt) {
+                    altMenuEntries.push({ index: entry.index, displayName: entry.displayName, el: li });
+                } else {
+                    domElementsRegistry[entry.index] = li;
+                }
+            });
         menuContainer.appendChild(ul);
     }
 }
 
-function loadImage(index, arrivalViewOverride, restorePosition) {
+function loadImage(index, arrivalViewOverride, restorePosition, displayNameOverride) {
     domElementsRegistry.forEach((el) => {
         if (el) el.classList.remove('active');
     });
+    altMenuEntries.forEach((entry) => entry.el.classList.remove('active'));
     
     const activeSubmenus = menuContainer.querySelectorAll('.submenu-list');
     activeSubmenus.forEach(menu => menu.remove());
@@ -1031,6 +1453,7 @@ function loadImage(index, arrivalViewOverride, restorePosition) {
 
     const selectedMap = ArcanumMapData[index];
     currentMapFilename = selectedMap.filename; 
+    currentDisplayName = displayNameOverride || selectedMap.displayName;
     currentMapType = selectedMap.typemap || ""; 
     currentMapChunked = !!selectedMap.chunked;
     currentMapLoaded = false;
@@ -1062,6 +1485,11 @@ function loadImage(index, arrivalViewOverride, restorePosition) {
         waypointFields.style.display = 'none';
         shopFields.style.display = 'none';
         masterFields.style.display = 'none';
+        followerFields.style.display = 'none';
+        statsFields.style.display = 'none';
+        questFields.style.display = 'none';
+        chestFields.style.display = 'none';
+        genericLinksField.style.display = 'flex';
     } else {
         mapCoordinatesHud.style.display = 'flex';
         hudBoxW.style.display = 'none';
@@ -1071,6 +1499,16 @@ function loadImage(index, arrivalViewOverride, restorePosition) {
         waypointFields.style.display = getSelectedNewLabelCategories().includes('waypoint') ? 'flex' : 'none';
         shopFields.style.display = getSelectedNewLabelCategories().includes('shop') ? 'flex' : 'none';
         masterFields.style.display = getSelectedNewLabelCategories().includes('master') ? 'flex' : 'none';
+        followerFields.style.display = getSelectedNewLabelCategories().includes('followers') ? 'flex' : 'none';
+        statsFields.style.display = categoriesUseStatsFields(getSelectedNewLabelCategories()) ? 'flex' : 'none';
+        questFields.style.display = getSelectedNewLabelCategories().includes('quest') ? 'flex' : 'none';
+        genericLinksField.style.display = getSelectedNewLabelCategories().includes('quest') ? 'none' : 'flex';
+        const catsForChest = getSelectedNewLabelCategories();
+        chestFields.style.display = catsForChest.includes('chest') ? 'flex' : 'none';
+        if (catsForChest.includes('chest')) {
+            populateChestKeyOptions();
+            updateChestKeyRowVisibility();
+        }
     }
 
     let primaryTargetIndex = index;
@@ -1079,7 +1517,12 @@ function loadImage(index, arrivalViewOverride, restorePosition) {
         if (parentIdx !== -1) primaryTargetIndex = parentIdx;
     }
     
-    if (domElementsRegistry[primaryTargetIndex]) {
+    // If an altViews entry is what's actually showing, highlight that li instead of the
+    // primary one (they share the same underlying map/index, but are separate menu rows).
+    const activeAltEntry = altMenuEntries.find(entry => entry.index === index && entry.displayName === currentDisplayName);
+    if (activeAltEntry) {
+        activeAltEntry.el.classList.add('active');
+    } else if (domElementsRegistry[primaryTargetIndex]) {
         domElementsRegistry[primaryTargetIndex].classList.add('active');
     }
 
@@ -1176,9 +1619,9 @@ function finishMapLoad(selectedMap, arrivalViewOverride, restorePosition) {
 }
 
 function travelToMapByFilename(targetName, arrivalViewOverride, autoOpenLabelText = null) {
-    const matchedIndex = ArcanumMapData.findIndex(map => map.displayName === targetName);
-    if (matchedIndex !== -1) {
-        const targetMap = ArcanumMapData[matchedIndex];
+    const resolved = resolveMapEntryByDisplayName(targetName);
+    if (resolved) {
+        const { map: targetMap, index: matchedIndex, displayName: resolvedDisplayName, defaultView } = resolved;
         pendingAutoOpenLabelText = autoOpenLabelText || null;
 
         let targetCategory = "modules";
@@ -1195,9 +1638,9 @@ function travelToMapByFilename(targetName, arrivalViewOverride, autoOpenLabelTex
 
         const normalizedView = arrivalViewOverride
             ? { ...arrivalViewOverride, zoom: 1 }
-            : (targetMap.defaultView ? { ...targetMap.defaultView, zoom: 1 } : { x: 0, y: 0, zoom: 1 });
+            : (defaultView ? { ...defaultView, zoom: 1 } : { x: 0, y: 0, zoom: 1 });
 
-        loadImage(matchedIndex, normalizedView);
+        loadImage(matchedIndex, normalizedView, null, resolvedDisplayName);
     } else {
         alert(`Travel target failed: "${targetName}" is not registered inside your maps.js file (no map with that displayName).`);
     }
@@ -1247,6 +1690,38 @@ function travelToLinkedLabel(searchText) {
     travelToMapByFilename(map.displayName, viewOverride, searchText);
 }
 
+// A chest's "Opens With" key doesn't point at a same-named label - it points at whichever
+// label actually carries that item in its Inventory (an NPC, a shop, or another chest).
+// One key per chest is assumed, so the first match found wins.
+function findLabelCarryingItem(itemName) {
+    const target = normalizeLabelText(itemName);
+    if (!target) return null;
+
+    for (const map of ArcanumMapData) {
+        if (!Array.isArray(map.labels)) continue;
+        for (const label of map.labels) {
+            if (!Array.isArray(label.inventory)) continue;
+            const carries = label.inventory.some(item => {
+                const name = typeof item === 'string' ? item : (item && item.name);
+                return name && normalizeLabelText(name) === target;
+            });
+            if (carries) return { map, label };
+        }
+    }
+    return null;
+}
+
+function travelToLabelCarryingKey(itemName) {
+    const result = findLabelCarryingItem(itemName);
+    if (!result) {
+        alert(`No label found carrying "${itemName}" in its Inventory - check that some NPC/Shop/Chest lists this exact item name in its Inventory.`);
+        return;
+    }
+    const { map, label } = result;
+    const viewOverride = (map.typemap === "overworld") ? null : { x: label.x, y: label.y, zoom: 1 };
+    travelToMapByFilename(map.displayName, viewOverride, label.text);
+}
+
 // --- Quest list panel: all quests on the current map, grouped by the NPC that gives them ---
 
 function jumpToLabelOnCurrentMap(label) {
@@ -1275,13 +1750,13 @@ function buildQuestListForMap(selectedMap) {
                 if (!found) return null;
                 const foundCats = Array.isArray(found.label.category) ? found.label.category : (found.label.category ? [found.label.category] : []);
                 if (!foundCats.includes('quest') || foundCats.includes('npc')) return null;
-                return { title: entry, description: found.label.description || '', target: entry, part: found.label.part || null };
+                return { title: entry, description: found.label.description || '', target: entry, part: found.label.part || null, questType: found.label.questType || null };
             }
-            return { title: entry.questName || entry.target || questLabel.text, description: entry.questDescription || '', target: entry.target || null, part: entry.part || null };
+            return { title: entry.questName || entry.target || questLabel.text, description: entry.questDescription || '', target: entry.target || null, part: entry.part || null, questType: entry.questType || null };
         }).filter(Boolean);
 
         if (quests.length === 0) {
-            quests.push({ title: questLabel.text, description: questLabel.description || '', target: null, ownLabel: questLabel, part: questLabel.part || null });
+            quests.push({ title: questLabel.text, description: questLabel.description || '', target: null, ownLabel: questLabel, part: questLabel.part || null, questType: questLabel.questType || null });
         }
         npcGroups.push({ npcLabel: questLabel, quests });
     });
@@ -1298,7 +1773,7 @@ function buildQuestListForCurrentMap() {
 
 function renderQuestPanel() {
     const selectedMap = ArcanumMapData.find(m => m.filename === currentMapFilename);
-    questPanelMapName.textContent = selectedMap ? selectedMap.displayName : '';
+    questPanelMapName.textContent = selectedMap ? (currentDisplayName || selectedMap.displayName) : '';
 
     const { npcGroups, unassigned } = buildQuestListForCurrentMap();
 
@@ -1313,7 +1788,7 @@ function renderQuestPanel() {
             <div class="quest-panel-npc-name" data-npc-index="${gi}">🧑 ${group.npcLabel.text}</div>`;
         group.quests.forEach((q, qi) => {
             html += `<div class="quest-panel-quest-item" data-npc-index="${gi}" data-quest-index="${qi}">
-                <div class="quest-panel-quest-title">📜 ${q.title}${buildQuestPartBadge(q.part)}</div>
+                <div class="quest-panel-quest-title">📜 ${q.title}${buildQuestTypeMarker(q.questType)}${buildQuestPartBadge(q.part)}</div>
                 ${q.description ? `<div class="quest-panel-quest-desc">${q.description}</div>` : ''}
             </div>`;
         });
@@ -1324,7 +1799,7 @@ function renderQuestPanel() {
         html += `<div class="quest-panel-section-label">Other quests</div>`;
         unassigned.forEach((q, ui) => {
             html += `<div class="quest-panel-quest-item" data-unassigned-index="${ui}">
-                <div class="quest-panel-quest-title">📜 ${q.title}${buildQuestPartBadge(q.part)}</div>
+                <div class="quest-panel-quest-title">📜 ${q.title}${buildQuestTypeMarker(q.questType)}${buildQuestPartBadge(q.part)}</div>
                 ${q.description ? `<div class="quest-panel-quest-desc">${q.description}</div>` : ''}
             </div>`;
         });
@@ -1375,7 +1850,8 @@ function buildAllQuestsRows(selectedMap) {
                     mapFilename: map.filename,
                     target: quest.target || null,
                     ownLabel: quest.ownLabel || null,
-                    part: (typeof quest.part === 'number') ? quest.part : null
+                    part: (typeof quest.part === 'number' || quest.part === 'reward') ? quest.part : null,
+                    questType: quest.questType || null
                 });
             });
         });
@@ -1386,6 +1862,13 @@ function buildAllQuestsRows(selectedMap) {
 // Collapses every row sharing the same quest name into one group. A group with more than one
 // row is a "multi-part" quest: it renders as a single [+] row (part count = the highest part
 // number seen) that expands to list each part's label/location, in ascending part order.
+// A part's sort position within a multi-part quest: numbers sort normally, and "reward"
+// (the quest's payoff step) always sorts last, after every numbered part.
+function questPartSortValue(part) {
+    if (part === 'reward') return Infinity;
+    return typeof part === 'number' ? part : 0;
+}
+
 function groupQuestsTableRows(rows) {
     const groupsByName = new Map();
     rows.forEach(row => {
@@ -1395,13 +1878,17 @@ function groupQuestsTableRows(rows) {
     });
 
     return Array.from(groupsByName.values()).map(group => {
-        const sortedRows = group.rows.slice().sort((a, b) => (a.part || 0) - (b.part || 0));
+        const sortedRows = group.rows.slice().sort((a, b) => questPartSortValue(a.part) - questPartSortValue(b.part));
         const isMultiPart = sortedRows.length > 1;
         const partNumbers = sortedRows.map(r => r.part).filter(p => typeof p === 'number');
         const partCount = isMultiPart
             ? (partNumbers.length > 0 ? Math.max(...partNumbers) : sortedRows.length)
             : null;
-        return { questName: group.questName, rows: sortedRows, isMultiPart, partCount };
+        // A multi-part quest's parts should all agree on questType, but fall back to
+        // whichever part actually carries it (usually part 1) just in case they don't.
+        const representative = sortedRows.find(r => r.part === 1) || sortedRows[0];
+        const questType = representative.questType || sortedRows.find(r => r.questType)?.questType || null;
+        return { questName: group.questName, rows: sortedRows, isMultiPart, partCount, questType };
     });
 }
 
@@ -1411,6 +1898,8 @@ let questsTableSortDirection = 'asc';
 let questsTableExpanded = new Set(); // quest names currently expanded
 let questsTableLocationIndexMap = new Map(); // map filename -> default sort-bucket position
 let questsTableLocationInfoMap = new Map(); // map filename -> { displayName, isSub }
+let questsTableLocationFilter = ''; // top-level map filename to restrict to, '' = all locations
+let questsTableTypeFilter = new Set(['main', 'master', 'side']); // quest-type buckets currently shown (OR filter)
 
 // Default (unsorted) ordering for the quests table: Cities first (each city's submaps'
 // quests listed right after it), then Quest locations, then Other locations - mirroring
@@ -1425,7 +1914,10 @@ function buildQuestsTableLocationOrder(selectedMap) {
     if (selectedMap.modGroup === 'World Map') {
         const groupOrder = ['Cities', 'Quest locations', 'Other locations'];
         groupOrder.forEach(modGroup => {
-            const topMaps = ArcanumMapData.filter(m => m.modGroup === modGroup);
+            // modGroup is inherited from the parent map (see resolveModGroup), so a submap's
+            // modGroup matches its parent's - exclude anything with a parentFilename here or
+            // submaps would also be picked up as "top-level" locations.
+            const topMaps = ArcanumMapData.filter(m => m.modGroup === modGroup && !m.parentFilename);
             topMaps.forEach(topMap => {
                 order.push({ filename: topMap.filename, displayName: topMap.displayName, isSub: false, parentFilename: null });
                 const subMaps = ArcanumMapData.filter(m => m.parentFilename === topMap.filename);
@@ -1444,20 +1936,31 @@ function buildQuestsTableLocationOrder(selectedMap) {
     return order;
 }
 
-function getQuestsTableGroupMapFilename(group) {
-    const representative = group.rows.find(r => r.part === 1) || group.rows[0];
-    return representative.mapFilename;
+// A location filter can leave a multi-part quest's usual "part 1" row outside the
+// selected location (its other parts happen to live elsewhere) - fall back to whichever
+// row actually landed in the filtered set so the header/columns shown stay consistent
+// with what's visible.
+function getQuestsTableGroupRepresentative(group, locationFilenames) {
+    if (locationFilenames) {
+        const matching = group.rows.find(r => locationFilenames.has(r.mapFilename));
+        if (matching) return matching;
+    }
+    return group.rows.find(r => r.part === 1) || group.rows[0];
 }
 
-function getQuestsTableGroupLocationIndex(group) {
-    const filename = getQuestsTableGroupMapFilename(group);
+function getQuestsTableGroupMapFilename(group, locationFilenames) {
+    return getQuestsTableGroupRepresentative(group, locationFilenames).mapFilename;
+}
+
+function getQuestsTableGroupLocationIndex(group, locationFilenames) {
+    const filename = getQuestsTableGroupMapFilename(group, locationFilenames);
     return questsTableLocationIndexMap.has(filename)
         ? questsTableLocationIndexMap.get(filename)
         : Number.MAX_SAFE_INTEGER;
 }
 
-function getQuestsTableSortValue(group, key) {
-    const representative = group.rows.find(r => r.part === 1) || group.rows[0];
+function getQuestsTableSortValue(group, key, locationFilenames) {
+    const representative = getQuestsTableGroupRepresentative(group, locationFilenames);
     switch (key) {
         case 'quest': return (group.questName || '').toLowerCase();
         case 'part': return group.partCount || 0;
@@ -1465,6 +1968,82 @@ function getQuestsTableSortValue(group, key) {
         case 'location': return (representative.mapDisplayName || '').toLowerCase();
         default: return '';
     }
+}
+
+// A quest's "type" for filtering purposes: the two explicit markers, or "side" for
+// anything else (the vast majority of quests, which carry no questType at all).
+function getQuestsTableTypeBucket(questType) {
+    if (questType === 'main') return 'main';
+    if (questType === 'master') return 'master';
+    return 'side';
+}
+
+// Resolves a top-level location filename into itself plus its direct submaps, so picking
+// a city in the location filter also shows quests from that city's interiors.
+function getQuestsTableLocationFilterFilenames(topFilename) {
+    if (!topFilename) return null;
+    const set = new Set([topFilename]);
+    ArcanumMapData.forEach(m => { if (m.parentFilename === topFilename) set.add(m.filename); });
+    return set;
+}
+
+function getFilteredQuestsTableGroups() {
+    const locationFilenames = getQuestsTableLocationFilterFilenames(questsTableLocationFilter);
+    return questsTableGroups.filter(group => {
+        if (!questsTableTypeFilter.has(getQuestsTableTypeBucket(group.questType))) return false;
+        if (locationFilenames && !group.rows.some(r => locationFilenames.has(r.mapFilename))) return false;
+        return true;
+    });
+}
+
+// Builds the Location filter's <select> options: one per top-level location that actually
+// has quests (its own or its submaps' - submaps themselves are never listed separately, and
+// picking a parent location folds its submap quests in automatically), grouped into
+// Cities/Quest locations/Other locations on the World Map, or just the current map on any
+// other map.
+function populateQuestsTableLocationFilterOptions(selectedMap) {
+    const select = document.getElementById('quests-table-location-filter');
+    if (!select) return;
+
+    const topLevelEntries = buildQuestsTableLocationOrder(selectedMap)
+        .filter(e => !e.isSub)
+        .filter(e => {
+            const locationFilenames = getQuestsTableLocationFilterFilenames(e.filename);
+            return questsTableGroups.some(group => group.rows.some(r => locationFilenames.has(r.mapFilename)));
+        });
+    select.innerHTML = '<option value="">All locations</option>';
+
+    if (selectedMap && selectedMap.modGroup === 'World Map') {
+        const groupOrder = ['Cities', 'Quest locations', 'Other locations'];
+        groupOrder.forEach(modGroup => {
+            const entries = topLevelEntries
+                .filter(e => {
+                    const m = ArcanumMapData.find(mm => mm.filename === e.filename);
+                    return m && m.modGroup === modGroup;
+                })
+                .slice()
+                .sort((a, b) => a.displayName.localeCompare(b.displayName));
+            if (entries.length === 0) return;
+            const optgroup = document.createElement('optgroup');
+            optgroup.label = modGroup;
+            entries.forEach(e => {
+                const opt = document.createElement('option');
+                opt.value = e.filename;
+                opt.textContent = e.displayName;
+                optgroup.appendChild(opt);
+            });
+            select.appendChild(optgroup);
+        });
+    } else {
+        topLevelEntries.forEach(e => {
+            const opt = document.createElement('option');
+            opt.value = e.filename;
+            opt.textContent = e.displayName;
+            select.appendChild(opt);
+        });
+    }
+
+    select.value = questsTableLocationFilter;
 }
 
 function navigateToQuestRow(row) {
@@ -1481,26 +2060,38 @@ function navigateToQuestRow(row) {
 }
 
 function renderQuestsTableBody() {
-    let sortedGroups = questsTableGroups.slice();
+    const locationFilenames = getQuestsTableLocationFilterFilenames(questsTableLocationFilter);
+    let sortedGroups = getFilteredQuestsTableGroups();
     let showLocationHeaders = false;
     if (questsTableSortColumn) {
         sortedGroups.sort((a, b) => {
-            const va = getQuestsTableSortValue(a, questsTableSortColumn);
-            const vb = getQuestsTableSortValue(b, questsTableSortColumn);
+            const va = getQuestsTableSortValue(a, questsTableSortColumn, locationFilenames);
+            const vb = getQuestsTableSortValue(b, questsTableSortColumn, locationFilenames);
             if (va < vb) return questsTableSortDirection === 'asc' ? -1 : 1;
             if (va > vb) return questsTableSortDirection === 'asc' ? 1 : -1;
             return 0;
         });
     } else {
         // Default view: Cities (with their submaps' quests right below), then Quest
-        // locations, then Other locations - alphabetical by quest name within each map.
+        // locations, then Other locations - alphabetical by quest name within each map,
+        // except the main quest (✨) always floats to the top of its location.
         showLocationHeaders = true;
         sortedGroups.sort((a, b) => {
-            const ia = getQuestsTableGroupLocationIndex(a);
-            const ib = getQuestsTableGroupLocationIndex(b);
+            const ia = getQuestsTableGroupLocationIndex(a, locationFilenames);
+            const ib = getQuestsTableGroupLocationIndex(b, locationFilenames);
             if (ia !== ib) return ia - ib;
+            const aMain = a.questType === 'main' ? 0 : 1;
+            const bMain = b.questType === 'main' ? 0 : 1;
+            if (aMain !== bMain) return aMain - bMain;
             return (a.questName || '').toLowerCase().localeCompare((b.questName || '').toLowerCase());
         });
+    }
+
+    const tbody = document.getElementById('quests-table-body');
+
+    if (sortedGroups.length === 0) {
+        tbody.innerHTML = '<tr class="stats-empty-row"><td colspan="4">No quests match the current filters.</td></tr>';
+        return;
     }
 
     let lastLocationFilename = null;
@@ -1508,7 +2099,7 @@ function renderQuestsTableBody() {
     const rowsHtml = sortedGroups.map((group, gi) => {
         let headerHtml = '';
         if (showLocationHeaders) {
-            const filename = getQuestsTableGroupMapFilename(group);
+            const filename = getQuestsTableGroupMapFilename(group, locationFilenames);
             if (filename !== lastLocationFilename) {
                 const info = questsTableLocationInfoMap.get(filename);
 
@@ -1536,8 +2127,9 @@ function renderQuestsTableBody() {
         if (!group.isMultiPart) {
             const row = group.rows[0];
             const descHtml = row.description ? `<div class="quest-subrow-desc">${row.description}</div>` : '';
-            return headerHtml + `<tr data-group-index="${gi}" data-row-index="0">
-                <td>${group.questName}${descHtml}</td>
+            const rowClass = group.questType ? ` class="quest-row-${group.questType}"` : '';
+            return headerHtml + `<tr${rowClass} data-group-index="${gi}" data-row-index="0">
+                <td>${group.questName}${buildQuestTypeMarker(group.questType)}${descHtml}</td>
                 <td>&mdash;</td>
                 <td>${row.connectedLabelName || '&mdash;'}</td>
                 <td>${row.mapDisplayName}</td>
@@ -1545,9 +2137,10 @@ function renderQuestsTableBody() {
         }
 
         const isExpanded = questsTableExpanded.has(group.questName);
-        const partOneRow = group.rows.find(r => r.part === 1) || group.rows[0];
-        let html = headerHtml + `<tr class="quest-group-header" data-group-index="${gi}">
-            <td><span class="quest-group-toggle">${isExpanded ? '[-]' : '[+]'}</span> ${group.questName}</td>
+        const partOneRow = getQuestsTableGroupRepresentative(group, locationFilenames);
+        const groupRowClass = group.questType ? ` quest-row-${group.questType}` : '';
+        let html = headerHtml + `<tr class="quest-group-header${groupRowClass}" data-group-index="${gi}">
+            <td><span class="quest-group-toggle">${isExpanded ? '[-]' : '[+]'}</span> ${group.questName}${buildQuestTypeMarker(group.questType)}</td>
             <td>${group.partCount}</td>
             <td>${partOneRow.connectedLabelName || '&mdash;'}</td>
             <td>${partOneRow.mapDisplayName}</td>
@@ -1555,7 +2148,7 @@ function renderQuestsTableBody() {
 
         if (isExpanded) {
             html += group.rows.map((row, ri) => {
-                const partBadge = row.part ? `<span class="quest-part-badge">Part ${row.part}</span>` : '&mdash;';
+                const partBadge = row.part ? buildQuestPartBadge(row.part).trim() : '&mdash;';
                 const descHtml = row.description ? `<div class="quest-subrow-desc">${row.description}</div>` : '';
                 return `<tr class="quest-group-subrow" data-group-index="${gi}" data-row-index="${ri}">
                 <td class="quest-subrow-cell">${partBadge}${descHtml}</td>
@@ -1568,7 +2161,6 @@ function renderQuestsTableBody() {
         return html;
     }).join('');
 
-    const tbody = document.getElementById('quests-table-body');
     tbody.innerHTML = rowsHtml;
 
     questsTableContent.querySelectorAll('th[data-sort-key]').forEach(th => {
@@ -1600,13 +2192,15 @@ function renderQuestsTableBody() {
 
 function renderQuestsTable() {
     const selectedMap = ArcanumMapData.find(m => m.filename === currentMapFilename);
-    questsTableMapName.textContent = selectedMap ? selectedMap.displayName : '';
+    questsTableMapName.textContent = selectedMap ? (currentDisplayName || selectedMap.displayName) : '';
 
     const rawRows = selectedMap ? buildAllQuestsRows(selectedMap) : [];
     questsTableGroups = groupQuestsTableRows(rawRows);
     questsTableSortColumn = null;
     questsTableSortDirection = 'asc';
     questsTableExpanded = new Set();
+    questsTableLocationFilter = '';
+    questsTableTypeFilter = new Set(['main', 'master', 'side']);
 
     questsTableLocationIndexMap = new Map();
     questsTableLocationInfoMap = new Map();
@@ -1622,7 +2216,23 @@ function renderQuestsTable() {
         return;
     }
 
+    const questTypePillsHtml = [
+        { type: 'main', emoji: '✨', label: 'Main Quest' },
+        { type: 'master', emoji: '🎓', label: 'Master Quest' },
+        { type: 'side', emoji: '📜', label: 'Side Quest' }
+    ].map(t => `<span class="stats-legend-icon active" data-quest-type="${t.type}" title="${t.label}"><span class="stats-legend-icon-emoji">${t.emoji}</span><span class="stats-legend-icon-label">${t.label}</span></span>`).join('');
+
     questsTableContent.innerHTML = `
+        <div class="stats-summary quests-table-filters">
+            <div class="stats-summary-group">
+                <span class="stats-summary-label">Location</span>
+                <select id="quests-table-location-filter" class="quests-table-location-select"></select>
+            </div>
+            <div class="stats-summary-group stats-legend-group">
+                <span class="stats-summary-label">Quest Type</span>
+                <div class="stats-legend-icons quest-type-filter-icons">${questTypePillsHtml}</div>
+            </div>
+        </div>
         <table class="stats-table">
             <thead><tr>
                 <th data-sort-key="quest">Quest Name</th>
@@ -1634,6 +2244,8 @@ function renderQuestsTable() {
         </table>
     `;
 
+    populateQuestsTableLocationFilterOptions(selectedMap);
+
     questsTableContent.querySelectorAll('th[data-sort-key]').forEach(th => {
         th.addEventListener('click', () => {
             const key = th.getAttribute('data-sort-key');
@@ -1643,6 +2255,27 @@ function renderQuestsTable() {
                 questsTableSortColumn = key;
                 questsTableSortDirection = 'asc';
             }
+            renderQuestsTableBody();
+        });
+    });
+
+    const locationFilterSelect = document.getElementById('quests-table-location-filter');
+    if (locationFilterSelect) {
+        locationFilterSelect.addEventListener('change', () => {
+            questsTableLocationFilter = locationFilterSelect.value;
+            renderQuestsTableBody();
+        });
+    }
+
+    questsTableContent.querySelectorAll('.quest-type-filter-icons .stats-legend-icon').forEach(el => {
+        el.addEventListener('click', () => {
+            const type = el.getAttribute('data-quest-type');
+            if (questsTableTypeFilter.has(type)) {
+                questsTableTypeFilter.delete(type);
+            } else {
+                questsTableTypeFilter.add(type);
+            }
+            el.classList.toggle('active');
             renderQuestsTableBody();
         });
     });
@@ -1806,7 +2439,7 @@ function renderStatsTableBody() {
 
 function renderStatisticsPanel() {
     const selectedMap = ArcanumMapData.find(m => m.filename === currentMapFilename);
-    statisticsMapName.textContent = selectedMap ? selectedMap.displayName : '';
+    statisticsMapName.textContent = selectedMap ? (currentDisplayName || selectedMap.displayName) : '';
 
     const { entries, npcCount, shopCount, followerCount, raceCounts, sexCounts } = buildStatisticsForCurrentMap();
     statsEntries = entries;
@@ -1974,7 +2607,7 @@ function renderSingleLabel(label, isPending) {
         let linkedButtonsHtml = "";
         if (Array.isArray(label.linkedLabels) && label.linkedLabels.length > 0) {
             const blocks = label.linkedLabels.map((entry, i) => {
-                let title, icon, titleColor, descHtml, targetText, partValue;
+                let title, icon, titleColor, descHtml, targetText, partValue, questType;
 
                 if (typeof entry === 'string') {
                     // Plain form: links straight to another label, showing THAT label's own info
@@ -1989,8 +2622,9 @@ function renderSingleLabel(label, isPending) {
                     descHtml = (found && found.label.description) ? `<p class="linked-quest-desc">${found.label.description}</p>` : '';
                     targetText = entry;
                     partValue = found ? found.label.part : null;
+                    questType = found ? found.label.questType : null;
                 } else {
-                    // Inline form: { questName, questDescription, target, category?, part? } - the quest's own
+                    // Inline form: { questName, questDescription, target, category?, part?, questType? } - the quest's own
                     // name/description live here directly, separate from wherever "target" actually is
                     const cat = entry.category || 'quest';
                     title = entry.questName || entry.target || 'Quest';
@@ -1999,14 +2633,19 @@ function renderSingleLabel(label, isPending) {
                     descHtml = entry.questDescription ? `<p class="linked-quest-desc">${entry.questDescription}</p>` : '';
                     targetText = entry.target || null;
                     partValue = entry.part || null;
+                    questType = entry.questType || null;
                 }
+
+                // Main/master quests get a distinct title color on top of their marker,
+                // so they stand out from an ordinary side quest at a glance.
+                if (QUEST_TYPE_COLOR[questType]) titleColor = QUEST_TYPE_COLOR[questType];
 
                 // Only clickable when there's actually somewhere to send you
                 const blockClass = targetText ? 'linked-quest-block clickable-quest-block' : 'linked-quest-block';
                 const dataAttr = targetText ? ` data-link-index="${i}"` : '';
 
                 return `<div class="${blockClass}"${dataAttr}>
-                    <div class="linked-quest-title" style="color:${titleColor};">${icon} ${title}${buildQuestPartBadge(partValue)}</div>
+                    <div class="linked-quest-title" style="color:${titleColor};">${icon} ${title}${buildQuestTypeMarker(questType)}${buildQuestPartBadge(partValue)}</div>
                     ${descHtml}
                 </div>`;
             }).join('');
@@ -2026,8 +2665,12 @@ function renderSingleLabel(label, isPending) {
         ].some(Boolean);
         const headerClass = hasPopupBody ? 'popup-header' : 'popup-header popup-header-only';
         const masterHtml = buildLabelMasterHtml(label);
-        const masterHeaderClass = label.master ? ' has-master' : '';
-        const headerHtml = `<div class="${headerClass}${masterHeaderClass}">${portraitHtml}<div class="popup-header-text"><h4>${label.text}${buildQuestPartBadge(label.part)}</h4>${masterHtml}${godTypeHtml}${chestStatusHtml}${statsRowHtml}</div></div>`;
+        const followerTypeHtml = buildLabelFollowerTypeHtml(label);
+        // "has-master" just zeroes the h4's bottom margin so it sits flush against whichever
+        // italic subtitle line (Master or Follower Type) follows it - reused here rather than
+        // adding a near-identical class, since the two lines never both need that margin removed.
+        const masterHeaderClass = (label.master || label.followerType) ? ' has-master' : '';
+        const headerHtml = `<div class="${headerClass}${masterHeaderClass}">${portraitHtml}<div class="popup-header-text"><h4>${label.text}${buildQuestTypeMarker(label.questType)}${buildQuestPartBadge(label.part)}</h4>${masterHtml}${followerTypeHtml}${godTypeHtml}${chestStatusHtml}${statsRowHtml}</div></div>`;
         
         popup.innerHTML = `<span class="close-btn">&times;</span>${headerHtml}${shopInfoHtml}${inscriptionHtml}${inventoryHtml}${offeringHtml}${blessingHtml}${descHtmlMain}${travelButtonHtml}${linkedButtonsHtml}`;
         popup.querySelector('.close-btn').addEventListener('click', (el) => { el.stopPropagation(); popup.remove(); });
@@ -2085,7 +2728,7 @@ function renderSingleLabel(label, isPending) {
             if (chestKeyEl) {
                 chestKeyEl.addEventListener('click', (e) => {
                     e.stopPropagation();
-                    travelToLinkedLabel(label.chestKey);
+                    travelToLabelCarryingKey(label.chestKey);
                 });
             }
         }
@@ -2242,6 +2885,7 @@ function buildLabelCodeLine(labelData) {
     if (typeof labelData.textY === 'number' && !isNaN(labelData.textY)) parts.push(`textY: ${labelData.textY}`);
     if (labelData.description) parts.push(`description: "${labelData.description}"`);
     if (labelData.master) parts.push(`master: "${labelData.master}"`);
+    if (labelData.followerType) parts.push(`followerType: "${labelData.followerType}"`);
     if (labelData.category) {
         if (Array.isArray(labelData.category)) {
             parts.push(`category: [${labelData.category.map(c => `"${c}"`).join(', ')}]`);
@@ -2290,6 +2934,7 @@ function buildLabelCodeLine(labelData) {
             if (entry.questDescription) objParts.push(`questDescription: "${entry.questDescription}"`);
             if (entry.target) objParts.push(`target: "${entry.target}"`);
             if (entry.category) objParts.push(`category: "${entry.category}"`);
+            if (entry.questType) objParts.push(`questType: "${entry.questType}"`);
             if (entry.part !== undefined && entry.part !== null && entry.part !== '') {
                 objParts.push(typeof entry.part === 'number' ? `part: ${entry.part}` : `part: "${entry.part}"`);
             }
@@ -2314,17 +2959,34 @@ function startEditingLabel(label) {
 
     newLabelText.value = label.text || '';
     newLabelDesc.value = label.description || '';
+    setDescriptionFieldVisible(Boolean(label.description));
     newLabelMaster.value = label.master || '';
+    newLabelFollowerType.value = label.followerType || '';
+    const sexKey = label.sex ? String(label.sex).trim().toLowerCase() : '';
+    newLabelSex.value = (sexKey === 'm') ? 'male' : (sexKey === 'f') ? 'female' : sexKey;
+    newLabelRace.value = label.race || '';
+    newLabelLevel.value = (typeof label.level === 'number') ? label.level : (label.level || '');
 
     const stringLinks = Array.isArray(label.linkedLabels) ? label.linkedLabels.filter(e => typeof e === 'string') : [];
     newLabelLinks.value = stringLinks.join(', ');
 
+    // Quest category stores its data as a single structured linkedLabels object rather
+    // than the plain string links above - pull the first one back into the Quest fields.
+    const questEntry = (Array.isArray(label.linkedLabels) ? label.linkedLabels.find(e => e && typeof e === 'object') : null) || {};
+    newLabelQuestName.value = questEntry.questName || '';
+    newLabelQuestDesc.value = questEntry.questDescription || '';
+    newLabelQuestTarget.value = questEntry.target || '';
+    newLabelQuestPart.value = (typeof questEntry.part === 'number') ? questEntry.part : (questEntry.part === 'reward' ? 'reward' : '');
+
     if (currentMapType !== "overworld") {
         const cats = Array.isArray(label.category) ? label.category : (label.category ? [label.category] : []);
         newLabelCategoryChecks.forEach(cb => { cb.checked = cats.includes(cb.value); });
+        syncCategoryPillActiveStates();
 
         waypointFields.style.display = cats.includes('waypoint') ? 'flex' : 'none';
         masterFields.style.display = cats.includes('master') ? 'flex' : 'none';
+        followerFields.style.display = cats.includes('followers') ? 'flex' : 'none';
+        statsFields.style.display = categoriesUseStatsFields(cats) ? 'flex' : 'none';
         newLabelTargetMap.value = label.targetMapFilename || '';
         populateTargetWaypointOptions();
         newLabelTargetX.value = (typeof label.targetX === 'number') ? label.targetX : '';
@@ -2333,6 +2995,15 @@ function startEditingLabel(label) {
         shopFields.style.display = cats.includes('shop') ? 'flex' : 'none';
         newLabelShopType.value = label.shopType || '';
         newLabelShopMarkup.value = (typeof label.shopMarkup === 'number') ? label.shopMarkup : '';
+
+        questFields.style.display = cats.includes('quest') ? 'flex' : 'none';
+        genericLinksField.style.display = cats.includes('quest') ? 'none' : 'flex';
+
+        chestFields.style.display = cats.includes('chest') ? 'flex' : 'none';
+        newLabelChestState.value = label.chestState || '';
+        if (cats.includes('chest')) populateChestKeyOptions();
+        newLabelChestKey.value = label.chestKey || '';
+        updateChestKeyRowVisibility();
     }
 
     addToPreviewBtn.textContent = '💾 Save Edits';
@@ -2350,12 +3021,25 @@ function stopEditingLabel() {
     editingIndicator.style.display = 'none';
     newLabelText.value = '';
     newLabelDesc.value = '';
+    setDescriptionFieldVisible(false);
     newLabelMaster.value = '';
+    newLabelFollowerType.value = '';
     newLabelLinks.value = '';
+    newLabelQuestName.value = '';
+    newLabelQuestDesc.value = '';
+    newLabelQuestTarget.value = '';
+    newLabelQuestPart.value = '';
     newLabelTargetX.value = '';
     newLabelTargetY.value = '';
     if (newLabelTargetWaypoint) newLabelTargetWaypoint.value = '';
     newLabelShopMarkup.value = '';
+    newLabelChestState.value = '';
+    newLabelChestKey.value = '';
+    newLabelSex.value = '';
+    newLabelRace.value = '';
+    newLabelLevel.value = '';
+    updateChestKeyRowVisibility();
+    populateQuestNameOptions();
 }
 
 // Returns the current map's full pixel dimensions, regardless of whether it's a single

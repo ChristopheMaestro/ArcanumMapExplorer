@@ -32,36 +32,103 @@
             <h3>Label Placement Tool</h3>
             <div style="color:#d4c5a1; font-size:12px;">Click the map to set a spot: <strong id="coord-display">X: -, Y: -</strong></div>
             
-            <label>Label Text</label>
-            <input type="text" id="new-label-text" placeholder="e.g., Bates Factory">
-            
-            <label>Description Note</label>
-            <textarea id="new-label-desc" placeholder="Historical information..."></textarea>
+            <div id="stats-fields" class="stats-fields-row" style="display:none;">
+                <div class="field-row">
+                    <label>Sex</label>
+                    <select id="new-label-sex">
+                        <option value="">—</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                </div>
+                <div class="field-row">
+                    <label>Race</label>
+                    <select id="new-label-race">
+                        <option value="">—</option>
+                        <option value="Human">Human</option>
+                        <option value="Elf">Elf</option>
+                        <option value="Gnome">Gnome</option>
+                        <option value="Dwarf">Dwarf</option>
+                        <option value="Half-Elf">Half-Elf</option>
+                        <option value="Half-Orc">Half-Orc</option>
+                        <option value="Half-Ogre">Half-Ogre</option>
+                        <option value="Halfling">Halfling</option>
+                        <option value="Dark Elf">Dark Elf</option>
+                    </select>
+                </div>
+                <div class="field-row">
+                    <label>Level</label>
+                    <input type="number" id="new-label-level" placeholder="e.g., 5">
+                </div>
+            </div>
+
+            <div class="field-row">
+                <label>Label Text</label>
+                <div class="label-text-row">
+                    <input type="text" id="new-label-text" placeholder="e.g., Bates Factory">
+                    <button type="button" id="toggle-desc-btn" class="icon-toggle-btn" title="Add a description note">💡</button>
+                </div>
+            </div>
+
+            <div id="description-field" class="field-row" style="display:none;">
+                <label>Description Note</label>
+                <textarea id="new-label-desc" placeholder="Historical information..."></textarea>
+            </div>
 
             <div id="master-fields" class="field-row" style="display:none;">
                 <label>Master</label>
                 <input type="text" id="new-label-master" placeholder="e.g., Master of Fire">
             </div>
 
-            <div class="field-row">
+            <div id="follower-fields" class="field-row" style="display:none;">
+                <label>Follower Type</label>
+                <select id="new-label-follower-type">
+                    <option value="">— none —</option>
+                    <option value="regular">Regular</option>
+                    <option value="special">Special</option>
+                    <option value="temporary">Temporary</option>
+                </select>
+            </div>
+
+            <div id="generic-links-field" class="field-row">
                 <label>Linked Label(s) - optional</label>
                 <input type="text" id="new-label-links" placeholder="Exact text of other label(s), comma-separated">
             </div>
 
+            <div id="quest-fields" class="waypoint-subfields" style="display:none;">
+                <div class="field-row">
+                    <label>Quest Name</label>
+                    <input type="text" id="new-label-quest-name" list="quest-name-options" placeholder="e.g., The Nasrudin Discs">
+                    <datalist id="quest-name-options"></datalist>
+                </div>
+                <div class="field-row">
+                    <label>Quest Description</label>
+                    <textarea id="new-label-quest-desc" placeholder="What this quest is about..."></textarea>
+                </div>
+                <div class="field-row">
+                    <label>Target (optional)</label>
+                    <input type="text" id="new-label-quest-target" placeholder="Exact text of another label, if this quest travels there">
+                </div>
+                <div class="field-row">
+                    <label>Part (optional)</label>
+                    <input type="text" id="new-label-quest-part" placeholder="e.g., 1 or reward">
+                </div>
+            </div>
+
             <div id="category-field" class="field-row">
                 <label>Category (pick one or more)</label>
-                <div class="category-checkboxes">
-                    <label><input type="checkbox" class="new-label-cat-chk" value="quest" checked> 📜 Quest</label>
-                    <label><input type="checkbox" class="new-label-cat-chk" value="followers"> 🛡️ Followers</label>
-                    <label><input type="checkbox" class="new-label-cat-chk" value="shop"> 🪙 Shop</label>
-                    <label><input type="checkbox" class="new-label-cat-chk" value="waypoint"> 🚪 Waypoint</label>
-                    <label><input type="checkbox" class="new-label-cat-chk" value="key"> 🔑 Key</label>
-                    <label><input type="checkbox" class="new-label-cat-chk" value="npc"> 🧑 NPC</label>
-                    <label><input type="checkbox" class="new-label-cat-chk" value="chest"> 📦 Chest</label>
-                    <label><input type="checkbox" class="new-label-cat-chk" value="information"> ℹ️ Information</label>
-                    <label><input type="checkbox" class="new-label-cat-chk" value="altar"> 🕯️ Altar</label>
-                    <label><input type="checkbox" class="new-label-cat-chk" value="bounty"> 💰 Bounty</label>
-                    <label><input type="checkbox" class="new-label-cat-chk" value="master"> 🎓 Master</label>
+                <div class="category-icon-grid">
+                    <label class="category-icon-pill"><input type="checkbox" class="new-label-cat-chk" value="quest" checked><span class="category-icon-pill-emoji">📜</span><span class="category-icon-pill-label">Quest</span></label>
+                    <label class="category-icon-pill"><input type="checkbox" class="new-label-cat-chk" value="followers"><span class="category-icon-pill-emoji">🛡️</span><span class="category-icon-pill-label">Followers</span></label>
+                    <label class="category-icon-pill"><input type="checkbox" class="new-label-cat-chk" value="shop"><span class="category-icon-pill-emoji">🪙</span><span class="category-icon-pill-label">Shop</span></label>
+                    <label class="category-icon-pill"><input type="checkbox" class="new-label-cat-chk" value="waypoint"><span class="category-icon-pill-emoji">🚪</span><span class="category-icon-pill-label">Waypoint</span></label>
+                    <label class="category-icon-pill"><input type="checkbox" class="new-label-cat-chk" value="key"><span class="category-icon-pill-emoji">🔑</span><span class="category-icon-pill-label">Key</span></label>
+                    <label class="category-icon-pill"><input type="checkbox" class="new-label-cat-chk" value="npc"><span class="category-icon-pill-emoji">🧑</span><span class="category-icon-pill-label">NPC</span></label>
+                    <label class="category-icon-pill"><input type="checkbox" class="new-label-cat-chk" value="chest"><span class="category-icon-pill-emoji">📦</span><span class="category-icon-pill-label">Chest</span></label>
+                    <label class="category-icon-pill"><input type="checkbox" class="new-label-cat-chk" value="information"><span class="category-icon-pill-emoji">ℹ️</span><span class="category-icon-pill-label">Information</span></label>
+                    <label class="category-icon-pill"><input type="checkbox" class="new-label-cat-chk" value="altar"><span class="category-icon-pill-emoji">🕯️</span><span class="category-icon-pill-label">Altar</span></label>
+                    <label class="category-icon-pill"><input type="checkbox" class="new-label-cat-chk" value="bounty"><span class="category-icon-pill-emoji">💰</span><span class="category-icon-pill-label">Bounty</span></label>
+                    <label class="category-icon-pill"><input type="checkbox" class="new-label-cat-chk" value="master"><span class="category-icon-pill-emoji">🎓</span><span class="category-icon-pill-label">Master</span></label>
                 </div>
             </div>
 
@@ -97,6 +164,22 @@
                 <div class="field-row">
                     <label>Markup % (optional)</label>
                     <input type="number" id="new-label-shop-markup" placeholder="e.g., 150">
+                </div>
+            </div>
+
+            <div id="chest-fields" class="waypoint-subfields" style="display:none;">
+                <div class="field-row">
+                    <label>Chest State</label>
+                    <select id="new-label-chest-state">
+                        <option value="">Unlocked</option>
+                        <option value="locked">Locked</option>
+                    </select>
+                </div>
+                <div class="field-row" id="chest-key-row" style="display:none;">
+                    <label>Opens With (key, optional)</label>
+                    <select id="new-label-chest-key">
+                        <option value="">— no key needed —</option>
+                    </select>
                 </div>
             </div>
 
