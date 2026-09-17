@@ -3,8 +3,55 @@
 // Merge the three per-tab data files (arcanummaps.js, cerestoredmaps.js, modulesmaps.js)
 // into the single ArcanumMapData array the rest of this file expects. Each guard falls
 // back to an empty array so a syntax error in just one file doesn't take down the others.
+//
+// Two authoring conveniences are resolved here so the data files can stay terse:
+//  - Arcanum's own base-game maps (arcanummaps.js) live entirely in the "ArcanumBase/" folder,
+//    so their `filename`, `music` and `altView.image` values are just bare file names with no
+//    folder in them. Any other dataset (CE Restored, Modules, etc.) already writes its own
+//    full folder-qualified path, so the rule is simply: no "/" in the value yet -> it must be
+//    an Arcanum base-game asset -> prepend the default folder for that kind of asset.
+//  - A submap points at its parent by parentName (matching the parent's own `name` field)
+//    instead of the parent's filename, which is resolved into an internal `parentFilename`
+//    here so the rest of this file (which keys everything off filenames) doesn't need to
+//    know the difference.
+//
+// A couple of backward-compat fallbacks are also handled here: `name`/`parentName` used to be
+// called `displayName`/`parentFilename` (the latter pointing straight at the parent's filename
+// rather than its name) - if an entry still uses the old field (e.g. a map copy-pasted from an
+// older template), it's picked up here instead of silently ending up with an undefined name.
+const DEFAULT_MAP_FOLDER = 'ArcanumBase/';
+const DEFAULT_MUSIC_FOLDER = 'music/';
+const ITEMFOLDER_BASE = 'Textures/Books/';
+
+function withDefaultFolder(path, folder) {
+    if (!path) return path;
+    return path.includes('/') ? path : `${folder}${path}`;
+}
+
 function normalizeMapMetadata(maps) {
-    const mapsByFilename = new Map(maps.map(map => [map.filename, map]));
+    const withFolders = maps.map(map => ({
+        ...map,
+        name: map.name || map.displayName,
+        altViews: Array.isArray(map.altViews)
+            ? map.altViews.map(alt => ({ ...alt, name: alt.name || alt.displayName }))
+            : map.altViews,
+        filename: withDefaultFolder(map.filename, DEFAULT_MAP_FOLDER),
+        music: map.music ? withDefaultFolder(map.music, DEFAULT_MUSIC_FOLDER) : map.music,
+        altView: map.altView
+            ? { ...map.altView, image: withDefaultFolder(map.altView.image, DEFAULT_MAP_FOLDER) }
+            : map.altView
+    }));
+
+    const mapsByName = new Map(withFolders.map(map => [map.name, map]));
+    const withParents = withFolders.map(map => {
+        const parent = map.parentName ? mapsByName.get(map.parentName) : null;
+        // Old-style entries that still set parentFilename directly (a full path) rather than
+        // parentName keep working as a fallback, rather than being silently disconnected.
+        const parentFilename = parent ? parent.filename : (map.parentName ? null : (map.parentFilename || null));
+        return { ...map, parentFilename };
+    });
+
+    const mapsByFilename = new Map(withParents.map(map => [map.filename, map]));
     const resolvingGroups = new Set();
 
     function resolveModGroup(map) {
@@ -18,8 +65,9 @@ function normalizeMapMetadata(maps) {
         return parentGroup || map.modGroup;
     }
 
-    return maps.map(map => ({
+    return withParents.map(map => ({
         ...map,
+        name: map.name || '(Unnamed map - missing "name" field)',
         typemap: map.typemap || 'local',
         modGroup: resolveModGroup(map)
     }));
@@ -34,21 +82,21 @@ const ItemDataByName = new Map(
     (typeof ArcanumItemData !== 'undefined' ? ArcanumItemData : []).map(item => [item.name, item])
 );
 
-// A map object can optionally carry `altViews`: an array of { displayName, defaultView }
+// A map object can optionally carry `altViews`: an array of { name, defaultView }
 // entries. These let the same filename/labels/quests show up as more than one menu entry
 // (e.g. two names for the same location) without duplicating the map data - only the name
-// and the starting view differ. This resolves either a map's own displayName or one of its
-// altViews' displayNames, returning the map plus whichever displayName/defaultView matched.
+// and the starting view differ. This resolves either a map's own name or one of its
+// altViews' names, returning the map plus whichever name/defaultView matched.
 function resolveMapEntryByDisplayName(name) {
     for (let index = 0; index < ArcanumMapData.length; index++) {
         const map = ArcanumMapData[index];
-        if (map.displayName === name) {
-            return { map, index, displayName: map.displayName, defaultView: map.defaultView };
+        if (map.name === name) {
+            return { map, index, name: map.name, defaultView: map.defaultView };
         }
         if (Array.isArray(map.altViews)) {
-            const alt = map.altViews.find(a => a.displayName === name);
+            const alt = map.altViews.find(a => a.name === name);
             if (alt) {
-                return { map, index, displayName: alt.displayName, defaultView: alt.defaultView || map.defaultView };
+                return { map, index, name: alt.name, defaultView: alt.defaultView || map.defaultView };
             }
         }
     }
@@ -59,6 +107,7 @@ const menuContainer = document.getElementById('menu-container');
 const viewport = document.getElementById('viewport');
 const container = document.getElementById('pan-container');
 const img = document.getElementById('zoomImage');
+const mapBackgroundLayer = document.getElementById('map-background-layer');
 
 // Chunked-map support: for maps with `chunked: true`, `filename` points to a folder of tiles
 // named "<chunkPrefix>_<pixelX>_<pixelY>.(jpg|png)" instead of a single image. This div stands in
@@ -127,6 +176,22 @@ const editingLabelName = document.getElementById('editing-label-name');
 let editingLabel = null;
 let editingLabelDomEls = [];
 
+// --- Inventory picker (Label Editor "Manage Inventory" button) ---------------------------
+const openInventoryPickerBtn = document.getElementById('open-inventory-picker-btn');
+const inventoryCountBadge = document.getElementById('inventory-count-badge');
+const inventoryPickerOverlay = document.getElementById('inventory-picker-overlay');
+const inventoryPickerClose = document.getElementById('inventory-picker-close');
+const inventoryPickerLabelName = document.getElementById('inventory-picker-label-name');
+const inventoryPickerCurrentDropzone = document.getElementById('inventory-picker-current');
+const inventoryPickerCurrentList = document.getElementById('inventory-picker-current-list');
+const inventoryPickerCurrentCount = document.getElementById('inventory-picker-current-count');
+const inventoryPickerSearch = document.getElementById('inventory-picker-search');
+const inventoryPickerGrid = document.getElementById('inventory-picker-grid');
+// Working copy of the inventory for whichever label is currently being created/edited in the
+// Label Editor - a plain array of item names (or {name, tier, image} objects preserved as-is
+// from hand-edited maps.js data), committed onto the label only when the editor form is saved.
+let editingInventoryItems = [];
+
 const zoomInBtn = document.getElementById('zoomInBtn');
 const zoomOutBtn = document.getElementById('zoomOutBtn');
 const altViewBtn = document.getElementById('altViewBtn');
@@ -161,17 +226,186 @@ const questsTableOverlay = document.getElementById('quests-table-overlay');
 const questsTableMapName = document.getElementById('quests-table-mapname');
 const questsTableContent = document.getElementById('quests-table-content');
 const questsTableClose = document.getElementById('quests-table-close');
+const libraryBtn = document.getElementById('libraryBtn');
+const libraryOverlay = document.getElementById('library-overlay');
+const libraryClose = document.getElementById('library-close');
+const libraryCategoryButtons = document.querySelectorAll('.library-category-btn');
+const libraryGrid = document.getElementById('library-grid');
 const itemImageOverlay = document.getElementById('item-image-overlay');
+const itemImageTitle = document.getElementById('item-image-title');
 const itemImageOverlayImg = document.getElementById('item-image-overlay-img');
+const itemImagePrevBtn = document.getElementById('item-image-prev-btn');
+const itemImageNextBtn = document.getElementById('item-image-next-btn');
+const itemImagePageIndicator = document.getElementById('item-image-page-indicator');
+const itemImageItemPrevBtn = document.getElementById('item-image-item-prev-btn');
+const itemImageItemNextBtn = document.getElementById('item-image-item-next-btn');
 
-function showItemImage(imagePath) {
-    itemImageOverlayImg.src = imagePath;
+// Multi-page books/notes: an item's "image" field may be a single path (unchanged behavior)
+// or an array of paths, one per page. These track which pages/page are currently shown.
+let currentItemImagePages = [];
+let currentItemImagePageIndex = 0;
+
+// When the overlay was opened from the Library, this tracks the full filtered/sorted list
+// for the active category plus the index of whichever item is currently showing, so the
+// outer "previous/next item" arrows can step through the whole category, separately from
+// the inner page arrows above (which only step through one item's own pages).
+let libraryNavItems = null;
+let libraryNavIndex = -1;
+
+function renderItemImagePage() {
+    const pages = currentItemImagePages;
+    itemImageOverlayImg.src = pages[currentItemImagePageIndex] || '';
+    const multiPage = pages.length > 1;
+    itemImagePrevBtn.style.display = multiPage ? 'flex' : 'none';
+    itemImageNextBtn.style.display = multiPage ? 'flex' : 'none';
+    itemImagePageIndicator.style.display = multiPage ? 'block' : 'none';
+    itemImagePageIndicator.textContent = multiPage ? `Page ${currentItemImagePageIndex + 1} / ${pages.length}` : '';
+    itemImagePrevBtn.disabled = currentItemImagePageIndex === 0;
+    itemImageNextBtn.disabled = currentItemImagePageIndex === pages.length - 1;
+}
+
+function showItemImagePrevPage() {
+    if (currentItemImagePageIndex > 0) {
+        currentItemImagePageIndex--;
+        renderItemImagePage();
+    }
+}
+
+function showItemImageNextPage() {
+    if (currentItemImagePageIndex < currentItemImagePages.length - 1) {
+        currentItemImagePageIndex++;
+        renderItemImagePage();
+    }
+}
+
+// navContext (optional): { items: [{name, image}, ...], index } - the Library passes this so
+// the item-to-item arrows know what list they're stepping through; anything opened from a map
+// popup (inventory items, altar inscriptions) omits it, which hides those arrows entirely.
+// displayName (optional): shown above the image (the item's items.js "name"); omitted for things
+// like altar inscriptions that aren't a catalog item and so have no name to show.
+function showItemImage(imageData, navContext, displayName) {
+    currentItemImagePages = Array.isArray(imageData) ? imageData : [imageData];
+    currentItemImagePageIndex = 0;
+    renderItemImagePage();
     itemImageOverlay.style.display = 'flex';
+    itemImageTitle.textContent = displayName || '';
+    itemImageTitle.style.display = displayName ? 'block' : 'none';
+    libraryNavItems = navContext ? navContext.items : null;
+    libraryNavIndex = navContext ? navContext.index : -1;
+    updateItemNavControls();
+}
+
+// A book's pages don't have to be spelled out as an "image" array - an item can instead set
+// "itemfolder" (a folder path) and its pages are assumed to be named 1.png, 2.png, 3.png... in
+// that folder. There's no page-count field to read, so the pages are discovered by probing
+// sequential file numbers and stopping at the first one that fails to load.
+function probeImageExists(path) {
+    return new Promise(resolve => {
+        const probe = new Image();
+        probe.onload = () => resolve(true);
+        probe.onerror = () => resolve(false);
+        probe.src = path;
+    });
+}
+
+async function resolveItemImagePages(item) {
+    if (!item) return [];
+    if (item.itemfolder) {
+        // All book folders live under Textures/Books/ - itemfolder is just the subfolder name
+        // (e.g. "OldTome"), not a full path.
+        const folder = `${ITEMFOLDER_BASE}${item.itemfolder.replace(/^\/+|\/+$/g, '')}`;
+        const pages = [];
+        let pageNum = 1;
+        while (await probeImageExists(`${folder}/${pageNum}.png`)) {
+            pages.push(`${folder}/${pageNum}.png`);
+            pageNum++;
+        }
+        return pages;
+    }
+    if (Array.isArray(item.image)) return item.image;
+    if (item.image) return [item.image];
+    return [];
+}
+
+function itemHasArt(item) {
+    return !!(item && (item.image || item.itemfolder));
+}
+
+// Opens an item's art, resolving an itemfolder's pages first if it needs to. A request token
+// guards against a slower, older probe (e.g. a folder with lots of pages) finishing after the
+// person has already clicked on to a different item and overwriting what's on screen by then.
+let itemArtRequestToken = 0;
+
+async function openItemArt(item, navContext) {
+    if (!itemHasArt(item)) return;
+    const myToken = ++itemArtRequestToken;
+    const displayName = item.name || '';
+
+    if (item.itemfolder && !item.image) {
+        itemImageOverlay.style.display = 'flex';
+        itemImageOverlayImg.src = '';
+        itemImageTitle.textContent = displayName || '';
+        itemImageTitle.style.display = displayName ? 'block' : 'none';
+        itemImagePrevBtn.style.display = 'none';
+        itemImageNextBtn.style.display = 'none';
+        itemImagePageIndicator.style.display = 'block';
+        itemImagePageIndicator.textContent = 'Loading…';
+        libraryNavItems = navContext ? navContext.items : null;
+        libraryNavIndex = navContext ? navContext.index : -1;
+        updateItemNavControls();
+
+        const pages = await resolveItemImagePages(item);
+        if (myToken !== itemArtRequestToken) return; // superseded by a newer request
+
+        if (pages.length === 0) {
+            itemImagePageIndicator.textContent = 'No pages found in itemfolder';
+            return;
+        }
+        showItemImage(pages, navContext, displayName);
+    } else {
+        showItemImage(item.image, navContext, displayName);
+    }
 }
 
 function hideItemImage() {
     itemImageOverlay.style.display = 'none';
     itemImageOverlayImg.src = '';
+    itemImageTitle.textContent = '';
+    currentItemImagePages = [];
+    currentItemImagePageIndex = 0;
+    libraryNavItems = null;
+    libraryNavIndex = -1;
+    itemArtRequestToken++; // invalidate any itemfolder probe still in flight
+    updateItemNavControls();
+}
+
+function updateItemNavControls() {
+    const show = !!(libraryNavItems && libraryNavItems.length > 1);
+    itemImageItemPrevBtn.style.display = show ? 'flex' : 'none';
+    itemImageItemNextBtn.style.display = show ? 'flex' : 'none';
+}
+
+// Steps to the next/previous item in libraryNavItems that actually has art, wrapping around
+// the list, and skipping any items along the way that have none.
+function showLibraryItemAtOffset(offset) {
+    if (!libraryNavItems || libraryNavItems.length === 0) return;
+    const total = libraryNavItems.length;
+    for (let step = 1; step <= total; step++) {
+        const idx = ((libraryNavIndex + offset * step) % total + total) % total;
+        const item = libraryNavItems[idx];
+        if (itemHasArt(item)) {
+            openItemArt(item, { items: libraryNavItems, index: idx });
+            return;
+        }
+    }
+}
+
+function showLibraryPrevItem() {
+    showLibraryItemAtOffset(-1);
+}
+
+function showLibraryNextItem() {
+    showLibraryItemAtOffset(1);
 }
 const bgMusicAudioA = new Audio();
 const bgMusicAudioB = new Audio();
@@ -185,7 +419,7 @@ let musicFadeRAF = null;
 const MUSIC_FADE_MS = 1800;
 
 let domElementsRegistry = []; 
-let altMenuEntries = []; // { index, displayName, el } for each altViews menu entry currently rendered
+let altMenuEntries = []; // { index, name, el } for each altViews menu entry currently rendered
 let scale = 1;
 let posX = 0;
 let posY = 0;
@@ -218,7 +452,7 @@ let modifiedLabels = new Set();
 let clickMapX = 0;
 let clickMapY = 0;
 let currentMapFilename = ""; 
-let currentDisplayName = ""; // the displayName of whichever entry (primary or altViews) is currently showing
+let currentDisplayName = ""; // the name of whichever entry (primary or altViews) is currently showing
 let currentMapType = ""; 
 let activeModCategory = "arcanum"; 
 let pendingAutoOpenLabelText = null;
@@ -229,6 +463,10 @@ let musicVolume = 0.5;
 
 const minScale = 0.05;
 const maxScale = 12;
+
+function clampScale(value) {
+    return Math.min(maxScale, Math.max(minScale, value));
+}
 
 const CATEGORY_EMOJI = {
     quest: '📜',
@@ -257,6 +495,17 @@ const CATEGORY_LABELS = {
     bounty: 'Bounty',
     master: 'Master'
 };
+
+// A map's "modGroup" (maps.js) drives grouping/filtering logic throughout the viewer and is
+// left as-is everywhere that happens - this only maps it to different text where a group name
+// is actually shown to the user (the sidebar menu heading, the quests table location filter).
+const MOD_GROUP_DISPLAY_LABELS = {
+    'Cities': 'Settlements'
+};
+
+function getModGroupDisplayLabel(modGroup) {
+    return MOD_GROUP_DISPLAY_LABELS[modGroup] || modGroup;
+}
 
 // Canonical display order for a label's categories - so a label authored as
 // ["followers", "quest"] and one authored as ["quest", "followers"] always render their
@@ -370,9 +619,14 @@ function buildLabelFollowerTypeHtml(label) {
 }
 
 // Shared renderer for inventory-like item lists (inventory / offering / blessing) - each entry is
-// either a plain string (regular tier, not clickable) or { name, image?, tier? }. fieldName is used
-// to route clicks back to the right array on the label object when opening a clickable item's image.
-function buildItemListHtml(items, sectionTitle, fieldName) {
+// either a plain string (regular tier, implicit quantity 1, not clickable) or an object like
+// { name, image?, tier?, count? }. fieldName is used to route clicks back to the right array on
+// the label object when opening a clickable item's image. showIcon (optional, default false)
+// additionally renders each item's itemimg (falling back to its image) as a small icon before the
+// name - used for Offering so altar popups show what the item actually looks like, while
+// Inventory/Blessing keep the plain bulleted-text look. A count above 1 (e.g. "100 coins", "2
+// swords") is shown as a "×N" suffix regardless of showIcon.
+function buildItemListHtml(items, sectionTitle, fieldName, showIcon) {
     if (!Array.isArray(items) || items.length === 0) return '';
     const itemsHtml = items.map((item, i) => {
         const itemData = typeof item === 'string' ? { name: item } : item;
@@ -384,12 +638,293 @@ function buildItemListHtml(items, sectionTitle, fieldName) {
         const clickable = Boolean(resolvedItem.image);
         const cls = clickable ? ' class="inventory-item-clickable"' : '';
         const dataAttr = clickable ? ` data-item-field="${fieldName}" data-item-index="${i}"` : '';
-        return `<li${cls}${dataAttr} style="color:${color};">${name}</li>`;
+        const iconSrc = showIcon ? (resolvedItem.itemimg ? resolveItemIconPath(resolvedItem.itemimg) : (resolvedItem.image || '')) : '';
+        const iconHtml = iconSrc ? `<img class="npc-inventory-item-icon" src="${iconSrc}" alt="" loading="lazy" onerror="this.style.display='none'">` : '';
+        const countHtml = (typeof resolvedItem.count === 'number' && resolvedItem.count > 1) ? ` <span class="npc-inventory-item-count">&times;${resolvedItem.count}</span>` : '';
+        return `<li${cls}${dataAttr} style="color:${color};">${iconHtml}${name}${countHtml}</li>`;
     }).join('');
     return `<div class="npc-inventory-block">
         <div class="npc-inventory-title">${sectionTitle}</div>
-        <ul class="npc-inventory-list">${itemsHtml}</ul>
+        <ul class="npc-inventory-list${showIcon ? ' npc-inventory-list-icons' : ''}">${itemsHtml}</ul>
     </div>`;
+}
+
+// --- Inventory picker helpers ------------------------------------------------------------
+// items.js only stores the file name in "itemimg" (e.g. "key.gif") - the icon always lives
+// under this fixed folder, so the path gets built here rather than in the data file.
+const ITEM_ICON_FOLDER = 'Textures/itemimg/';
+
+function resolveItemIconPath(itemimg) {
+    return itemimg ? `${ITEM_ICON_FOLDER}${itemimg}` : '';
+}
+
+// Resolves the display name + icon image (items.js "itemimg" field, falling back to "image"
+// for catalogs/entries that only define that) for one inventory entry, which may be a plain
+// item name string or an object like { name, tier, image, count }.
+function resolveInventoryTileIcon(entry) {
+    const name = typeof entry === 'string' ? entry : entry.name;
+    const catalogItem = ItemDataByName.get(name) || {};
+    const merged = typeof entry === 'string' ? catalogItem : { ...catalogItem, ...entry };
+    const icon = merged.itemimg ? resolveItemIconPath(merged.itemimg) : (merged.image || '');
+    return { name, icon };
+}
+
+// A plain string entry (or an object with no "count") is an implicit quantity of 1 - "count"
+// is only ever stored on the entry once it's more than 1 (see setEditingInventoryItemCount).
+function getEntryCount(entry) {
+    return (entry && typeof entry === 'object' && typeof entry.count === 'number' && entry.count > 1) ? entry.count : 1;
+}
+
+function buildInventoryTileHtml(name, icon, extraClass, extraAttrs) {
+    const imgHtml = icon ? `<img src="${icon}" alt="" loading="lazy">` : '';
+    return `<div class="inventory-item-tile${extraClass ? ' ' + extraClass : ''}"${extraAttrs || ''}>
+        <div class="inventory-item-tile-img">${imgHtml}</div>
+        <div class="inventory-item-tile-name">${name}</div>
+    </div>`;
+}
+
+function updateInventoryCountBadge() {
+    if (inventoryCountBadge) inventoryCountBadge.textContent = editingInventoryItems.length;
+}
+
+function renderInventoryPickerCurrentList() {
+    inventoryPickerCurrentCount.textContent = editingInventoryItems.length > 0 ? `(${editingInventoryItems.length})` : '';
+    if (editingInventoryItems.length === 0) {
+        inventoryPickerCurrentList.innerHTML = '<div class="inventory-picker-empty-hint">Drag items here to add them</div>';
+        return;
+    }
+    inventoryPickerCurrentList.innerHTML = editingInventoryItems.map((entry, i) => {
+        const { name, icon } = resolveInventoryTileIcon(entry);
+        const imgHtml = icon ? `<img src="${icon}" alt="" loading="lazy">` : '';
+        const count = getEntryCount(entry);
+        return `<div class="inventory-item-tile inventory-item-tile-current" data-index="${i}">
+            <button type="button" class="inventory-item-remove-btn" data-index="${i}" title="Remove from inventory">&times;</button>
+            <div class="inventory-item-tile-img">${imgHtml}</div>
+            <div class="inventory-item-tile-name">${name}</div>
+            <div class="inventory-item-qty-row">
+                <button type="button" class="inventory-item-qty-btn" data-action="dec" data-index="${i}" title="Decrease quantity">&minus;</button>
+                <span class="inventory-item-qty-value">${count}</span>
+                <button type="button" class="inventory-item-qty-btn" data-action="inc" data-index="${i}" title="Increase quantity">+</button>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+
+function renderInventoryPickerGrid(query) {
+    const catalog = (typeof ArcanumItemData !== 'undefined' ? ArcanumItemData : []);
+    const q = (query || '').trim().toLowerCase();
+    const filtered = catalog
+        .filter(it => it && it.name && (!q || it.name.toLowerCase().includes(q)))
+        .slice()
+        .sort((a, b) => a.name.localeCompare(b.name));
+
+    if (filtered.length === 0) {
+        inventoryPickerGrid.innerHTML = `<div class="inventory-picker-empty-hint">${catalog.length === 0 ? 'No item catalog loaded (items.js)' : 'No items match your search'}</div>`;
+        return;
+    }
+
+    inventoryPickerGrid.innerHTML = filtered.map(it => {
+        const icon = it.itemimg ? resolveItemIconPath(it.itemimg) : (it.image || '');
+        return buildInventoryTileHtml(it.name, icon, '', ` draggable="true" data-item-name="${it.name}"`);
+    }).join('');
+}
+
+// --- World Map Library --------------------------------------------------------------
+// Browses every items.js entry whose "class" field (a string, or array of strings) matches
+// one of the library categories - reuses the same tile markup as the inventory picker's
+// catalog grid (buildInventoryTileHtml/resolveItemIconPath) for a consistent look. "Manuals"
+// is the one exception: it isn't a items.js class of its own, just a BookBlue.png-icon subset
+// of "books" split out into its own category (see itemHasLibraryClass). "Altar" and "Others"
+// aren't items.js-backed categories at all (see getAltarLibraryItems/OTHERS_LIBRARY_ITEMS
+// below renderLibraryGrid). Category buttons are listed alphabetically by label in Index.html.
+let activeLibraryCategory = 'altar';
+// The currently-rendered category's filtered/sorted item list, kept around so clicking a tile
+// can hand showItemImage the exact same order to step through with the item-nav arrows.
+let currentLibraryItems = [];
+
+// "Manuals" isn't its own items.js class - it's the subset of "books" items that use this
+// specific itemimg, pulled out into its own Library category (see itemHasLibraryClass).
+const MANUALS_ITEMIMG = 'BookBlue.png';
+
+// "The Tarantian" and "The Vendigroth Times" are their own items.js classes (like "newspapers",
+// "notes", etc.) - these itemimg values are only used below to pick their sidebar icon.
+const TARANTIAN_ITEMIMG = 'Newspaper.png';
+const VENDIGROTH_TIMES_ITEMIMG = 'Newspaper2.png';
+
+function itemClassMatches(item, cls) {
+    if (!item || !item.class) return false;
+    return Array.isArray(item.class) ? item.class.includes(cls) : item.class === cls;
+}
+
+// "Schematics" isn't named after its own items.js class 1:1 - the class value on those
+// items is the singular "schematic", so it needs the same kind of special-casing as
+// manuals/books below rather than falling through to the generic itemClassMatches(item, category).
+const SCHEMATIC_CLASS = 'schematic';
+
+function itemHasLibraryClass(item, category) {
+    if (!item || !item.class) return false;
+    if (category === 'manuals') return itemClassMatches(item, 'books') && item.itemimg === MANUALS_ITEMIMG;
+    if (category === 'books') return itemClassMatches(item, 'books') && item.itemimg !== MANUALS_ITEMIMG;
+    if (category === 'schematics') return itemClassMatches(item, SCHEMATIC_CLASS);
+    return itemClassMatches(item, category);
+}
+
+// "Altar" isn't sourced from items.js at all - it's every "altar"-category label's
+// inscription image, gathered from across all maps in ArcanumMapData. The tile shows the
+// label's own "text" as its name (there's no catalog item name to fall back to), and the
+// image is the inscription path itself, so the existing tile-click -> openItemArt/showItemImage
+// flow (which just needs .name + .image) works unchanged. Entries are deduped by
+// text+inscription in case the same altar text/inscription pair appears on more than one map.
+function getAltarLibraryItems() {
+    const items = [];
+    const seen = new Set();
+    ArcanumMapData.forEach(map => {
+        if (!Array.isArray(map.labels)) return;
+        map.labels.forEach(label => {
+            const cats = Array.isArray(label.category) ? label.category : (label.category ? [label.category] : []);
+            if (!cats.includes('altar') || !label.inscription || !label.text) return;
+            const key = `${label.text}|${label.inscription}`;
+            if (seen.has(key)) return;
+            seen.add(key);
+            items.push({ name: label.text, image: label.inscription });
+        });
+    });
+    return items;
+}
+
+// "Others" is a small fixed list of art that doesn't correspond to any items.js entry or
+// map label - the images live under Textures/Others/ (not the itemimg folder), so these set
+// "image" directly rather than "itemimg".
+const OTHERS_LIBRARY_ITEMS = [
+    { name: 'Blood Stone', image: 'Textures/Others/BloodStone.png' },
+    { name: "Mazzerin's Mystery", image: 'Textures/Others/MazzerinsMystery.png' },
+    { name: 'Tulla Mural', image: 'Textures/Others/TullaMural.png' }
+];
+
+function renderLibraryGrid() {
+    let sourceItems;
+    if (activeLibraryCategory === 'altar') {
+        sourceItems = getAltarLibraryItems();
+    } else if (activeLibraryCategory === 'others') {
+        sourceItems = OTHERS_LIBRARY_ITEMS;
+    } else {
+        const catalog = (typeof ArcanumItemData !== 'undefined' ? ArcanumItemData : []);
+        sourceItems = catalog.filter(it => it && it.name && itemHasLibraryClass(it, activeLibraryCategory));
+    }
+
+    currentLibraryItems = sourceItems.slice().sort((a, b) => a.name.localeCompare(b.name));
+
+    if (currentLibraryItems.length === 0) {
+        libraryGrid.innerHTML = `<div class="inventory-picker-empty-hint">No items found in this category</div>`;
+        return;
+    }
+
+    libraryGrid.innerHTML = currentLibraryItems.map(it => {
+        const icon = it.itemimg ? resolveItemIconPath(it.itemimg) : (it.image || '');
+        return buildInventoryTileHtml(it.name, icon, 'library-item-tile', ` data-item-name="${it.name}"`);
+    }).join('');
+}
+
+// Explicit itemimg to use for a category's sidebar icon, for categories where picking "the
+// first catalog match" wouldn't reliably give the right picture (falls back to a catalog
+// lookup below for anything not listed here). Altar/Schematics/Others aren't sourced from a
+// items.js catalog match at all (see renderLibraryGrid), so they must be listed here.
+const LIBRARY_CATEGORY_ICON_OVERRIDE = {
+    altar: 'goddess.png',
+    books: 'BookRed.png',
+    maps: 'Map.png',
+    manuals: MANUALS_ITEMIMG,
+    others: 'DwarvenTablet.png',
+    schematics: 'Schematic.png',
+    tarantian: TARANTIAN_ITEMIMG,
+    vendigroth: VENDIGROTH_TIMES_ITEMIMG
+};
+
+// Populates each Library category button's icon from a representative item's itemimg (an
+// explicit override where one is set above, else the first catalog match for that category,
+// in catalog order) instead of a hardcoded emoji, so the sidebar stays visually consistent
+// with the rest of the item art in the viewer.
+function renderLibraryCategoryIcons() {
+    const catalog = (typeof ArcanumItemData !== 'undefined' ? ArcanumItemData : []);
+    libraryCategoryButtons.forEach(btn => {
+        const iconEl = btn.querySelector('.library-category-icon');
+        if (!iconEl) return;
+        const category = btn.getAttribute('data-category');
+        let itemimg = LIBRARY_CATEGORY_ICON_OVERRIDE[category];
+        if (!itemimg) {
+            const representative = catalog.find(it => it && it.name && it.itemimg && itemHasLibraryClass(it, category));
+            itemimg = representative ? representative.itemimg : '';
+        }
+        const iconPath = itemimg ? resolveItemIconPath(itemimg) : '';
+        iconEl.innerHTML = iconPath ? `<img src="${iconPath}" alt="">` : '';
+    });
+}
+
+function setActiveLibraryCategory(category) {
+    activeLibraryCategory = category;
+    libraryCategoryButtons.forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-category') === category);
+    });
+    renderLibraryGrid();
+}
+
+function openLibrary() {
+    renderLibraryCategoryIcons();
+    setActiveLibraryCategory('altar');
+    libraryOverlay.classList.add('open');
+}
+
+function closeLibrary() {
+    libraryOverlay.classList.remove('open');
+}
+
+function addItemToEditingInventory(name) {
+    if (!name) return;
+    const alreadyHas = editingInventoryItems.some(entry => (typeof entry === 'string' ? entry : entry.name) === name);
+    if (alreadyHas) return;
+    editingInventoryItems.push(name);
+    renderInventoryPickerCurrentList();
+    updateInventoryCountBadge();
+}
+
+function removeItemFromEditingInventory(index) {
+    editingInventoryItems.splice(index, 1);
+    renderInventoryPickerCurrentList();
+    updateInventoryCountBadge();
+}
+
+// Sets how many copies of an inventory entry a label has (e.g. "100 coins", "2 swords").
+// A count of 1 is the implicit default and isn't stored, so the entry collapses back to a
+// plain string (or an object with just its other fields, if any) rather than carrying a
+// redundant "count: 1" - keeps existing single-copy entries serializing exactly as before.
+function setEditingInventoryItemCount(index, count) {
+    const entry = editingInventoryItems[index];
+    if (!entry) return;
+    const normalized = typeof entry === 'string' ? { name: entry } : { ...entry };
+    const clamped = Math.max(1, Math.min(9999, Math.round(count) || 1));
+    if (clamped <= 1) {
+        delete normalized.count;
+    } else {
+        normalized.count = clamped;
+    }
+    const extraKeys = Object.keys(normalized).filter(k => k !== 'name');
+    editingInventoryItems[index] = extraKeys.length === 0 ? normalized.name : normalized;
+    renderInventoryPickerCurrentList();
+}
+
+function openInventoryPicker() {
+    inventoryPickerLabelName.textContent = editingLabel
+        ? (editingLabel.text || 'Unnamed Label')
+        : (newLabelText.value.trim() || 'New Label');
+    inventoryPickerSearch.value = '';
+    renderInventoryPickerCurrentList();
+    renderInventoryPickerGrid('');
+    inventoryPickerOverlay.classList.add('open');
+}
+
+function closeInventoryPicker() {
+    inventoryPickerOverlay.classList.remove('open');
 }
 
 function getSelectedNewLabelCategories() {
@@ -450,7 +985,7 @@ function getInventoryKeyOptionsForCurrentLocation() {
                 const name = typeof item === 'string' ? item : (item && item.name);
                 if (!name || seen.has(name) || !name.toLowerCase().includes('key')) return;
                 seen.add(name);
-                const entry = { text: name, mapDisplayName: map.displayName };
+                const entry = { text: name, mapDisplayName: map.name };
                 (groupFilenames.has(map.filename) ? local : other).push(entry);
             });
         });
@@ -511,7 +1046,7 @@ function populateTargetMapOptions() {
     const seen = new Set();
     const uniqueMaps = [];
     ArcanumMapData.forEach(map => {
-        const dedupeKey = `${map.displayName}::${map.modGroup || ''}`;
+        const dedupeKey = `${map.name}::${map.modGroup || ''}`;
         if (seen.has(dedupeKey)) return;
         seen.add(dedupeKey);
         uniqueMaps.push(map);
@@ -539,11 +1074,11 @@ function populateTargetMapOptions() {
         const isParent = !!parentOfCurrent && map.filename === parentOfCurrent.filename;
         const isSibling = siblingsOfCurrent.some(s => s.filename === map.filename);
         const opt = document.createElement('option');
-        opt.value = map.displayName;
-        const label = isParent ? `↑ ${map.displayName} (parent map)`
-            : isSibling ? `↔ ${map.displayName} (sibling map)`
-            : map.displayName;
-        opt.textContent = map.modGroup ? `${label} — ${map.modGroup}` : label;
+        opt.value = map.name;
+        const label = isParent ? `↑ ${map.name} (parent map)`
+            : isSibling ? `↔ ${map.name} (sibling map)`
+            : map.name;
+        opt.textContent = map.modGroup ? `${label} — ${getModGroupDisplayLabel(map.modGroup)}` : label;
         newLabelTargetMap.appendChild(opt);
 
         // Each altViews entry is its own selectable destination (same filename/labels,
@@ -551,11 +1086,11 @@ function populateTargetMapOptions() {
         if (Array.isArray(map.altViews)) {
             map.altViews.forEach(alt => {
                 const altOpt = document.createElement('option');
-                altOpt.value = alt.displayName;
-                const altLabel = isParent ? `↑ ${alt.displayName} (parent map)`
-                    : isSibling ? `↔ ${alt.displayName} (sibling map)`
-                    : alt.displayName;
-                altOpt.textContent = map.modGroup ? `${altLabel} — ${map.modGroup}` : altLabel;
+                altOpt.value = alt.name;
+                const altLabel = isParent ? `↑ ${alt.name} (parent map)`
+                    : isSibling ? `↔ ${alt.name} (sibling map)`
+                    : alt.name;
+                altOpt.textContent = map.modGroup ? `${altLabel} — ${getModGroupDisplayLabel(map.modGroup)}` : altLabel;
                 newLabelTargetMap.appendChild(altOpt);
             });
         }
@@ -673,7 +1208,7 @@ function saveViewerState() {
         try {
             localStorage.setItem(VIEWER_STATE_KEY, JSON.stringify({
                 mapFilename: currentMapFilename,
-                displayName: currentDisplayName,
+                name: currentDisplayName,
                 modCategory: activeModCategory,
                 scale: scale,
                 posX: posX,
@@ -798,7 +1333,7 @@ function parseShareLink() {
     // Explicit x/y/zoom in the link wins; otherwise fall back to whichever entry (primary
     // or altViews) the "map" name resolved to, so an alt-name link opens at its own view.
     const view = (!isNaN(x) && !isNaN(y) && !isNaN(zoom)) ? { x, y, zoom } : resolved.defaultView;
-    return { index: resolved.index, view, displayName: resolved.displayName };
+    return { index: resolved.index, view, name: resolved.name };
 }
 
 function flashButtonText(btn, message) {
@@ -860,7 +1395,7 @@ function initViewer() {
         if (!selectedMap) return;
         const center = getCurrentMapCenter();
         const params = new URLSearchParams();
-        params.set('map', currentDisplayName || selectedMap.displayName);
+        params.set('map', currentDisplayName || selectedMap.name);
         params.set('x', center.x);
         params.set('y', center.y);
         params.set('zoom', center.zoom.toFixed(3));
@@ -914,11 +1449,122 @@ function initViewer() {
         if (e.target === questsTableOverlay) questsTableOverlay.classList.remove('open');
     });
 
+    // --- Library wiring ---
+    libraryBtn.addEventListener('click', openLibrary);
+    libraryClose.addEventListener('click', closeLibrary);
+    libraryOverlay.addEventListener('click', (e) => {
+        if (e.target === libraryOverlay) closeLibrary();
+    });
+    libraryCategoryButtons.forEach(btn => {
+        btn.addEventListener('click', () => setActiveLibraryCategory(btn.getAttribute('data-category')));
+    });
+    libraryGrid.addEventListener('click', (e) => {
+        const tile = e.target.closest('.library-item-tile');
+        if (!tile) return;
+        const itemName = tile.getAttribute('data-item-name');
+        const idx = currentLibraryItems.findIndex(it => it.name === itemName);
+        const item = idx !== -1 ? currentLibraryItems[idx] : ItemDataByName.get(itemName);
+        if (itemHasArt(item)) openItemArt(item, { items: currentLibraryItems, index: idx });
+    });
+
     itemImageOverlay.addEventListener('click', hideItemImage);
+    itemImagePrevBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showItemImagePrevPage();
+    });
+    itemImageNextBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showItemImageNextPage();
+    });
+    itemImageItemPrevBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showLibraryPrevItem();
+    });
+    itemImageItemNextBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showLibraryNextItem();
+    });
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && itemImageOverlay.style.display === 'flex') hideItemImage();
-        if (e.key === 'Escape' && statisticsOverlay.classList.contains('open')) statisticsOverlay.classList.remove('open');
-        if (e.key === 'Escape' && questsTableOverlay.classList.contains('open')) questsTableOverlay.classList.remove('open');
+        if (itemImageOverlay.style.display === 'flex') {
+            // Left/Right flips pages within the current item first (when there's another page
+            // to go to); once you're at that item's first/last page, the same keys fall through
+            // to moving on to the previous/next item - so holding the same direction reads
+            // straight through a whole category. Up/Down always jump items directly.
+            if (e.key === 'ArrowLeft') {
+                if (currentItemImagePageIndex > 0) showItemImagePrevPage();
+                else showLibraryPrevItem();
+            }
+            if (e.key === 'ArrowRight') {
+                if (currentItemImagePageIndex < currentItemImagePages.length - 1) showItemImageNextPage();
+                else showLibraryNextItem();
+            }
+            if (e.key === 'ArrowUp') showLibraryPrevItem();
+            if (e.key === 'ArrowDown') showLibraryNextItem();
+        }
+        if (e.key === 'Escape') {
+            // Only the topmost thing closes per Escape press - e.g. viewing a note opened from
+            // the Library sits on top of the Library itself, so the first Escape should just
+            // dismiss the image and leave the Library open; a second Escape then closes it.
+            if (itemImageOverlay.style.display === 'flex') hideItemImage();
+            else if (statisticsOverlay.classList.contains('open')) statisticsOverlay.classList.remove('open');
+            else if (questsTableOverlay.classList.contains('open')) questsTableOverlay.classList.remove('open');
+            else if (inventoryPickerOverlay.classList.contains('open')) closeInventoryPicker();
+            else if (libraryOverlay.classList.contains('open')) closeLibrary();
+        }
+    });
+
+    // --- Inventory picker wiring ---
+    openInventoryPickerBtn.addEventListener('click', openInventoryPicker);
+    inventoryPickerClose.addEventListener('click', closeInventoryPicker);
+    inventoryPickerOverlay.addEventListener('click', (e) => {
+        if (e.target === inventoryPickerOverlay) closeInventoryPicker();
+    });
+
+    inventoryPickerSearch.addEventListener('input', () => {
+        renderInventoryPickerGrid(inventoryPickerSearch.value);
+    });
+
+    // Catalog tiles are draggable - dragstart is delegated from the grid container since
+    // tiles are re-rendered wholesale on every search keystroke.
+    inventoryPickerGrid.addEventListener('dragstart', (e) => {
+        const tile = e.target.closest('.inventory-item-tile');
+        if (!tile) return;
+        e.dataTransfer.setData('text/plain', tile.getAttribute('data-item-name'));
+        e.dataTransfer.effectAllowed = 'copy';
+    });
+
+    inventoryPickerCurrentDropzone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'copy';
+        inventoryPickerCurrentDropzone.classList.add('drag-over');
+    });
+    inventoryPickerCurrentDropzone.addEventListener('dragleave', (e) => {
+        if (!inventoryPickerCurrentDropzone.contains(e.relatedTarget)) {
+            inventoryPickerCurrentDropzone.classList.remove('drag-over');
+        }
+    });
+    inventoryPickerCurrentDropzone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        inventoryPickerCurrentDropzone.classList.remove('drag-over');
+        const name = e.dataTransfer.getData('text/plain');
+        addItemToEditingInventory(name);
+    });
+
+    // Remove-item buttons and the quantity +/- buttons are delegated too, since the
+    // current-inventory list is re-rendered on every add/remove/quantity change.
+    inventoryPickerCurrentList.addEventListener('click', (e) => {
+        const removeBtn = e.target.closest('.inventory-item-remove-btn');
+        if (removeBtn) {
+            removeItemFromEditingInventory(parseInt(removeBtn.getAttribute('data-index'), 10));
+            return;
+        }
+        const qtyBtn = e.target.closest('.inventory-item-qty-btn');
+        if (qtyBtn) {
+            const index = parseInt(qtyBtn.getAttribute('data-index'), 10);
+            const current = getEntryCount(editingInventoryItems[index]);
+            const delta = qtyBtn.getAttribute('data-action') === 'inc' ? 1 : -1;
+            setEditingInventoryItemCount(index, current + delta);
+        }
     });
 
     if (ArcanumMapData.length > 0) {
@@ -932,7 +1578,7 @@ function initViewer() {
         if (shared) {
             startIndex = shared.index;
             arrivalView = shared.view;
-            displayNameToRestore = shared.displayName;
+            displayNameToRestore = shared.name;
             const sharedMap = ArcanumMapData[startIndex];
             if (checkMapCategoryMatch(sharedMap, "arcanum")) activeModCategory = "arcanum";
             else if (checkMapCategoryMatch(sharedMap, "cerestored")) activeModCategory = "cerestored";
@@ -946,7 +1592,7 @@ function initViewer() {
                 const savedIndex = ArcanumMapData.findIndex(m => m.filename === saved.mapFilename);
                 if (savedIndex !== -1) {
                     startIndex = savedIndex;
-                    displayNameToRestore = saved.displayName || null;
+                    displayNameToRestore = saved.name || null;
                     if (saved.modCategory) activeModCategory = saved.modCategory;
                     if (typeof saved.scale === 'number' && typeof saved.posX === 'number' && typeof saved.posY === 'number') {
                         restorePosition = { scale: saved.scale, posX: saved.posX, posY: saved.posY };
@@ -1052,7 +1698,7 @@ function initViewer() {
 
     newLabelTargetWaypoint.addEventListener('change', () => {
         if (!newLabelTargetWaypoint.value) return;
-        const targetMap = ArcanumMapData.find(m => m.displayName === newLabelTargetMap.value);
+        const targetMap = ArcanumMapData.find(m => m.name === newLabelTargetMap.value);
         const label = targetMap && targetMap.labels && targetMap.labels[parseInt(newLabelTargetWaypoint.value, 10)];
         if (!label) return;
         newLabelTargetX.value = label.x;
@@ -1187,6 +1833,9 @@ function buildQuestEntryFromFields() {
                 }
             }
 
+            if (editingInventoryItems.length > 0) editingLabel.inventory = [...editingInventoryItems];
+            else delete editingLabel.inventory;
+
             const wasPending = pendingNewLabels.includes(editingLabel);
             if (!wasPending) modifiedLabels.add(editingLabel);
             editingLabelDomEls.forEach(el => el.remove());
@@ -1256,6 +1905,8 @@ function buildQuestEntryFromFields() {
             }
         }
 
+        if (editingInventoryItems.length > 0) newLabelObj.inventory = [...editingInventoryItems];
+
         renderSingleLabel(newLabelObj, true);
         pendingNewLabels.push(newLabelObj);
 
@@ -1280,6 +1931,8 @@ function buildQuestEntryFromFields() {
         newLabelSex.value = '';
         newLabelRace.value = '';
         newLabelLevel.value = '';
+        editingInventoryItems = [];
+        updateInventoryCountBadge();
         updateChestKeyRowVisibility();
         populateQuestNameOptions();
     });
@@ -1403,10 +2056,10 @@ function renderGroupedFileList() {
         // A map contributes its own entry plus one entry per altViews name - all treated
         // as independent, identically-styled rows and sorted alphabetically together within
         // the group, so an altViews entry doesn't stand out as "belonging" to the map above it.
-        grouped[groupName].push({ displayName: map.displayName, index, defaultView: map.defaultView, isAlt: false });
+        grouped[groupName].push({ name: map.name, index, defaultView: map.defaultView, isAlt: false });
         if (Array.isArray(map.altViews)) {
             map.altViews.forEach(alt => {
-                grouped[groupName].push({ displayName: alt.displayName, index, defaultView: alt.defaultView, isAlt: true });
+                grouped[groupName].push({ name: alt.name, index, defaultView: alt.defaultView, isAlt: true });
             });
         }
     });
@@ -1414,22 +2067,22 @@ function renderGroupedFileList() {
     for (const modName in grouped) {
         const headerDiv = document.createElement('div');
         headerDiv.className = 'mod-heading';
-        headerDiv.textContent = modName;
+        headerDiv.textContent = getModGroupDisplayLabel(modName);
         menuContainer.appendChild(headerDiv);
         
         const ul = document.createElement('ul');
         ul.className = 'file-list';
         
         grouped[modName]
-            .sort((a, b) => a.displayName.localeCompare(b.displayName))
+            .sort((a, b) => (a.name || '').localeCompare(b.name || ''))
             .forEach(entry => {
                 const li = document.createElement('li');
-                li.textContent = entry.displayName;
-                li.addEventListener('click', () => loadImage(entry.index, entry.defaultView, null, entry.displayName));
+                li.textContent = entry.name;
+                li.addEventListener('click', () => loadImage(entry.index, entry.defaultView, null, entry.name));
                 ul.appendChild(li);
 
                 if (entry.isAlt) {
-                    altMenuEntries.push({ index: entry.index, displayName: entry.displayName, el: li });
+                    altMenuEntries.push({ index: entry.index, name: entry.name, el: li });
                 } else {
                     domElementsRegistry[entry.index] = li;
                 }
@@ -1439,6 +2092,11 @@ function renderGroupedFileList() {
 }
 
 function loadImage(index, arrivalViewOverride, restorePosition, displayNameOverride) {
+    // Captured before anything below touches "scale" - carries over the zoom level from
+    // whichever map is currently showing, so a plain map-to-map navigation (no explicit
+    // arrival view/zoom of its own) keeps that zoom instead of resetting to 100%.
+    const previousScale = scale;
+
     domElementsRegistry.forEach((el) => {
         if (el) el.classList.remove('active');
     });
@@ -1453,7 +2111,7 @@ function loadImage(index, arrivalViewOverride, restorePosition, displayNameOverr
 
     const selectedMap = ArcanumMapData[index];
     currentMapFilename = selectedMap.filename; 
-    currentDisplayName = displayNameOverride || selectedMap.displayName;
+    currentDisplayName = displayNameOverride || selectedMap.name;
     currentMapType = selectedMap.typemap || ""; 
     currentMapChunked = !!selectedMap.chunked;
     currentMapLoaded = false;
@@ -1470,11 +2128,7 @@ function loadImage(index, arrivalViewOverride, restorePosition, displayNameOverr
         altViewBtn.style.display = 'none';
     }
 
-    if (selectedMap.background) {
-        viewport.style.background = selectedMap.background;
-    } else {
-        viewport.style.background = "#0b0a08"; 
-    }
+    applyMapBackground(selectedMap.background);
 
     if (currentMapType === "overworld") {
         mapCoordinatesHud.style.display = 'flex';
@@ -1490,6 +2144,7 @@ function loadImage(index, arrivalViewOverride, restorePosition, displayNameOverr
         questFields.style.display = 'none';
         chestFields.style.display = 'none';
         genericLinksField.style.display = 'flex';
+        libraryBtn.style.display = 'flex';
     } else {
         mapCoordinatesHud.style.display = 'flex';
         hudBoxW.style.display = 'none';
@@ -1503,6 +2158,7 @@ function loadImage(index, arrivalViewOverride, restorePosition, displayNameOverr
         statsFields.style.display = categoriesUseStatsFields(getSelectedNewLabelCategories()) ? 'flex' : 'none';
         questFields.style.display = getSelectedNewLabelCategories().includes('quest') ? 'flex' : 'none';
         genericLinksField.style.display = getSelectedNewLabelCategories().includes('quest') ? 'none' : 'flex';
+        libraryBtn.style.display = 'none';
         const catsForChest = getSelectedNewLabelCategories();
         chestFields.style.display = catsForChest.includes('chest') ? 'flex' : 'none';
         if (catsForChest.includes('chest')) {
@@ -1519,7 +2175,7 @@ function loadImage(index, arrivalViewOverride, restorePosition, displayNameOverr
     
     // If an altViews entry is what's actually showing, highlight that li instead of the
     // primary one (they share the same underlying map/index, but are separate menu rows).
-    const activeAltEntry = altMenuEntries.find(entry => entry.index === index && entry.displayName === currentDisplayName);
+    const activeAltEntry = altMenuEntries.find(entry => entry.index === index && entry.name === currentDisplayName);
     if (activeAltEntry) {
         activeAltEntry.el.classList.add('active');
     } else if (domElementsRegistry[primaryTargetIndex]) {
@@ -1536,14 +2192,14 @@ function loadImage(index, arrivalViewOverride, restorePosition, displayNameOverr
         subUl.className = 'submenu-list';
 
         const pLi = document.createElement('li');
-        pLi.textContent = `↳ Base: ${parentMapObject.displayName}`;
+        pLi.textContent = `↳ Base: ${parentMapObject.name}`;
         if (index === parentMapIndex) pLi.classList.add('active');
         pLi.addEventListener('click', (e) => { e.stopPropagation(); loadImage(parentMapIndex); });
         subUl.appendChild(pLi);
 
         subMapsArray.forEach(item => {
             const cLi = document.createElement('li');
-            cLi.textContent = `↳ Sub: ${item.m.displayName}`;
+            cLi.textContent = `↳ Sub: ${item.m.name}`;
             if (index === item.idx) cLi.classList.add('active');
             cLi.addEventListener('click', (e) => { e.stopPropagation(); loadImage(item.idx); });
             subUl.appendChild(cLi);
@@ -1566,14 +2222,14 @@ function loadImage(index, arrivalViewOverride, restorePosition, displayNameOverr
         img.style.display = 'none';
         setupChunkedMap(selectedMap);
         currentMapLoaded = true;
-        finishMapLoad(selectedMap, arrivalViewOverride, restorePosition);
+        finishMapLoad(selectedMap, arrivalViewOverride, restorePosition, previousScale);
     } else {
         chunkContainer.style.display = 'none';
         img.style.display = 'block';
         img.src = selectedMap.filename;
         img.onload = () => {
             currentMapLoaded = true;
-            finishMapLoad(selectedMap, arrivalViewOverride, restorePosition);
+            finishMapLoad(selectedMap, arrivalViewOverride, restorePosition, previousScale);
         };
         img.onerror = () => {
             img.style.display = 'none';
@@ -1582,7 +2238,7 @@ function loadImage(index, arrivalViewOverride, restorePosition, displayNameOverr
     }
 }
 
-function finishMapLoad(selectedMap, arrivalViewOverride, restorePosition) {
+function finishMapLoad(selectedMap, arrivalViewOverride, restorePosition, previousScale) {
     if (restorePosition) {
         scale = restorePosition.scale;
         posX = restorePosition.posX;
@@ -1590,7 +2246,7 @@ function finishMapLoad(selectedMap, arrivalViewOverride, restorePosition) {
         updateTransform();
     } else {
         const finalView = arrivalViewOverride || selectedMap.defaultView;
-        resetView(finalView);
+        resetView(finalView, previousScale);
     }
     if (selectedMap.labels) {
         selectedMap.labels.forEach(label => renderSingleLabel(label));
@@ -1621,7 +2277,7 @@ function finishMapLoad(selectedMap, arrivalViewOverride, restorePosition) {
 function travelToMapByFilename(targetName, arrivalViewOverride, autoOpenLabelText = null) {
     const resolved = resolveMapEntryByDisplayName(targetName);
     if (resolved) {
-        const { map: targetMap, index: matchedIndex, displayName: resolvedDisplayName, defaultView } = resolved;
+        const { map: targetMap, index: matchedIndex, name: resolvedDisplayName, defaultView } = resolved;
         pendingAutoOpenLabelText = autoOpenLabelText || null;
 
         let targetCategory = "modules";
@@ -1642,7 +2298,7 @@ function travelToMapByFilename(targetName, arrivalViewOverride, autoOpenLabelTex
 
         loadImage(matchedIndex, normalizedView, null, resolvedDisplayName);
     } else {
-        alert(`Travel target failed: "${targetName}" is not registered inside your maps.js file (no map with that displayName).`);
+        alert(`Travel target failed: "${targetName}" is not registered inside your maps.js file (no map with that name).`);
     }
 }
 
@@ -1687,7 +2343,7 @@ function travelToLinkedLabel(searchText) {
     // map's defaultView/arrival coordinates - rather than mis-convert it, just use that
     // map's default view when the link happens to land on the world map itself.
     const viewOverride = (map.typemap === "overworld") ? null : { x: label.x, y: label.y, zoom: 1 };
-    travelToMapByFilename(map.displayName, viewOverride, searchText);
+    travelToMapByFilename(map.name, viewOverride, searchText);
 }
 
 // A chest's "Opens With" key doesn't point at a same-named label - it points at whichever
@@ -1719,7 +2375,7 @@ function travelToLabelCarryingKey(itemName) {
     }
     const { map, label } = result;
     const viewOverride = (map.typemap === "overworld") ? null : { x: label.x, y: label.y, zoom: 1 };
-    travelToMapByFilename(map.displayName, viewOverride, label.text);
+    travelToMapByFilename(map.name, viewOverride, label.text);
 }
 
 // --- Quest list panel: all quests on the current map, grouped by the NPC that gives them ---
@@ -1773,7 +2429,7 @@ function buildQuestListForCurrentMap() {
 
 function renderQuestPanel() {
     const selectedMap = ArcanumMapData.find(m => m.filename === currentMapFilename);
-    questPanelMapName.textContent = selectedMap ? (currentDisplayName || selectedMap.displayName) : '';
+    questPanelMapName.textContent = selectedMap ? (currentDisplayName || selectedMap.name) : '';
 
     const { npcGroups, unassigned } = buildQuestListForCurrentMap();
 
@@ -1846,7 +2502,7 @@ function buildAllQuestsRows(selectedMap) {
                     questName: quest.title,
                     description: quest.description || '',
                     connectedLabelName: group.npcLabel.text,
-                    mapDisplayName: map.displayName,
+                    mapDisplayName: map.name,
                     mapFilename: map.filename,
                     target: quest.target || null,
                     ownLabel: quest.ownLabel || null,
@@ -1897,7 +2553,7 @@ let questsTableSortColumn = null;
 let questsTableSortDirection = 'asc';
 let questsTableExpanded = new Set(); // quest names currently expanded
 let questsTableLocationIndexMap = new Map(); // map filename -> default sort-bucket position
-let questsTableLocationInfoMap = new Map(); // map filename -> { displayName, isSub }
+let questsTableLocationInfoMap = new Map(); // map filename -> { name, isSub }
 let questsTableLocationFilter = ''; // top-level map filename to restrict to, '' = all locations
 let questsTableTypeFilter = new Set(['main', 'master', 'side']); // quest-type buckets currently shown (OR filter)
 
@@ -1919,18 +2575,18 @@ function buildQuestsTableLocationOrder(selectedMap) {
             // submaps would also be picked up as "top-level" locations.
             const topMaps = ArcanumMapData.filter(m => m.modGroup === modGroup && !m.parentFilename);
             topMaps.forEach(topMap => {
-                order.push({ filename: topMap.filename, displayName: topMap.displayName, isSub: false, parentFilename: null });
+                order.push({ filename: topMap.filename, name: topMap.name, isSub: false, parentFilename: null });
                 const subMaps = ArcanumMapData.filter(m => m.parentFilename === topMap.filename);
                 subMaps.forEach(subMap => {
-                    order.push({ filename: subMap.filename, displayName: subMap.displayName, isSub: true, parentFilename: topMap.filename });
+                    order.push({ filename: subMap.filename, name: subMap.name, isSub: true, parentFilename: topMap.filename });
                 });
             });
         });
     } else {
-        order.push({ filename: selectedMap.filename, displayName: selectedMap.displayName, isSub: false, parentFilename: null });
+        order.push({ filename: selectedMap.filename, name: selectedMap.name, isSub: false, parentFilename: null });
         const subMaps = ArcanumMapData.filter(m => m.parentFilename === selectedMap.filename);
         subMaps.forEach(subMap => {
-            order.push({ filename: subMap.filename, displayName: subMap.displayName, isSub: true, parentFilename: selectedMap.filename });
+            order.push({ filename: subMap.filename, name: subMap.name, isSub: true, parentFilename: selectedMap.filename });
         });
     }
     return order;
@@ -2022,14 +2678,14 @@ function populateQuestsTableLocationFilterOptions(selectedMap) {
                     return m && m.modGroup === modGroup;
                 })
                 .slice()
-                .sort((a, b) => a.displayName.localeCompare(b.displayName));
+                .sort((a, b) => (a.name || '').localeCompare(b.name || ''));
             if (entries.length === 0) return;
             const optgroup = document.createElement('optgroup');
-            optgroup.label = modGroup;
+            optgroup.label = getModGroupDisplayLabel(modGroup);
             entries.forEach(e => {
                 const opt = document.createElement('option');
                 opt.value = e.filename;
-                opt.textContent = e.displayName;
+                opt.textContent = e.name;
                 optgroup.appendChild(opt);
             });
             select.appendChild(optgroup);
@@ -2038,7 +2694,7 @@ function populateQuestsTableLocationFilterOptions(selectedMap) {
         topLevelEntries.forEach(e => {
             const opt = document.createElement('option');
             opt.value = e.filename;
-            opt.textContent = e.displayName;
+            opt.textContent = e.name;
             select.appendChild(opt);
         });
     }
@@ -2108,16 +2764,16 @@ function renderQuestsTableBody() {
                 // do), show the parent header first so the section isn't missing its heading.
                 if (info && info.isSub && info.parentFilename !== lastTopLevelFilename) {
                     const parentInfo = questsTableLocationInfoMap.get(info.parentFilename);
-                    const parentDisplayName = parentInfo ? parentInfo.displayName : '';
+                    const parentDisplayName = parentInfo ? parentInfo.name : '';
                     if (parentDisplayName) {
                         headerHtml += `<tr class="quest-location-header"><td colspan="4">${parentDisplayName}</td></tr>`;
                     }
                     lastTopLevelFilename = info.parentFilename;
                 }
 
-                const displayName = info ? info.displayName : (group.rows[0].mapDisplayName || '');
+                const name = info ? info.name : (group.rows[0].mapDisplayName || '');
                 const subClass = info && info.isSub ? ' sub' : '';
-                headerHtml += `<tr class="quest-location-header${subClass}"><td colspan="4">${displayName}</td></tr>`;
+                headerHtml += `<tr class="quest-location-header${subClass}"><td colspan="4">${name}</td></tr>`;
 
                 lastLocationFilename = filename;
                 if (!info || !info.isSub) lastTopLevelFilename = filename;
@@ -2192,7 +2848,7 @@ function renderQuestsTableBody() {
 
 function renderQuestsTable() {
     const selectedMap = ArcanumMapData.find(m => m.filename === currentMapFilename);
-    questsTableMapName.textContent = selectedMap ? (currentDisplayName || selectedMap.displayName) : '';
+    questsTableMapName.textContent = selectedMap ? (currentDisplayName || selectedMap.name) : '';
 
     const rawRows = selectedMap ? buildAllQuestsRows(selectedMap) : [];
     questsTableGroups = groupQuestsTableRows(rawRows);
@@ -2322,7 +2978,7 @@ function buildStatisticsForCurrentMap() {
         map.labels.forEach(label => {
             const cats = Array.isArray(label.category) ? label.category : (label.category ? [label.category] : []);
             if (cats.includes('npc') || cats.includes('shop') || cats.includes('followers')) {
-                entries.push({ label, mapDisplayName: map.displayName, mapFilename: map.filename });
+                entries.push({ label, mapDisplayName: map.name, mapFilename: map.filename });
             }
         });
     });
@@ -2439,7 +3095,7 @@ function renderStatsTableBody() {
 
 function renderStatisticsPanel() {
     const selectedMap = ArcanumMapData.find(m => m.filename === currentMapFilename);
-    statisticsMapName.textContent = selectedMap ? (currentDisplayName || selectedMap.displayName) : '';
+    statisticsMapName.textContent = selectedMap ? (currentDisplayName || selectedMap.name) : '';
 
     const { entries, npcCount, shopCount, followerCount, raceCounts, sexCounts } = buildStatisticsForCurrentMap();
     statsEntries = entries;
@@ -2590,7 +3246,7 @@ function renderSingleLabel(label, isPending) {
         }
 
         const inventoryHtml = buildItemListHtml(label.inventory, 'Inventory', 'inventory');
-        const offeringHtml = buildItemListHtml(label.offering, 'Offering', 'offering');
+        const offeringHtml = buildItemListHtml(label.offering, 'Offering', 'offering', true);
         const blessingHtml = buildItemListHtml(label.blessing, 'Blessing', 'blessing');
 
         let inscriptionHtml = "";
@@ -2709,7 +3365,7 @@ function renderSingleLabel(label, isPending) {
                 const item = typeof rawItem === 'string'
                     ? ItemDataByName.get(itemName)
                     : { ...(ItemDataByName.get(itemName) || {}), ...rawItem };
-                if (item && item.image) showItemImage(item.image);
+                if (itemHasArt(item)) openItemArt(item);
             });
         });
 
@@ -2911,9 +3567,18 @@ function buildLabelCodeLine(labelData) {
     if (labelData.part !== undefined && labelData.part !== null && labelData.part !== '') {
         parts.push(typeof labelData.part === 'number' ? `part: ${labelData.part}` : `part: "${labelData.part}"`);
     }
-    const serializeItemList = (items) => items.map(item => {
-        return `"${typeof item === 'string' ? item : item.name}"`;
-    }).join(', ');
+    // A plain string entry serializes as before; an object entry (tier/image/count) is
+    // serialized in full so quantities (and anything else set on the entry) round-trip
+    // through save/reload instead of silently collapsing back down to just its name.
+    const serializeItemEntry = (item) => {
+        if (typeof item === 'string') return `"${item}"`;
+        const fields = [`name: "${item.name}"`];
+        if (item.tier) fields.push(`tier: "${item.tier}"`);
+        if (typeof item.count === 'number' && item.count > 1) fields.push(`count: ${item.count}`);
+        if (item.image) fields.push(`image: "${item.image}"`);
+        return `{ ${fields.join(', ')} }`;
+    };
+    const serializeItemList = (items) => items.map(serializeItemEntry).join(', ');
     if (Array.isArray(labelData.inventory) && labelData.inventory.length > 0) {
         parts.push(`inventory: [${serializeItemList(labelData.inventory)}]`);
     }
@@ -2966,6 +3631,9 @@ function startEditingLabel(label) {
     newLabelSex.value = (sexKey === 'm') ? 'male' : (sexKey === 'f') ? 'female' : sexKey;
     newLabelRace.value = label.race || '';
     newLabelLevel.value = (typeof label.level === 'number') ? label.level : (label.level || '');
+
+    editingInventoryItems = Array.isArray(label.inventory) ? [...label.inventory] : [];
+    updateInventoryCountBadge();
 
     const stringLinks = Array.isArray(label.linkedLabels) ? label.linkedLabels.filter(e => typeof e === 'string') : [];
     newLabelLinks.value = stringLinks.join(', ');
@@ -3038,6 +3706,8 @@ function stopEditingLabel() {
     newLabelSex.value = '';
     newLabelRace.value = '';
     newLabelLevel.value = '';
+    editingInventoryItems = [];
+    updateInventoryCountBadge();
     updateChestKeyRowVisibility();
     populateQuestNameOptions();
 }
@@ -3051,15 +3721,20 @@ function getMapHeight() {
     return currentMapChunked ? currentMapTotalHeight : img.clientHeight;
 }
 
-function resetView(viewOverride) {
+// previousScale (optional): the zoom level to fall back to when viewOverride doesn't specify
+// its own - carries the zoom over from whatever map was showing before, so a plain map-to-map
+// navigation keeps its zoom instead of resetting to 100% (see loadImage). Explicit view/zoom
+// data (a travel target, a saved default view, etc.) still always wins when present.
+function resetView(viewOverride, previousScale) {
+    const fallbackScale = clampScale(previousScale || 1);
     if (viewOverride && typeof viewOverride.x === 'number' && typeof viewOverride.y === 'number') {
-        scale = viewOverride.zoom || 1;
+        scale = (typeof viewOverride.zoom === 'number') ? clampScale(viewOverride.zoom) : fallbackScale;
         posX = (viewport.clientWidth / 2) - (viewOverride.x * scale);
         posY = (viewport.clientHeight / 2) - (viewOverride.y * scale);
     } else {
-        scale = 1;
-        posX = (viewport.clientWidth - getMapWidth()) / 2;
-        posY = (viewport.clientHeight / 2) - (getMapHeight() / 2);
+        scale = fallbackScale;
+        posX = (viewport.clientWidth - getMapWidth() * scale) / 2;
+        posY = (viewport.clientHeight - getMapHeight() * scale) / 2;
     }
     updateTransform();
 }
@@ -3070,8 +3745,68 @@ function resetView(viewOverride) {
 function updateTransform() {
     container.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
     if (hudValZoom) hudValZoom.textContent = `${Math.round(scale * 100)}%`;
+    updateBackgroundLayerTransform();
     saveViewerState();
     scheduleChunkUpdate();
+}
+
+// --- Map background texture --------------------------------------------
+// A map's "background" (maps.js) is a raw CSS `background` shorthand - usually either a
+// repeating texture ("url('...') repeat") or a plain color fallback. Repeating textures are
+// kept in lockstep with the map's own pan/zoom (posX/posY/scale) so they always look like part
+// of the map's world space rather than a static backdrop, while background-repeat means the
+// tiling still completely fills the viewport no matter how far zoomed in/out or panned.
+let backgroundTileImg = null;
+let backgroundTileNaturalWidth = 0;
+let backgroundTileNaturalHeight = 0;
+
+function extractBackgroundImageUrl(bgValue) {
+    if (typeof bgValue !== 'string') return null;
+    const match = bgValue.match(/url\(([^)]+)\)/i);
+    if (!match) return null;
+    return match[1].trim().replace(/^["']|["']$/g, '');
+}
+
+function applyMapBackground(bgValue) {
+    const imageUrl = extractBackgroundImageUrl(bgValue || '');
+    if (imageUrl) {
+        mapBackgroundLayer.style.background = `url("${imageUrl}") repeat`;
+        if (backgroundTileImg && backgroundTileImg.src === imageUrl && backgroundTileNaturalWidth) {
+            updateBackgroundLayerTransform();
+        } else {
+            backgroundTileNaturalWidth = 0;
+            backgroundTileNaturalHeight = 0;
+            const tileImg = new Image();
+            backgroundTileImg = tileImg;
+            tileImg.onload = () => {
+                if (backgroundTileImg !== tileImg) return; // a newer map/background loaded in the meantime
+                backgroundTileNaturalWidth = tileImg.naturalWidth || 0;
+                backgroundTileNaturalHeight = tileImg.naturalHeight || 0;
+                updateBackgroundLayerTransform();
+            };
+            tileImg.src = imageUrl;
+        }
+    } else {
+        // Plain color (or no background at all) - fills the layer on its own, no scaling needed.
+        backgroundTileImg = null;
+        backgroundTileNaturalWidth = 0;
+        backgroundTileNaturalHeight = 0;
+        mapBackgroundLayer.style.background = bgValue || "#0b0a08";
+        mapBackgroundLayer.style.backgroundSize = '';
+        mapBackgroundLayer.style.backgroundPosition = '';
+    }
+}
+
+function updateBackgroundLayerTransform() {
+    if (!backgroundTileNaturalWidth || !backgroundTileNaturalHeight) return;
+    const tileW = backgroundTileNaturalWidth * scale;
+    const tileH = backgroundTileNaturalHeight * scale;
+    // Anchor the tiling to the map's own world coordinates and wrap with modulo so it stays
+    // seamless as posX/posY grow or shrink during panning.
+    const offsetX = ((posX % tileW) + tileW) % tileW;
+    const offsetY = ((posY % tileH) + tileH) % tileH;
+    mapBackgroundLayer.style.backgroundSize = `${tileW}px ${tileH}px`;
+    mapBackgroundLayer.style.backgroundPosition = `${offsetX}px ${offsetY}px`;
 }
 
 // --- Chunked map loading -------------------------------------------------

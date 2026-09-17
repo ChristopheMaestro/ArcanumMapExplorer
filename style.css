@@ -7,6 +7,13 @@
     font-display: swap;
 }
 
+/* Custom map cursor (torch-blade arrow) - one shared definition so every "clickable"
+   or "default" cursor in the file uses the exact same image/hotspot. Hotspot is at (0,1),
+   the pixel the arrow tip actually points from, so clicks land where it's aiming. */
+:root {
+    --custom-cursor: url("Textures/cursor.png") 0 1, auto;
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -16,6 +23,7 @@ body {
     display: flex;
     height: 100vh;
     width: 100vw;
+    cursor: var(--custom-cursor);
 }
 
 #script-error-panel {
@@ -121,7 +129,7 @@ body {
 
 .file-list li {
     padding: 12px 20px;
-    cursor: pointer;
+    cursor: var(--custom-cursor);
     border-bottom: 1px solid #2d251c;
     font-size: 14px;
     transition: all 0.2s ease;
@@ -169,7 +177,7 @@ body {
     padding: 6px 14px;
     font-family: "Cinzel", "Georgia", serif;
     font-size: 12px;
-    cursor: pointer;
+    cursor: var(--custom-cursor);
     border-radius: 3px;
     transition: all 0.2s;
 }
@@ -177,6 +185,14 @@ body {
 .toggle-btn:hover, .toggle-btn.active-tool {
     background-color: #4a3e2e;
     color: #ffd700;
+}
+
+/* Compact square variant for buttons that only show a single icon/glyph (e.g. the reload
+   button), so they don't carry the same wide text padding as a labeled button */
+.icon-only-btn {
+    padding: 6px 10px;
+    font-size: 15px;
+    line-height: 1;
 }
 
 .toggle-btn.disabled {
@@ -205,7 +221,7 @@ body {
 .music-control input[type="range"] {
     width: 90px;
     accent-color: #ffd700;
-    cursor: pointer;
+    cursor: var(--custom-cursor);
 }
 
 #tool-status {
@@ -220,11 +236,6 @@ body {
     flex-grow: 1;
     overflow: hidden;
     position: relative;
-    cursor: grab;
-}
-
-#viewport:active {
-    cursor: grabbing;
 }
 
 #viewport.creator-mode {
@@ -242,6 +253,17 @@ body {
 .pending-label {
     outline: 2px dashed #ffffff;
     outline-offset: 2px;
+}
+
+/* Sits behind #pan-container (earlier in DOM order, no z-index of its own) and always spans
+   the full viewport. background-size/background-position are kept in sync with the map's own
+   scale/pan in JS (updateBackgroundLayerTransform) so the texture zooms and pans with the map
+   while background-repeat keeps it tiling seamlessly across the whole visible area. */
+#map-background-layer {
+    position: absolute;
+    inset: 0;
+    background-repeat: repeat;
+    pointer-events: none;
 }
 
 #pan-container {
@@ -283,7 +305,7 @@ img {
     font-weight: bold;
     white-space: nowrap;
     box-shadow: 0px 3px 6px rgba(0,0,0,0.6);
-    cursor: pointer;
+    cursor: var(--custom-cursor);
     transform: translate(-50%, -100%); 
     transition: background-color 0.15s, color 0.15s;
     z-index: 2;
@@ -310,18 +332,23 @@ img {
 
 /* --- ICONIC ARCANUM OVERWORLD POINTS & LABELS --- */
 
-/* The 10px marker dot. Anchors on center using 50%/50% translate bounds */
+/* The marker pin, rendered from Textures/Loc.png (a small transparent-cornered square
+   with a purple ring - the black center is baked into the art, not a CSS background).
+   drop-shadow (not box-shadow) is used so the shadow follows the icon's actual alpha
+   shape instead of its square bounding box. Anchors on center using 50%/50% translate. */
 .arcanum-world-dot {
     position: absolute;
-    width: 10px;
-    height: 10px;
-    background-color: #000000;
-    border: 1px solid #5a1d82;
-    border-radius: 50%;
-    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+    width: 12px;
+    height: 12px;
+    background-image: url("Textures/Loc.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    image-rendering: pixelated;
+    filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.8));
     transform: translate(-50%, -50%);
-    z-index: 3;
-    cursor: pointer;
+    z-index: 1;
+    cursor: var(--custom-cursor);
 }
 
 /* The completely detached text element. Sits slightly offset to the right */
@@ -343,9 +370,9 @@ img {
         1px 0px 1px #000000;
         
     transform: translate(12px, -50%); /* 12px offset ensures it stays clear of the dot space */
-    z-index: 2;
+    z-index: 2; /* above .arcanum-world-dot (z-index: 1), so the pin sits behind the text */
     user-select: none;
-    cursor: pointer;
+    cursor: var(--custom-cursor);
     transition: color 0.15s;
 }
 
@@ -454,6 +481,9 @@ img {
     margin: 0 0 4px 0;
     padding-bottom: 0;
     border-bottom: none;
+    /* Avoids a wrapped title (label name, or a quest's own name for a quest label) leaving
+       just a word-fragment or a couple of characters stranded on the last line. */
+    text-wrap: pretty;
 }
 
 .popup-header.has-master .popup-header-text h4 {
@@ -499,7 +529,7 @@ img {
     color: #9b59b6;
     text-decoration: underline;
     text-decoration-style: dotted;
-    cursor: pointer;
+    cursor: var(--custom-cursor);
 }
 
 .chest-key-link:hover {
@@ -546,7 +576,7 @@ img {
     top: 4px;
     right: 8px;
     color: #b39449;
-    cursor: pointer;
+    cursor: var(--custom-cursor);
     font-family: Arial, sans-serif;
     font-size: 14px;
     font-weight: bold;
@@ -571,7 +601,7 @@ img {
     border-radius: 3px;
     font-family: "Cinzel", "Georgia", serif;
     font-size: 11px;
-    cursor: pointer;
+    cursor: var(--custom-cursor);
     text-transform: uppercase;
     letter-spacing: 0.5px;
     transition: all 0.2s ease;
@@ -607,7 +637,7 @@ img {
 }
 
 .clickable-quest-block {
-    cursor: pointer;
+    cursor: var(--custom-cursor);
     border-radius: 3px;
     transition: background-color 0.15s;
 }
@@ -620,6 +650,9 @@ img {
     font-weight: bold;
     font-size: 13px;
     margin-bottom: 4px;
+    /* Avoids a wrapped title leaving just a word-fragment or a couple of characters
+       stranded on the last line - the whole last word moves down instead when needed. */
+    text-wrap: pretty;
 }
 
 .linked-quest-desc {
@@ -694,8 +727,32 @@ img {
     margin-bottom: 2px;
 }
 
+/* Offering list variant - shows each item's icon (itemimg) instead of a plain bulleted line */
+.npc-inventory-list-icons {
+    list-style: none;
+    padding-left: 0;
+}
+
+.npc-inventory-list-icons li {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.npc-inventory-item-icon {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.npc-inventory-item-count {
+    opacity: 0.8;
+    font-size: 11px;
+}
+
 .inventory-item-clickable {
-    cursor: pointer;
+    cursor: var(--custom-cursor);
     text-decoration: underline;
     text-decoration-style: dotted;
     text-underline-offset: 2px;
@@ -714,7 +771,27 @@ img {
     z-index: 200;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
+    cursor: var(--custom-cursor);
+}
+
+/* Name of the item/document currently on screen, shown above the image - hidden (via inline
+   display:none) whenever the thing being viewed has no name to show, e.g. an altar inscription. */
+#item-image-title {
+    position: fixed;
+    top: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 201;
+    background-color: rgba(23, 19, 14, 0.85);
+    border: 1px solid #b39449;
+    border-radius: 12px;
+    padding: 6px 18px;
+    color: #ffd700;
+    font-family: "Cinzel", serif;
+    font-size: 15px;
+    letter-spacing: 0.5px;
+    text-align: center;
+    max-width: 70vw;
 }
 
 #item-image-overlay img {
@@ -724,7 +801,101 @@ img {
     box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.9);
     border: 2px solid #b39449;
     border-radius: 4px;
-    cursor: pointer;
+    cursor: var(--custom-cursor);
+}
+
+/* Prev/next page controls for multi-page books/notes - hidden (via inline display:none)
+   whenever the current item only has a single page, so single-image items look untouched. */
+.item-image-nav-btn {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 201;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 2px solid #b39449;
+    background-color: rgba(23, 19, 14, 0.85);
+    color: #ffd700;
+    font-family: "Cinzel", serif;
+    font-size: 16px;
+    line-height: 1;
+    cursor: var(--custom-cursor);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.15s ease, opacity 0.15s ease;
+}
+
+.item-image-nav-btn:hover {
+    background-color: rgba(60, 48, 28, 0.95);
+}
+
+.item-image-nav-btn:disabled {
+    opacity: 0.35;
+    cursor: var(--custom-cursor);
+    pointer-events: none;
+}
+
+.item-image-prev-btn {
+    left: 84px;
+}
+
+.item-image-next-btn {
+    right: 84px;
+}
+
+/* Item-to-item controls (Library only): step through every item in the current category,
+   independently from the page arrows above. Sit further out than the page arrows so the two
+   pairs never overlap, and only shown (via inline display:none by default) when the overlay
+   was opened from the Library with more than one item in its category. */
+.item-image-item-nav-btn {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 201;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 2px solid #b39449;
+    background-color: rgba(23, 19, 14, 0.85);
+    color: #ffd700;
+    font-family: "Cinzel", serif;
+    font-size: 16px;
+    line-height: 1;
+    cursor: var(--custom-cursor);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.15s ease, opacity 0.15s ease;
+}
+
+.item-image-item-nav-btn:hover {
+    background-color: rgba(60, 48, 28, 0.95);
+}
+
+.item-image-item-prev-btn {
+    left: 24px;
+}
+
+.item-image-item-next-btn {
+    right: 24px;
+}
+
+#item-image-page-indicator {
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 201;
+    background-color: rgba(23, 19, 14, 0.85);
+    border: 1px solid #b39449;
+    border-radius: 12px;
+    padding: 4px 14px;
+    color: #ffd700;
+    font-family: "Cinzel", serif;
+    font-size: 12px;
+    letter-spacing: 0.5px;
 }
 
 #creator-panel {
@@ -822,7 +993,7 @@ img {
     padding: 5px 7px;
     border-radius: 4px;
     border: 1px solid transparent;
-    cursor: pointer;
+    cursor: var(--custom-cursor);
     opacity: 0.5;
     transition: opacity 0.15s, background-color 0.15s, border-color 0.15s;
     user-select: none;
@@ -871,7 +1042,7 @@ img {
     font-size: 15px;
     line-height: 1;
     padding: 0 10px;
-    cursor: pointer;
+    cursor: var(--custom-cursor);
     opacity: 0.5;
     transition: opacity 0.15s, background-color 0.15s, border-color 0.15s;
 }
@@ -925,7 +1096,7 @@ img {
     font-size: 22px;
     font-weight: bold;
     font-family: monospace;
-    cursor: pointer;
+    cursor: var(--custom-cursor);
     border-radius: 4px;
     box-shadow: 0px 4px 8px rgba(0,0,0,0.5);
     display: flex;
@@ -957,7 +1128,7 @@ img {
     padding: 0;
     background: transparent;
     border: none;
-    cursor: pointer;
+    cursor: var(--custom-cursor);
     filter: drop-shadow(0px 2px 5px rgba(0,0,0,0.85));
     transition: transform 0.15s ease, filter 0.15s ease;
 }
@@ -1045,7 +1216,7 @@ img {
     color: #f1e4c3;
     font-family: "Georgia", serif;
     font-size: 13px;
-    cursor: pointer;
+    cursor: var(--custom-cursor);
     user-select: none;
 }
 
@@ -1056,7 +1227,7 @@ img {
 
 .dropdown-content input[type="checkbox"] {
     accent-color: #ffd700;
-    cursor: pointer;
+    cursor: var(--custom-cursor);
 }
 
 /* Visibility classes used dynamically by the rendering pipeline */
@@ -1246,7 +1417,7 @@ img {
     font-size: 11px;
     font-weight: bold;
     text-align: center;
-    cursor: pointer;
+    cursor: var(--custom-cursor);
     border-radius: 3px;
     transition: all 0.2s ease;
     user-select: none;
@@ -1317,7 +1488,7 @@ img {
 }
 
 .quest-panel-close-btn {
-    cursor: pointer;
+    cursor: var(--custom-cursor);
     color: #b39449;
     font-size: 20px;
     font-weight: bold;
@@ -1348,7 +1519,7 @@ img {
     margin-bottom: 8px;
     padding-bottom: 5px;
     border-bottom: 1px solid #332b20;
-    cursor: pointer;
+    cursor: var(--custom-cursor);
     transition: color 0.15s;
 }
 
@@ -1360,7 +1531,7 @@ img {
     padding: 6px 0 6px 10px;
     border-left: 2px solid #4a3e2e;
     margin-bottom: 6px;
-    cursor: pointer;
+    cursor: var(--custom-cursor);
     transition: border-color 0.15s, background-color 0.15s;
 }
 
@@ -1373,6 +1544,7 @@ img {
     color: #ffdf80;
     font-size: 13px;
     font-weight: bold;
+    text-wrap: pretty;
 }
 
 .quest-panel-quest-desc {
@@ -1427,6 +1599,108 @@ img {
     display: flex;
 }
 
+/* World Map Library modal */
+#library-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.75);
+    z-index: 150;
+    align-items: center;
+    justify-content: center;
+}
+
+#library-overlay.open {
+    display: flex;
+}
+
+.library-panel {
+    width: 880px;
+    height: 85vh;
+}
+
+.library-body {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+}
+
+.library-categories {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 220px;
+    flex-shrink: 0;
+    padding: 15px 10px;
+    border-right: 2px solid #4a3e2e;
+    overflow-y: auto;
+}
+
+.library-category-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: transparent;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: #d4c5a1;
+    font-family: "Georgia", serif;
+    text-align: left;
+    padding: 8px 10px;
+    cursor: var(--custom-cursor);
+    transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.library-category-btn:hover {
+    background-color: #2b2418;
+    border-color: #4a3e2e;
+}
+
+.library-category-btn.active {
+    background-color: rgba(255, 215, 0, 0.1);
+    border-color: #ffd700;
+    color: #ffd700;
+    font-weight: bold;
+}
+
+/* Category icon is sourced at runtime from a representative item's itemimg (see
+   renderLibraryCategoryIcons) rather than a hardcoded emoji, to match the item art look
+   used everywhere else in the viewer. */
+.library-category-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+.library-category-icon img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.library-category-label {
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.library-grid {
+    flex: 1;
+    align-content: start;
+}
+
+/* Library tiles are clickable (opens the item's image), not draggable, so they use a pointer
+   cursor rather than the inventory picker's grab/grabbing cursor for draggable catalog tiles */
+.library-item-tile {
+    cursor: var(--custom-cursor);
+}
+
+.library-item-tile:active {
+    cursor: var(--custom-cursor);
+}
+
 .statistics-panel {
     background-color: #17130e;
     border: 2px solid #4a3e2e;
@@ -1463,6 +1737,214 @@ img {
 #quests-table-content {
     padding: 15px;
     overflow-y: auto;
+}
+
+/* Inventory picker modal (opened from the Label Editor's "Manage Inventory" button) */
+#inventory-picker-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.75);
+    z-index: 160;
+    align-items: center;
+    justify-content: center;
+}
+
+#inventory-picker-overlay.open {
+    display: flex;
+}
+
+.inventory-picker-panel {
+    width: 720px;
+}
+
+.inventory-picker-current-dropzone {
+    padding: 12px 15px 4px;
+    flex-shrink: 0;
+    border-bottom: 1px solid #332b20;
+    transition: background-color 0.15s;
+}
+
+.inventory-picker-current-dropzone.drag-over {
+    background-color: rgba(255, 215, 0, 0.08);
+}
+
+.inventory-picker-section-title {
+    color: #20b2aa;
+    font-weight: bold;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+}
+
+.inventory-picker-section-title span {
+    color: #b3a685;
+    font-weight: normal;
+    text-transform: none;
+    letter-spacing: normal;
+}
+
+.inventory-picker-search-row {
+    padding: 10px 15px;
+    flex-shrink: 0;
+    border-bottom: 1px solid #332b20;
+}
+
+.inventory-picker-search-row input {
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #211c14;
+    border: 1px solid #4a3e2e;
+    color: #f1e4c3;
+    padding: 8px 10px;
+    border-radius: 3px;
+    font-family: "Georgia", serif;
+    font-size: 13px;
+}
+
+.inventory-picker-search-row input:focus {
+    outline: none;
+    border-color: #b39449;
+}
+
+.inventory-picker-tile-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
+    gap: 8px;
+    padding: 12px 15px;
+    min-height: 40px;
+}
+
+.inventory-picker-current-dropzone .inventory-picker-tile-list {
+    padding: 0 0 12px;
+    min-height: 76px;
+}
+
+.inventory-picker-catalog-list {
+    overflow-y: auto;
+    align-content: start;
+}
+
+.inventory-picker-empty-hint {
+    grid-column: 1 / -1;
+    color: #665c45;
+    font-style: italic;
+    font-size: 12px;
+    text-align: center;
+    padding: 12px 4px;
+}
+
+.inventory-item-tile {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    background-color: #211c14;
+    border: 1px solid #4a3e2e;
+    border-radius: 4px;
+    padding: 6px 4px 5px;
+    cursor: grab;
+    transition: border-color 0.15s, background-color 0.15s;
+}
+
+.inventory-item-tile:hover {
+    border-color: #b39449;
+    background-color: #2b2418;
+}
+
+.inventory-item-tile:active {
+    cursor: grabbing;
+}
+
+.inventory-item-tile-img {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.inventory-item-tile-img img {
+    max-width: 100%;
+    max-height: 100%;
+    image-rendering: pixelated;
+    pointer-events: none;
+    -webkit-user-drag: none;
+}
+
+.inventory-item-tile-name {
+    color: #d4c5a1;
+    font-size: 10px;
+    line-height: 1.2;
+    text-align: center;
+    word-break: break-word;
+    pointer-events: none;
+}
+
+.inventory-item-tile-current {
+    cursor: var(--custom-cursor);
+    border-color: #20b2aa;
+}
+
+.inventory-item-remove-btn {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    width: 18px;
+    height: 18px;
+    line-height: 16px;
+    text-align: center;
+    background-color: #4a1f1f;
+    border: 1px solid #b34949;
+    border-radius: 50%;
+    color: #f1c3c3;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: var(--custom-cursor);
+    padding: 0;
+}
+
+.inventory-item-remove-btn:hover {
+    background-color: #b34949;
+    color: #ffffff;
+}
+
+/* Quantity stepper shown on each tile in the label editor's "current inventory" list, so
+   e.g. "100 coins" or "2 swords" can be set without needing 100 separate tiles. */
+.inventory-item-qty-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    margin-top: 2px;
+}
+
+.inventory-item-qty-btn {
+    width: 16px;
+    height: 16px;
+    line-height: 14px;
+    padding: 0;
+    background-color: #2b2418;
+    border: 1px solid #4a3e2e;
+    border-radius: 3px;
+    color: #d4c5a1;
+    font-size: 11px;
+    font-weight: bold;
+    cursor: var(--custom-cursor);
+}
+
+.inventory-item-qty-btn:hover {
+    border-color: #b39449;
+    background-color: #3a3020;
+}
+
+.inventory-item-qty-value {
+    min-width: 20px;
+    text-align: center;
+    font-size: 11px;
+    color: #d4c5a1;
 }
 
 .stats-summary {
@@ -1528,7 +2010,7 @@ img {
     border-radius: 3px;
     font-family: "Georgia", serif;
     font-size: 12px;
-    cursor: pointer;
+    cursor: var(--custom-cursor);
     max-width: 220px;
 }
 
@@ -1559,7 +2041,7 @@ img {
     padding: 4px 6px;
     border-radius: 4px;
     border: 1px solid transparent;
-    cursor: pointer;
+    cursor: var(--custom-cursor);
     opacity: 0.5;
     transition: opacity 0.15s, background-color 0.15s, border-color 0.15s;
     white-space: nowrap;
@@ -1584,7 +2066,7 @@ img {
 }
 
 .stats-empty-row {
-    cursor: default;
+    cursor: var(--custom-cursor);
 }
 
 .stats-empty-row:hover td {
@@ -1596,7 +2078,7 @@ img {
     color: #a89a7c;
     font-style: italic;
     padding: 16px 8px;
-    cursor: default;
+    cursor: var(--custom-cursor);
 }
 
 .stats-table {
@@ -1616,7 +2098,7 @@ img {
     font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    cursor: pointer;
+    cursor: var(--custom-cursor);
     user-select: none;
     white-space: nowrap;
 }
@@ -1646,7 +2128,7 @@ img {
 }
 
 .stats-table tbody tr {
-    cursor: pointer;
+    cursor: var(--custom-cursor);
     transition: background-color 0.15s;
 }
 
@@ -1701,7 +2183,7 @@ img {
     font-weight: bold;
     padding: 8px 8px 6px;
     border-bottom: 1px solid #4a3e2e;
-    cursor: default;
+    cursor: var(--custom-cursor);
 }
 
 .quest-location-header:hover td {

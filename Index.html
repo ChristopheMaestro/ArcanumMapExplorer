@@ -183,6 +183,11 @@
                 </div>
             </div>
 
+            <div class="field-row">
+                <label>Inventory</label>
+                <button type="button" id="open-inventory-picker-btn" class="toggle-btn" style="width:100%;">🎒 Manage Inventory (<span id="inventory-count-badge">0</span>)</button>
+            </div>
+
             <div id="editing-indicator" style="display:none;">✏️ Editing: <span id="editing-label-name"></span></div>
             
             <button id="add-to-preview-btn" class="toggle-btn" style="width:100%;">+ Add Label</button>
@@ -197,18 +202,20 @@
     <!-- Right Side Global Workspace Area -->
     <div id="main-viewer">
         <div id="control-bar">
+            <!-- Icon-only reload button, pinned first so it's easy to find in a crowded bar -->
+            <button id="topBarReloadBtn" class="toggle-btn icon-only-btn" onclick="hotReloadMapDatabase()" title="Reload maps.js dataset without resetting your page zoom">↻</button>
             <button id="filterDropdownBtn" class="toggle-btn">Hide labels</button>
             
             <!-- Renamed button link element configuration -->
             <button id="toggleCreatorModeBtn" class="toggle-btn">Label Editor</button>
-            <!-- Repositioned Hot-Reload button asset pinned to top utility navigation deck bar -->
-            <button id="topBarReloadBtn" class="toggle-btn" onclick="hotReloadMapDatabase()" title="Reload maps.js dataset without resetting your page zoom">↻ Reload Data</button>
             <!-- Copies a link that reopens this exact map, spot, and zoom for whoever you send it to -->
             <button id="shareLinkBtn" class="toggle-btn" title="Copy a link to this exact map view">🔗 Share View</button>
             <!-- Opens the right-side panel listing every quest on the current map, grouped by NPC -->
             <button id="questListBtn" class="toggle-btn" title="Show all quests on this map, grouped by NPC">📋 Quests</button>
             <!-- Opens a modal listing every NPC/Shop label on this map, with name/sex/race/level and summary stats -->
             <button id="statisticsBtn" class="toggle-btn" title="Show NPC/Shop statistics for this map">📊 Statistics</button>
+            <!-- World Map only: browse every Book/Manual/Map/Newspaper/Note/Telegraph item from items.js -->
+            <button id="libraryBtn" class="toggle-btn" title="Browse readable items (books, manuals, maps, newspapers, notes, telegraphs)" style="display:none;">📚 Library</button>
 
             <!-- Background music control - plays whatever track the current map's "music" field points to -->
             <div class="music-control">
@@ -227,6 +234,9 @@
         </div>
         
         <div id="viewport">
+            <!-- Repeating map background texture, kept perfectly in sync with the map's own pan/zoom
+                 (see updateBackgroundLayerTransform in viewer.js) so it always tiles seamlessly -->
+            <div id="map-background-layer"></div>
             <div id="pan-container">
                 <img id="zoomImage" src="" alt="" style="display: none;">
                 <!-- Map labels and structural info popups inject dynamically here -->
@@ -256,7 +266,13 @@
 
     <!-- Full-screen overlay for clickable inventory items (notes, books, etc.) - click anywhere to dismiss -->
     <div id="item-image-overlay">
+        <div id="item-image-title"></div>
+        <button id="item-image-item-prev-btn" class="item-image-item-nav-btn item-image-item-prev-btn" title="Previous item">&#10094;&#10094;</button>
+        <button id="item-image-prev-btn" class="item-image-nav-btn item-image-prev-btn" title="Previous page">&#10094;</button>
         <img id="item-image-overlay-img" src="" alt="">
+        <button id="item-image-next-btn" class="item-image-nav-btn item-image-next-btn" title="Next page">&#10095;</button>
+        <button id="item-image-item-next-btn" class="item-image-item-nav-btn item-image-item-next-btn" title="Next item">&#10095;&#10095;</button>
+        <div id="item-image-page-indicator"></div>
     </div>
 
     <!-- Modal overlay: NPC/Shop statistics table for the current map -->
@@ -279,6 +295,60 @@
                 <span id="quests-table-close" class="quest-panel-close-btn">&times;</span>
             </div>
             <div id="quests-table-content"></div>
+        </div>
+    </div>
+
+    <!-- Modal overlay: World Map Library - browse every Book/Manual/Map/Newspaper/Note/Telegraph/
+         Schematic item from items.js, plus Altar inscriptions (pulled from "altar"-category map
+         labels) and a fixed "Others" list. Left side lists the categories in alphabetical order
+         (icons are populated at runtime, mostly from a representative item's itemimg - see
+         renderLibraryCategoryIcons/LIBRARY_CATEGORY_ICON_OVERRIDE), right side is the same
+         icon+name tile grid used by the Label Editor's inventory picker; clicking a tile opens
+         the item's image (see showItemImage, which also handles multi-page books). -->
+    <div id="library-overlay">
+        <div class="statistics-panel library-panel">
+            <div class="statistics-header">
+                <h3>📚 Library</h3>
+                <span id="library-close" class="quest-panel-close-btn">&times;</span>
+            </div>
+            <div class="library-body">
+                <div id="library-categories" class="library-categories">
+                    <button type="button" class="library-category-btn active" data-category="altar"><span class="library-category-icon"></span><span class="library-category-label">Altar</span></button>
+                    <button type="button" class="library-category-btn" data-category="books"><span class="library-category-icon"></span><span class="library-category-label">Books</span></button>
+                    <button type="button" class="library-category-btn" data-category="manuals"><span class="library-category-icon"></span><span class="library-category-label">Manuals</span></button>
+                    <button type="button" class="library-category-btn" data-category="maps"><span class="library-category-icon"></span><span class="library-category-label">Maps</span></button>
+                    <button type="button" class="library-category-btn" data-category="notes"><span class="library-category-icon"></span><span class="library-category-label">Notes</span></button>
+                    <button type="button" class="library-category-btn" data-category="others"><span class="library-category-icon"></span><span class="library-category-label">Others</span></button>
+                    <button type="button" class="library-category-btn" data-category="schematics"><span class="library-category-icon"></span><span class="library-category-label">Schematics</span></button>
+                    <button type="button" class="library-category-btn" data-category="telegraphs"><span class="library-category-icon"></span><span class="library-category-label">Telegraphs</span></button>
+                    <button type="button" class="library-category-btn" data-category="tarantian"><span class="library-category-icon"></span><span class="library-category-label">The Tarantian</span></button>
+                    <button type="button" class="library-category-btn" data-category="vendigroth"><span class="library-category-icon"></span><span class="library-category-label">The Vendigroth Times</span></button>
+                </div>
+                <div id="library-grid" class="inventory-picker-tile-list inventory-picker-catalog-list library-grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal overlay: Inventory picker for the Label Editor - top section lists the current
+         label's inventory (a drop zone), middle is a search box, bottom is the full items.js
+         catalog as a draggable icon grid. Drag a catalog tile into the top section to add it. -->
+    <div id="inventory-picker-overlay">
+        <div class="statistics-panel inventory-picker-panel">
+            <div class="statistics-header">
+                <h3>🎒 Inventory — <span id="inventory-picker-label-name">New Label</span></h3>
+                <span id="inventory-picker-close" class="quest-panel-close-btn">&times;</span>
+            </div>
+
+            <div id="inventory-picker-current" class="inventory-picker-current-dropzone">
+                <div class="inventory-picker-section-title">Current Inventory <span id="inventory-picker-current-count"></span></div>
+                <div id="inventory-picker-current-list" class="inventory-picker-tile-list"></div>
+            </div>
+
+            <div class="inventory-picker-search-row">
+                <input type="text" id="inventory-picker-search" placeholder="🔍 Search items (e.g., &quot;key&quot;)...">
+            </div>
+
+            <div id="inventory-picker-grid" class="inventory-picker-tile-list inventory-picker-catalog-list"></div>
         </div>
     </div>
 
