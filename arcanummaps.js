@@ -492,7 +492,7 @@ const ArcanumCitiesMapData = [
 
       // Thief underground
       { x: 6565, y: 4413, text: "Chest Of Gold", category: "bounty" },
-      { x: 3899, y: 2304, text: "Chest", inventory: ["Magick Necklace"], category: ["chest", "bounty"] },
+      { x: 3899, y: 2304, text: "Chest", inventory: ["Great Aunt Ester's Amulet"], category: ["chest", "bounty"] },
       { x: 5510, y: 3451, text: "Crate", inventory: ["Post Bound For Tarant"], category: ["chest", "bounty"] },
       { x: 7424, y: 1805, text: "Cabinet", chestState: "locked", inventory: ["Ryan Marshall's Police Record"], category: ["chest", "bounty"] },
 
@@ -904,20 +904,12 @@ const ArcanumCitiesMapData = [
       { x: 4211, y: 1759, text: "Stillwater Giants Cave", category: "waypoint", targetMapFilename: "Stillwater Giants Cave" },
 
       // Shops
-      { x: 1978, y: 3831, text: "General Store Clerk", sex: "male", race: "Gnome", level: 29, category: "shop", shopType: "General Store", shopMarkup: 110 },
-      { x: 2278, y: 3130, text: "Richard Leeks", sex: "male", race: "Human", level: 35, category: ["shop", "quest"], shopType: "Blacksmith", shopMarkup: 110, inventory: ["Stillwater Blade", "Stillwater Blade", "Tempered Shield"],
-        linkedLabels: [
-          { questName: "Rescue Cyrus", questDescription: "Richard Leeks, the blacksmith in Stillwater, wants you to find his friend Cyrus.", target: "Puddles of blood and footprints", part: 1 }
-        ]
-      },
+      { x: 1978, y: 3831, text: "General Store Clerk", category: "shop", shopType: "General Store", shopMarkup: 110, level: 29, sex: "male", race: "Gnome", inventory: ["Finely Honed Dagger", "Dagger", "Small Rustic Finery"] },
+      { x: 2278, y: 3130, text: "Richard Leeks", category: ["quest", "shop"], shopType: "Blacksmith", shopMarkup: 110, level: 35, sex: "male", race: "Human", inventory: [{ name: "Stillwater Blade", count: 2 }, "Tempered Shield"], linkedLabels: [{ questName: "Rescue Cyrus", questDescription: "Richard Leeks, the blacksmith in Stillwater, wants you to find his friend Cyrus.", target: "Puddles of blood and footprints", part: 1 }] },
 
       // Quests
       //// Find the Stolen Idol
-      { x: 1298, y: 2918, text: "Brigitte", sex: "female", race: "Human", level: 25, description: "", category: ["npc", "quest"],
-        linkedLabels: [
-          { questName: "Find the Stolen Idol", questDescription: "Brigitte, Priestess of Stillwater, has entrusted you with the task of finding the stolen idol of their goddess, Geshtianna.", target: "Marley", part: 1 }
-        ]
-      },
+      { x: 1298, y: 2918, text: "Brigitte", category: ["quest", "npc"], level: 25, sex: "female", race: "Human", inventory: ["Mage's Staff", { name: "Heal Lesser Wounds", count: 3 }, { name: "Fatigue Restorer", count: 2 }], linkedLabels: [{ questName: "Find the Stolen Idol", questDescription: "Brigitte, Priestess of Stillwater, has entrusted you with the task of finding the stolen idol of their goddess, Geshtianna.", target: "Marley", part: 1 }] },
       { x: 3777, y: 3372, text: "Marley", sex: "male", race: "Human", level: 35, category: ["npc", "quest", "key"],
         linkedLabels: [
           { questName: "Find the Stolen Idol", questDescription: "Brigitte, Priestess of Stillwater, has entrusted you with the task of finding the stolen idol of their goddess, Geshtianna.", target: "Big Wooden Object", part: 2 }
@@ -936,30 +928,21 @@ const ArcanumCitiesMapData = [
         ]
       },
 
-      { x: 2389, y: 3537, text: "Innkeeper (Stillwater)", sex: "male", race: "Gnome", level: 35, category: ["quest", "npc"], 
-        linkedLabels: [
-          { questName: "Elder Joachim’s paper trail", questDescription: "Elder Joachim left a telegram at the inn of Stillwater.", target: "", part: 4 }
-        ]
-      },
-             
-      { x: 2271, y: 2586, text: "Myrth", sex: "male", race: "Elf", level: 20, inventory:["Amulet of N'Tala"], category: ["npc", "quest"],
+      { x: 2389, y: 3537, text: "Innkeeper (Stillwater)", category: ["quest", "npc"], level: 35, sex: "male", race: "Gnome", inventory: ["Joachim's Stillwater Book", "Bread", "Healing Salve", "Dagger", "Small Rustic Finery"], linkedLabels: [{ questName: "Elder Joachim’s paper trail", questDescription: "Elder Joachim left a telegram at the inn of Stillwater.", part: 4 }] },
+      { x: 2271, y: 2586, text: "Myrth", sex: "male", race: "Elf", level: 20, inventory:["Amulet of N'Tala", "Elven Hunter's Bow", "Smoking Jacket", { name: "Arrow", count: 35 }], category: ["npc", "quest"],
         linkedLabels: [
           { questName: "The Stillwater Giant", questDescription: "Myrth, an elf residing in Stillwater, instructs you to perform a rite of passage, killing a Stillwater Giant and bringing its pelt to him. He directs you to Stanley Xavier Hippington, living directly North from his house.", target: "Stanley Xavier Hippington", part: 1 },
           { questName: "Find Qintarra", questDescription: "For bringing a fake pelt of the Stillwater Giant to Myrth, you will make him laugh and he will reveal where Qintarra is located", questType: "main", target: "Raven", part: "reward"},
           { questName: "Find the Amulet of N’Tala", questDescription: "The amulet can be obtained from Myrth either by stealing it or by taking it from his corpse after killing him.", target: "Gaylin", part: 2 }
         ]
       },
-      { x: 2719, y: 1753, text: "Stanley Xavier Hippington", sex: "male", race: "Human", level: 29, category: ["npc", "quest"],
-        linkedLabels: [
-          { questName: "The Stillwater Giant", questDescription: "Upon talking to Stanley Xavier Hippington, a cryptozoologist, he gives you a Stillwater trap and a bottle of Stillwater Giant scent to use to capture a Stillwater Giant, residing in a cave nearby.", target: "Bunny", part: 2 }
-        ]
-      },
+      { x: 2719, y: 1753, text: "Stanley Xavier Hippington", category: ["quest", "npc"], level: 29, sex: "male", race: "Human", inventory: ["Stillwater Trap (Empty)", "Stillwater Giant Scent"], linkedLabels: [{ questName: "The Stillwater Giant", questDescription: "Upon talking to Stanley Xavier Hippington, a cryptozoologist, he gives you a Stillwater trap and a bottle of Stillwater Giant scent to use to capture a Stillwater Giant, residing in a cave nearby.", target: "Bunny", part: 2 }] },
       { x: 2627, y: 2829, text: "Gildor Nightwalk", sex: "male", race: "Halfling", level: 31, inventory: ["Ring of Concealment", "Tannon Wroughtbringer's Journal"], category: ["quest", "npc"],
         linkedLabels: [
           { questName: "Retrieving the Ruby", questDescription: "Gildor Nightwalk will reward you with 1500 coin, if you are able pass the beasts of death and retrieve the great ruby for him.", target: "Altar (Ruby Glade)", part: 1 }
         ]
       },
-      { x: 784, y: 3387, text: "Adkin Chambers", sex: "male", race: "Human", level: 48, master: "Dodge Master", category: ["quest", "npc", "master"],
+      { x: 784, y: 3387, text: "Adkin Chambers", sex: "male", race: "Human", level: 48, master: "Dodge Master", inventory: ["Heavy Wool Clothes"], category: ["quest", "npc", "master"],
         linkedLabels: [
           { questName: "Adkin Chambers and Sir Garrick Stout", questDescription: "Adkin Chambers, the Dodge Master, wants you to kill Sir Garrick Stout, the Melee Master, and bring his eyes as proof that you have completed the task.", questType: "master", target: "Sir Garrick Stout", part: 1 },
           { questName: "Adkin Chambers and Sir Garrick Stout", questDescription: "To thank you for killing Garrick Stout, Adking Chambers will train you to be a dodge master.", questType: "master", part: "reward" }
@@ -973,7 +956,8 @@ const ArcanumCitiesMapData = [
         inscription: "Textures/Altar/Geshtianna.png",
         offering: ["Passion Root"],
         blessing: ["+1 Beauty"] },
-      { x: 1545, y: 2837, text: "Passion Root", description: "", category: "information", linkedLabels:["Geshtianna's Altar"]}
+      { x: 1545, y: 2837, text: "Passion Root", description: "", category: "information", linkedLabels:["Geshtianna's Altar"]},
+      { x: 1620, y: 3915, text: "Dresser", category: "chest", chestState: "locked", inventory: ["Leather Gloves", "Small Wool Jacket", "Dragon's Cologne", "Rheumatism Cure", "Cure Poison", "Heal Lesser Wounds"] },
     ],
   },
   {
@@ -1107,7 +1091,7 @@ const ArcanumCitiesMapData = [
       },
       { x: 3788, y: 2333, text: "Matthew Jameson", sex: "male", race: "Human", level: 12, category: ["quest", "npc"],
         linkedLabels: [
-          { questName: "Retrieve Matthew's Wedding Ring", questDescription: "Matthew Jameson wants you to retrieve his wedding ring from the sewers.", target: "Fancy Ring", part: 1 }
+          { questName: "Retrieve Matthew's Wedding Ring", questDescription: "Matthew Jameson wants you to retrieve his wedding ring from the sewers.", target: "Fancy Ring (Quest)", part: 1 }
         ]
       },
       { x: 5234, y: 1065, text: "Benjamin Gershwin", sex: "male", race: "Gnome", level: 17, category: ["quest", "npc"],
@@ -3127,7 +3111,7 @@ const ArcanumCitiesMapData = [
       { x: 1115, y: 91, text: "Tarant", description: "", category: "waypoint" },
 
       // Quests
-      { x: 337, y: 663, text: "Fancy Ring", inventory: ["Fancy Ring"], category: "quest", 
+      { x: 337, y: 663, text: "Fancy Ring (Quest)", inventory: ["Fancy Ring (Quest)"], category: "quest", 
         linkedLabels: [
           { questName: "Retrieve Matthew's Wedding Ring", questDescription: "Return to Matthew with the ring for a reward.", target: "Matthew Jameson", part: 2 }
         ]
@@ -3401,7 +3385,7 @@ const ArcanumCitiesMapData = [
     labels: [
       // Waypoints
       { x: 836, y: 1410, text: "Tulla", category: "waypoint", targetMapFilename: "Tulla", targetX: 2268, targetY: 1619 },
-      { x: 2192, y: 604, text: "Simeons Hallway", category: "waypoint", targetMapFilename: "Simeons Hallway" },
+      { x: 2192, y: 604, text: "Simeons Hallway", category: "waypoint", targetMapFilename: "Simeons Hallway", targetX: 92, targetY: 474 },
 
       // NPCs
       { x: 742, y: 995, text: "Liam Raymond, Meta Master", sex: "male", race: "Human", level: 50, inventory: ["Scroll of Disperse Magick", "Scroll of Bonds of Magic", "Arcane Sword", "Arcane Robes", "Mastery Medallion of Meta"], category: "npc" },
@@ -3421,6 +3405,13 @@ const ArcanumCitiesMapData = [
           { questName: "The Gem of Water Purification", questDescription: "V'ed Eckes, Master of Water Magick in Tulla, wants you to retrieve the Gem of Water Purification from the acolyte waiting outside the gates of Tulla.", target: "Albert", part: 1 }
         ]
       },
+      { x: 1616, y: 1421, text: "Edgar Jerryl, Mental Master", category: "npc", level: 50, sex: "male", race: "Gnome", inventory: ["Arcane Dagger", "Small Arcane Robes", "Mastery Medallion of Mental", "Scroll of Drain Will", "Scroll of Nightmare", "Heal Lesser Wounds"] },
+      { x: 1997, y: 1583, text: "Rys'Ard, Force Master", category: "npc", level: 50, sex: "male", race: "Half-Elf", inventory: ["Arcane Robes", "Elven Boots", "Scroll of Teleportation", "Scroll of Disintegrate"] },
+      { x: 2958, y: 1655, text: "Naph'Tha, Fire Master", category: "npc", level: 50, sex: "female", race: "Elf", inventory: ["Pyrotechnic Bow", "Arcane Robes", { name: "Arrow", count: 25 }, "Scroll of Fireflash", "Scroll of Body of Fire"] },
+      { x: 3455, y: 1365, text: "Addo Terrin, Earth Master", category: "npc", level: 50, sex: "male", race: "Halfling", inventory: ["Arcane Staff", "Small Arcane Robes", "Scroll of Body of Stone", "Scroll of Call Earth Elemental"] },
+      { x: 3217, y: 1249, text: "Wel'Kene, Air Master", category: "npc", inventory: ["Arcane Staff", "Scroll of Body of Air", "Scroll of Poison Vapours", "Shadowing Robes"] },    
+      { x: 3036, y: 999, text: "Cassandra Johanson, Divination Master", category: "npc", level: 50, sex: "female", race: "Human", inventory: ["Arcane Robes", "Arcane Staff", { name: "Heal Lesser Wounds", count: 2 }] },
+      { x: 2915, y: 846, text: "Ve'Tura, Conveyance Master", category: "npc", level: 50, sex: "female", race: "Elf", inventory: ["Arcane Robes", "Arcane Staff", "Scroll of Teleportation", "Scroll of Unseen Force"] },
     ]
   },
   {
@@ -3431,6 +3422,7 @@ const ArcanumCitiesMapData = [
     labels: [
       { x: 92, y: 474, text: "Tulla - Main Floor", category: "waypoint", targetMapFilename: "Tulla - Main Floor", targetX: 2192, targetY: 604 },
       { x: 708, y: 200, text: "Simeons Chamber", category: "waypoint", targetMapFilename: "Simeons Chamber", targetX: 535, targetY: 844 },
+      { x: 645, y: 237, text: "Jorian", category: "npc", level: 50, sex: "male", race: "Human", inventory: ["Magick Robes"] },
     ]
   },
   {
