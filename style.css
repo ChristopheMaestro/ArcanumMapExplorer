@@ -751,6 +751,32 @@ img {
     font-size: 11px;
 }
 
+/* Collapsed Inventory list (see buildItemListHtml's "collapsible" arg): regular-tier items are
+   hidden until the "[+N]" toggle is clicked, so a label carrying a huge mundane inventory
+   doesn't blow out the popup's height - magick/hexed items always stay visible. */
+.npc-inventory-collapsed .npc-inventory-item-extra {
+    display: none;
+}
+
+.npc-inventory-toggle {
+    list-style: none;
+    margin-left: -18px;
+    color: #b39449;
+    cursor: var(--custom-cursor);
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-underline-offset: 2px;
+    font-size: 11px;
+}
+
+.npc-inventory-toggle:hover {
+    color: #ffd700;
+}
+
+.npc-inventory-list-icons .npc-inventory-toggle {
+    margin-left: 0;
+}
+
 .inventory-item-clickable {
     cursor: var(--custom-cursor);
     text-decoration: underline;
@@ -974,6 +1000,60 @@ img {
     display: flex;
     flex-direction: column;
     gap: 10px;
+}
+
+/* Repeatable Quest cards inside the Label Editor's Quest fields (#quest-entries-list) - one
+   card per quest a label carries, each a scaled-down echo of #creator-panel's own field-row
+   styling so multiple cards read as a stack rather than one continuous form. */
+#quest-entries-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.quest-entry-card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background-color: rgba(0, 0, 0, 0.15);
+    border: 1px solid #4a3e2e;
+    border-radius: 4px;
+    padding: 8px 10px;
+}
+
+.quest-entry-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.quest-entry-label {
+    color: #b39449;
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.quest-entry-remove-btn {
+    width: 18px;
+    height: 18px;
+    line-height: 16px;
+    text-align: center;
+    background-color: #4a1f1f;
+    border: 1px solid #b34949;
+    border-radius: 50%;
+    color: #f1c3c3;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: var(--custom-cursor);
+    padding: 0;
+    flex-shrink: 0;
+}
+
+.quest-entry-remove-btn:hover {
+    background-color: #b34949;
+    color: #ffffff;
 }
 
 /* Label Editor category picker - styled to match the Statistics panel's icon legend:
@@ -1806,6 +1886,23 @@ img {
 .inventory-picker-search-row input:focus {
     outline: none;
     border-color: #b39449;
+}
+
+/* Class/Size filter row in the Label Editor's inventory picker, sitting between the search box
+   and the catalog grid. Reuses the quests-table-filters select look (.quests-table-location-select)
+   and the stats-summary-group/label pattern for visual consistency with the Quests table's own
+   filter bar. */
+.inventory-picker-filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    padding: 0 15px 10px;
+    flex-shrink: 0;
+    border-bottom: 1px solid #332b20;
+}
+
+.inventory-picker-filter-row .quests-table-location-select {
+    max-width: 160px;
 }
 
 .inventory-picker-tile-list {

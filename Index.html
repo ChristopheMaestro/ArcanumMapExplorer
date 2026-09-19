@@ -96,23 +96,9 @@
             </div>
 
             <div id="quest-fields" class="waypoint-subfields" style="display:none;">
-                <div class="field-row">
-                    <label>Quest Name</label>
-                    <input type="text" id="new-label-quest-name" list="quest-name-options" placeholder="e.g., The Nasrudin Discs">
-                    <datalist id="quest-name-options"></datalist>
-                </div>
-                <div class="field-row">
-                    <label>Quest Description</label>
-                    <textarea id="new-label-quest-desc" placeholder="What this quest is about..."></textarea>
-                </div>
-                <div class="field-row">
-                    <label>Target (optional)</label>
-                    <input type="text" id="new-label-quest-target" placeholder="Exact text of another label, if this quest travels there">
-                </div>
-                <div class="field-row">
-                    <label>Part (optional)</label>
-                    <input type="text" id="new-label-quest-part" placeholder="e.g., 1 or reward">
-                </div>
+                <div id="quest-entries-list"></div>
+                <button type="button" id="add-quest-entry-btn" class="toggle-btn" style="width:100%;">+ Add Another Quest</button>
+                <datalist id="quest-name-options"></datalist>
             </div>
 
             <div id="category-field" class="field-row">
@@ -330,8 +316,10 @@
     </div>
 
     <!-- Modal overlay: Inventory picker for the Label Editor - top section lists the current
-         label's inventory (a drop zone), middle is a search box, bottom is the full items.js
-         catalog as a draggable icon grid. Drag a catalog tile into the top section to add it. -->
+         label's inventory (a drop zone), middle is a search box plus Class/Size filter selects
+         (populated from items.js "class"/"size" fields - see populateInventoryPickerFilterOptions),
+         bottom is the full items.js catalog as a draggable icon grid, narrowed by search text and
+         the two filters together. Drag a catalog tile into the top section to add it. -->
     <div id="inventory-picker-overlay">
         <div class="statistics-panel inventory-picker-panel">
             <div class="statistics-header">
@@ -346,6 +334,17 @@
 
             <div class="inventory-picker-search-row">
                 <input type="text" id="inventory-picker-search" placeholder="🔍 Search items (e.g., &quot;key&quot;)...">
+            </div>
+
+            <div class="inventory-picker-filter-row">
+                <div class="stats-summary-group">
+                    <span class="stats-summary-label">Class</span>
+                    <select id="inventory-picker-class-filter" class="quests-table-location-select"></select>
+                </div>
+                <div class="stats-summary-group">
+                    <span class="stats-summary-label">Size</span>
+                    <select id="inventory-picker-size-filter" class="quests-table-location-select"></select>
+                </div>
             </div>
 
             <div id="inventory-picker-grid" class="inventory-picker-tile-list inventory-picker-catalog-list"></div>

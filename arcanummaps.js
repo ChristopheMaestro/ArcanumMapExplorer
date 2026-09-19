@@ -91,27 +91,28 @@ const ArcanumCitiesMapData = [
       { x: 1230, y: 1530, text: "Wolf Cave", textX: 1228, textY: 1530, description: "Wolf Cave.", targetMapFilename: "Wolf Cave" },
 
       /*
-      // ### CITIES ###
+      Work to do - Maps
+      =================
 
-      { x: 1604, y: 1828, text: "Caladon", description: "A thriving feudal kingdom.", targetMapFilename: "Caladon" },
-        // NEW MAP TO DO (Castle Main Floor; Upstairs; Vents)
-      { x: 323, y: 877, text: "Isle of Despair", description: "A penal colony.", targetMapFilename: "Isle of Despair" }, // MAP OK
-        // To do: Pit
-      { x: 1545, y: 656, text: "Qintarra", description: "A large elven community.", targetMapFilename: "Qintarra"}, // MAP OK
-        // PART OF CENTRAL TREE CUT FROM SCREENSHOT - FIX!!!
-      { x: 1752, y: 1514, text: "Roseborough", description: "A small town near the Ring of Brodgar.", targetMapFilename: "Roseborough"},
-        // To do: Mannox's Hole
-      { x: 972, y: 1028, text: "Tarant", description: "The biggest, most industrial city in Arcanum", targetMapFilename: "Tarant"},
-        // NEW MAP TO DO
-      { x: 954, y: 667, text: "Wheel Clan", description: "A Dwarven society deep in the Grey Mountains.", targetMapFilename: "Wheel Clan"},
-        // NEW MAP TO DO (Town / Dredge)
-      
-      // ### QUEST LOCATIONS ###
+      Replace Jen's maps:
+        - Caladon (integrate the new map)
+        - Caladon Castle Main Floor
+        - Caladon Castle Upstairs
+        - Caladon Castle Vents
+        - Tarant
+        - Wheel Clan - Town
+        - Wheel Clan - Dredge
+        - Black Mountain Mines - Level 1
+        - Black Mountain Mines - Level 2
+        - Black Mountain Mines - Level 3
+        - Nasrudin's Resting Place
 
-      { x: 721, y: 1890, text: "Nasrudin’s Resting Place", description: "Reputed to be the location of the remains of Nasrudin.", targetMapFilename: "Nasrudin’s Resting Place", targetX: 3144, targetY: 2443},
-      // New map to do
-      { x: 1308, y: 754, text: "The Black Mountain<br>Mines", description: "The abandoned home of the Black Mountain Clan.", targetMapFilename: "The Black Mountain Mines"},
-      // To do: checkup + new maps (level 1 - mines; 2 - city; 3 - castle)
+      New map to do:
+        - Mannox's Hole
+
+      Fixes:
+        - Fix Qintarra (one part of a tree was cut)
+        - Stillwater - cursor appears on the east
       */
     ]
   },
@@ -572,8 +573,7 @@ const ArcanumCitiesMapData = [
       { x: 3870, y: 1373, text: "Wood Chest", inventory: ["Shovel"], category: "chest" },
 
       // Information
-      { x: 6244, y: 1057, text: "Human Guard", sex: "male", race: "Human", level: 45, description: "The only way to use this entrance is to insult the guards until they toss you in.", category: ["information","npc"]  },
-      { x: 4446, y: 2464, text: "- Rupert's House of Well-Worn Effects -", description: "", category: "information" },
+      { x: 6244, y: 1057, text: "Human Guard", category: ["quest", "npc"], level: 45, sex: "male", race: "Human", linkedLabels: [{ questName: "Rescue Tollo Underhill", questDescription: "Insult the guards until they throw you in the pit.", target: "Tollo Underhill", part: 2 }] },      { x: 4446, y: 2464, text: "- Rupert's House of Well-Worn Effects -", description: "", category: "information" },
       { x: 3676, y: 2188, text: "Dolan's General Store", description: "", category: "information" },
       { x: 4776, y: 2228, text: "- King's Inn & Pub -", description: "", category: "information" },
       { x: 4548, y: 1768, text: "Wallow's Quality Armour", description: "", category: "information" },
@@ -622,16 +622,9 @@ const ArcanumCitiesMapData = [
           { questName: "Deliver Goods to Maximillian", questDescription: "Norian, on the Isle of Despair, wants you to deliver some goods to a man named Maximillian.", target: "Maximillian", part: 1 }
         ]
       },
-      { x: 2330, y: 3216, text: "Jones the Collector", sex: "male", race: "Human", level: 23, inventory: ["Ancient Gun Chassis"], category: ["quest", "npc"],
-        linkedLabels: [
-          { questName: "Find Some Objects from Shades Beach", questDescription: "Jones the Collector wants you to gather some objects from Shades Beach.  If he likes any of them, he will trade you for a strange weapon.", target: "", part: 1 }
-        ]
-      },
-      { x: 1836, y: 3281, text: "Ogdin", sex: "male", race: "Half-Ogre", level: 40, inventory: ["Key to Thorvald's House"], category: ["quest", "key", "npc"],
-        linkedLabels: [
-          { questName: "The Hand", questDescription: "Ogdin will let you meet with Thorvald without having to fight in the pit if you bring him the book ''The Hand''.", part: "reward" }
-        ]
-      },
+
+      { x: 2330, y: 3216, text: "Jones the Collector", category: ["quest", "npc"], level: 23, sex: "male", race: "Human", inventory: ["Ancient Gun Chassis", "Mace", "Guard Armour"], linkedLabels: [{ questName: "Find Some Objects from Shades Beach", questDescription: "Jones the Collector wants you to gather some objects from Shades Beach.  If he likes any of them, he will trade you for a strange weapon.", part: 1 }] },
+      { x: 1836, y: 3281, text: "Ogdin", category: ["quest", "key", "npc"], level: 40, sex: "male", race: "Half-Ogre", inventory: ["Key to Thorvald's House", "Leather Gloves", "Axe", "Large Leather Armour", "Helmet"], linkedLabels: [{ questName: "The Hand", questDescription: "Ogdin will let you meet with Thorvald without having to fight in the pit if you bring him the book ''The Hand''.", part: "reward" }] },
       { x: 2054, y: 3320, text: "Gorrin, Master of the Pit", sex: "male", race: "Human", level: 24, category: ["quest", "npc"] },
       { x: 1954, y: 605, text: "The Sorcerous Beast", description: "", category: "quest" },
       { x: 1423, y: 3142, text: "Wood Chest", inventory: ["Thorvald's Journal", "Schematics: Wheel Clan Spectacles"], category: ["quest", "chest"] },
@@ -2292,8 +2285,10 @@ const ArcanumCitiesMapData = [
     displayName: "Void",
     modGroup: "Quest locations",
     background: "#100B07",
-    // defaultView: { x: 868, y: 598 },
-    labels: [],
+    defaultView: { x: 1082, y: 644 }, // Good
+    labels: [
+      { x: 1681, y: 579, text: "Void - Arronax Prison Island", category: "waypoint", targetMapFilename: "Void - Arronax Prison Island", targetX: 349, targetY: 533 },
+    ],
   },
   {
     filename: "ArcanumBase/VollingersMeetingPlace.png",
@@ -2721,8 +2716,11 @@ const ArcanumCitiesMapData = [
     labels: [
       { x: 2399, y: 1977, text: "Dernholm", category: "waypoint", targetMapFilename: "Dernholm", targetX: 6132, targetY: 1215 },
       { x: 341, y: 1317, text: "Dernholm", category: "waypoint", targetMapFilename: "Dernholm", targetX: 499, targetY: 573 },
-      { x: 2310, y: 782, text: "Tollo Underhill", category: ["quest", "followers"],
-        linkedLabels: [{ questName: "Rescue Tollo Underhill", part: 2 }]
+      { x: 2310, y: 782, text: "Tollo Underhill", followerType: "special", category: ["quest", "followers"], level: 30, sex: "male", race: "Halfling",
+        linkedLabels: [
+          { questName: "Rescue Tollo Underhill", questDescription: "Tollo will join your party to escape the Pits.", target: "Tollo Underhill", part: 3 },
+          { questName: "Rescue Tollo Underhill", questDescription: "Helping Tollo to escape will earn you 10,900 exp. If your party has an open slot, the player is at least level 29 and an alignment of at least -35, and if you tease him that he is scared, Tollo might join permanently your party.", part: "reward" },
+        ]
       },
     ],
   },
@@ -3021,8 +3019,8 @@ const ArcanumCitiesMapData = [
       { x: 2592, y: 1503, text: "Stonecutter Clan - Entrance", description: "", category: "waypoint", targetMapFilename: "Stonecutter Clan", targetX: 990, targetY: 620 },
       { x: 2519, y: 264, text: "Stonecutter Clan - Level 2", description: "", category: "waypoint", targetMapFilename: "Stonecutter Clan - Level 2", targetX: 328, targetY: 262 },
     
-      { x: 1037, y: 270, text: "Erland Iron Heart", description: "Dwarf male 25 / inv: Erland's key, Stonecutter Clan", category: ["quest", "key", "npc"], linkedLabels: [{ questName: "Thrayne Wants His Brother to Return Home", part: 2 }] },
-      { x: 1717, y: 889, text: "Barrel", description: "Mithril Ore", category: "chest" },
+      { x: 1037, y: 270, text: "Erland Iron Heart", sex: "male", race: "Dwarf", level: 25, inventory: ["Erland's key, Stonecutter Clan"], category: ["quest", "key", "npc"], linkedLabels: [{ questName: "Thrayne Wants His Brother to Return Home", part: 2 }] },
+      { x: 1717, y: 889, text: "Barrel", category: "chest", inventory: ["Mithril Ore"] },
     ]
   },
   {
@@ -3294,6 +3292,14 @@ const ArcanumCitiesMapData = [
     labels: []
   },
   {
+    filename: "ArcanumBase/IsleOfDespair-Pit.png",
+    displayName: "The Pit",
+    background: "#000000",
+    defaultView: { x: 300, y: 300 }, // Good
+    parentFilename: "ArcanumBase/IsleOfDespair",
+    labels: []
+  },
+  {
     filename: "ArcanumBase/ThePitOfFiresInside.png",
     displayName: "The Pit of Fires - Inside",
     background: "#000000",
@@ -3545,67 +3551,109 @@ const ArcanumCitiesMapData = [
     displayName: "Void - Arronax Prison Island",
     parentFilename: "ArcanumBase/VoidMainIsland.png",
     background: "#100B07",
-    labels: []
+    defaultView: { x: 348, y: 532 }, // Good
+    labels: [
+      { x: 526, y: 437, text: "Void", category: "waypoint", targetMapFilename: "Void", targetX: 558, targetY: 642 },
+      { x: 1115, y: 694, text: "Arronax Prison", category: "waypoint", targetMapFilename: "Arronax Prison", targetX: 966, targetY: 808 },
+    ]
   },
   {
     filename: "ArcanumBase/VoidArayaIsland.png",
     displayName: "Void - Araya Island 1",
     parentFilename: "ArcanumBase/VoidMainIsland.png",
     background: "#0E0A07",
-    labels: []
+    defaultView: { x: 1153, y: 408 }, // Good
+    labels: [
+      { x: 436, y: 492, text: "Void - Araya Island 2", category: "waypoint", targetMapFilename: "Void - Araya Island 2", targetX: 1160, targetY: 156 },
+    ]
   },
   {
     filename: "ArcanumBase/VoidArayaIsland2.png",
     displayName: "Void - Araya Island 2",
     parentFilename: "ArcanumBase/VoidMainIsland.png",
     background: "#0E0A07",
-    labels: []
+    defaultView: { x: 1160, y: 156 }, // Good
+    labels: [
+      { x: 382, y: 515, text: "Void - Kraka-tur Island", category: "waypoint", targetMapFilename: "Void - Kraka-tur Island", targetX: 1156, targetY: 425 },
+    ]
   },
   {
     filename: "ArcanumBase/VoidBaneOfKreeIsland.png",
     displayName: "Void - Bane of Kree Island",
     parentFilename: "ArcanumBase/VoidMainIsland.png",
     background: "#0E0A07",
-    labels: []
+    defaultView: { x: 1158, y: 417 }, // Good
+    labels: [
+      { x: 907, y: 297, text: "Void", category: "waypoint", targetMapFilename: "Void", targetX: 557, targetY: 641 },
+      { x: 519, y: 395, text: "Bane of Kree", followerType: "special", category: "followers", level: 50, sex: "male", race: "Human", inventory: ["Dread Armour", "Torian Kel's Ancestral Sword"] },
+    ]
   },
   {
     filename: "ArcanumBase/VoidGorgothIsland.png",
     displayName: "Void - Gorgoth Island",
     parentFilename: "ArcanumBase/VoidMainIsland.png",
     background: "#100B07",
-    labels: []
+    defaultView: { x: 377, y: 518 }, // Good
+    labels: [
+      { x: 1061, y: 825, text: "Void - Kryggyrd's Falchion Island", category: "waypoint", targetMapFilename: "Void - Kryggyrd’s Falchion Island" },
+      { x: 1287, y: 266, text: "Gorgoth", followerType: "special", category: "followers", level: 50, race: "Demon", sex: "male", portrait: "Textures/gorgoth.png" },
+    ]
   },
   {
     filename: "ArcanumBase/VoidKerghanCastleOutside.png",
     displayName: "Void - Kerghan’s Castle Island",
     parentFilename: "ArcanumBase/VoidMainIsland.png",
     background: "#100B07",
-    labels: []
+    defaultView: { x: 1174, y: 957 }, // Good
+    labels: [
+      { x: 1305, y: 1086, text: "Void - Gorgoth Island", category: "waypoint", targetMapFilename: "Void - Gorgoth Island", targetX: 377, targetY: 518 },
+      { x: 1621, y: 634, text: "Kerghan's Castle - Level 1", category: "waypoint", targetMapFilename: "Kerghan’s Castle - Level 1" },
+    ]
   },
   {
     filename: "ArcanumBase/VoidKrakaTurIsland.png",
     displayName: "Void - Kraka-tur Island",
     parentFilename: "ArcanumBase/VoidMainIsland.png",
     background: "#0E0A07",
-    labels: []
+    defaultView: { x: 1156, y: 425 }, // Good
+    labels: [
+      { x: 652, y: 313, text: "Kraka-tur", followerType: "special", category: "followers", level: 50, sex: "male" },
+      { x: 849, y: 331, text: "Void - Bane of Kree Island", category: "waypoint", targetMapFilename: "Void - Bane of Kree Island", targetX: 1158, targetY: 417 },
+    ]
   },
   {
     filename: "ArcanumBase/VoidIslandCave.png",
     displayName: "Void - Kryggyrd’s Falchion Island",
     parentFilename: "ArcanumBase/VoidMainIsland.png",
     background: "#0E0A07",
-    labels: []
+    defaultView: { x: 1264, y: 348 },
+    labels: [
+      { x: 571, y: 801, text: "Cave of the Kryggyrd’s Falchion", category: "waypoint", targetMapFilename: "Cave of the Kryggyrd’s Falchion", targetX: 1260, targetY: 1203 },
+      { x: 630, y: 473, text: "Void - Araya Island 1", category: "waypoint", targetMapFilename: "Void - Araya Island 1", targetX: 1153, targetY: 408 },
+    ]
   },
   {
     filename: "ArcanumBase/VoidArronax.png",
     displayName: "Arronax Prison",
     parentFilename: "ArcanumBase/VoidMainIsland.png",
     background: "#000000",
+    defaultView: { x: 898, y: 445 }, // Good
     labels: [
+      // WAYPOINTS
+      { x: 966, y: 808, text: "Void - Arronax Prison Island", category: "waypoint", targetMapFilename: "Void - Arronax Prison Island", targetX: 1115, targetY: 694 },
+      { x: 412, y: 249, text: "Void - Kerghan's Castle Island", category: "waypoint", targetMapFilename: "Void - Kerghan’s Castle Island", targetX: 1176, targetY: 957 },
+
+      // QUESTS
       { x: 898, y: 445, text: "Arronax", sex: "Male", race: "Elf", level: 50, portrait: "Textures/arronax.gif", category: ["quest", "followers"],
       linkedLabels: [
-          { questName: "Free Arronax", questDescription: "Effect Arronax's release from the magick that binds him.", target: "", part: 1 },
+          { questName: "Free Arronax", questDescription: "Effect Arronax's release from the magick that binds him.", target: "Spirit Snake", part: 1 },
+          { questName: "Free Arronax", questDescription: "Once you freed him, Arronax can join you to defeat Kerghan.", part: "reward" },
           { questName: "Defeat Kerghan", questDescription: "Defeat Kerghan", target: "Kerghan", part: 1 }
+        ]
+      },
+      { x: 1292, y: 636, text: "Spirit Snake", category: "quest",
+        linkedLabels: [
+          { questName: "Free Arronax", questDescription: "Kill the Spirit Snake to release Arronax, then return to him.", target: "Arronax", part: 2 }
         ]
       },
     ]
@@ -3615,7 +3663,11 @@ const ArcanumCitiesMapData = [
     displayName: "Cave of the Kryggyrd’s Falchion",
     parentFilename: "ArcanumBase/VoidMainIsland.png",
     background: "#000000",
-    labels: []
+    defaultView: { x: 1260, y: 1203 }, // Good
+    labels: [
+      { x: 1260, y: 1203, text: "Void - Kryggyrd's Falchion Island", category: "waypoint", targetMapFilename: "Void - Kryggyrd’s Falchion Island" },
+      { x: 1269, y: 152, text: "Altar", category: "chest", inventory: ["Kryggird's Falchion"] },
+    ]
   },
   {
     filename: "ArcanumBase/VoidKerghanCastleLevel1.png",

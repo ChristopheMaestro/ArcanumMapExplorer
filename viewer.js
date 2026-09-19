@@ -141,10 +141,8 @@ const newLabelMaster = document.getElementById('new-label-master');
 const newLabelLinks = document.getElementById('new-label-links');
 const genericLinksField = document.getElementById('generic-links-field');
 const questFields = document.getElementById('quest-fields');
-const newLabelQuestName = document.getElementById('new-label-quest-name');
-const newLabelQuestDesc = document.getElementById('new-label-quest-desc');
-const newLabelQuestTarget = document.getElementById('new-label-quest-target');
-const newLabelQuestPart = document.getElementById('new-label-quest-part');
+const questEntriesList = document.getElementById('quest-entries-list');
+const addQuestEntryBtn = document.getElementById('add-quest-entry-btn');
 const addToPreviewBtn = document.getElementById('add-to-preview-btn');
 const copyAllBtn = document.getElementById('copy-all-btn');
 const copyNewBtn = document.getElementById('copy-new-btn');
@@ -176,6 +174,14 @@ const editingLabelName = document.getElementById('editing-label-name');
 let editingLabel = null;
 let editingLabelDomEls = [];
 
+// Working copy of this label's quest entries for the Label Editor's Quest category fields -
+// a label can carry more than one quest (e.g. an NPC who hands out several), so this is an
+// array of { questName, questDescription, target, part, questType? } objects rather than a
+// single set of fields. Rendered by renderQuestEntriesList, committed onto the label's
+// linkedLabels (as object-form entries) only when the editor form is saved - see
+// buildQuestEntriesFromState / startEditingLabel.
+let editingQuestEntries = [];
+
 // --- Inventory picker (Label Editor "Manage Inventory" button) ---------------------------
 const openInventoryPickerBtn = document.getElementById('open-inventory-picker-btn');
 const inventoryCountBadge = document.getElementById('inventory-count-badge');
@@ -186,6 +192,8 @@ const inventoryPickerCurrentDropzone = document.getElementById('inventory-picker
 const inventoryPickerCurrentList = document.getElementById('inventory-picker-current-list');
 const inventoryPickerCurrentCount = document.getElementById('inventory-picker-current-count');
 const inventoryPickerSearch = document.getElementById('inventory-picker-search');
+const inventoryPickerClassFilter = document.getElementById('inventory-picker-class-filter');
+const inventoryPickerSizeFilter = document.getElementById('inventory-picker-size-filter');
 const inventoryPickerGrid = document.getElementById('inventory-picker-grid');
 // Working copy of the inventory for whichever label is currently being created/edited in the
 // Label Editor - a plain array of item names (or {name, tier, image} objects preserved as-is
@@ -618,6 +626,11 @@ function buildLabelFollowerTypeHtml(label) {
     return text ? `<div class="label-follower-type">${text}</div>` : '';
 }
 
+// Item tiers shown by default when a list is collapsible (see buildItemListHtml) - everything
+// else (regular items, and any future tier not listed here) is what gets tucked behind the
+// "[+N]" toggle.
+const ITEM_LIST_DEFAULT_TIERS = new Set(['magick', 'hexed']);
+
 // Shared renderer for inventory-like item lists (inventory / offering / blessing) - each entry is
 // either a plain string (regular tier, implicit quantity 1, not clickable) or an object like
 // { name, image?, tier?, count? }. fieldName is used to route clicks back to the right array on
@@ -626,26 +639,47 @@ function buildLabelFollowerTypeHtml(label) {
 // name - used for Offering so altar popups show what the item actually looks like, while
 // Inventory/Blessing keep the plain bulleted-text look. A count above 1 (e.g. "100 coins", "2
 // swords") is shown as a "×N" suffix regardless of showIcon.
-function buildItemListHtml(items, sectionTitle, fieldName, showIcon) {
+// collapsible (optional, default false) - when true and there's more than one non-magick/hexed
+// item, only the magick/hexed items are shown by default; the rest sit behind a "[+N]" toggle
+// (see the click handler on .npc-inventory-toggle) so a label with a huge regular-tier inventory
+// doesn't blow out the popup's height. A single non-magick/hexed item is shown right away rather
+// than hidden behind a toggle for just one item.
+function buildItemListHtml(items, sectionTitle, fieldName, showIcon, collapsible) {
     if (!Array.isArray(items) || items.length === 0) return '';
-    const itemsHtml = items.map((item, i) => {
+
+    const resolvedItems = items.map(item => {
         const itemData = typeof item === 'string' ? { name: item } : item;
         const catalogItem = ItemDataByName.get(itemData.name) || {};
-        const resolvedItem = { ...catalogItem, ...itemData };
+        return { ...catalogItem, ...itemData };
+    });
+
+    const extraCount = resolvedItems.filter(r => !ITEM_LIST_DEFAULT_TIERS.has(r.tier || 'regular')).length;
+    const collapsed = Boolean(collapsible) && extraCount > 1;
+
+    const itemsHtml = resolvedItems.map((resolvedItem, i) => {
         const name = resolvedItem.name;
         const tier = resolvedItem.tier || 'regular';
         const color = ITEM_TIER_COLORS[tier] || ITEM_TIER_COLORS.regular;
         const clickable = Boolean(resolvedItem.image);
-        const cls = clickable ? ' class="inventory-item-clickable"' : '';
+        const isExtra = collapsed && !ITEM_LIST_DEFAULT_TIERS.has(tier);
+        const classes = [];
+        if (clickable) classes.push('inventory-item-clickable');
+        if (isExtra) classes.push('npc-inventory-item-extra');
+        const clsAttr = classes.length > 0 ? ` class="${classes.join(' ')}"` : '';
         const dataAttr = clickable ? ` data-item-field="${fieldName}" data-item-index="${i}"` : '';
         const iconSrc = showIcon ? (resolvedItem.itemimg ? resolveItemIconPath(resolvedItem.itemimg) : (resolvedItem.image || '')) : '';
         const iconHtml = iconSrc ? `<img class="npc-inventory-item-icon" src="${iconSrc}" alt="" loading="lazy" onerror="this.style.display='none'">` : '';
         const countHtml = (typeof resolvedItem.count === 'number' && resolvedItem.count > 1) ? ` <span class="npc-inventory-item-count">&times;${resolvedItem.count}</span>` : '';
-        return `<li${cls}${dataAttr} style="color:${color};">${iconHtml}${name}${countHtml}</li>`;
+        return `<li${clsAttr}${dataAttr} style="color:${color};">${iconHtml}${name}${countHtml}</li>`;
     }).join('');
-    return `<div class="npc-inventory-block">
+
+    const toggleHtml = collapsed
+        ? `<li class="npc-inventory-toggle" data-action="toggle-inventory-extra">[+${extraCount}]</li>`
+        : '';
+
+    return `<div class="npc-inventory-block${collapsed ? ' npc-inventory-collapsed' : ''}">
         <div class="npc-inventory-title">${sectionTitle}</div>
-        <ul class="npc-inventory-list${showIcon ? ' npc-inventory-list-icons' : ''}">${itemsHtml}</ul>
+        <ul class="npc-inventory-list${showIcon ? ' npc-inventory-list-icons' : ''}">${itemsHtml}${toggleHtml}</ul>
     </div>`;
 }
 
@@ -711,16 +745,56 @@ function renderInventoryPickerCurrentList() {
 }
 
 
+// Human-readable label for a items.js "class" value in the filter dropdown - just title-cases
+// the raw class string (e.g. "firearms" -> "Firearms"); no special-casing needed since these
+// are equipment classes, unlike the Library's book/manual/schematic split.
+function formatItemClassLabel(cls) {
+    return cls.charAt(0).toUpperCase() + cls.slice(1);
+}
+
+// Builds the ordered list of "size" values to offer in the Size filter - fixed order (rather
+// than alphabetical, which would read "large, medium, small") since these are the two
+// items.js-backed classes (armor/clothes) that carry a size.
+const ITEM_SIZE_FILTER_ORDER = ['small', 'medium', 'large'];
+
+// Populates the Inventory picker's Class/Size <select> filters from the items.js catalog -
+// called once from openInventoryPicker() since the catalog is static for the session. Class
+// options are every distinct catalog "class" value (a string, or array of strings - same shape
+// itemClassMatches already handles for the Library), sorted alphabetically. Size stays a fixed
+// small/medium/large list regardless of which classes are actually present, since narrowing it
+// per-class would make the control jump around as the Class filter changes.
+function populateInventoryPickerFilterOptions() {
+    const catalog = (typeof ArcanumItemData !== 'undefined' ? ArcanumItemData : []);
+    const classes = new Set();
+    catalog.forEach(it => {
+        if (!it || !it.class) return;
+        (Array.isArray(it.class) ? it.class : [it.class]).forEach(c => classes.add(c));
+    });
+
+    inventoryPickerClassFilter.innerHTML = ['<option value="">All Classes</option>']
+        .concat([...classes].sort().map(c => `<option value="${c}">${formatItemClassLabel(c)}</option>`))
+        .join('');
+
+    inventoryPickerSizeFilter.innerHTML = ['<option value="">All Sizes</option>']
+        .concat(ITEM_SIZE_FILTER_ORDER.map(s => `<option value="${s}">${formatItemClassLabel(s)}</option>`))
+        .join('');
+}
+
 function renderInventoryPickerGrid(query) {
     const catalog = (typeof ArcanumItemData !== 'undefined' ? ArcanumItemData : []);
     const q = (query || '').trim().toLowerCase();
+    const classFilter = inventoryPickerClassFilter.value;
+    const sizeFilter = inventoryPickerSizeFilter.value;
     const filtered = catalog
-        .filter(it => it && it.name && (!q || it.name.toLowerCase().includes(q)))
+        .filter(it => it && it.name
+            && (!q || it.name.toLowerCase().includes(q))
+            && (!classFilter || itemClassMatches(it, classFilter))
+            && (!sizeFilter || it.size === sizeFilter))
         .slice()
         .sort((a, b) => a.name.localeCompare(b.name));
 
     if (filtered.length === 0) {
-        inventoryPickerGrid.innerHTML = `<div class="inventory-picker-empty-hint">${catalog.length === 0 ? 'No item catalog loaded (items.js)' : 'No items match your search'}</div>`;
+        inventoryPickerGrid.innerHTML = `<div class="inventory-picker-empty-hint">${catalog.length === 0 ? 'No item catalog loaded (items.js)' : 'No items match your filters'}</div>`;
         return;
     }
 
@@ -918,6 +992,9 @@ function openInventoryPicker() {
         ? (editingLabel.text || 'Unnamed Label')
         : (newLabelText.value.trim() || 'New Label');
     inventoryPickerSearch.value = '';
+    populateInventoryPickerFilterOptions();
+    inventoryPickerClassFilter.value = '';
+    inventoryPickerSizeFilter.value = '';
     renderInventoryPickerCurrentList();
     renderInventoryPickerGrid('');
     inventoryPickerOverlay.classList.add('open');
@@ -1342,6 +1419,93 @@ function flashButtonText(btn, message) {
     setTimeout(() => { btn.textContent = original; }, 1500);
 }
 
+// Parses the Quest Part field: the sentinel word "reward" (any case) becomes the string
+// 'reward' (see buildQuestPartBadge), anything else is parsed as the usual part number.
+function parseQuestPartValue(raw) {
+    const trimmed = (raw || '').trim();
+    if (!trimmed) return null;
+    if (trimmed.toLowerCase() === 'reward') return 'reward';
+    return parseInt(trimmed, 10);
+}
+
+// Formats a quest entry's "part" value (a number, the 'reward' sentinel string, a raw string
+// still being typed, or unset) for display in the Part input's value attribute / for reading
+// back out on save - passes numbers and in-progress typed strings through as-is, since this
+// field holds either shape depending on whether the entry came from saved data or is being
+// live-edited (see the delegated 'input' listener, which stores the raw typed string).
+function formatQuestPartForInput(part) {
+    return (part === undefined || part === null) ? '' : part;
+}
+
+// Minimal HTML-escaping for values interpolated into the quest entry cards' markup (attribute
+// values and textarea content) - needed here because, unlike most of the app's read-only
+// interpolated strings, these round-trip back into an editable input/textarea, where an
+// unescaped quote or "</textarea>" in a quest name/description would break the markup.
+function escapeHtmlAttr(str) {
+    return String(str == null ? '' : str)
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+}
+
+// Renders editingQuestEntries as a stack of removable quest cards inside #quest-entries-list.
+// Called on add/remove only (not on every keystroke - see the delegated 'input' listener below,
+// which writes straight into editingQuestEntries without re-rendering, so typing doesn't lose
+// focus/cursor position). Top-level (not nested in initViewer) since startEditingLabel and
+// stopEditingLabel - both top-level functions of their own - need to call it too.
+function renderQuestEntriesList() {
+    if (!questEntriesList) return;
+    questEntriesList.innerHTML = editingQuestEntries.map((entry, i) => `
+        <div class="quest-entry-card" data-quest-index="${i}">
+            <div class="quest-entry-header">
+                <span class="quest-entry-label">Quest ${i + 1}</span>
+                <button type="button" class="quest-entry-remove-btn" data-quest-index="${i}" title="Remove this quest">&times;</button>
+            </div>
+            <div class="field-row">
+                <label>Quest Name</label>
+                <input type="text" class="quest-entry-name" list="quest-name-options" data-quest-index="${i}" placeholder="e.g., The Nasrudin Discs" value="${escapeHtmlAttr(entry.questName || '')}">
+            </div>
+            <div class="field-row">
+                <label>Quest Description</label>
+                <textarea class="quest-entry-desc" data-quest-index="${i}" placeholder="What this quest is about...">${escapeHtmlAttr(entry.questDescription || '')}</textarea>
+            </div>
+            <div class="field-row">
+                <label>Target (optional)</label>
+                <input type="text" class="quest-entry-target" data-quest-index="${i}" placeholder="Exact text of another label, if this quest travels there" value="${escapeHtmlAttr(entry.target || '')}">
+            </div>
+            <div class="field-row">
+                <label>Part (optional)</label>
+                <input type="text" class="quest-entry-part" data-quest-index="${i}" placeholder="e.g., 1 or reward" value="${escapeHtmlAttr(formatQuestPartForInput(entry.part))}">
+            </div>
+        </div>
+    `).join('');
+}
+
+// Builds the linkedLabels object-form entries to save from editingQuestEntries - drops any
+// entry left completely blank (e.g. a card added then not filled in), and parses the Part
+// field on the way out. questType (✨ main / 🎓 master) has no field in this form - it's set
+// by hand in maps.js, so each entry's existing questType (already sitting in editingQuestEntries
+// from startEditingLabel) is preserved as-is rather than dropped on save.
+function buildQuestEntriesFromState() {
+    return editingQuestEntries
+        .map(entry => {
+            const questNameVal = (entry.questName || '').trim();
+            const questDescVal = (entry.questDescription || '').trim();
+            const questTargetVal = (entry.target || '').trim();
+            const questPartVal = formatQuestPartForInput(entry.part).toString().trim();
+            if (!questNameVal && !questDescVal && !questTargetVal && !questPartVal) return null;
+            const out = {};
+            if (questNameVal) out.questName = questNameVal;
+            if (questDescVal) out.questDescription = questDescVal;
+            if (questTargetVal) out.target = questTargetVal;
+            if (questPartVal !== '') out.part = parseQuestPartValue(questPartVal);
+            if (entry.questType) out.questType = entry.questType;
+            return out;
+        })
+        .filter(Boolean);
+}
+
 function initViewer() {
     if (window.__mapsJsLoadErrors && window.__mapsJsLoadErrors.length > 0) {
         const errorBlocks = window.__mapsJsLoadErrors.map(err => {
@@ -1524,6 +1688,14 @@ function initViewer() {
         renderInventoryPickerGrid(inventoryPickerSearch.value);
     });
 
+    inventoryPickerClassFilter.addEventListener('change', () => {
+        renderInventoryPickerGrid(inventoryPickerSearch.value);
+    });
+
+    inventoryPickerSizeFilter.addEventListener('change', () => {
+        renderInventoryPickerGrid(inventoryPickerSearch.value);
+    });
+
     // Catalog tiles are draggable - dragstart is delegated from the grid container since
     // tiles are re-rendered wholesale on every search keystroke.
     inventoryPickerGrid.addEventListener('dragstart', (e) => {
@@ -1673,6 +1845,10 @@ function initViewer() {
                 statsFields.style.display = categoriesUseStatsFields(cats) ? 'flex' : 'none';
             questFields.style.display = cats.includes('quest') ? 'flex' : 'none';
             genericLinksField.style.display = cats.includes('quest') ? 'none' : 'flex';
+            if (cats.includes('quest') && editingQuestEntries.length === 0) {
+                editingQuestEntries.push({});
+                renderQuestEntriesList();
+            }
             chestFields.style.display = cats.includes('chest') ? 'flex' : 'none';
             if (cats.includes('chest')) {
                 populateChestKeyOptions();
@@ -1681,6 +1857,39 @@ function initViewer() {
             syncCategoryPillActiveStates();
         });
     });
+
+    // --- Quest entries wiring (Label Editor's repeatable Quest cards) ---
+    if (addQuestEntryBtn) {
+        addQuestEntryBtn.addEventListener('click', () => {
+            editingQuestEntries.push({});
+            renderQuestEntriesList();
+            const lastCard = questEntriesList && questEntriesList.querySelector('.quest-entry-card:last-child .quest-entry-name');
+            if (lastCard) lastCard.focus();
+        });
+    }
+
+    // Typing into a quest card's fields writes straight into editingQuestEntries without
+    // re-rendering the list, so the input keeps focus/cursor position (see renderQuestEntriesList).
+    if (questEntriesList) {
+        questEntriesList.addEventListener('input', (e) => {
+            const el = e.target;
+            const i = parseInt(el.getAttribute('data-quest-index'), 10);
+            if (isNaN(i) || !editingQuestEntries[i]) return;
+            if (el.classList.contains('quest-entry-name')) editingQuestEntries[i].questName = el.value;
+            else if (el.classList.contains('quest-entry-desc')) editingQuestEntries[i].questDescription = el.value;
+            else if (el.classList.contains('quest-entry-target')) editingQuestEntries[i].target = el.value;
+            else if (el.classList.contains('quest-entry-part')) editingQuestEntries[i].part = el.value;
+        });
+
+        questEntriesList.addEventListener('click', (e) => {
+            const btn = e.target.closest('.quest-entry-remove-btn');
+            if (!btn) return;
+            const i = parseInt(btn.getAttribute('data-quest-index'), 10);
+            if (isNaN(i)) return;
+            editingQuestEntries.splice(i, 1);
+            renderQuestEntriesList();
+        });
+    }
 
     if (newLabelChestState) {
         newLabelChestState.addEventListener('change', () => {
@@ -1705,29 +1914,6 @@ function initViewer() {
         newLabelTargetY.value = label.y;
     });
 
-// Parses the Quest Part field: the sentinel word "reward" (any case) becomes the string
-// 'reward' (see buildQuestPartBadge), anything else is parsed as the usual part number.
-function parseQuestPartValue(raw) {
-    const trimmed = (raw || '').trim();
-    if (!trimmed) return null;
-    if (trimmed.toLowerCase() === 'reward') return 'reward';
-    return parseInt(trimmed, 10);
-}
-
-function buildQuestEntryFromFields() {
-    const questNameVal = newLabelQuestName.value.trim();
-    const questDescVal = newLabelQuestDesc.value.trim();
-    const questTargetVal = newLabelQuestTarget.value.trim();
-    const questPartVal = newLabelQuestPart.value.trim();
-    if (!questNameVal && !questDescVal && !questTargetVal && !questPartVal) return null;
-    const entry = {};
-    if (questNameVal) entry.questName = questNameVal;
-    if (questDescVal) entry.questDescription = questDescVal;
-    if (questTargetVal) entry.target = questTargetVal;
-    if (questPartVal !== '') entry.part = parseQuestPartValue(questPartVal);
-    return entry;
-}
-
     addToPreviewBtn.addEventListener('click', () => {
         const labelTitle = newLabelText.value.trim() || "New Marker Location";
         const labelDescription = newLabelDesc.value.trim();
@@ -1739,24 +1925,20 @@ function buildQuestEntryFromFields() {
             editingLabel.text = labelTitle;
             editingLabel.description = labelDescription;
 
-            // Quest category: linkedLabels holds a single structured quest object built
-            // from the Quest Name/Description/Target/Part fields, replacing whatever was
-            // there before. Any other category: the Linked Label(s) field only ever
-            // represents simple string-form links - preserve any object-form entries
-            // (e.g. Myrth-style multi-quest objects) that might already be there from
-            // hand-edited maps.js data.
+            // Quest category: linkedLabels holds the label's quest entries (one object per
+            // quest, built from the repeatable Quest cards) replacing whatever object-form
+            // entries were there before, but keeping any string-form links (a quest label can
+            // still separately link to another label by plain text) untouched. Any other
+            // category: the Linked Label(s) field only ever represents simple string-form
+            // links - preserve any object-form entries (e.g. Myrth-style multi-quest objects)
+            // that might already be there from hand-edited maps.js data.
             if (cats.includes('quest')) {
-                const questEntry = buildQuestEntryFromFields();
-                if (questEntry) {
-                    // questType (✨ main / 🎓 master) has no field in this form - it's set by
-                    // hand in maps.js, so preserve it rather than silently dropping it on save.
-                    const previousObjectEntry = Array.isArray(editingLabel.linkedLabels)
-                        ? editingLabel.linkedLabels.find(e => e && typeof e === 'object') : null;
-                    if (previousObjectEntry && previousObjectEntry.questType) questEntry.questType = previousObjectEntry.questType;
-                    editingLabel.linkedLabels = [questEntry];
-                } else {
-                    delete editingLabel.linkedLabels;
-                }
+                const questEntries = buildQuestEntriesFromState();
+                const preservedStringLinks = Array.isArray(editingLabel.linkedLabels)
+                    ? editingLabel.linkedLabels.filter(e => typeof e === 'string') : [];
+                const combined = [...questEntries, ...preservedStringLinks];
+                if (combined.length > 0) editingLabel.linkedLabels = combined;
+                else delete editingLabel.linkedLabels;
             } else {
                 const preservedObjectLinks = Array.isArray(editingLabel.linkedLabels)
                     ? editingLabel.linkedLabels.filter(e => typeof e !== 'string') : [];
@@ -1855,8 +2037,8 @@ function buildQuestEntryFromFields() {
         if (!cats.includes('waypoint')) newLabelObj.description = labelDescription;
 
         if (cats.includes('quest')) {
-            const questEntry = buildQuestEntryFromFields();
-            if (questEntry) newLabelObj.linkedLabels = [questEntry];
+            const questEntries = buildQuestEntriesFromState();
+            if (questEntries.length > 0) newLabelObj.linkedLabels = questEntries;
         } else if (linkedText) {
             newLabelObj.linkedLabels = linkedText.split(',').map(s => s.trim()).filter(Boolean);
         }
@@ -1917,10 +2099,8 @@ function buildQuestEntryFromFields() {
         setDescriptionFieldVisible(false);
         newLabelMaster.value = '';
         newLabelLinks.value = '';
-        newLabelQuestName.value = '';
-        newLabelQuestDesc.value = '';
-        newLabelQuestTarget.value = '';
-        newLabelQuestPart.value = '';
+        editingQuestEntries = getSelectedNewLabelCategories().includes('quest') ? [{}] : [];
+        renderQuestEntriesList();
         newLabelTargetX.value = '';
         newLabelTargetY.value = '';
         if (newLabelTargetWaypoint) newLabelTargetWaypoint.value = '';
@@ -3245,7 +3425,7 @@ function renderSingleLabel(label, isPending) {
             shopInfoHtml = `<div class="shop-info-block">${shopTypeHtml}${shopMarkupHtml}</div>`;
         }
 
-        const inventoryHtml = buildItemListHtml(label.inventory, 'Inventory', 'inventory');
+        const inventoryHtml = buildItemListHtml(label.inventory, 'Inventory', 'inventory', false, true);
         const offeringHtml = buildItemListHtml(label.offering, 'Offering', 'offering', true);
         const blessingHtml = buildItemListHtml(label.blessing, 'Blessing', 'blessing');
 
@@ -3366,6 +3546,18 @@ function renderSingleLabel(label, isPending) {
                     ? ItemDataByName.get(itemName)
                     : { ...(ItemDataByName.get(itemName) || {}), ...rawItem };
                 if (itemHasArt(item)) openItemArt(item);
+            });
+        });
+
+        // Collapsed Inventory list (see buildItemListHtml's "collapsible" arg) - clicking the
+        // "[+N]" toggle reveals the tucked-away regular-tier items and removes the toggle itself,
+        // rather than re-rendering the list.
+        popup.querySelectorAll('.npc-inventory-toggle').forEach(el => {
+            el.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const block = el.closest('.npc-inventory-block');
+                if (block) block.classList.remove('npc-inventory-collapsed');
+                el.remove();
             });
         });
 
@@ -3591,8 +3783,17 @@ function buildLabelCodeLine(labelData) {
     if (labelData.targetMapFilename) parts.push(`targetMapFilename: "${labelData.targetMapFilename}"`);
     if (typeof labelData.targetX === 'number' && !isNaN(labelData.targetX)) parts.push(`targetX: ${labelData.targetX}`);
     if (typeof labelData.targetY === 'number' && !isNaN(labelData.targetY)) parts.push(`targetY: ${labelData.targetY}`);
+
+    // linkedLabels gets its own multi-line block (rather than folding into `parts` like every
+    // other field) so a label carrying quest entries reads the way the rest of maps.js is
+    // hand-formatted - one quest object per line, rather than one gigantic single-line label
+    // with a long questDescription buried in the middle of it. The label's other fields still
+    // sit on their own single line above it (see the leading tab counts below: this function's
+    // return value already assumes copyLabels prefixes its FIRST line with 3 tabs, so every
+    // line after that spells out its own tabs explicitly: 4 for "linkedLabels: [" and its
+    // closing "]", 5 for each entry inside it, 3 again for the label's closing "},").
     if (Array.isArray(labelData.linkedLabels) && labelData.linkedLabels.length > 0) {
-        const serializedEntries = labelData.linkedLabels.map(entry => {
+        const entryLines = labelData.linkedLabels.map(entry => {
             if (typeof entry === 'string') return `"${entry}"`;
             const objParts = [];
             if (entry.questName) objParts.push(`questName: "${entry.questName}"`);
@@ -3605,8 +3806,12 @@ function buildLabelCodeLine(labelData) {
             }
             return `{ ${objParts.join(', ')} }`;
         });
-        parts.push(`linkedLabels: [${serializedEntries.join(', ')}]`);
+        const entryBlock = entryLines
+            .map((line, i) => `\t\t\t\t\t${line}${i < entryLines.length - 1 ? ',' : ''}`)
+            .join('\n');
+        return `{ ${parts.join(', ')},\n\t\t\t\tlinkedLabels: [\n${entryBlock}\n\t\t\t\t]\n\t\t\t},`;
     }
+
     return `{ ${parts.join(', ')} },`;
 }
 
@@ -3638,13 +3843,12 @@ function startEditingLabel(label) {
     const stringLinks = Array.isArray(label.linkedLabels) ? label.linkedLabels.filter(e => typeof e === 'string') : [];
     newLabelLinks.value = stringLinks.join(', ');
 
-    // Quest category stores its data as a single structured linkedLabels object rather
-    // than the plain string links above - pull the first one back into the Quest fields.
-    const questEntry = (Array.isArray(label.linkedLabels) ? label.linkedLabels.find(e => e && typeof e === 'object') : null) || {};
-    newLabelQuestName.value = questEntry.questName || '';
-    newLabelQuestDesc.value = questEntry.questDescription || '';
-    newLabelQuestTarget.value = questEntry.target || '';
-    newLabelQuestPart.value = (typeof questEntry.part === 'number') ? questEntry.part : (questEntry.part === 'reward' ? 'reward' : '');
+    // Quest category stores its data as structured linkedLabels objects (one per quest)
+    // rather than the plain string links above - pull all of them back into the Quest cards.
+    // A label saved before multi-quest support only ever had one, so this still works for those.
+    const questObjectEntries = Array.isArray(label.linkedLabels) ? label.linkedLabels.filter(e => e && typeof e === 'object') : [];
+    editingQuestEntries = questObjectEntries.map(e => ({ ...e }));
+    renderQuestEntriesList();
 
     if (currentMapType !== "overworld") {
         const cats = Array.isArray(label.category) ? label.category : (label.category ? [label.category] : []);
@@ -3693,10 +3897,8 @@ function stopEditingLabel() {
     newLabelMaster.value = '';
     newLabelFollowerType.value = '';
     newLabelLinks.value = '';
-    newLabelQuestName.value = '';
-    newLabelQuestDesc.value = '';
-    newLabelQuestTarget.value = '';
-    newLabelQuestPart.value = '';
+    editingQuestEntries = [];
+    renderQuestEntriesList();
     newLabelTargetX.value = '';
     newLabelTargetY.value = '';
     if (newLabelTargetWaypoint) newLabelTargetWaypoint.value = '';
