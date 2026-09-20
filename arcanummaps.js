@@ -119,6 +119,7 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/Ashbury",
     chunked: true,
+    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
     width: 11000,
     height: 4500,
     displayName: "Ashbury",
@@ -202,6 +203,7 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/BlackRoot",
     chunked: true,
+    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
     width: 8500,
     height: 4000,
     displayName: "Black Root",
@@ -321,7 +323,11 @@ const ArcanumCitiesMapData = [
     ]
   },
   {
-    filename: "ArcanumBase/Caladonsmall.jpg",
+    filename: "ArcanumBase/Caladonsmall",
+    chunked: true,
+    width: 12800,
+    height: 4544,
+    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
     displayName: "Caladon",
     modGroup: "Cities",
     music: "music/Caladon.mp3",
@@ -505,7 +511,11 @@ const ArcanumCitiesMapData = [
     ]
   },
   {
-    filename: "ArcanumBase/Dernholm.jpg",
+    filename: "ArcanumBase/Dernholm",
+    chunked: true,
+    width: 7573,
+    height: 3613,
+    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
     displayName: "Dernholm",
     modGroup: "Cities",
     music: "music/Cities.mp3", // Good
@@ -584,6 +594,7 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/IsleOfDespair",
     chunked: true,
+    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
     width: 4500,
     height: 5000,
     displayName: "Isle of Despair",
@@ -639,7 +650,11 @@ const ArcanumCitiesMapData = [
     ]
   },
   {
-    filename: "ArcanumBase/Qintarra.png",
+    filename: "ArcanumBase/Qintarra",
+    chunked: true,
+    width: 4061,
+    height: 2760,
+    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
     displayName: "Qintarra",
     modGroup: "Cities",
     music: "music/Qintarra.mp3",
@@ -708,6 +723,7 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/Roseborough",
     chunked: true,
+    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
     width: 12000,
     height: 4000,
     displayName: "Roseborough",
@@ -773,6 +789,7 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/ShroudedHills",
     chunked: true,
+    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
     width: 14000,
     height: 5000,
     displayName: "Shrouded Hills",
@@ -886,7 +903,11 @@ const ArcanumCitiesMapData = [
     ]
   },
   {
-    filename: "ArcanumBase/Stillwater.jpg",
+    filename: "ArcanumBase/Stillwater",
+    chunked: true,
+    width: 5551,
+    height: 4370,
+    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
     displayName: "Stillwater",
     modGroup: "Cities",
     music: "music/Villages.mp3", // Good
@@ -954,7 +975,11 @@ const ArcanumCitiesMapData = [
     ],
   },
   {
-    filename: "ArcanumBase/Tarant.png",
+    filename: "ArcanumBase/Tarant",
+    chunked: true,
+    width: 8192,
+    height: 4096,
+    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
     displayName: "Tarant",
     modGroup: "Cities",
     music: "music/Tarant.mp3",
@@ -1412,7 +1437,11 @@ const ArcanumCitiesMapData = [
     ]
   },
   {
-    filename: "ArcanumBase/Tulla.jpg",
+    filename: "ArcanumBase/Tulla",
+    chunked: true,
+    width: 4904,
+    height: 2664,
+    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
     displayName: "Tulla",
     modGroup: "Cities",
     music: "music/Tulla.mp3",
@@ -1600,7 +1629,11 @@ const ArcanumCitiesMapData = [
     ]
   }, 
   {
-    filename: "ArcanumBase/CrashSite.jpg",
+    filename: "ArcanumBase/CrashSite",
+    chunked: true,
+    width: 20901,
+    height: 9834,
+    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
     displayName: "Crash Site",
     modGroup: "Quest locations",
     music: "music/Wilderness.mp3", // Good
@@ -1732,7 +1765,11 @@ const ArcanumCitiesMapData = [
     ],
   },
   {
-    filename: "ArcanumBase/GorgothPass.jpg",
+    filename: "ArcanumBase/GorgothPass",
+    chunked: true,
+    width: 7032,
+    height: 4099,
+    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
     displayName: "Gorgoth Pass",
     modGroup: "Quest locations",
     music: "", // CONFIRMED - No music.
@@ -1749,7 +1786,11 @@ const ArcanumCitiesMapData = [
     ],
   },
   {
-    filename: "ArcanumBase/HalfOgreIsland.jpg",
+    filename: "ArcanumBase/HalfOgreIsland",
+    chunked: true,
+    width: 4118,
+    height: 2504,
+    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
     displayName: "Half Ogre Island",
     modGroup: "Quest locations",
     //music: "",
@@ -1763,7 +1804,11 @@ const ArcanumCitiesMapData = [
     ]
   },
   {
-    filename: "ArcanumBase/HardinsPass.jpg",
+    filename: "ArcanumBase/HardinsPass",
+    chunked: true,
+    width: 8479,
+    height: 4346,
+    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
     displayName: "Hardin’s Pass",
     modGroup: "Quest locations",
     //music: "",
@@ -1797,7 +1842,11 @@ const ArcanumCitiesMapData = [
     ],
   },
   {
-    filename: "ArcanumBase/Kree.jpg",
+    filename: "ArcanumBase/Kree",
+    chunked: true,
+    width: 4673,
+    height: 2613,
+    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
     displayName: "Kree",
     modGroup: "Quest locations",
     music: "music/Isle_of_Despair.mp3", // Good
@@ -1813,7 +1862,11 @@ const ArcanumCitiesMapData = [
     ],
   },
   {
-    filename: "ArcanumBase/LetheWyvernSighting.jpg",
+    filename: "ArcanumBase/LetheWyvernSighting",
+    chunked: true,
+    width: 4499,
+    height: 2366,
+    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
     displayName: "Lethe Wyvern Sighting",
     modGroup: "Quest locations",
     music: "", // CONFIRMED - No music.
@@ -1827,7 +1880,11 @@ const ArcanumCitiesMapData = [
     ],
   },
   {
-    filename: "ArcanumBase/LiamsWorkshop.jpg",
+    filename: "ArcanumBase/LiamsWorkshop",
+    chunked: true,
+    width: 5676,
+    height: 2559,
+    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
     displayName: "Liam’s Workshop",
     modGroup: "Quest locations",
     music: "", // CONFIRMED - No music.
@@ -1854,7 +1911,11 @@ const ArcanumCitiesMapData = [
     ],
   }, 
   {
-    filename: "ArcanumBase/NasrudinRestingPlace.jpg",
+    filename: "ArcanumBase/NasrudinRestingPlace",
+    chunked: true,
+    width: 6400,
+    height: 2592,
+    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
     displayName: "Nasrudin’s Resting Place",
     modGroup: "Quest locations",
     // music: "",
@@ -1992,7 +2053,11 @@ const ArcanumCitiesMapData = [
     ],
   },
   {
-    filename: "ArcanumBase/StringyPetesCove.jpg",
+    filename: "ArcanumBase/StringyPetesCove",
+    chunked: true,
+    width: 4583,
+    height: 2984,
+    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
     displayName: "Stringy Petes Cove",
     modGroup: "Quest locations",
     music: "", // CONFIRMED - No music.
@@ -2153,7 +2218,11 @@ const ArcanumCitiesMapData = [
     ],
   },
   {
-    filename: "ArcanumBase/ThePlaceOfLostVoices.jpg",
+    filename: "ArcanumBase/ThePlaceOfLostVoices",
+    chunked: true,
+    width: 5225,
+    height: 2013,
+    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
     displayName: "The Place of Lost Voices",
     modGroup: "Quest locations",
     background: "#000000",
@@ -2437,17 +2506,36 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/Caladon-CastleDownstairs.jpg",
     displayName: "Caladon Castle - Downstairs",
     background: "#000000",
-    defaultView: {},
-    parentFilename: "ArcanumBase/Caladonsmall.jpg",
+    defaultView: { x: 636, y: 34 }, // Good
+    parentFilename: "ArcanumBase/Caladonsmall",
+    labels: [
+      // WAYPOINTS
+      { x: 237, y: 394, text: "Caladon Castle - Main Floor", category: "waypoint", targetMapFilename: "Caladon Castle - Main Floor", targetX: 636, targetY: 34 },
+      { x: 375, y: 552, text: "Caladon Castle - Upstairs", category: "waypoint", targetMapFilename: "Caladon Castle - Upstairs" },
+      { x: 71, y: 532, text: "Caladon Castle - Upstairs", category: "waypoint", targetMapFilename: "Caladon Castle - Upstairs" },
+      { x: 834, y: 61, text: "Caladon Castle - Upstairs", category: "waypoint", targetMapFilename: "Caladon Castle - Upstairs" },
+      { x: 834, y: 61, text: "Caladon Castle - Upstairs", category: "waypoint", targetMapFilename: "Caladon Castle - Upstairs" },
+      { x: 883, y: 446, text: "Caladon Castle - Vents", category: "waypoint", targetMapFilename: "Caladon Castle - Vents" },
+      { x: 1302, y: 305, text: "Caladon Castle - Vents", category: "waypoint", targetMapFilename: "Caladon Castle - Vents" },
+      
+      // CHESTS
+      { x: 1035, y: 178, text: "Wood Chest", category: "chest", inventory: [{ name: "Coins", count: 3705}] },
+      { x: 893, y: 480, text: "Magick Chest", category: "chest" },
+    ]
   },
   {
     filename: "ArcanumBase/Caladon-CastleMainFloor.jpg",
     displayName: "Caladon Castle - Main Floor",
     // music: ?
     background: "#000000",
-    // defaultView: {},
-    parentFilename: "ArcanumBase/Caladonsmall.jpg",
+    defaultView: { x: 355, y: 431 }, // Good
+    parentFilename: "ArcanumBase/Caladonsmall",
     labels: [
+      { x: 355, y: 431, text: "Caladon", category: "waypoint", targetMapFilename: "Caladon", targetX: 6613, targetY: 1768 },
+      { x: 161, y: 289, text: "Caladon Castle - Downstairs", category: "waypoint", targetMapFilename: "Caladon Castle - Downstairs" },
+      { x: 636, y: 34, text: "Caladon Castle - Upstairs", category: "waypoint", targetMapFilename: "Caladon Castle - Upstairs" },
+      { x: 1127, y: 274, text: "Caladon Castle - Upstairs", category: "waypoint", targetMapFilename: "Caladon Castle - Upstairs" },
+
       { x: 775, y: 323, text: "Vernon", sex: "male", race: "Human", level: 15, inventory:["Vernon's key"], category: ["quest","npc","key"],
         linkedLabels: [
           { questName: "Assassinating King Farad", questDescription: "Heinrich Jenks wants you to assassinate King Farad of Caladon.", target: "King Farad", part: 4}
@@ -2466,7 +2554,7 @@ const ArcanumCitiesMapData = [
     // music: ?
     background: "#000000",
     // defaultView: {},
-    parentFilename: "ArcanumBase/Caladonsmall.jpg",
+    parentFilename: "ArcanumBase/Caladonsmall",
     labels: [
       { x: 855, y: 185, text: "King Farad", sex: "male", race: "Human", category: ["quest", "npc"],
         linkedLabels: [
@@ -2481,7 +2569,7 @@ const ArcanumCitiesMapData = [
     // music: ?
     background: "#000000",
     // defaultView: {},
-    parentFilename: "ArcanumBase/Caladonsmall.jpg",
+    parentFilename: "ArcanumBase/Caladonsmall",
     labels: [],
   },
   {
@@ -2490,7 +2578,7 @@ const ArcanumCitiesMapData = [
     // music: ?
     background: "#000000",
     // defaultView: {},
-    parentFilename: "ArcanumBase/Caladonsmall.jpg",
+    parentFilename: "ArcanumBase/Caladonsmall",
     labels: [
       { x: 627, y: 479, text: "Caladon Panarii Temple - Level 2", description: "", category: "waypoint", targetMapFilename: "Caladon Panarii Temple - Level 2", targetX: 1188, targetY: 227 },
     ]
@@ -2501,7 +2589,7 @@ const ArcanumCitiesMapData = [
     // music: ?
     background: "#000000", // Good
     defaultView: { x: 206, y: 964 }, // Good
-    parentFilename: "ArcanumBase/Caladonsmall.jpg",
+    parentFilename: "ArcanumBase/Caladonsmall",
     labels: [
       { x: 723, y: 659, text: "Alexander the Acolyte", sex: "male", race: "Human", level: 45, category: ["quest", "npc"],
         linkedLabels: [
@@ -2531,7 +2619,7 @@ const ArcanumCitiesMapData = [
     // music: ?
     background: "#000000", // Good
     defaultView: { x: 99, y: 534 }, // Good
-    parentFilename: "ArcanumBase/Caladonsmall.jpg",
+    parentFilename: "ArcanumBase/Caladonsmall",
     labels: [
       // Waypoints
       { x: 1188, y: 227, text: "Caladon Panarii Temple - Catacombs", category: "waypoint", targetMapFilename: "Caladon Panarii Temple - Catacombs", targetX: 633, targetY: 484 },
@@ -2556,7 +2644,7 @@ const ArcanumCitiesMapData = [
     // music: ?
     background: "#000000", // Good
     defaultView: { x: 174, y: 362 }, // Good
-    parentFilename: "ArcanumBase/Caladonsmall.jpg",
+    parentFilename: "ArcanumBase/Caladonsmall",
     labels: [
       { x: 174, y: 362, text: "Caladon Panarii Temple - Level 1", description: "", category: "waypoint", targetMapFilename: "Caladon Panarii Temple - Level 1", targetX: 1148, targetY: 112 },
       { x: 483, y: 191, text: "K'an Hua", sex: "male", race: "Dark Elf", level: 50, category: ["quest", "npc"],
@@ -2573,7 +2661,7 @@ const ArcanumCitiesMapData = [
     // music: ?
     background: "#000000",
     // defaultView: {},
-    parentFilename: "ArcanumBase/Caladonsmall.jpg",
+    parentFilename: "ArcanumBase/Caladonsmall",
     labels: [
       // Waypoint
       { x: 1247, y: 349, text: "Caladon", category: "waypoint", targetMapFilename: "Caladon", targetX: 4353, targetY: 1328 },
@@ -2604,7 +2692,7 @@ const ArcanumCitiesMapData = [
     // music: ?
     background: "#000000",
     defaultView: { x: 1081, y: 645 }, // Good
-    parentFilename: "ArcanumBase/Caladonsmall.jpg",
+    parentFilename: "ArcanumBase/Caladonsmall",
     labels: [
       { x: 1081, y: 645, text: "Caladon", category: "waypoint", targetMapFilename: "Caladon", targetX: 6870, targetY: 2460 },
       { x: 857, y: 273, text: "Wood Chest", inventory: ["Caladon Crusading Chain (magick)", "Balanced Sword"], category: ["chest", "bounty"] },
@@ -2616,7 +2704,7 @@ const ArcanumCitiesMapData = [
     // music: ?
     background: "#000000",
     defaultView: { x: 2034, y: 957 }, // Good
-    parentFilename: "ArcanumBase/Caladonsmall.jpg",
+    parentFilename: "ArcanumBase/Caladonsmall",
     labels: [
       { x: 2034, y: 957, text: "Caladon", category: "waypoint", targetMapFilename: "Caladon" },
       { x: 812, y: 472, text: "J.T. Morgan", sex: "male", race: "Gnome", category: ["quest", "npc"],
@@ -2632,7 +2720,7 @@ const ArcanumCitiesMapData = [
     // music: ?
     background: "#000000",
     defaultView: { x: 429, y: 598 }, // Good
-    parentFilename: "ArcanumBase/Caladonsmall.jpg",
+    parentFilename: "ArcanumBase/Caladonsmall",
     labels: [
       { x: 429, y: 598, text: "Caladon", category: "waypoint", targetMapFilename: "Caladon", targetX: 5883, targetY: 1959},
     ],
@@ -2643,19 +2731,23 @@ const ArcanumCitiesMapData = [
     // music: ?
     background: "#000000",
     defaultView: { x: 833, y: 349 }, // Good
-    parentFilename: "ArcanumBase/Caladonsmall.jpg",
+    parentFilename: "ArcanumBase/Caladonsmall",
     labels: [
       { x: 833, y: 349, text: "Caladon", category: "waypoint", targetMapFilename: "Caladon", targetX: 5377, targetY: 1643 },
       { x: 694, y: 403, text: "Wood Chest", description: "inventory: Staff of Restoration (magick)", category: ["chest", "bounty"] },
     ]
   },
   {
-    filename: "ArcanumBase/CaladonTrapDisarmDungeon.png",
+    filename: "ArcanumBase/CaladonTrapDisarmDungeon",
+    chunked: true,
+    width: 5113,
+    height: 2254,
+    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
     displayName: "Trap Disarm Dungeon",
     // music: ?
     background: "#000000",
     defaultView: { x: 2840, y: 1431 }, // Good
-    parentFilename: "ArcanumBase/Caladonsmall.jpg",
+    parentFilename: "ArcanumBase/Caladonsmall",
     labels: [
       { x: 2969, y: 1486, text: "Exit the Maze", category: ["quest", "waypoint"], targetMapFilename: "Caladon", targetX: 6878, targetY: 716,
         linkedLabels: [
@@ -2666,7 +2758,7 @@ const ArcanumCitiesMapData = [
   },
   {
     filename: "ArcanumBase/CrashSite-Cave.png",
-    parentFilename: "ArcanumBase/CrashSite.jpg",
+    parentFilename: "ArcanumBase/CrashSite",
     displayName: "Crash Site - Cave",
     defaultView: { x: 266, y: 583 }, // Good
     music: "music/Mines.mp3", // Good
@@ -2690,7 +2782,7 @@ const ArcanumCitiesMapData = [
     defaultView: { x: 704, y: 956 }, // Good
     music: "", // CONFIRMED - No music.
     background: "#000000", // Good
-    parentFilename: "ArcanumBase/Dernholm.jpg",
+    parentFilename: "ArcanumBase/Dernholm",
     labels: [
       // Waypoints
       { x: 702, y: 956, text: "Dernholm", description: "", category: "waypoint", targetMapFilename: "Dernholm", targetX: 5465, targetY: 1782 },
@@ -2707,12 +2799,16 @@ const ArcanumCitiesMapData = [
     ],
   },
   {
-    filename: "ArcanumBase/DernholmPits.png",
+    filename: "ArcanumBase/DernholmPits",
+    chunked: true,
+    width: 4458,
+    height: 2079,
+    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
     displayName: "Dernholm Pits",
     defaultView: { x: 341, y: 1317 }, // Good
     // music: ?
     background: "#000000",
-    parentFilename: "ArcanumBase/Dernholm.jpg",
+    parentFilename: "ArcanumBase/Dernholm",
     labels: [
       { x: 2399, y: 1977, text: "Dernholm", category: "waypoint", targetMapFilename: "Dernholm", targetX: 6132, targetY: 1215 },
       { x: 341, y: 1317, text: "Dernholm", category: "waypoint", targetMapFilename: "Dernholm", targetX: 499, targetY: 573 },
@@ -2776,7 +2872,11 @@ const ArcanumCitiesMapData = [
     ],
   },
   {
-    filename: "ArcanumBase/KnaThaLevel1.jpg",
+    filename: "ArcanumBase/KnaThaLevel1",
+    chunked: true,
+    width: 6238,
+    height: 3388,
+    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
     displayName: "K’na Tha - Level 1",
     //defaultView: { x: ?, y: ?},
     parentFilename: "ArcanumBase/KnaThaEntrance.png",
@@ -2786,7 +2886,11 @@ const ArcanumCitiesMapData = [
     ],
   },
   {
-    filename: "ArcanumBase/KnaThaLevel2.jpg",
+    filename: "ArcanumBase/KnaThaLevel2",
+    chunked: true,
+    width: 6672,
+    height: 3569,
+    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
     displayName: "K’na Tha - Level 2",
     //defaultView: { x: ?, y: ?},
     parentFilename: "ArcanumBase/KnaThaEntrance.png",
@@ -2794,7 +2898,11 @@ const ArcanumCitiesMapData = [
     labels: [],
   },
     {
-    filename: "ArcanumBase/KnaThaLevel3.png",
+    filename: "ArcanumBase/KnaThaLevel3",
+    chunked: true,
+    width: 5365,
+    height: 2473,
+    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
     displayName: "K’na Tha - Level 3",
     //defaultView: { x: ?, y: ?},
     parentFilename: "ArcanumBase/KnaThaEntrance.png",
@@ -2802,7 +2910,11 @@ const ArcanumCitiesMapData = [
     labels: [],
   },
     {
-    filename: "ArcanumBase/KnaThaLevel4.png",
+    filename: "ArcanumBase/KnaThaLevel4",
+    chunked: true,
+    width: 5972,
+    height: 2104,
+    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
     displayName: "K’na Tha - Level 4",
     //defaultView: { x: ?, y: ?},
     parentFilename: "ArcanumBase/KnaThaEntrance.png",
@@ -2818,7 +2930,11 @@ const ArcanumCitiesMapData = [
     labels: [],
   },
   {
-    filename: "ArcanumBase/KnaThaLevel6.jpg",
+    filename: "ArcanumBase/KnaThaLevel6",
+    chunked: true,
+    width: 4680,
+    height: 2327,
+    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
     displayName: "K’na Tha - Level 6",
     //defaultView: { x: ?, y: ?},
     parentFilename: "ArcanumBase/KnaThaEntrance.png",
@@ -2835,7 +2951,7 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/QintarraSilverLadyChambers.png",
     displayName: "Silver Lady Chambers",
     //defaultView: { x: ?, y: ?},
-    parentFilename: "ArcanumBase/Qintarra.png",
+    parentFilename: "ArcanumBase/Qintarra",
     background: "#000000",
     labels: [
       { x: 258, y: 244, text: "Silver Lady", sex: "female", race: "Elf", level: 50, category: ["quest", "npc"],
@@ -2979,7 +3095,7 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/StillwaterGiantsCave.png",
     displayName: "Stillwater Giants Cave",
     background: "#000000",
-    parentFilename: "ArcanumBase/Stillwater.jpg",
+    parentFilename: "ArcanumBase/Stillwater",
     defaultView: { x: 432, y: 719 }, // Good
     labels: [
       { x: 432, y: 719, text: "Stillwater", description: "", category: "waypoint", targetMapFilename: "Stillwater", targetX: 4211, targetY: 1759, targetZoom: 1.0},
@@ -2994,7 +3110,7 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/StillwaterDrogsCave.png",
     displayName: "Drogs Cave",
     background: "#000000",
-    parentFilename: "ArcanumBase/Stillwater.jpg",
+    parentFilename: "ArcanumBase/Stillwater",
     defaultView: { x: 841, y: 739 }, // Good
     labels: [
       // Waypoints
@@ -3035,9 +3151,13 @@ const ArcanumCitiesMapData = [
     ]
   },
   {
-    filename: "ArcanumBase/Tarant-BatesTunnel.png",
+    filename: "ArcanumBase/Tarant-BatesTunnel",
+    chunked: true,
+    width: 4017,
+    height: 1144,
+    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
     displayName: "Bates Tunnel",
-    parentFilename: "ArcanumBase/Tarant.png",
+    parentFilename: "ArcanumBase/Tarant",
     background: "#000000",
     defaultView: { x: 251, y: 937 }, // Good
     labels: [
@@ -3048,7 +3168,7 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/TarantBatesMansionLevel1.png",
     displayName: "Bates Mansion Level 1",
-    parentFilename: "ArcanumBase/Tarant.png",
+    parentFilename: "ArcanumBase/Tarant",
     background: "#000000",
     defaultView: { x: 415, y: 593 }, // Good
     labels: [
@@ -3060,7 +3180,7 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/TarantBatesMansionLevel2.png",
     displayName: "Bates Mansion Level 2",
-    parentFilename: "ArcanumBase/Tarant.png",
+    parentFilename: "ArcanumBase/Tarant",
     defaultView: { x: 639, y: 523 }, // Good
     background: "#000000",
     labels: [
@@ -3084,7 +3204,7 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/TarantCityHall.png",
     displayName: "Hall of Records",
     modGroup: "Cities",
-    parentFilename: "ArcanumBase/Tarant.png",
+    parentFilename: "ArcanumBase/Tarant",
     background: "#000000",
     labels: [
       { x: 841, y: 297, text: "Tarant", category: "waypoint", targetMapFilename: "Tarant" },
@@ -3100,7 +3220,7 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/Tarant_02.jpg",
     displayName: "Tarant New Sewers",
     music: "music/Tarant_Sewers.mp3",
-    parentFilename: "ArcanumBase/Tarant.png",
+    parentFilename: "ArcanumBase/Tarant",
     background: "#000000",
     labels: [
       { x: 80, y: 419, text: "Tarant", description: "", category: "waypoint" },
@@ -3117,11 +3237,15 @@ const ArcanumCitiesMapData = [
     ]
   },
   {
-    filename: "ArcanumBase/Tarant_03.jpg",
+    filename: "ArcanumBase/Tarant_03",
+    chunked: true,
+    width: 4955,
+    height: 2304,
+    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
     displayName: "Tarant Old Sewers",
     background: "#000000",
     music: "music/Tarant_Sewers.mp3",
-    parentFilename: "ArcanumBase/Tarant.png",
+    parentFilename: "ArcanumBase/Tarant",
     labels: [
       { x: 564, y: 1778, text: "Tarant", category: "waypoint" },
       { x: 1714, y: 2153, text: "Tarant", category: "waypoint" },
@@ -3132,21 +3256,21 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/TarantPSchuylersLevel1.png",
     displayName: "P. Schuyler & Sons - Level 1",
-    parentFilename: "ArcanumBase/Tarant.png",
+    parentFilename: "ArcanumBase/Tarant",
     background: "#000000",
     labels: []
   },
   {
     filename: "ArcanumBase/TarantPSchuylersLevel2.png",
     displayName: "P. Schuyler & Sons - Level 2",
-    parentFilename: "ArcanumBase/Tarant.png",
+    parentFilename: "ArcanumBase/Tarant",
     background: "#000000",
     labels: []
   },
   {
     filename: "ArcanumBase/TarantPSchuylersLevel3.png",
     displayName: "P. Schuyler & Sons - Level 3",
-    parentFilename: "ArcanumBase/Tarant.png",
+    parentFilename: "ArcanumBase/Tarant",
     background: "#000000",
     labels: [
       { x: 288, y: 198, text: "Winston Schuyler", sex: "male", race: "Human", level: 10, category: ["key", "quest", "npc"],
@@ -3326,7 +3450,7 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/ThePlaceOfLostVoicesEntrance.png",
     displayName: "The Place of Lost Voices - Entrance",
     background: "#000000",
-    parentFilename: "ArcanumBase/ThePlaceOfLostVoices.jpg",
+    parentFilename: "ArcanumBase/ThePlaceOfLostVoices",
     labels: [
       { x: 865, y: 494, text: "The Place of Lost Voices - Inside", category: "waypoint", targetMapFilename: "The Place of Lost Voices", targetX: 4780, targetY: 787 },
     ]
@@ -3387,7 +3511,7 @@ const ArcanumCitiesMapData = [
     background: "#000000",
     music: "music/Tulla.mp3",
     defaultView: { x: 836, y: 1410 },
-    parentFilename: "ArcanumBase/Tulla.jpg",
+    parentFilename: "ArcanumBase/Tulla",
     labels: [
       // Waypoints
       { x: 836, y: 1410, text: "Tulla", category: "waypoint", targetMapFilename: "Tulla", targetX: 2268, targetY: 1619 },
@@ -3424,7 +3548,7 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/TullaSimeonsHallway.png",
     displayName: "Simeons Hallway",
     background: "#000000",
-    parentFilename: "ArcanumBase/Tulla.jpg",
+    parentFilename: "ArcanumBase/Tulla",
     labels: [
       { x: 92, y: 474, text: "Tulla - Main Floor", category: "waypoint", targetMapFilename: "Tulla - Main Floor", targetX: 2192, targetY: 604 },
       { x: 708, y: 200, text: "Simeons Chamber", category: "waypoint", targetMapFilename: "Simeons Chamber", targetX: 535, targetY: 844 },
@@ -3436,7 +3560,7 @@ const ArcanumCitiesMapData = [
     displayName: "Simeons Chamber",
     background: "#000000",
     defaultView: { x: 535, y: 844 },
-    parentFilename: "ArcanumBase/Tulla.jpg",
+    parentFilename: "ArcanumBase/Tulla",
     labels: [
       { x: 535, y: 844, text: "Simeons Hallway", category: "waypoint", targetMapFilename: "Simeons Hallway", targetX: 708, targetY: 200 },
       { x: 817, y: 683, text: "Simeon Tor", sex: "male", level: 50, category: ["quest", "npc"],
@@ -3451,7 +3575,7 @@ const ArcanumCitiesMapData = [
     displayName: "Fa'al Kin's Maze",
     background: "#000000",
     defaultView: { x: 488, y: 404 }, // Good
-    parentFilename: "ArcanumBase/Tulla.jpg",
+    parentFilename: "ArcanumBase/Tulla",
     labels: []
   },
   {
@@ -3746,7 +3870,11 @@ const ArcanumCitiesMapData = [
     ]
   },
   {
-    filename: "ArcanumBase/WheelClanTown.jpg",
+    filename: "ArcanumBase/WheelClanTown",
+    chunked: true,
+    width: 6244,
+    height: 4368,
+    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
     displayName: "Wheel Clan - Town",
     parentFilename: "ArcanumBase/WheelClan.png",
     background: "#000000",

@@ -113,6 +113,16 @@ const mapBackgroundLayer = document.getElementById('map-background-layer');
 // named "<chunkPrefix>_<pixelX>_<pixelY>.(jpg|png)" instead of a single image. This div stands in
 // for `img` as the map's full-size backdrop; individual tile <img> elements are absolutely
 // positioned inside it and are only created once they enter (or approach) the viewport.
+//
+// Tiered chunk sets: a chunked map can optionally declare `chunkTiers: { low: {...}, mid: {...} }`
+// - coarser, downsampled tile sets used when zoomed out, so far fewer (and lighter) tiles need to
+// be fetched to cover the same on-screen area. Which tier is active depends only on `scale`
+// (below CHUNK_TIER_LOW_MAX -> "low", below CHUNK_TIER_MID_MAX -> "mid", otherwise the map's own
+// original tiles - see getChunkTierForScale/switchChunkTier). Everything stays positioned in the
+// map's real, full-resolution coordinate space regardless of tier - only which folder/prefix/
+// chunkSize is used to fetch and lay out tiles changes. A map with no chunkTiers (or missing a
+// given tier) just falls back to its original tiles at every zoom level, so this is fully
+// backward-compatible with maps that haven't been processed by the tile-pyramid generator yet.
 const chunkContainer = document.createElement('div');
 chunkContainer.id = 'chunk-container';
 chunkContainer.style.position = 'absolute';
@@ -121,12 +131,17 @@ chunkContainer.style.left = '0';
 chunkContainer.style.display = 'none';
 container.appendChild(chunkContainer);
 
+const CHUNK_TIER_LOW_MAX = 0.20;  // scale below this -> "low" tier
+const CHUNK_TIER_MID_MAX = 0.60;  // scale below this (and >= low max) -> "mid" tier; else "full"
+
 let currentMapChunked = false;
 let currentMapTotalWidth = 0;
 let currentMapTotalHeight = 0;
 let currentChunkSize = 500;
 let currentChunkFolder = '';
 let currentChunkPrefix = '';
+let currentChunkedMap = null;   // the selectedMap object currently driving chunk loading
+let currentChunkTier = null;    // 'low' | 'mid' | 'full' | null (not yet set up)
 let loadedChunkKeys = new Set();
 let currentMapLoaded = false; // true once either the single image or the chunk grid is ready - replaces the old img.src/display checks used to gate panning/zooming
 const toggleCreatorModeBtn = document.getElementById('toggleCreatorModeBtn');
@@ -4017,8 +4032,35 @@ function updateBackgroundLayerTransform() {
 // are ever created, and only within the real extent of the tile grid - see chunk bounds
 // discovery below, which figures out where the grid actually ends before any tile is requested.
 
+// Tiles are appended to `activeChunkLayer`, not chunkContainer directly, so that when the
+// zoom crosses a tier boundary we can keep the OUTGOING tier's tiles on screen (parked in
+// `staleChunkLayers`) until the incoming tier's tiles have actually loaded, instead of
+// clearing straight away and leaving a black gap for a frame (or several, on a slow
+// connection) while the new tiles fetch. See switchChunkTier()/loadChunk().
+let activeChunkLayer = null;
+let staleChunkLayers = [];
+let chunkTierSwapGeneration = 0;
+let pendingTierTileLoads = 0;
+
+function createChunkLayer() {
+    const layer = document.createElement('div');
+    layer.className = 'chunk-layer';
+    layer.style.position = 'absolute';
+    layer.style.top = '0';
+    layer.style.left = '0';
+    chunkContainer.appendChild(layer);
+    return layer;
+}
+
+function removeStaleChunkLayers() {
+    staleChunkLayers.forEach(layer => layer.remove());
+    staleChunkLayers = [];
+}
+
 function clearMapChunks() {
     chunkContainer.innerHTML = '';
+    activeChunkLayer = null;
+    staleChunkLayers = [];
     loadedChunkKeys = new Set();
 }
 
@@ -4080,19 +4122,79 @@ async function discoverChunkBounds(selectedMap) {
     discoveredMaxRow = maxRow;
     chunkBoundsReady = true;
     loadVisibleChunks();
+
+    // Nothing was actually requested for the new tier at this viewport (e.g. it has no tiles
+    // covering the current view) - nothing to wait for, so drop the old tier's tiles now
+    // rather than leaving them stuck on screen forever.
+    if (staleChunkLayers.length && pendingTierTileLoads === 0) removeStaleChunkLayers();
+}
+
+// Which tier should be active for a given zoom level. Kept as a pure function of `scale` so
+// every zoom path (wheel, +/- buttons, pinch, restoring a saved view, etc.) can just call
+// scheduleChunkUpdate() as before and have the right tier picked up automatically.
+function getChunkTierForScale(s) {
+    if (s < CHUNK_TIER_LOW_MAX) return 'low';
+    if (s < CHUNK_TIER_MID_MAX) return 'mid';
+    return 'full';
+}
+
+// Resolves a tier name to the folder/prefix/chunkSize to fetch tiles from. Falls back to the
+// map's own original chunk config whenever the map has no chunkTiers entry for that tier, so
+// unprocessed maps keep working exactly as before at every zoom level.
+function getChunkTierConfig(selectedMap, tier) {
+    const baseFolder = selectedMap.filename.replace(/\/+$/, '');
+    const basePrefix = selectedMap.chunkPrefix || baseFolder.split('/').pop();
+    const baseChunkSize = selectedMap.chunkSize || 500;
+    const tierCfg = tier !== 'full' && selectedMap.chunkTiers && selectedMap.chunkTiers[tier];
+    if (!tierCfg) {
+        return { folder: baseFolder, prefix: basePrefix, chunkSize: baseChunkSize };
+    }
+    return {
+        folder: (tierCfg.folder || `${baseFolder}_${tier}`).replace(/\/+$/, ''),
+        prefix: tierCfg.prefix || `${basePrefix}_${tier}`,
+        chunkSize: tierCfg.chunkSize || baseChunkSize
+    };
+}
+
+// Switches the active chunk tier: points currentChunkFolder/Prefix/Size at the new tier's tile
+// set and re-runs bounds discovery against it. A no-op if we're already on that tier.
+//
+// `instant: true` (used when setting up a map for the first time, where any previously-shown
+// tiles belong to a different map entirely and must not linger) clears immediately, exactly
+// like before. `instant: false` (the default; used when the zoom level crosses a tier
+// boundary on an already-loaded map) instead parks the outgoing tier's tiles in
+// `staleChunkLayers` and leaves them on screen - loadChunk()/discoverChunkBounds() clear them
+// once the incoming tier's tiles have loaded, avoiding a black flash in between.
+function switchChunkTier(tier, { instant = false } = {}) {
+    if (!currentChunkedMap || tier === currentChunkTier) return;
+    currentChunkTier = tier;
+    const cfg = getChunkTierConfig(currentChunkedMap, tier);
+    currentChunkFolder = cfg.folder;
+    currentChunkPrefix = cfg.prefix;
+    currentChunkSize = cfg.chunkSize;
+
+    if (instant) {
+        clearMapChunks();
+    } else if (activeChunkLayer) {
+        staleChunkLayers.push(activeChunkLayer);
+    }
+
+    activeChunkLayer = createChunkLayer();
+    loadedChunkKeys = new Set();
+    pendingTierTileLoads = 0;
+    chunkTierSwapGeneration++;
+    discoverChunkBounds(currentChunkedMap);
 }
 
 function setupChunkedMap(selectedMap) {
-    clearMapChunks();
+    currentChunkedMap = selectedMap;
+    currentChunkTier = null; // force switchChunkTier below to apply, even if reusing a tier name from a previous map
     currentMapTotalWidth = selectedMap.width;
     currentMapTotalHeight = selectedMap.height;
-    currentChunkSize = selectedMap.chunkSize || 500;
-    currentChunkFolder = selectedMap.filename.replace(/\/+$/, '');
-    currentChunkPrefix = selectedMap.chunkPrefix || currentChunkFolder.split('/').pop();
     chunkContainer.style.width = `${currentMapTotalWidth}px`;
     chunkContainer.style.height = `${currentMapTotalHeight}px`;
     chunkContainer.style.display = 'block';
-    discoverChunkBounds(selectedMap);
+    switchChunkTier(getChunkTierForScale(scale), { instant: true });
 }
 
 // How far (in unscaled map pixels) each tile should overshoot into its neighbor's space.
@@ -4138,6 +4240,17 @@ function loadChunk(col, row) {
     tile.style.top = `${row * currentChunkSize}px`;
     applyChunkOverlap(tile);
 
+    // If a tier swap is in progress (there's an outgoing layer parked in staleChunkLayers),
+    // track this tile so we know when it's safe to drop the old tiles - see settleTile below.
+    const swapGeneration = chunkTierSwapGeneration;
+    const trackedSwap = staleChunkLayers.length > 0;
+    if (trackedSwap) pendingTierTileLoads++;
+    const settleTile = () => {
+        if (!trackedSwap || swapGeneration !== chunkTierSwapGeneration) return;
+        pendingTierTileLoads--;
+        if (pendingTierTileLoads <= 0) removeStaleChunkLayers();
+    };
+
     const basePath = `${currentChunkFolder}/${currentChunkPrefix}_${col * currentChunkSize}_${row * currentChunkSize}`;
     tile.onerror = () => {
         if (tile.dataset.triedPng) {
@@ -4145,14 +4258,16 @@ function loadChunk(col, row) {
             // real extent, but a sparse/irregular map could still be missing an interior tile -
             // remove it rather than leave a broken-image icon, and don't retry.
             tile.remove();
+            settleTile();
             return;
         }
         tile.dataset.triedPng = 'true';
         tile.src = `${basePath}.png`;
     };
+    tile.onload = settleTile;
     tile.src = `${basePath}.jpg`;
 
-    chunkContainer.appendChild(tile);
+    activeChunkLayer.appendChild(tile);
 }
 
 // The set of chunks strictly inside the viewport, plus a 1-chunk margin so panning/zooming
@@ -4183,7 +4298,14 @@ function scheduleChunkUpdate() {
     chunkUpdateScheduled = true;
     requestAnimationFrame(() => {
         chunkUpdateScheduled = false;
-        loadVisibleChunks();
+        const nextTier = getChunkTierForScale(scale);
+        if (nextTier !== currentChunkTier) {
+            // switchChunkTier() re-runs bounds discovery, which calls loadVisibleChunks()
+            // itself once the new tier's grid extent is known - nothing else to do here.
+            switchChunkTier(nextTier);
+        } else {
+            loadVisibleChunks();
+        }
         refreshChunkOverlaps();
     });
 }
