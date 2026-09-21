@@ -323,191 +323,182 @@ const ArcanumCitiesMapData = [
     ]
   },
   {
-    filename: "ArcanumBase/Caladonsmall",
+    filename: "ArcanumBase/Caladon",
     chunked: true,
-    width: 12800,
-    height: 4544,
+    width: 10000,
+    height: 10000,
     chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
     displayName: "Caladon",
     modGroup: "Cities",
     music: "music/Caladon.mp3",
     defaultView: { x: 3596, y: 3305 },
     labels: [
-      // Waypoints
-      { x: 4401, y: 1297, text: "Caladon Panarii Temple - Level 1", description: "", category: "waypoint", targetMapFilename: "Caladon Panarii Temple - Level 1" },
-      { x: 6613, y: 1768, text: "Caladon Castle - Main Floor", description: "", category: "waypoint", targetMapFilename: "Caladon Castle - Main Floor" },
-      { x: 6870, y: 2460, text: "Guardhouse Basement", description: "", category: "waypoint", targetMapFilename: "Guardhouse Basement" },
-      { x: 7529, y: 1837, text: "High Security Prison", description: "", category: "waypoint", targetMapFilename: "High Security Prison" },
-      { x: 5883, y: 1959, text: "Mafia Underground", description: "", category: "waypoint", targetMapFilename: "Mafia Underground" },
-      { x: 5377, y: 1643, text: "Sanders Basement", description: "", category: "waypoint", targetMapFilename: "Sanders Basement" },
-      { x: 6878, y: 716, text: "Trap Disarm Dungeon", description: "", category: "waypoint", targetMapFilename: "Trap Disarm Dungeon" },
-      { x: 8236, y: 1540, text: "Caladon Sewers", description: "", category: "waypoint", targetMapFilename: "Caladon - Sewers", targetX: 3690, targetY: 819 },
-      { x: 4353, y: 1328, text: "Caladon Sewers", description: "", category: "waypoint", targetMapFilename: "Caladon - Sewers", targetX: 2244, targetY: 346 },
-      { x: 6300, y: 978, text: "Caladon Sewers", description: "", category: "waypoint", targetMapFilename: "Caladon - Sewers", targetX: 2753, targetY: 356 },
-      { x: 7480, y: 2591, text: "Caladon Sewers", description: "", category: "waypoint", targetMapFilename: "Caladon - Sewers", targetX: 3265, targetY: 1347 },
-      { x: 5602, y: 2270, text: "Caladon Sewers", description: "", category: "waypoint", targetMapFilename: "Caladon - Sewers", targetX: 2148, targetY: 1103 },
-      { x: 5742, y: 3327, text: "Caladon Sewers", description: "", category: "waypoint", targetMapFilename: "Caladon - Sewers", targetX: 2326, targetY: 1784 },
-      
-      // Shops
-      { x: 6488, y: 101, text: "Wise Woman", sex: "female", race: "Human", level: 28, shopType: "Nomad", shopMarkup: 150, category: "shop" },
-      { x: 5820, y: 1881, text: "Human Shopkeeper", sex: "male", race: "Human", level: 34, shopType: "Black market", shopMarkup: 100, category: "shop" },
-      { x: 5136, y: 2155, text: "Magickal Smith", sex: "male", race: "Half-Elf", level: 37, shopType: "Magickal smith", shopMarkup: 100, category: "shop" },
-      { x: 5330, y: 2137, text: "Magick Shop Clerk", sex: "female", race: "Elf", level: 30, shopType: "Magic shop", shopMarkup: 100, category: "shop" },
-      { x: 4419, y: 2175, text: "Herbalist", sex: "female", race: "Half-Elf", level: 34, shopType: "Herbalist", shopMarkup: 90, category: "shop" },
-      { x: 4797, y: 2365, text: "Dwarven Smith", sex: "male", race: "Dwarf", level: 34, shopType: "Blacksmith", shopMarkup: 105, category: "shop" },
-
-      // Quests
-      { x: 4333, y: 2610, text: "Kietzel Pierce (Caladon)", sex: "male", race: "Half-Elf", level: 48, master: "Bow Master", category: ["quest", "npc", "master"],
+      { x: 4690, y: 1554, text: "Caladon Panarii Temple - Level 1", category: "waypoint", targetMapFilename: "Caladon Panarii Temple - Level 1" },
+      { x: 6902, y: 2025, text: "Caladon Castle - Main Floor", category: "waypoint", targetMapFilename: "Caladon Castle - Main Floor" },
+      { x: 7159, y: 2717, text: "Guardhouse Basement", category: "waypoint", targetMapFilename: "Guardhouse Basement" },
+      { x: 7818, y: 2094, text: "High Security Prison", category: "waypoint", targetMapFilename: "High Security Prison" },
+      { x: 6172, y: 2216, text: "Mafia Underground", category: "waypoint", targetMapFilename: "Mafia Underground" },
+      { x: 5666, y: 1900, text: "Sanders Basement", category: "waypoint", targetMapFilename: "Sanders Basement" },
+      { x: 7167, y: 973, text: "Trap Disarm Dungeon", category: "waypoint", targetMapFilename: "Trap Disarm Dungeon" },
+      { x: 8525, y: 1797, text: "Caladon Sewers", category: "waypoint", targetMapFilename: "Caladon - Sewers", targetX: 3690, targetY: 819 },
+      { x: 4642, y: 1585, text: "Caladon Sewers", category: "waypoint", targetMapFilename: "Caladon - Sewers", targetX: 2244, targetY: 346 },
+      { x: 6589, y: 1235, text: "Caladon Sewers", category: "waypoint", targetMapFilename: "Caladon - Sewers", targetX: 2753, targetY: 356 },
+      { x: 7769, y: 2848, text: "Caladon Sewers", category: "waypoint", targetMapFilename: "Caladon - Sewers", targetX: 3265, targetY: 1347 },
+      { x: 5891, y: 2527, text: "Caladon Sewers", category: "waypoint", targetMapFilename: "Caladon - Sewers", targetX: 2148, targetY: 1103 },
+      { x: 6031, y: 3584, text: "Caladon Sewers", category: "waypoint", targetMapFilename: "Caladon - Sewers", targetX: 2326, targetY: 1784 },
+      { x: 6716, y: 388, text: "Wise Woman", category: "shop", shopType: "Nomad", shopMarkup: 150, level: 28, sex: "female", race: "Human" },
+      { x: 6109, y: 2138, text: "Human Shopkeeper", category: "shop", shopType: "Black market", shopMarkup: 100, level: 34, sex: "male", race: "Human" },
+      { x: 5425, y: 2412, text: "Magickal Smith", category: "shop", shopType: "Magickal smith", shopMarkup: 100, level: 37, sex: "male", race: "Half-Elf" },
+      { x: 5619, y: 2394, text: "Magick Shop Clerk", category: "shop", shopType: "Magic shop", shopMarkup: 100, level: 30, sex: "female", race: "Elf" },
+      { x: 4708, y: 2432, text: "Herbalist", category: "shop", shopType: "Herbalist", shopMarkup: 90, level: 34, sex: "female", race: "Half-Elf" },
+      { x: 5086, y: 2622, text: "Dwarven Smith", category: "shop", shopType: "Blacksmith", shopMarkup: 105, level: 34, sex: "male", race: "Dwarf" },
+      { x: 4622, y: 2867, text: "Kietzel Pierce (Caladon)", master: "Bow Master", category: ["quest", "npc", "master"], level: 48, sex: "male", race: "Half-Elf",
         linkedLabels: [
           { questName: "Find the Bow of Ecclesiates", questDescription: "Kietzel Pearce will train you as a Bow Master if you can find the Bow of Ecclesiates, said to be hidden in the ancient Ruins of Szabo.", questType: "master", part: 1 }
         ]
       },
-      { x: 4836, y: 1928, text: "Lillian Misk", sex: "female", race: "Human", level: 21, category: ["quest", "npc"],
+      { x: 5125, y: 2185, text: "Lillian Misk", category: ["quest", "npc"], level: 21, sex: "female", race: "Human",
         linkedLabels: [
           { questName: "Find Mr. Victor Misk", questDescription: "Victor Misk is dead. He was killed because of his ownership of the book Horror Among the Dark Elves", part: 2 },
-          { questName: "Investigation for Lillian Misk", questDescription: "Lillian Misk wants an investigation into who disclosed the information concerning the ownership of ''Horror Among the Dark Elves'' by her late husband.", target: "", part: 1 }
+          { questName: "Investigation for Lillian Misk", questDescription: "Lillian Misk wants an investigation into who disclosed the information concerning the ownership of ''Horror Among the Dark Elves'' by her late husband.", part: 1 }
         ]
       },
-      { x: 4809, y: 2000, text: "Wesley the Butler", sex: "male", race: "Human", level: 18, category: ["quest", "npc"],
+      { x: 5098, y: 2257, text: "Wesley the Butler", category: ["quest", "npc"], level: 18, sex: "male", race: "Human",
         linkedLabels: [
           { questName: "Investigation for Lillian Misk", part: 2 }
         ]
       },
-      { x: 4949, y: 1780, text: "Brinda the Maid", sex: "female", race: "Half-Orc", level: 19, category: ["quest", "npc"],
+      { x: 5238, y: 2037, text: "Brinda the Maid", category: ["quest", "npc"], level: 19, sex: "female", race: "Half-Orc",
         linkedLabels: [
           { questName: "Investigation for Lillian Misk", part: 3 }
         ]
       },
-      { x: 6384, y: 1799, text: "Edward Willoughsby (Caladon)", sex: "male", race: "Gnome", level: 45, category: ["quest", "npc"],
+      { x: 6673, y: 2056, text: "Edward Willoughsby (Caladon)", category: ["quest", "npc"], level: 45, sex: "male", race: "Gnome",
         linkedLabels: [
-          { questName: "Negotiations with Caladon", questDescription: "Edward Willoughsby wants you to convince King Farad's advisors that Caladon should join the Unified Kingdom.", questType: "master", target: "", part: 3 }
+          { questName: "Negotiations with Caladon", questDescription: "Edward Willoughsby wants you to convince King Farad's advisors that Caladon should join the Unified Kingdom.", questType: "master", part: 3 }
         ]
       },
-      { x: 5350, y: 1864, text: "Elite Guard", sex: "male", race: "Human", level: 35, category: ["quest", "npc"],
+      { x: 5639, y: 2121, text: "Elite Guard", category: ["quest", "npc"], level: 35, sex: "male", race: "Human",
         linkedLabels: [
           { questName: "Stop the Whytechurch Murderer", questDescription: "The guard told you to talk with Henderson if you want to help in the investigation.", target: "Chief Inspector Henderson", part: 1 }
         ]
       },
-      { x: 7225, y: 1852, text: "Chief Inspector Henderson", sex: "male", race: "Gnome", level: 35, category: ["quest", "npc"],
+      { x: 7514, y: 2109, text: "Chief Inspector Henderson", category: ["quest", "npc"], level: 35, sex: "male", race: "Gnome",
         linkedLabels: [
-          { questName: "Stop the Whytechurch Murderer", questDescription: "Chief Inspector Henderson has charged you with the task of finding the Whytechurch Murderer.", target: "", part: 2 }
+          { questName: "Stop the Whytechurch Murderer", questDescription: "Chief Inspector Henderson has charged you with the task of finding the Whytechurch Murderer.", part: 2 }
         ]
       },
-      { x: 6838, y: 758, text: "Daniel McPherson", sex: "male", race: "Human", level: 47, master: "Trap Master", category: ["quest", "npc", "master"],
+      { x: 7127, y: 1015, text: "Daniel McPherson", master: "Trap Master", category: ["quest", "npc", "master"], level: 47, sex: "male", race: "Human",
         linkedLabels: [
-          { questName: "Survive the Training Maze", questDescription: "Daniel McPherson will train you as the Trap Master if you can survive the training maze beneath his house.", questType: "master", target: "Exit the Maze", part: 1 }
+          { questName: "Survive the Training Maze", questDescription: "Daniel McPherson will train you as the Trap Master if you can survive the training maze beneath his house.", target: "Exit the Maze", questType: "master", part: 1 }
         ]
       },
-      { x: 6553, y: 605, text: "Adam Maxwell", sex: "male", race: "Human", level: 29, category: ["quest", "npc"],
+      { x: 6842, y: 862, text: "Adam Maxwell", category: ["quest", "npc"], level: 29, sex: "male", race: "Human",
         linkedLabels: [
-          { questName: "Caladon Thieves Underground", questDescription: "Adam Maxwell, a member of the Thieves Underground, has asked you to steal the ancient book entitled ''Divinations and Magicks for the Adept Wizard'' from the home of Widower Misk in Caladon.", target: "", part: 1 },
-          { questName: "Caladon Thieves Underground", questDescription: "Adam Maxwell, a member of the Thieves Underground, has asked you to heist the priceless Necklace of Queen K'na S'ea from the museum in Caladon.", target: "", part: 3 }
+          { questName: "Caladon Thieves Underground", questDescription: "Adam Maxwell, a member of the Thieves Underground, has asked you to steal the ancient book entitled ''Divinations and Magicks for the Adept Wizard'' from the home of Widower Misk in Caladon.", part: 1 },
+          { questName: "Caladon Thieves Underground", questDescription: "Adam Maxwell, a member of the Thieves Underground, has asked you to heist the priceless Necklace of Queen K'na S'ea from the museum in Caladon.", part: 3 }
         ]
       },
-      { x: 4732, y: 1870, text: "Bookstand", description: "Divinations and Magicks for the Adept Wizard", category: ["quest", "chest"],
+      { x: 5021, y: 2127, text: "Bookstand", description: "Divinations and Magicks for the Adept Wizard", category: ["quest", "chest"],
         linkedLabels: [
           { questName: "Caladon Thieves Underground", questDescription: "Retrieve the book from its locked case", target: "Adam Maxwell", part: 2 }
         ]
       },
-      { x: 5513, y: 598, text: "Safe", chestState: "locked", inventory: ["Necklace of Queen K'na S'ea"], category: ["chest", "quest"],
+      { x: 5802, y: 855, text: "Safe", category: ["chest", "quest"], chestState: "locked", inventory: ["Necklace of Queen K'na S'ea"],
         linkedLabels: [
           { questName: "Caladon Thieves Underground", questDescription: "Steal the necklace, defeat the Mechanized Arachnids, and return to Adam Maxwell.", target: "Adam Maxwell", part: 4 }
         ]
       },
-      { x: 5508, y: 2034, text: "Ryan Sanders", sex: "male", race: "Human", level: 17, inventory: ["Ryan Sander's Timepiece", "Decent Gold Ring"], category: ["quest", "npc", "bounty"],
+      { x: 5797, y: 2291, text: "Ryan Sanders", category: ["quest", "npc", "bounty"], level: 17, sex: "male", race: "Human", inventory: ["Ryan Sander's Timepiece", "Decent Gold Ring"],
         linkedLabels: [
           { questName: "Kill Jonathan Sanders", questDescription: "Ryan Sanders wants you to kill his father, Jonathan Sanders. He will pay you 1,000 coin when the job is complete.", target: "Jonathan Sanders", part: 1 }
         ]
-      },  
-      { x: 5200, y: 1714, text: "Jonathan Sanders", sex: "male", race: "Human", level: 31, category: ["quest", "npc"],
+      },
+      { x: 5489, y: 1971, text: "Jonathan Sanders", category: ["quest", "npc"], level: 31, sex: "male", race: "Human",
         linkedLabels: [
           { questName: "Kill Jonathan Sanders", questDescription: "Kill Jonathan Sanders and return to Ryan Sanders.", target: "Ryan Sanders", part: "reward" }
         ]
       },
-      { x: 2182, y: 3781, text: "David Wit", sex: "male", race: "Human", level: 17, category: ["quest", "npc"],
+      { x: 2471, y: 4038, text: "David Wit", category: ["quest", "npc"], level: 17, sex: "male", race: "Human",
         linkedLabels: [
           { questName: "Discover what is killing David's rabbits", questDescription: "David Wit would like you to discover what is killing his rabbits.", target: "Cynthia Wit", part: 1 },
-          { questName: "Discover what is killing David's rabbits", questDescription: "Find a cure for Cynthia Wit's werewolf curse.", target: "S'Btin'ka, Morph Master", part: 3 }          
+          { questName: "Discover what is killing David's rabbits", questDescription: "Find a cure for Cynthia Wit's werewolf curse.", target: "S'Btin'ka, Morph Master", part: 3 }
         ]
       },
-      { x: 2320, y: 3689, text: "Cynthia Wit", sex: "female", race: "Human", level: 5, category: ["quest", "npc"],
+      { x: 2609, y: 3946, text: "Cynthia Wit", category: ["quest", "npc"], level: 5, sex: "female", race: "Human",
         linkedLabels: [
-          { questName: "Discover what is killing David's rabbits", questDescription: "Wait for the night to see Cynthia Wit transform into a werewolf, then report to David Wit.", target: "Cynthia Wit", part: 2 },
+          { questName: "Discover what is killing David's rabbits", questDescription: "Wait for the night to see Cynthia Wit transform into a werewolf, then report to David Wit.", target: "Cynthia Wit", part: 2 }
         ]
       },
-      { x: 1229, y: 2891, text: "Hieronymous Maxim", sex: "male", race: "Human", level: 45, master: "Master Repair", category: ["quest", "npc", "master"],
+      { x: 1518, y: 3148, text: "Hieronymous Maxim", master: "Master Repair", category: ["quest", "npc", "master"], level: 45, sex: "male", race: "Human",
         linkedLabels: [
-          { questName: "Find Proof that Maxim's Air Machines Flew", questDescription: "Find proof for Hieronymous Maxim that his heavier than air machines actually flew.", questType: "master", target: "Isaac Zapruder", part: 1 },
+          { questName: "Find Proof that Maxim's Air Machines Flew", questDescription: "Find proof for Hieronymous Maxim that his heavier than air machines actually flew.", target: "Isaac Zapruder", questType: "master", part: 1 },
           { questName: "Find Proof that Maxim's Air Machines Flew", questDescription: "To thank you for proving his machines can fly, Hieronymous Maxim will offer you to be trained as a master of repair.", questType: "master", part: "reward" }
         ]
       },
-      { x: 6337, y: 739, text: "Arthur Tyron", sex: "male", race: "Human", level: 1, category: ["quest", "npc"],
+      { x: 6626, y: 996, text: "Arthur Tyron", category: ["quest", "npc"], level: 1, sex: "male", race: "Human",
         linkedLabels: [
           { questName: "The Ren'ar Siamese Twins", questDescription: "Arthur Tyron needs you to find proof of Half-Ogre breeding that was done on the ''Half-Ogre Island''.", target: "Safe (Half Ogre Island)", part: 6 }
         ]
       },
-      { x: 6298, y: 696, text: "Gnome City Dweller", sex: "male", race: "Gnome", level: 45, category: ["quest", "npc"],
+      { x: 6587, y: 953, text: "Gnome City Dweller", category: ["quest", "npc"], level: 45, sex: "male", race: "Gnome",
         linkedLabels: [
           { questName: "The Ren'ar Siamese Twins", questDescription: "Arthur Tyron has disappeared. In his place is a gnome that has been waiting for you, and will tell you all about the Half-Ogre conspiracy.", part: "reward" }
         ]
       },
-      { x: 3843, y: 1855, text: "Grave of Victor Misk", description: "Book purchased at the Roseborough Gift Shop.", category: ["quest", "chest"],
+      { x: 4132, y: 2112, text: "Grave of Victor Misk", description: "Book purchased at the Roseborough Gift Shop.", category: ["quest", "chest"],
         linkedLabels: [
-          { questName: "Investigate M'in Gorad", questDescription: "", questType: "main", target: "" }
+          { questName: "Investigate M'in Gorad", questType: "main" }
         ]
       },
-      { x: 4743, y: 1964, text: "Display case", inventory: ["The Book of Durin's Truth"], category: ["quest", "chest"],
+      { x: 5032, y: 2221, text: "Display case", category: ["quest", "chest"], inventory: ["The Book of Durin's Truth"],
         linkedLabels: [
           { questName: "The Iron Clan", questDescription: "Buy or steal the book by pickpocketing Mrs. Misk, but do not damage the display case or it will explode. Reading the book will tell you of the location of the entrance to the clan, and of the Glass Key that opens it.", target: "Glass Key", part: 4 }
         ]
       },
-      { x: 6262, y: 3558, text: "Bullors", sex: "male", race: "Dwarf", level: 20, category: ["quest", "npc"],
+      { x: 6551, y: 3815, text: "Bullors", category: ["quest", "npc"], level: 20, sex: "male", race: "Dwarf",
         linkedLabels: [
-          { questName: "Assassinating King Farad", questDescription: "Heinrich Jenks wants you to assassinate King Farad of Caladon.", target: "Wooden Crate", part: 2}
+          { questName: "Assassinating King Farad", questDescription: "Heinrich Jenks wants you to assassinate King Farad of Caladon.", target: "Wooden Crate", part: 2 }
         ]
       },
-      { x: 6238, y: 3508, text: "Wooden Crate", category: "quest",
+      { x: 6527, y: 3765, text: "Wooden Crate", category: "quest",
         linkedLabels: [
           { questName: "Assassinating King Farad", questDescription: "Heinrich Jenks wants you to assassinate King Farad of Caladon.", target: "Vernon", part: 3 }
         ]
       },
-      { x: 5744, y: 1834, text: "Mr. Razzia", sex: "male", race: "Half-Orc", level: 42, category: ["quest", "npc"],
+      { x: 6033, y: 2091, text: "Mr. Razzia", category: ["quest", "npc"], level: 42, sex: "male", race: "Half-Orc",
         linkedLabels: [
-          { questName: "Find the Master of Prowling", questDescription: "Read the Prowling Master Note 1 and follow its directions.", questType: "master", inventory: ["Prowling Master Note 1"], target: "Prowling Master Note 2", part: 1 }
-        ]
-      }, 
-      { x: 4076, y: 2231, text: "Prowling Master Note 2", category: "quest",
-        linkedLabels: [
-          { questName: "Find the Master of Prowling", questDescription: "After reading the Prowling Master Note 2, you should equip spectacles found next to the bed and watch the portrait.", questType: "master", target: "Something Mid Sized", part: 2 }
-        ]
-      }, 
-      { x: 4055, y: 2179, text: "Something Mid Sized", description: "", category: "quest",
-        linkedLabels: [
-          { questName: "Find the Master of Prowling", questDescription: "The portrait revealed the coordinates to a mysterious place.", questType: "master", target: "Hollow Stump", part: 3 }
-        ]
-      }, 
-      { x: 4233, y: 2644, text: "Mushroom's Fireplace", category: "quest",
-        linkedLabels: [
-          { questName: "Find the Master of Prowling", questDescription: "Reading the note next to the fire reveals a different message, that informs you that the master is Albert Leek and that he can be found in the Sobbing Onion.", questType: "master", target: "Albert Leek", part: 5 }
+          { questName: "Find the Master of Prowling", questDescription: "Read the Prowling Master Note 1 and follow its directions.", target: "Prowling Master Note 2", questType: "master", part: 1 }
         ]
       },
-      { x: 5380, y: 1981, text: "Albert Leek", sex: "male", race: "Half-Elf", level: 42, master: "Prowling Master", category: ["quest", "master"],
+      { x: 4365, y: 2488, text: "Prowling Master Note 2", category: "quest",
+        linkedLabels: [
+          { questName: "Find the Master of Prowling", questDescription: "After reading the Prowling Master Note 2, you should equip spectacles found next to the bed and watch the portrait.", target: "Something Mid Sized", questType: "master", part: 2 }
+        ]
+      },
+      { x: 4344, y: 2436, text: "Something Mid Sized", category: "quest",
+        linkedLabels: [
+          { questName: "Find the Master of Prowling", questDescription: "The portrait revealed the coordinates to a mysterious place.", target: "Hollow Stump", questType: "master", part: 3 }
+        ]
+      },
+      { x: 4522, y: 2901, text: "Mushroom's Fireplace", category: "quest",
+        linkedLabels: [
+          { questName: "Find the Master of Prowling", questDescription: "Reading the note next to the fire reveals a different message, that informs you that the master is Albert Leek and that he can be found in the Sobbing Onion.", target: "Albert Leek", questType: "master", part: 5 }
+        ]
+      },
+      { x: 5669, y: 2238, text: "Albert Leek", master: "Prowling Master", category: ["quest", "master"], level: 42, sex: "male", race: "Half-Elf",
         linkedLabels: [
           { questName: "Find the Master of Prowling", questDescription: "The man will introduce himself as A.L. Make him drink until he recognizes being Albert Leek and trains you.", questType: "master", part: "reward" }
         ]
       },
-
-      // Thief underground
-      { x: 6565, y: 4413, text: "Chest Of Gold", category: "bounty" },
-      { x: 3899, y: 2304, text: "Chest", inventory: ["Great Aunt Ester's Amulet"], category: ["chest", "bounty"] },
-      { x: 5510, y: 3451, text: "Crate", inventory: ["Post Bound For Tarant"], category: ["chest", "bounty"] },
-      { x: 7424, y: 1805, text: "Cabinet", chestState: "locked", inventory: ["Ryan Marshall's Police Record"], category: ["chest", "bounty"] },
-
-      // Information
-      { x: 4298, y: 1706, text: "Grave of Lawrence Brummond", description: "Virgil, born Virgil Brummond, grew up in Caladon with his brother Lawrence Brummond as a local drifter and criminal-associate. After losing in a gamble, his brother was beaten to death, whereby Virgil fled from Caladon until he was taken in by Elder Joachim, and underwent a complete transformation by embracing the Panarii Religion. He is sent to escort the supposed reincarnation of Nasurdin back Shrouded Hills.", category: ["information"] },
-      { x: 7040, y: 2320, text: "L.N. Renford", sex: "male", race: "Gnome", level: 22, category: "npc" },
-      { x: 7095, y: 2280, text: "Tarry Thornpick", sex: "male", race: "Halfling", level: 14, category: "npc" },
-      { x: 7194, y: 2321, text: "Shoreline Park", category: "information" },
+      { x: 6055, y: 6626, text: "Chest Of Gold", category: "bounty" },
+      { x: 4188, y: 2561, text: "Chest", category: ["chest", "bounty"], inventory: ["Great Aunt Ester's Amulet"] },
+      { x: 5799, y: 3708, text: "Crate", category: ["chest", "bounty"], inventory: ["Post Bound For Tarant"] },
+      { x: 7713, y: 2062, text: "Cabinet", category: ["chest", "bounty"], chestState: "locked", inventory: ["Ryan Marshall's Police Record"] },
+      { x: 4587, y: 1963, text: "Grave of Lawrence Brummond", description: "Virgil, born Virgil Brummond, grew up in Caladon with his brother Lawrence Brummond as a local drifter and criminal-associate. After losing in a gamble, his brother was beaten to death, whereby Virgil fled from Caladon until he was taken in by Elder Joachim, and underwent a complete transformation by embracing the Panarii Religion. He is sent to escort the supposed reincarnation of Nasurdin back Shrouded Hills.", category: ["information"] },
+      { x: 7329, y: 2577, text: "L.N. Renford", category: "npc", level: 22, sex: "male", race: "Gnome" },
+      { x: 7384, y: 2537, text: "Tarry Thornpick", category: "npc", level: 14, sex: "male", race: "Halfling" },
+      { x: 7483, y: 2578, text: "Shoreline Park", category: "information" },
     ]
   },
   {
@@ -2507,7 +2498,7 @@ const ArcanumCitiesMapData = [
     displayName: "Caladon Castle - Downstairs",
     background: "#000000",
     defaultView: { x: 636, y: 34 }, // Good
-    parentFilename: "ArcanumBase/Caladonsmall",
+    parentFilename: "ArcanumBase/Caladon",
     labels: [
       // WAYPOINTS
       { x: 237, y: 394, text: "Caladon Castle - Main Floor", category: "waypoint", targetMapFilename: "Caladon Castle - Main Floor", targetX: 636, targetY: 34 },
@@ -2529,7 +2520,7 @@ const ArcanumCitiesMapData = [
     // music: ?
     background: "#000000",
     defaultView: { x: 355, y: 431 }, // Good
-    parentFilename: "ArcanumBase/Caladonsmall",
+    parentFilename: "ArcanumBase/Caladon",
     labels: [
       { x: 355, y: 431, text: "Caladon", category: "waypoint", targetMapFilename: "Caladon", targetX: 6613, targetY: 1768 },
       { x: 161, y: 289, text: "Caladon Castle - Downstairs", category: "waypoint", targetMapFilename: "Caladon Castle - Downstairs" },
@@ -2554,7 +2545,7 @@ const ArcanumCitiesMapData = [
     // music: ?
     background: "#000000",
     // defaultView: {},
-    parentFilename: "ArcanumBase/Caladonsmall",
+    parentFilename: "ArcanumBase/Caladon",
     labels: [
       { x: 855, y: 185, text: "King Farad", sex: "male", race: "Human", category: ["quest", "npc"],
         linkedLabels: [
@@ -2569,7 +2560,7 @@ const ArcanumCitiesMapData = [
     // music: ?
     background: "#000000",
     // defaultView: {},
-    parentFilename: "ArcanumBase/Caladonsmall",
+    parentFilename: "ArcanumBase/Caladon",
     labels: [],
   },
   {
@@ -2578,7 +2569,7 @@ const ArcanumCitiesMapData = [
     // music: ?
     background: "#000000",
     // defaultView: {},
-    parentFilename: "ArcanumBase/Caladonsmall",
+    parentFilename: "ArcanumBase/Caladon",
     labels: [
       { x: 627, y: 479, text: "Caladon Panarii Temple - Level 2", description: "", category: "waypoint", targetMapFilename: "Caladon Panarii Temple - Level 2", targetX: 1188, targetY: 227 },
     ]
@@ -2589,7 +2580,7 @@ const ArcanumCitiesMapData = [
     // music: ?
     background: "#000000", // Good
     defaultView: { x: 206, y: 964 }, // Good
-    parentFilename: "ArcanumBase/Caladonsmall",
+    parentFilename: "ArcanumBase/Caladon",
     labels: [
       { x: 723, y: 659, text: "Alexander the Acolyte", sex: "male", race: "Human", level: 45, category: ["quest", "npc"],
         linkedLabels: [
@@ -2619,7 +2610,7 @@ const ArcanumCitiesMapData = [
     // music: ?
     background: "#000000", // Good
     defaultView: { x: 99, y: 534 }, // Good
-    parentFilename: "ArcanumBase/Caladonsmall",
+    parentFilename: "ArcanumBase/Caladon",
     labels: [
       // Waypoints
       { x: 1188, y: 227, text: "Caladon Panarii Temple - Catacombs", category: "waypoint", targetMapFilename: "Caladon Panarii Temple - Catacombs", targetX: 633, targetY: 484 },
@@ -2644,7 +2635,7 @@ const ArcanumCitiesMapData = [
     // music: ?
     background: "#000000", // Good
     defaultView: { x: 174, y: 362 }, // Good
-    parentFilename: "ArcanumBase/Caladonsmall",
+    parentFilename: "ArcanumBase/Caladon",
     labels: [
       { x: 174, y: 362, text: "Caladon Panarii Temple - Level 1", description: "", category: "waypoint", targetMapFilename: "Caladon Panarii Temple - Level 1", targetX: 1148, targetY: 112 },
       { x: 483, y: 191, text: "K'an Hua", sex: "male", race: "Dark Elf", level: 50, category: ["quest", "npc"],
@@ -2661,7 +2652,7 @@ const ArcanumCitiesMapData = [
     // music: ?
     background: "#000000",
     // defaultView: {},
-    parentFilename: "ArcanumBase/Caladonsmall",
+    parentFilename: "ArcanumBase/Caladon",
     labels: [
       // Waypoint
       { x: 1247, y: 349, text: "Caladon", category: "waypoint", targetMapFilename: "Caladon", targetX: 4353, targetY: 1328 },
@@ -2692,7 +2683,7 @@ const ArcanumCitiesMapData = [
     // music: ?
     background: "#000000",
     defaultView: { x: 1081, y: 645 }, // Good
-    parentFilename: "ArcanumBase/Caladonsmall",
+    parentFilename: "ArcanumBase/Caladon",
     labels: [
       { x: 1081, y: 645, text: "Caladon", category: "waypoint", targetMapFilename: "Caladon", targetX: 6870, targetY: 2460 },
       { x: 857, y: 273, text: "Wood Chest", inventory: ["Caladon Crusading Chain (magick)", "Balanced Sword"], category: ["chest", "bounty"] },
@@ -2704,7 +2695,7 @@ const ArcanumCitiesMapData = [
     // music: ?
     background: "#000000",
     defaultView: { x: 2034, y: 957 }, // Good
-    parentFilename: "ArcanumBase/Caladonsmall",
+    parentFilename: "ArcanumBase/Caladon",
     labels: [
       { x: 2034, y: 957, text: "Caladon", category: "waypoint", targetMapFilename: "Caladon" },
       { x: 812, y: 472, text: "J.T. Morgan", sex: "male", race: "Gnome", category: ["quest", "npc"],
@@ -2720,7 +2711,7 @@ const ArcanumCitiesMapData = [
     // music: ?
     background: "#000000",
     defaultView: { x: 429, y: 598 }, // Good
-    parentFilename: "ArcanumBase/Caladonsmall",
+    parentFilename: "ArcanumBase/Caladon",
     labels: [
       { x: 429, y: 598, text: "Caladon", category: "waypoint", targetMapFilename: "Caladon", targetX: 5883, targetY: 1959},
     ],
@@ -2731,7 +2722,7 @@ const ArcanumCitiesMapData = [
     // music: ?
     background: "#000000",
     defaultView: { x: 833, y: 349 }, // Good
-    parentFilename: "ArcanumBase/Caladonsmall",
+    parentFilename: "ArcanumBase/Caladon",
     labels: [
       { x: 833, y: 349, text: "Caladon", category: "waypoint", targetMapFilename: "Caladon", targetX: 5377, targetY: 1643 },
       { x: 694, y: 403, text: "Wood Chest", description: "inventory: Staff of Restoration (magick)", category: ["chest", "bounty"] },
@@ -2747,7 +2738,7 @@ const ArcanumCitiesMapData = [
     // music: ?
     background: "#000000",
     defaultView: { x: 2840, y: 1431 }, // Good
-    parentFilename: "ArcanumBase/Caladonsmall",
+    parentFilename: "ArcanumBase/Caladon",
     labels: [
       { x: 2969, y: 1486, text: "Exit the Maze", category: ["quest", "waypoint"], targetMapFilename: "Caladon", targetX: 6878, targetY: 716,
         linkedLabels: [

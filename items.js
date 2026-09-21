@@ -2,124 +2,155 @@ const ArcanumItemData = [
 
   // ARMOR class: "armor", size: "medium"
   { name: "Arcane Plate", tier: "magick", itemimg: "Armor/Medium/ArcanePlate_M.png", class: "armor", size: "medium" },
-  { name: "Arcane Chainmail", tier: "magick", itemimg: "Armor/Medium/ArcaneChainmail_M.gif", class: "armor", size: "medium" }, // GIF Okay for the moment
-  { name: "Arcane Leather Armour", tier: "magick", itemimg: "Armor/Medium/ArcaneLeather_M.png", class: "armor", size: "medium" },
   { name: "Charmed Platemail", tier: "magick", itemimg: "Armor/Medium/CharmedPlate_M.png", class: "armor", size: "medium" },
-  { name: "Charmed Leather Armour", tier: "magick", class: "armor", size: "medium" }, // Missing itemimg
-  { name: "Dragon Skin Leather", tier: "magick", itemimg: "Armor/Medium/DragonLeather_M.png", class: "armor", size: "medium" },
-  { name: "Dread Armour", tier: "magick", itemimg: "Armor/Medium/DreadArmour.png", class: "armor", size: "medium" },
-  { name: "Elven Chainmail", tier: "magick", itemimg: "Armor/Medium/ElvenChain_M.png", class: "armor", size: "medium" },
-  { name: "Magick Leather Armour", tier: "magick", itemimg: "Armor/Medium/MagickLeather_M.png", class: "armor", size: "medium" },
-  { name: "Mithril Chainmail", tier: "magick", itemimg: "Armor/Medium/MitheralChain_M.png", class: "armor", size: "medium" },
-  { name: "Mystic Chainmail", tier: "magick", itemimg: "Armor/Medium/mysticchainmail.gif", class: "armor", size: "medium" }, // GIF Okay for the moment
   { name: "Mystic Platemail", tier: "magick", itemimg: "Armor/Medium/MysticPlate_M.png", class: "armor", size: "medium" },
-  { name: "Red Barbarian Clothes", tier: "magick", itemimg: "Armor/Medium/ArmorBarbarianRed.png", class: "armor", size: "medium" }, // Itemimg to fix 
-  { name: "Caladon Crusading Chain", tier: "magick", itemimg: "Armor/Medium/CaladonChainmail.png", class: "armor", size: "medium" }, // Quest item (Caladon bounty)
+  { name: "Magick Platemail", tier: "magick", itemimg: "Armor/Medium/MagickPlate_M.png", class: "armor", size: "medium" },
+  { name: "Bronzed Plate", itemimg: "Armor/Medium/BronzedPlate.png", class: "armor", size: "medium" },
   { name: "Consuming Plate Mail", tier: "hexed", itemimg: "Armor/Medium/BronzedPlate.png", class: "armor", size: "medium" },
-  { name: "Diseased Chain Mail Armour", tier: "hexed", class: "armor", size: "medium" }, // Itemimg missing
-  { name: "Diseased Leather Armour", tier: "hexed", itemimg: "Armor/Medium/LeatherArmour_M.png", class: "armor", size: "medium" },
-  { name: "Hero's Weakness Barbarian Armor", tier: "hexed", itemimg: "Armor/Medium/ArmorBarbarianRed.png", class: "armor", size: "medium" }, // Itemimg to fix
-  { name: "Barbarian Clothes", itemimg: "Armor/Medium/ArmorBarbarianGrey.png", class: "armor", size: "medium" },
   { name: "Basic Machined Plate", itemimg: "Armor/Medium/MachinedPlate_M.png", class: "armor", size: "medium" },
   { name: "Basic Platemail", itemimg: "Armor/Medium/StandardPlate_M.png", class: "armor", size: "medium" },
-  { name: "Bronze Barbarian Clothes", class: "armor", size: "medium" }, // Itemimg missing
-  { name: "Bronzed Plate", itemimg: "Armor/Medium/BronzedPlate.png", class: "armor", size: "medium" },
+  { name: "Elite Plate", itemimg: "Armor/Medium/ElitePlate_M.png", class: "armor", size: "medium" },
+
+  { name: "Arcane Chainmail", tier: "magick", itemimg: "Armor/Medium/ChainArcane_M.png", class: "armor", size: "medium" },
+  { name: "Charmed Chainmail", tier: "magick", itemimg: "Armor/Medium/ChainCharmed_M.png", class: "armor", size: "medium" },
+  { name: "Magick Chainmail", tier: "magick", itemimg: "Armor/Medium/ChainMagick_M.png", class: "armor", size: "medium" },
+  { name: "Mystic Chainmail", tier: "magick", itemimg: "Armor/Medium/ChainMystic_M.png", class: "armor", size: "medium" },
+  { name: "Elven Chainmail", tier: "magick", itemimg: "Armor/Medium/ElvenChain_M.png", class: "armor", size: "medium" },
+  { name: "Mithril Chainmail", tier: "magick", itemimg: "Armor/Medium/MitheralChain_M.png", class: "armor", size: "medium" },
+  { name: "Caladon Crusading Chain", tier: "magick", itemimg: "Armor/Medium/CaladonChainmail.png", class: "armor", size: "medium" }, // Quest item (Caladon bounty)
+  { name: "Guard Chainmail", class: "armor", size: "medium", itemimg: "Armor/Medium/ChainGuard_M.png" },
+  { name: "Diseased Chain Mail Armour", tier: "hexed", class: "armor", size: "medium", itemimg: "Armor/Medium/ChainGuard_M.png" },
   { name: "Caladon Elite Guard Chainmail", itemimg: "Armor/Medium/CaladonChainmail.png", class: "armor", size: "medium" },
   { name: "Chainmail", itemimg: "Armor/Medium/Chainmail.png", class: "armor", size: "medium" },
-  { name: "Elite Plate", itemimg: "Armor/Medium/ElitePlate_M.png", class: "armor", size: "medium" },
-  { name: "Feather-Weight Chain", itemimg: "Armor/Medium/FeatherWeightChain_M.png", class: "armor", size: "medium" },
+  { name: "Oiled Chainmail", itemimg: "Armor/Medium/OiledChain_M.png", class: "armor", size: "medium" },
+  
+  { name: "Arcane Leather Armour", tier: "magick", itemimg: "Armor/Medium/ArcaneLeather_M.png", class: "armor", size: "medium" },
+  { name: "Charmed Leather Armour", tier: "magick", itemimg: "Armor/Medium/LeatherCharmed_S.png", class: "armor", size: "medium" },
+  { name: "Magick Leather Armour", tier: "magick", itemimg: "Armor/Medium/MagickLeather_M.png", class: "armor", size: "medium" },
+  { name: "Mystic Leather Armour", tier: "magick", itemimg: "Armor/Medium/LeatherMystic_M.png", class: "armor", size: "medium" },
+
+  { name: "Dragon Skin Leather", tier: "magick", itemimg: "Armor/Medium/DragonLeather_M.png", class: "armor", size: "medium" },
+  { name: "Diseased Leather Armour", tier: "hexed", itemimg: "Armor/Medium/LeatherArmour_M.png", class: "armor", size: "medium" },
   { name: "Guard Armour", itemimg: "Armor/Medium/LeatherArmour_M.png", class: "armor", size: "medium" },
   { name: "Leather Armour", itemimg: "Armor/Medium/LeatherArmour_M.png", class: "armor", size: "medium" },
-  { name: "Oiled Chainmail", itemimg: "Armor/Medium/OiledChain_M.png", class: "armor", size: "medium" },
-  { name: "Oiled Thives Leather", itemimg: "Armor/Medium/OiledLeather_M.png", class: "armor", size: "medium" },
+  { name: "Oiled Thieves Leather", itemimg: "Armor/Medium/OiledLeather_M.png", class: "armor", size: "medium" },
   { name: "Studded Leather", itemimg: "Armor/Medium/StudedLeather_M.png", class: "armor", size: "medium" },
 
+  { name: "Dread Armour", tier: "magick", itemimg: "Armor/Medium/DreadArmour.png", class: "armor", size: "medium" },
+  { name: "Red Barbarian Clothes", tier: "magick", itemimg: "Armor/Medium/ArmorBarbarianRed.png", class: "armor", size: "medium" },
+  { name: "Hero's Weakness Barbarian Armor", tier: "hexed", itemimg: "Armor/Medium/ArmorBarbarianRed.png", class: "armor", size: "medium" },
+  { name: "Barbarian Clothes", itemimg: "Armor/Medium/ArmorBarbarianGrey.png", class: "armor", size: "medium" },
+  { name: "Bronze Barbarian Clothes", itemimg:"Armor/Medium/ArmorBarbarianBronze.png", class: "armor", size: "medium" },
+
+  { name: "Feather-Weight Chain", itemimg: "Armor/Medium/FeatherWeightChain_M.png", class: "armor", size: "medium" },
+
   // ARMOR class: "armor", size: "small"
-  { name: "Creep Armour", tier: "magick", itemimg: "Armor/Small/CreepArmour.png", class: "armor", size: "small" },
-  { name: "Gnomish Chainmail", tier: "magick", itemimg: "Armor/Small/GnomishChain.png", class: "armor", size: "small" },
-  { name: "Minute Platemail of Regeneration", tier: "magick", itemimg: "Armor/Small/MagickPlate_S.png", class: "armor", size: "small" },
-  { name: "Small Arcane Chainmail", tier: "magick", class: "armor", size: "small" }, // Itemimg missing
-  { name: "Small Arcane Leather Armour", tier: "magick", itemimg: "Armor/Small/ArcaneLeather_S.png", class: "armor", size: "small" },
-  { name: "Small Charmed Platemail", tier: "magick", itemimg: "Armor/Small/CharmedPlate_S.png", class: "armor", size: "small" },
-  { name: "Small Magick Leather Armour", tier: "magick", itemimg: "Armor/Small/MagicLeather_S.png", class: "armor", size: "small" },
-  { name: "Small Magick Chainmail", tier: "magick", class: "armor", size: "small" }, // Itemimg missing
-  { name: "Small Magick Platemail", tier: "magick", itemimg: "Armor/Small/MagickPlate_S.png", class: "armor", size: "small" },
-  { name: "Small Mithril Chainmail", tier: "magick", itemimg: "Armor/Small/MitheralChain_S.png", class: "armor", size: "small" },
-  { name: "Small Mystic Chainmail", tier: "magick", itemimg: "Armor/Small/smallmysticchainmail.gif", class: "armor", size: "small" }, // GIF Okay for the moment
-  { name: "Small Mystic Leather Armour", tier: "magick", itemimg: "Armor/Small/smallmysticleatherarmour.gif", class: "armor", size: "small" }, // GIF Okay for the moment
-  { name: "Small Mystic Platemail", tier: "magick", itemimg: "Armor/Small/MysticPlate_S.png", class: "armor", size: "small" },
-  { name: "Hexed Leather Armour", tier: "hexed", itemimg: "Armor/Small/BasicLeather_S.png", class: "armor", size: "small" },
-  { name: "Dwarven Chainmail", itemimg: "Armor/Small/DwarvenChain.png", class: "armor", size: "small" },
-  { name: "Dwarven Platemail", itemimg: "Armor/Small/DwarvenPlate.png", class: "armor", size: "small" },
-  { name: "Iron Clan Plate", itemimg: "Armor/Small/IronClanPlate_S.png", class: "armor", size: "small" },
-  { name: "Small Basic Platemail", itemimg: "Armor/Small/StandardPlate_S.png", class: "armor", size: "small" },
-  { name: "Small Chainmail", itemimg: "Armor/Small/ClassicChain_S.png", class: "armor", size: "small" },
-  { name: "Small Machined Platemail", itemimg: "Armor/Small/MachinedPlate_S.png", class: "armor", size: "small" },
-  { name: "Small Leather Armour", itemimg: "Armor/Small/BasicLeather_S.png", class: "armor", size: "small" },
-  { name: "Small Oiled Chainmail", itemimg: "Armor/Small/OiledChain_S.png", class: "armor", size: "small" },
-  { name: "Small Studded Leather", itemimg: "Armor/Small/StudedLeather_S.png", class: "armor", size: "small" },
+  { name: "Small Arcane Platemail", tier: "magick", itemimg: "Armor/Small/PlateArcane_S.png", class: "armor", size: "small" },
+  { name: "Small Mystic Platemail", tier: "magick", itemimg: "Armor/Small/PlateMystic_S.png", class: "armor", size: "small" },
+  { name: "Small Magick Platemail", tier: "magick", itemimg: "Armor/Small/PlateMagick_S.png", class: "armor", size: "small" },
+  { name: "Small Charmed Platemail", tier: "magick", itemimg: "Armor/Small/PlateCharmed_S.png", class: "armor", size: "small" },
+  { name: "Small Basic Platemail", itemimg: "Armor/Small/Plate_S.png", class: "armor", size: "small" },
+  { name: "Small Bronzed Platemail", itemimg: "Armor/Small/PlateBronzed_S.png", class: "armor", size: "small" },
+  { name: "Small Electro-Armor", itemimg: "Armor/Small/PlateElite_S.png", class: "armor", size: "small" },
+  { name: "Small Elite Platemail", itemimg: "Armor/Small/PlateElite_S.png", class: "armor", size: "small" },
+  { name: "Small Machined Platemail", itemimg: "Armor/Small/PlateMachined_S.png", class: "armor", size: "small" },
+  { name: "Dwarven Platemail", itemimg: "Armor/Small/PlateDwarven.png", class: "armor", size: "small" },
+  { name: "Iron Clan Plate", itemimg: "Armor/Small/PlateIronClan.png", class: "armor", size: "small" },
+  { name: "Minute Platemail of Regeneration", tier: "magick", itemimg: "Armor/Small/PlateMagick_S.png", class: "armor", size: "small" },
+
+  { name: "Small Arcane Chainmail", tier: "magick", itemimg: "Armor/Small/ChainArcane_S.png", class: "armor", size: "small" },
+  { name: "Small Mystic Chainmail", tier: "magick", itemimg: "Armor/Small/ChainMystic_S.png", class: "armor", size: "small" },
+  { name: "Small Magick Chainmail", tier: "magick", itemimg: "Armor/Small/ChainMagick_S.png", class: "armor", size: "small" },
+  { name: "Small Charmed Chainmail", tier: "magick", itemimg: "Armor/Small/ChainCharmed_S.png", class: "armor", size: "small" },
+  { name: "Dwarven Chainmail", itemimg: "Armor/Small/ChainDwarven.png", class: "armor", size: "small" },
+  { name: "Small Chainmail", itemimg: "Armor/Small/Chain_S.png", class: "armor", size: "small" },
+  { name: "Small Oiled Chainmail", itemimg: "Armor/Small/ChainOiled_S.png", class: "armor", size: "small" },
+  { name: "Gnomish Chainmail", tier: "magick", itemimg: "Armor/Small/ChainGnomish.png", class: "armor", size: "small" },
+  { name: "Small Mithril Chainmail", tier: "magick", itemimg: "Armor/Small/ChainMithril_S.png", class: "armor", size: "small" },
+
+  { name: "Small Arcane Leather Armour", tier: "magick", itemimg: "Armor/Small/LeatherArcane_S.png", class: "armor", size: "small" },
+  { name: "Small Mystic Leather Armour", tier: "magick", itemimg: "Armor/Small/LeatherMystic_S.png", class: "armor", size: "small" },
+  { name: "Small Magick Leather Armour", tier: "magick", itemimg: "Armor/Small/LeatherMagick_S.png", class: "armor", size: "small" },
+  { name: "Small Charmed Leather Armour", tier: "magick", itemimg: "Armor/Small/LeatherCharmed_S.png", class: "armor", size: "small" },
+  { name: "Small Leather Armour", itemimg: "Armor/Small/Leather_S.png", class: "armor", size: "small" },
+  { name: "Small Oiled Thieves Leather", itemimg: "Armor/Small/LeatherOiled_S.png", class: "armor", size: "small" },
+  { name: "Small Studded Leather", itemimg: "Armor/Small/LeatherStuded_S.png", class: "armor", size: "small" },
+  { name: "Hexed Leather Armour", tier: "hexed", itemimg: "Armor/Small/Leather_S.png", class: "armor", size: "small" },
+  { name: "Creep Armour", tier: "magick", itemimg: "Armor/Small/LeatherCreep.png", class: "armor", size: "small" },
 
   // ARMOR class: "armor", size: "large"
   { name: "Large Arcane Leather Armour", tier: "magick", itemimg: "Armor/Large/LeatherArcane_L.png", class: "armor", size: "large" },
   { name: "Large Dragon Skin Leather", tier: "magick", itemimg: "Armor/Large/LeatherDragon_L.png", class: "armor", size: "large" },
   { name: "Large Magick Leather Armour", tier: "magick", itemimg: "Armor/Large/LeatherMagick_L.png", class: "armor", size: "large" },
-  { name: "Large Mystic Leather Armour", tier: "magick", itemimg: "Armor/Large/LeatherMystic_L.gif", class: "armor", size: "large" }, // GIF Okay for the moment
+  { name: "Large Mystic Leather Armour", tier: "magick", itemimg: "Armor/Large/LeatherMystic_L.png", class: "armor", size: "large" },
   { name: "Large Basic Platemail", itemimg: "Armor/Large/Plate_L.png", class: "armor", size: "large" },
   { name: "Large Bronzed Plate", itemimg: "Armor/Large/PlateBronzed_L.png", class: "armor", size: "large" },
   { name: "Large Electro-Armor", itemimg: "Armor/Large/PlateElectro_L.png", class: "armor", size: "large" },
   { name: "Large Elite Platemail", itemimg: "Armor/Large/PlateElite_L.png", class: "armor", size: "large" },
   { name: "Large Machined Platemail", itemimg: "Armor/Large/PlateMachined_L.png", class: "armor", size: "large" },
   { name: "Large Leather Armour", itemimg: "Armor/Large/Leather_L.png", class: "armor", size: "large" },
-  { name: "Large Oiled Thives Leather", itemimg: "Armor/Large/LeatherOiled_L.png", class: "armor", size: "large" },
+  { name: "Large Oiled Thieves Leather", itemimg: "Armor/Large/LeatherOiled_L.png", class: "armor", size: "large" },
   { name: "Large Studded Armour", itemimg: "Armor/Large/LeatherStudded_L.png", class: "armor", size: "large" },
 
   // CLOTHES class: "clothes", size: "medium"
-  { name: "Arcane Robes", tier: "magick", itemimg: "Clothes/Medium/RobesArcane.gif", class: "clothes", size: "medium" }, // GIF
-  { name: "Arcane Traveler's Cloak", tier: "magick", class: "clothes", size: "medium" }, // Itemimg missing (grey)
-  { name: "Ashen Robes", tier: "magick", itemimg: "Clothes/Medium/RobesMagick.gif", class: "clothes", size: "medium" }, // GIF
+  { name: "Arcane Robes", tier: "magick", itemimg: "Clothes/Medium/RobesArcane.png", class: "clothes", size: "medium" },
+  { name: "Mystic Robes", tier: "magick", itemimg: "Clothes/Medium/RobesMystic.png", class: "clothes", size: "medium" },
+  { name: "Magick Robes", tier: "magick", itemimg: "Clothes/Medium/RobesMagick.png", class: "clothes", size: "medium" },
+  { name: "Charmed Robes", tier: "magick", itemimg: "Clothes/Medium/RobesMagick.png", class: "clothes", size: "medium" },
+
+  { name: "Arcane Traveler's Cloak", tier: "magick", itemimg: "Clothes/Medium/RobesArcaneTravelers.png", class: "clothes", size: "medium" },
+  { name: "Mystic Traveler's Cloak", tier: "magick", itemimg: "Clothes/Medium/RobesMysticTravelers.png", class: "clothes", size: "medium" },
+  { name: "Magick Traveler's Cloak", tier: "magick", itemimg: "Clothes/Medium/RobesMagickTravelers.png", class: "clothes", size: "medium" },
+  { name: "Charmed Traveler's Cloak", tier: "magick", itemimg: "Clothes/Medium/Robes.png", class: "clothes", size: "medium" },
+
+  { name: "Ashen Robes", tier: "magick", itemimg: "Clothes/Medium/RobesMagick.png", class: "clothes", size: "medium" },
+  { name: "Robe of Fire Protection", tier: "magick", itemimg: "Clothes/Medium/RobesMagick.png", class: "clothes", size: "medium" },
+  { name: "Shadowing Robes", tier: "magick", itemimg: "Clothes/Medium/RobesShadowing.png", class: "clothes", size: "medium" },
+  { name: "Silent Robes", tier: "magick", itemimg: "Clothes/Medium/RobesShadowing.png", class: "clothes", size: "medium" },
+  { name: "Priest Robes", itemimg: "Clothes/Medium/RobesPriest.png", class: "clothes", size: "medium" },
+  { name: "Robes", itemimg: "Clothes/Medium/Robes.png", class: "clothes", size: "medium" },
+  { name: "Pilgrim's Robes", itemimg: "Clothes/Medium/Robes.png", class: "clothes", size: "medium" },
+
   { name: "Enchanted Gown", tier: "magick", itemimg: "Clothes/Medium/DressMagenta.png", class: "clothes", size: "medium" },
-  { name: "Magick Robes", tier: "magick", itemimg: "Clothes/Medium/RobesMagick.gif", class: "clothes", size: "medium" }, // GIF
-  { name: "Magick Traveler's Cload", tier: "magick", itemimg: "Clothes/Medium/RobesWhite.png", class: "clothes", size: "medium" }, // Itemimg to fix
-  { name: "Mystic Robes", tier: "magick", class: "clothes", size: "medium" }, // Itemimg missing (light blue)
-  { name: "Mystic Traveler's Cloak", tier: "magick", itemimg: "Clothes/Medium/RobesMysticTravelers.gif", class: "clothes", size: "medium" }, // GIF
-  { name: "Robe of Fire Protection", tier: "magick", itemimg: "Clothes/Medium/RobesMagick.gif", class: "clothes", size: "medium" }, // GIF
-  { name: "Shadowing Robes", tier: "magick", itemimg: "Clothes/Medium/RobesShadowing.gif", class: "clothes", size: "medium" }, // GIF
-  { name: "Silent Robes", tier: "magick", itemimg: "Clothes/Medium/RobesShadowing.gif", class: "clothes", size: "medium" }, // GIF
-  { name: "Venom-Shielded Garment", tier: "magick", itemimg: "Clothes/Medium/JacketPoison_M.png", class: "clothes", size: "medium" }, // GIF
-  { name: "Jacket", itemimg: "Clothes/Medium/JacketBlue_M.png", class: "clothes", size: "medium" },
-  { name: "Heavy Wool Clothes", itemimg: "Clothes/Medium/JacketGreen_M.png", class: "clothes", size: "medium" },
-  { name: "Priest Robes", itemimg: "Clothes/Medium/RobesPriest.gif", class: "clothes", size: "medium" }, // GIF
-  { name: "Robes", itemimg: "Clothes/Medium/Robes.gif", class: "clothes", size: "medium" }, // GIF
-  { name: "Nice Suit", itemimg: "Clothes/Medium/SuitBlack_M.png", class: "clothes", size: "medium" },
-  { name: "Officer's Uniform", itemimg: "Clothes/Medium/JacketOfficers_M.png", class: "clothes", size: "medium" },
-  { name: "Pilgrim's Robes", itemimg: "Clothes/Medium/Robes.gif", class: "clothes", size: "medium" }, // GIF
   { name: "Plain Dress", itemimg: "Clothes/Medium/DressBlue.png", class: "clothes", size: "medium" },
   { name: "Rustic Dress", itemimg: "Clothes/Medium/DressBlack.png", class: "clothes", size: "medium" },
-  { name: "Rustic Finery", itemimg: "Clothes/Medium/SuitBrown_M.png", class: "clothes", size: "medium" },
-  { name: "Servants Clothes", itemimg: "Clothes/Medium/SuitWhite_M.png", class: "clothes", size: "medium" },
   { name: "Servant's Dress", itemimg: "Clothes/Medium/DressGreen.png", class: "clothes", size: "medium" },
-  { name: "Smoking Jacket", itemimg: "Clothes/Medium/SuitRed_M.png", class: "clothes", size: "medium" },
-  { name: "Suade Jacket", itemimg: "Clothes/Medium/JacketBlack_M.png", class: "clothes", size: "medium" },
-  { name: "Suit of Resistance", itemimg: "Clothes/Medium/SuitBlack_M.png", class: "clothes", size: "medium" },
   { name: "''Sunday's Best'' Dress", itemimg: "Clothes/Medium/DressMagenta.png", class: "clothes", size: "medium" },
+
+  { name: "Venom-Shielded Garment", tier: "magick", itemimg: "Clothes/Medium/JacketPoison_M.png", class: "clothes", size: "medium" },
+  { name: "Jacket", itemimg: "Clothes/Medium/JacketBlue_M.png", class: "clothes", size: "medium" },
+  { name: "Heavy Wool Clothes", itemimg: "Clothes/Medium/JacketGreen_M.png", class: "clothes", size: "medium" },
+  { name: "Officer's Uniform", itemimg: "Clothes/Medium/JacketOfficers_M.png", class: "clothes", size: "medium" },
+  { name: "Suade Jacket", itemimg: "Clothes/Medium/JacketBlack_M.png", class: "clothes", size: "medium" },
   { name: "Wool Jacket", itemimg: "Clothes/Medium/JacketBrown_M.png", class: "clothes", size: "medium" },
 
+  { name: "Nice Suit", itemimg: "Clothes/Medium/SuitBlack_M.png", class: "clothes", size: "medium" },
+  { name: "Rustic Finery", itemimg: "Clothes/Medium/SuitBrown_M.png", class: "clothes", size: "medium" },
+  { name: "Servants Clothes", itemimg: "Clothes/Medium/SuitWhite_M.png", class: "clothes", size: "medium" },
+  { name: "Smoking Jacket", itemimg: "Clothes/Medium/SuitRed_M.png", class: "clothes", size: "medium" },
+  { name: "Suit of Resistance", itemimg: "Clothes/Medium/SuitBlack_M.png", class: "clothes", size: "medium" },
+
   // CLOTHES class: "clothes", size: "small"
-  { name: "Small Arcane Traveller's Cloak", itemimg: "Clothes/Small/RobeArcaneTravellers_S.gif", class: "clothes", size: "small" }, // GIF
-  { name: "Small Arcane Robes", tier: "magick", class: "clothes", size: "small" }, // No ITEMIMG
-  { name: "Small Charmed Robes", itemimg: "Clothes/Small/RobeCharmed_S.gif", class: "clothes", size: "small" }, // GIF
-  { name: "Small Heavy Wool Clothes", itemimg: "Clothes/Small/JacketGreen_S.png", class: "clothes", size: "small" },
-  { name: "Small Magick Robes", tier: "magick", class: "clothes", size: "small" }, // Incorrect ITEMIMG in the folder (the robe is blue)
-  { name: "Small Manservant's Clothes", itemimg: "Clothes/Small/SuitWhite_S.png", class: "clothes", size: "small" },
-  { name: "Small Nice Suit", itemimg: "Clothes/Small/SuitBlack_S.png", class: "clothes", size: "small" },
+  { name: "Small Arcane Robes", itemimg: "Clothes/Small/RobesArcane_S.png", class: "clothes", size: "small" },
+  { name: "Small Mystic Robes", itemimg: "Clothes/Small/RobesMystic_S.png", tier: "magick", class: "clothes", size: "small" },
+  { name: "Small Magick Robes", itemimg: "Clothes/Small/RobesMagick_S.png", tier: "magick", class: "clothes", size: "small" },
+  { name: "Small Charmed Robes", itemimg: "Clothes/Small/RobesMystic_S.png", class: "clothes", size: "small" },
+
+  { name: "Small Arcane Traveller's Cloak", itemimg: "Clothes/Small/RobesArcaneTravelers_S.png", class: "clothes", size: "small" },
+  
   { name: "Small Priest Robes", itemimg: "Clothes/Small/RobeFancy_S.png", class: "clothes", size: "small" },
-  { name: "Small Robe of the Chameleon", itemimg: "Clothes/Medium/RobesShadowing.gif", class: "clothes", size: "small" },
-  { name: "Small Robes", itemimg: "Clothes/Small/Robe_S.gif", class: "clothes", size: "small" }, // GIF
-  { name: "Small Rustic Finery", itemimg: "Clothes/Small/SuitBrown_S.png", class: "clothes", size: "small" },
-  { name: "Small Smoking Jacket", itemimg: "Clothes/Small/SuitRed_S.png", class: "clothes", size: "small" },
+  { name: "Small Robe of the Chameleon", itemimg: "Clothes/Medium/RobesShadowing.png", class: "clothes", size: "small" },
+  { name: "Small Robes", itemimg: "Clothes/Small/Robes_S.png", class: "clothes", size: "small" },
+  { name: "Venomous Robes", tier: "hexed", itemimg: "Clothes/Small/RobeFancy_S.png", class: "clothes", size: "small" },
+
+  { name: "Small Heavy Wool Clothes", itemimg: "Clothes/Small/JacketGreen_S.png", class: "clothes", size: "small" },
   { name: "Small Suede Jacket", itemimg: "Clothes/Small/JacketBlack_S.png", class: "clothes", size: "small" },
   { name: "Small Wool Jacket", itemimg: "Clothes/Small/JacketBrown_S.png", class: "clothes", size: "small" },
-  { name: "Venomous Robes", tier: "hexed", itemimg: "Clothes/Small/RobeFancy_S.png", class: "clothes", size: "small" },
+
+  { name: "Small Manservant's Clothes", itemimg: "Clothes/Small/SuitWhite_S.png", class: "clothes", size: "small" },
+  { name: "Small Nice Suit", itemimg: "Clothes/Small/SuitBlack_S.png", class: "clothes", size: "small" },
+  { name: "Small Rustic Finery", itemimg: "Clothes/Small/SuitBrown_S.png", class: "clothes", size: "small" },
+  { name: "Small Smoking Jacket", itemimg: "Clothes/Small/SuitRed_S.png", class: "clothes", size: "small" },
 
   // CLOTHES class: "clothes", size: "large"
   { name: "Heavy Rags", itemimg: "Clothes/Large/RagBlack.png", class: "clothes", size: "large" },
@@ -169,12 +200,13 @@ const ArcanumItemData = [
   { name: "Worn Shoes", itemimg: "Boots/OldShoes.png", class: "boots" },
 
   // GLOVES class: "gloves"
-  { name: "Arcane Gauntlets", tier: "magick", itemimg: "Gloves/arcanegauntlets.gif", class: "gloves" }, // GIF
-  { name: "Charmed Gauntlets", tier: "magick", itemimg: "Gloves/CharmedGauntlets.png", class: "gloves" },
+  { name: "Arcane Gauntlets", tier: "magick", itemimg: "Gloves/GauntletsArcane.png", class: "gloves" },
+  { name: "Charmed Gauntlets", tier: "magick", itemimg: "Gloves/GauntletsCharmed.png", class: "gloves" },
+  { name: "Magick Gauntlets", tier: "magick", itemimg: "Gloves/GauntletsMagick.png", class: "gloves" },
+  { name: "Mystic Gauntlets", tier: "magick", itemimg: "Gloves/GauntletsMystic.png", class: "gloves" },
+
   { name: "Gloves of Dexterity", tier: "magick", itemimg: "Gloves/GlovesOfDexterity.png", class: "gloves" },
   { name: "Light-Fingered Gauntlets", tier: "magick", itemimg: "Gloves/LightFingeredGloves.png", class: "gloves" },
-  { name: "Magick Gauntlets", tier: "magick", class: "gloves" }, // Itemimg to add
-  { name: "Mystic Gauntlets", tier: "magick", class: "gloves" }, // Itemimg to add
   { name: "Baneful Gauntlets", tier: "hexed", itemimg: "Gloves/Gauntlets.png", class: "gloves" },
   { name: "Chain Gloves", itemimg: "Gloves/ChainGloves.png", class: "gloves" },
   { name: "Dwarven Gauntlets", itemimg: "Gloves/DwarvenGauntlets.png", class: "gloves" },
@@ -205,34 +237,37 @@ const ArcanumItemData = [
 
   // RING class: "rings"
   { name: "Arcane Ring", tier: "magick", itemimg: "Rings/RingArcane.png", class: "rings" },
-  { name: "Charmed Ring", tier: "magick", class: "rings" }, // itemimg missing
-  { name: "Fated Ring", tier: "magick", itemimg: "Rings/FatedRing.png", class: "rings" },
-  { name: "Magick Ring", tier: "magick", itemimg: "Rings/RingMagick.png", class: "rings" },
   { name: "Mystic Ring", tier: "magick", itemimg: "Rings/RingMystic.png", class: "rings" },
-  { name: "Negociator's Ring", tier: "magick", class: "rings" }, // itemimg: copper ring
-  { name: "Ring of Influence", tier: "magick", class: "rings" }, // itemimg: copper ring
+  { name: "Magick Ring", tier: "magick", itemimg: "Rings/RingMagick.png", class: "rings" },
+  { name: "Charmed Ring", tier: "magick", itemimg: "Rings/RingCharmed.png", class: "rings" },
+  
+  { name: "Fated Ring", tier: "magick", itemimg: "Rings/FatedRing.png", class: "rings" },
+  { name: "Negociator's Ring", tier: "magick", class: "rings", itemimg: "Rings/RingCopper.png" },
+  { name: "Ring of Influence", tier: "magick", class: "rings", itemimg: "Rings/RingCopper.png" },
   { name: "Ring of Poison Resistance", tier: "magick", itemimg: "Rings/FatedRing.png", class: "rings" },
   { name: "Ring of Protection", tier: "magick", itemimg: "Rings/RingofProtection.png", class: "rings" },
   { name: "Ring of Silence", tier: "magick", itemimg: "Rings/GoldRing.png", class: "rings" }, // Mrs Morgan ring - magick
   { name: "Ring of Dark Magicks", tier: "hexed", itemimg: "Rings/GoldRing.png", class: "rings" },
   { name: "Ring of Shadows", tier: "hexed", itemimg: "Rings/RingArcane.png", class: "rings" },
   { name: "Charged Ring", itemimg: "Rings/RingCharged.png", class: "rings" },
-  { name: "Copper Ring", class: "rings" }, // Copper ring itemimg to add
-  { name: "Decent Gold Ring", itemimg: "Rings/GoldRing.png", class: "rings" },
-  { name: "Diamond Ring", itemimg: "Rings/DiamondRing.png", class: "rings" },
-  { name: "Emerald Ring", class: "rings" }, // Itemimg to add
-  { name: "Fancy Ring", itemimg: "Rings/FancyRing.png", class: "rings" },
-  { name: "Mithril Ring", class: "rings" }, // Itemimg to add
   { name: "Ring of Concealment", itemimg: "Rings/FancyRing.png", class: "rings" }, // Not magick
   { name: "Ring of Silence (Albert Leek)", itemimg: "Rings/FancyRing.png", class: "rings" },
-  { name: "Ruby Ring", class: "rings" }, // Itemimg to add
-  { name: "Sapphire Ring", itemimg: "Rings/SapphireRing.png", class: "rings" },
-  { name: "Silver Ring", class: "rings" }, // Itemimg to add
+
+  { name: "Diamond Ring", itemimg: "Rings/DiamondRing.png", class: "rings" },
+  { name: "Emerald Ring", class: "rings", itemimg: "Rings/RingEmerald.png" },
+  { name: "Ruby Ring", class: "rings", itemimg: "Rings/RingRuby.png" },
+  { name: "Sapphire Ring", itemimg: "Rings/RingSapphire.png", class: "rings" },
+  { name: "Mithril Ring", class: "rings", itemimg: "Rings/RingMithril.png"},
+  { name: "Decent Gold Ring", itemimg: "Rings/GoldRing.png", class: "rings" },
+  { name: "Silver Ring", class: "rings", itemimg: "Rings/RingSilver.png" },
+  { name: "Copper Ring", class: "rings", itemimg: "Rings/RingCopper.png" },
   { name: "Wooden Ring", itemimg: "Rings/WoodRing.png", class: "rings" },
-  { name: "G.B. Ring", itemimg: "Rings/GBRing.png", class: "rings" }, // Quest item
+  { name: "Fancy Ring", itemimg: "Rings/FancyRing.png", class: "rings" },
+
+  { name: "Gilbert Bates' Ring", itemimg: "Rings/GBRing.png", class: "rings" }, // Quest item
   { name: "Gladys' Ring", itemimg: "Rings/FancyRing.png", class: "rings" }, // Quest item
   { name: "Fancy Ring (Quest)", itemimg: "Rings/GoldRing.png", class: "rings" }, // Quest item (Tarant Sewers)
-  { name: "Ring Of Virility", class: "rings" }, // Quest item (Tarant bounty)
+  { name: "Ring Of Virility", class: "rings", itemimg: "Rings/RingCopper.png" }, // Quest item (Tarant bounty)
 
   // NECKLACES class: "necklaces"
   { name: "Amulet of K'an-el", tier: "magick", itemimg: "Necklaces/DorianAmulet.png", class: "necklaces" },
@@ -245,9 +280,6 @@ const ArcanumItemData = [
   { name: "Medallion of Beauty", tier: "magick", itemimg: "Necklaces/BeautyMedallion.png", class: "necklaces" },
   { name: "Medallion of Silence", tier: "magick", itemimg: "Necklaces/Medallion.png", class: "necklaces" },
   { name: "The Finger of Mannox", tier: "magick", itemimg: "Necklaces/FingerOfMannox.png", class: "necklaces" },
-  { name: "Amulet of N'Tala", tier: "magick", itemimg: "Necklaces/DorianAmulet.png", class: "necklaces" }, // Quest item
-  { name: "Great Aunt Ester's Amulet", tier: "magick", itemimg: "Necklaces/DorianAmulet.png", class: "necklaces" }, // Quest item (Caladon bounty)
-  { name: "Necklace of Queen K'na S'ea", tier: "magick", itemimg: "Necklaces/BeautyMedallion.png", class: "necklaces" }, // Quest item
   { name: "Hellfire Medallion", tier: "hexed", itemimg: "Necklaces/BeautyMedallion.png", class: "necklaces" },
   { name: "Medallion of Dark Magicks", tier: "hexed", itemimg: "Necklaces/DorianAmulet.png", class: "necklaces" },
   { name: "Serpentine Necklace", tier: "hexed", itemimg: "Necklaces/SerpentineAmulet.png", class: "necklaces" },
@@ -259,6 +291,10 @@ const ArcanumItemData = [
   { name: "Pelojian's Amulet", itemimg: "Necklaces/DorianAmulet.png", class: "necklaces" },
   { name: "Ruby Necklace", itemimg: "Necklaces/NecklaceRuby.png", class: "necklaces" },
   { name: "Sapphire Necklace", class: "necklaces" }, // Iteimg to add
+
+  { name: "Amulet of N'Tala", tier: "magick", itemimg: "Necklaces/DorianAmulet.png", class: "necklaces" }, // Quest item
+  { name: "Great Aunt Ester's Amulet", tier: "magick", itemimg: "Necklaces/DorianAmulet.png", class: "necklaces" }, // Quest item (Caladon bounty)
+  { name: "Necklace of Queen K'na S'ea", tier: "magick", itemimg: "Necklaces/BeautyMedallion.png", class: "necklaces" }, // Quest item
   { name: "Cassie's Necklace", itemimg: "Necklaces/DorianAmulet.png", class: "necklaces" }, // Quest item (Not magick)
   { name: "Cynthia Boggs' Locket", itemimg: "Necklaces/CynthiaBoggsLocket.png", class: "necklaces" }, // Quest item
   { name: "Jewel Of Hebe", itemimg: "Necklaces/BeautyMedallion.png", class: "necklaces" }, // Quest item (Tarant bounty)
@@ -432,19 +468,19 @@ const ArcanumItemData = [
   { name: "Arcane Great Sword", tier: "magick", itemimg: "Swords/ArcaneGreatSword.png", class: "sword" },
   { name: "Arcane Sword", tier: "magick", itemimg: "Swords/ArcaneSword.png", class: "sword" },
   { name: "Charmed Great Sword", tier: "magick", itemimg: "Swords/CharmedGreatSword.png", class: "sword" },
-  { name: "Charmed Sword", tier: "magick", itemimg: "Swords/charmedsword.gif", class: "sword" }, // GIF
+  { name: "Charmed Sword", tier: "magick", itemimg: "Swords/CharmedSword.png", class: "sword" },
   { name: "Enchanted Sword", tier: "magick", itemimg: "Swords/EnchantedSword.png", class: "sword" },
   { name: "Filament Sword", tier: "magick", itemimg: "Swords/FilamentSword.png", class: "sword" },
   { name: "Magick Great Sword", tier: "magick", itemimg: "Swords/MagicGreatSword.png", class: "sword" },
-  { name: "Magick Sword", tier: "magick", class: "sword" }, // Itemimg missing
+  { name: "Magick Sword", tier: "magick", class: "sword", itemimg: "Swords/MagickSword.png" },
   { name: "Mystic Great Sword", itemimg: "Swords/MysticGreatSword.png", class: "sword" },
   { name: "Mystic Sword", tier: "magick", itemimg: "Swords/MysticSword.png", class: "sword" },
   { name: "Screaming Scimitar", tier: "magick", itemimg: "Swords/Scimitar.png", class: "sword" },
-  { name: "Stillwater Blade", tier: "magick", itemimg: "Swords/stillwaterblade.gif", class: "sword" }, // GIF
+  { name: "Stillwater Blade", tier: "magick", itemimg: "Swords/StillwaterBlade.png", class: "sword" },
   { name: "Sword of Air", tier: "magick", itemimg: "Swords/SwordOfAir.png", class: "sword" },
   { name: "Sword of Baltar", tier: "magick", itemimg: "Swords/QualityBroadsword.png", class: "sword" },
   { name: "Sword of Defense", tier: "magick", itemimg: "Swords/SwordOfDefense.png", class: "sword" },
-  { name: "Sword of Mannox", tier: "magick", itemimg: "Swords/qualitysword.gif", class: "sword" },
+  { name: "Sword of Mannox", tier: "magick", itemimg: "Swords/QualitySword.png", class: "sword" },
   { name: "Sword of Sickness", tier: "magick", itemimg: "Swords/SwordOfSickness.png", class: "sword" },
   { name: "Torian Kel's Ancestral Sword", tier: "magick", itemimg: "Swords/SwordOfDefense.png", class: "sword" },
   { name: "Black Stone Blade", tier: "hexed", itemimg: "Swords/Sword.png", class: "sword" },
@@ -459,23 +495,22 @@ const ArcanumItemData = [
   { name: "Caladon Elite Sword", itemimg: "Swords/CaladonEliteSword.png", class: "sword" },
   { name: "Charged Sword", itemimg: "Swords/ChargedSword.png", class: "sword" },
   { name: "Claymore", itemimg: "Swords/Claymore.png", class: "sword" },
-  { name: "Derian Ka Sword", itemimg: "Swords/charmedsword.gif", class: "sword" }, // GIF; Quest item (Tarant bounty)
   { name: "Envenomed Sword", itemimg: "Swords/EnvenomedSword.png", class: "sword" },
   { name: "Falchion", itemimg: "Swords/Falchion.png", class: "sword" },
   { name: "Flamberge", itemimg: "Swords/Flamberge.png", class: "sword" },
   { name: "Katana", itemimg: "Swords/Katana.png", class: "sword" },
   { name: "Kryggird's Falchion", itemimg: "Swords/KryggirdsFalchion.png", class: "sword" }, // Not magick
   { name: "Quality Broadsword", itemimg: "Swords/QualityBroadsword.png", class: "sword" },
-  { name: "Quality Sword", itemimg: "Swords/qualitysword.gif", class: "sword" }, // GIF
+  { name: "Quality Sword", itemimg: "Swords/QualitySword.png", class: "sword" },
   { name: "Rapier", itemimg: "Swords/Rapier.png", class: "sword" },
   { name: "Rusty Broadsword", itemimg: "Swords/RustyBroadsword.png", class: "sword" },
-  { name: "Rusty Sword", itemimg: "Swords/rustysword.gif", class: "sword" }, // GIF
+  { name: "Rusty Sword", itemimg: "Swords/RustySword.png", class: "sword" },
   { name: "Scimitar", itemimg: "Swords/Scimitar.png", class: "sword" },
   { name: "Short Sword", itemimg: "Swords/ShortSword.png", class: "sword" },
   { name: "Sword", itemimg: "Swords/Sword.png", class: "sword" },
   { name: "Sword (Isle of Despair)", itemimg: "Swords/BalancedSword.png", class: "sword" },
   { name: "Tempered Sword", itemimg: "Swords/Sword.png", class: "sword" },
-
+  { name: "Derian Ka Sword", itemimg: "Swords/CharmedSword.png", class: "sword" }, // Quest item (Tarant bounty)
   // QUEST
   { name: "Arbalah's Sacred Artifact", itemimg: "Quest/Artifact.png" },
   { name: "Bessie Toone's Boot", itemimg: "Quest/BessiesBoot.png" },
@@ -524,7 +559,7 @@ const ArcanumItemData = [
   { name: "Skull from the Tomb of Nasrudin", itemimg: "Skull.png" },
   { name: "Stringy Pete's Treasure", itemimg: "Quest/ChestTreasure.png" },
   { name: "Cassie's Jewellery", itemimg: "Quest/CassiesRing.png" },
-  { name: "Enchanted Looking Glass", itemimg: "lookingglass.gif" },
+  { name: "Enchanted Looking Glass", itemimg: "LookingGlass.png" },
   { name: "Flawless Dwarven Rubies", itemimg: "curePoison.png" },
   { name: "Heron Device", itemimg: "Engine.png" },
   { name: "Madam Lil's Music Box", itemimg: "MusicBox.png" },
@@ -537,7 +572,7 @@ const ArcanumItemData = [
   { name: "Napha Water", itemimg: "LadysPerfume.png" },  
   { name: "Lethe Wyvern Venom", itemimg: "Poison.png" },
   { name: "Mr. Fitzgerald's Potion Of Dark Power", itemimg: "Poison.png" },
-  { name: "Gem of Water Purity", itemimg: "Sapphire.png"},
+  { name: "Gem of Water Purity", itemimg: "GemSapphire.png"},
   { name: "Lycanthrope Restorative", itemimg: "Quest/LycanthropeRestorative.png"},
 
   // OTHERS
@@ -644,7 +679,7 @@ const ArcanumItemData = [
   { name: "Liquid Soap", itemimg: "LiquidSoap.png" },
   { name: "Li'tani", itemimg: "Litani.png" },
   { name: "Lockpicks", itemimg: "lockpicks.png" },
-  { name: "Looking Glass", itemimg: "lookingglass.gif" }, // GIF
+  { name: "Looking Glass", itemimg: "LookingGlass.png" },
   { name: "Magnesium", itemimg: "Magnesium.png" },
   { name: "Medical Arachnid", itemimg: "Arachnid.png" },
   { name: "Mental Inhibitor", itemimg: "mentalInhibitor.png"},
@@ -888,32 +923,146 @@ const ArcanumItemData = [
   { name: "Prof Eakins", class: "telegraphs", itemimg: "Telegraph.png", image: "Textures/Telegrams/1050 - Prof Eakins.png" },
 
   // SCHEMATICS
-  { name: "Schematics: Automaton" },
-  { name: "Schematics: Wheel Clan Spectacles" },
+  { name: "Schematic: Invigorator", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Reanimator", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Clockwork Physician", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Miracle Cure", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Mental Inhibitor", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Necromizer", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Fortifier", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Fuel", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Potion of Paralysis", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Lemon and Potato Charges", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Charged Sword", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Flow Disruptor", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Tesla Gun", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Bellringer", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Electro Armour (Medium)", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Pyrotechnic Bow", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Knock Out Gas", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Hallucination Grenade", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Electrocution Grenade", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Grenade Launcher", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Time Bomb", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Concussion Grenade", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Paralysis Grenade", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Mustard Gas Grenade", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Plastique", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Detonator", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Flame Thrower", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Mechanized Gun", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Acid Gun", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Accelerator Gun", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Pyrotechnic Gun", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Blade Launcher", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: High Velocity Pistol", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Schreck's Multi-Barreled Pistol", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Long Range Pistol", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Tranquilizer Gun", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Poison Arachnid", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Automaton", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Compound Bow", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Envenomed Bow", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Medical Arachnid", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Illuminated Decoy", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Explosive Decoy", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Automaton Gunner", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Goggled Helmet", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Machined Platemail", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Wheel Clan Spectacles", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Envenomed Sword", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Envenomed Axe", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Miner's Helmet", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Pyrotechnic Axe", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Rifled Cannon", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Mechanical Dagger", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Elixir of Hypnotic Suggestion", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Brain Builder", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Muscle Maker", class: "schematic", itemimg: "Schematic.png", image: "" },
+  { name: "Schematic: Bullets", class: "schematic", itemimg: "Schematic.png", image: "" },
 
   // SCROLL
-  { name: "Scroll of Body of Air", tier: "magick", itemimg: "Scroll.png" },
-  { name: "Scroll of Body of Fire", tier: "magick", itemimg: "Scroll.png" },
-  { name: "Scroll of Body of Stone", tier: "magick", itemimg: "Scroll.png" },
-  { name: "Scroll of Bonds of Magic", tier: "magick", itemimg: "Scroll.png" },
-  { name: "Scroll of Call Air Elemental", tier: "magick", itemimg: "Scroll.png" },
-  { name: "Scroll of Call Earth Elemental", tier: "magick", itemimg: "Scroll.png" },
-  { name: "Scroll of Call Water Elemental", tier: "magick", itemimg: "Scroll.png" },
-  { name: "Scroll of Disarm", tier: "magick", itemimg: "Scroll.png" },
-  { name: "Scroll of Disperse Magick", tier: "magick", itemimg: "Scroll.png" },
-  { name: "Scroll of Disintegrate", tier: "magick", itemimg: "Scroll.png" },
-  { name: "Scroll of Drain Will", tier: "magick", itemimg: "Scroll.png" },
-  { name: "Scroll of Fireflash", tier: "magick", itemimg: "Scroll.png" },
-  { name: "Scroll of Flesh to Stone", tier: "magick", itemimg: "Scroll.png" },
-  { name: "Scroll of Major Healing", tier: "magick", itemimg: "Scroll.png" },
-  { name: "Scroll of Nightmare", tier: "magick", itemimg: "Scroll.png" },
-  { name: "Scroll of Poison Vapours", tier: "magick", itemimg: "Scroll.png" },
-  { name: "Scroll of Polymorph", tier: "magick", itemimg: "Scroll.png" },
-  { name: "Scroll of Sense Invisible/Traps", tier: "magick", itemimg: "Scroll.png" },
-  { name: "Scroll of Squall of Ice", tier: "magick", itemimg: "Scroll.png" },
-  { name: "Scroll of Summon Undead", tier: "magick", itemimg: "Scroll.png" },
-  { name: "Scroll of Teleportation", tier: "magick", itemimg: "Scroll.png" },
-  { name: "Scroll of Unseen Force", tier: "magick", itemimg: "Scroll.png" },
+  { name: "Scroll of Disarm", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Unlocking Cantrip", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Unseen Force", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Spatial Distortion", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Teleportation", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Sense Alignment", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of See Contents", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Read Aura", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Sense Invisible/Traps", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Divine Magic", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Vitality of Air", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Poison Vapours", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Call Winds", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Body of Air", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Call Air Elemental", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Strength of Earth", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Stone Throw", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Wall of Stone", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Body of Stone", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Call Earth Elemental", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Agility of Fire", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Wall of Fire", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Fireflash", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Body of Fire", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Call Fire Elemental", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Purity of Water", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Call Fog", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Squall of Ice", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Body of Water", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Call Water Elemental", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Shield of Protection", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Jolt", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Wall of Force", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Bolt of Lightning", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Disintegrate", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Charm", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Stun", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Drain Will", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Nightmare", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Dominate Will", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Resist Magick", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Disperse Magick", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Dweomer Shield", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Bonds of Magic", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Reflection Shield", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Hardened Hands", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Weaken", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Shrink", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Flesh to Stone", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Polymorph", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Charm Beast", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Entangle", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Control Beast", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Succour Beast", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Regenerate", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Harm", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Conjure Spirit", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Summon Undead", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Create Undead", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Quench Life", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Minor Healing", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Halt Poison", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Major Healing", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Sanctuary", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Resurrect", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Illuminate", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Flash", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Blur Sight", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Phantasmal Fiend", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Invisibility", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Plague of Insects", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Orcish Champion", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Guardian Ogre", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Hellgate", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Familiar", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Magelock", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Congeal Time", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Hasten", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Stasis", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Tempus Fugit", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
+  { name: "Scroll of Exiting", tier: "magick", class: "scroll", itemimg: "Scroll.png" },
 
   // KEYS
   { name: "Bates Mausoleum Key", itemimg: "Key.png" },

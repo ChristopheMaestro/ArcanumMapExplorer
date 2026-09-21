@@ -210,6 +210,7 @@ const inventoryPickerSearch = document.getElementById('inventory-picker-search')
 const inventoryPickerClassFilter = document.getElementById('inventory-picker-class-filter');
 const inventoryPickerSizeFilter = document.getElementById('inventory-picker-size-filter');
 const inventoryPickerGrid = document.getElementById('inventory-picker-grid');
+const inventoryPickerItemCount = document.getElementById('inventory-picker-item-count');
 // Working copy of the inventory for whichever label is currently being created/edited in the
 // Label Editor - a plain array of item names (or {name, tier, image} objects preserved as-is
 // from hand-edited maps.js data), committed onto the label only when the editor form is saved.
@@ -797,6 +798,7 @@ function populateInventoryPickerFilterOptions() {
 
 function renderInventoryPickerGrid(query) {
     const catalog = (typeof ArcanumItemData !== 'undefined' ? ArcanumItemData : []);
+    const totalItems = catalog.filter(it => it && it.name).length;
     const q = (query || '').trim().toLowerCase();
     const classFilter = inventoryPickerClassFilter.value;
     const sizeFilter = inventoryPickerSizeFilter.value;
@@ -807,6 +809,10 @@ function renderInventoryPickerGrid(query) {
             && (!sizeFilter || it.size === sizeFilter))
         .slice()
         .sort((a, b) => a.name.localeCompare(b.name));
+
+    if (inventoryPickerItemCount) {
+        inventoryPickerItemCount.textContent = `Showing ${filtered.length.toLocaleString()} / ${totalItems.toLocaleString()} items`;
+    }
 
     if (filtered.length === 0) {
         inventoryPickerGrid.innerHTML = `<div class="inventory-picker-empty-hint">${catalog.length === 0 ? 'No item catalog loaded (items.js)' : 'No items match your filters'}</div>`;
@@ -3968,14 +3974,12 @@ function updateTransform() {
 }
 
 // --- Map background texture --------------------------------------------
-// A map's "background" (maps.js) is a raw CSS `background` shorthand - usually either a
-// repeating texture ("url('...') repeat") or a plain color fallback. Repeating textures are
-// kept in lockstep with the map's own pan/zoom (posX/posY/scale) so they always look like part
-// of the map's world space rather than a static backdrop, while background-repeat means the
-// tiling still completely fills the viewport no matter how far zoomed in/out or panned.
+// Performance note: the old implementation changed background-size/background-position
+// on every pan/zoom event. That can force the browser to repaint a large tiled surface.
+// Instead, keep the texture at its natural size and move/scale the entire background layer
+// with a CSS transform, just like the map container. This lets the compositor handle the
+// animation much more efficiently.
 let backgroundTileImg = null;
-let backgroundTileNaturalWidth = 0;
-let backgroundTileNaturalHeight = 0;
 
 function extractBackgroundImageUrl(bgValue) {
     if (typeof bgValue !== 'string') return null;
@@ -3986,28 +3990,26 @@ function extractBackgroundImageUrl(bgValue) {
 
 function applyMapBackground(bgValue) {
     const imageUrl = extractBackgroundImageUrl(bgValue || '');
+
+    // Reset transform whenever a new background is applied.
+    mapBackgroundLayer.style.transformOrigin = '0 0';
+    mapBackgroundLayer.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
+
     if (imageUrl) {
         mapBackgroundLayer.style.background = `url("${imageUrl}") repeat`;
-        if (backgroundTileImg && backgroundTileImg.src === imageUrl && backgroundTileNaturalWidth) {
-            updateBackgroundLayerTransform();
-        } else {
-            backgroundTileNaturalWidth = 0;
-            backgroundTileNaturalHeight = 0;
-            const tileImg = new Image();
-            backgroundTileImg = tileImg;
-            tileImg.onload = () => {
-                if (backgroundTileImg !== tileImg) return; // a newer map/background loaded in the meantime
-                backgroundTileNaturalWidth = tileImg.naturalWidth || 0;
-                backgroundTileNaturalHeight = tileImg.naturalHeight || 0;
-                updateBackgroundLayerTransform();
-            };
-            tileImg.src = imageUrl;
+        // Natural-size tiling: no per-frame background-size recalculation.
+        mapBackgroundLayer.style.backgroundSize = '';
+        mapBackgroundLayer.style.backgroundPosition = '0 0';
+
+        if (backgroundTileImg && backgroundTileImg.src === imageUrl) {
+            return;
         }
+
+        const tileImg = new Image();
+        backgroundTileImg = tileImg;
+        tileImg.src = imageUrl;
     } else {
-        // Plain color (or no background at all) - fills the layer on its own, no scaling needed.
         backgroundTileImg = null;
-        backgroundTileNaturalWidth = 0;
-        backgroundTileNaturalHeight = 0;
         mapBackgroundLayer.style.background = bgValue || "#0b0a08";
         mapBackgroundLayer.style.backgroundSize = '';
         mapBackgroundLayer.style.backgroundPosition = '';
@@ -4015,15 +4017,11 @@ function applyMapBackground(bgValue) {
 }
 
 function updateBackgroundLayerTransform() {
-    if (!backgroundTileNaturalWidth || !backgroundTileNaturalHeight) return;
-    const tileW = backgroundTileNaturalWidth * scale;
-    const tileH = backgroundTileNaturalHeight * scale;
-    // Anchor the tiling to the map's own world coordinates and wrap with modulo so it stays
-    // seamless as posX/posY grow or shrink during panning.
-    const offsetX = ((posX % tileW) + tileW) % tileW;
-    const offsetY = ((posY % tileH) + tileH) % tileH;
-    mapBackgroundLayer.style.backgroundSize = `${tileW}px ${tileH}px`;
-    mapBackgroundLayer.style.backgroundPosition = `${offsetX}px ${offsetY}px`;
+    // The background layer is transformed as a whole instead of changing its CSS
+    // background-size/background-position. This avoids repeated large-area repaints.
+    mapBackgroundLayer.style.transformOrigin = '0 0';
+    mapBackgroundLayer.style.transform =
+        `translate(${posX}px, ${posY}px) scale(${scale})`;
 }
 
 // --- Chunked map loading -------------------------------------------------

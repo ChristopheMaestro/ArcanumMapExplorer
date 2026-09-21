@@ -260,6 +260,8 @@ body {
    scale/pan in JS (updateBackgroundLayerTransform) so the texture zooms and pans with the map
    while background-repeat keeps it tiling seamlessly across the whole visible area. */
 #map-background-layer {
+    will-change: transform;
+    contain: paint;
     position: absolute;
     inset: 0;
     background-repeat: repeat;
@@ -1903,6 +1905,16 @@ img {
 
 .inventory-picker-filter-row .quests-table-location-select {
     max-width: 160px;
+}
+
+.inventory-picker-item-count {
+    margin-left: auto;
+    align-self: flex-end;
+    padding-bottom: 7px;
+    color: #b3a685;
+    font-size: 12px;
+    white-space: nowrap;
+    text-align: right;
 }
 
 .inventory-picker-tile-list {
