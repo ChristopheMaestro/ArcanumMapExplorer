@@ -143,9 +143,12 @@ let currentChunkPrefix = '';
 let currentChunkedMap = null;   // the selectedMap object currently driving chunk loading
 let currentChunkTier = null;    // 'low' | 'mid' | 'full' | null (not yet set up)
 let loadedChunkKeys = new Set();
+let activeTileEls = new Map();  // "col_row" -> tile <img> element, for the CURRENT active tier's layer only - lets loadVisibleChunks() prune tiles that have scrolled out of view instead of keeping every tile ever loaded
 let currentMapLoaded = false; // true once either the single image or the chunk grid is ready - replaces the old img.src/display checks used to gate panning/zooming
 const toggleCreatorModeBtn = document.getElementById('toggleCreatorModeBtn');
+const moveAllLabelsBtn = document.getElementById('moveAllLabelsBtn');
 const toolStatus = document.getElementById('tool-status');
+const toolStatusDefaultText = toolStatus.textContent;
 const creatorPanel = document.getElementById('creator-panel');
 const coordDisplay = document.getElementById('coord-display');
 const newLabelText = document.getElementById('new-label-text');
@@ -468,6 +471,14 @@ let draggedLabelCoordKeys = { xKey: "x", yKey: "y" };
 let dragLastScreenX = 0;
 let dragLastScreenY = 0;
 let suppressNextLabelClick = false;
+
+// Move All Labels: editor-only mode where dragging anywhere on the map shifts every label
+// on the current map by the same screen-space delta (e.g. to realign labels after swapping
+// in a higher-resolution version of a map image)
+let isMovingAllLabels = false;
+let isMovingAllLabelsDragging = false;
+let moveAllLastScreenX = 0;
+let moveAllLastScreenY = 0;
 
 // Labels added in this editing session, not yet part of the map's own labels array
 let pendingNewLabels = [];
@@ -1837,6 +1848,7 @@ function initViewer() {
             creatorPanel.style.display = 'flex';
             menuContainer.style.display = 'none';
             viewport.classList.add('creator-mode');
+            moveAllLabelsBtn.style.display = 'inline-block';
             clearActivePopups();
         } else {
             toggleCreatorModeBtn.textContent = "Label Editor";
@@ -1845,8 +1857,14 @@ function initViewer() {
             creatorPanel.style.removeProperty('display');
             menuContainer.style.removeProperty('display');
             viewport.classList.remove('creator-mode');
+            moveAllLabelsBtn.style.display = 'none';
+            setMovingAllLabels(false);
             clearPendingEditorState();
         }
+    });
+
+    moveAllLabelsBtn.addEventListener('click', () => {
+        setMovingAllLabels(!isMovingAllLabels);
     });
 
     if (toggleDescBtn) {
@@ -3380,6 +3398,44 @@ function clearOldLabels() {
     elements.forEach(el => el.remove());
 }
 
+// Turns "Move All Labels" mode on/off. While on, dragging anywhere on the map (see the
+// viewport mousedown/mousemove/mouseup handlers) shifts every label on the current map by
+// the same screen-space delta - handy for realigning a full set of labels after swapping in
+// a higher-resolution replacement for the map image.
+function setMovingAllLabels(on) {
+    isMovingAllLabels = on;
+    isMovingAllLabelsDragging = false;
+    moveAllLabelsBtn.classList.toggle('active-tool', on);
+    moveAllLabelsBtn.textContent = on ? "✅ Done Moving" : "↔️ Move All Labels";
+    viewport.classList.toggle('move-all-labels-mode', on);
+    toolStatus.textContent = on
+        ? "↔️ Drag anywhere on the map to shift every label together — click \"Done Moving\" when finished"
+        : toolStatusDefaultText;
+}
+
+// Shifts every label in `labels` by (dxPx, dyPx) screen/image pixels, updating whichever
+// coordinate fields it has (x/y always; textX/textY too, for overworld labels that use an
+// independently-placed text position). Mirrors the per-label drag math in the window
+// mousemove handler below, applied to the whole set at once.
+function applyBulkLabelShift(labels, dxPx, dyPx) {
+    if (!labels || (!dxPx && !dyPx)) return;
+    labels.forEach(label => {
+        if (currentMapType === "overworld") {
+            const normDx = (dxPx / img.clientWidth) * 2000;
+            const normDy = (dyPx / img.clientHeight) * 2000;
+            if (typeof label.x === 'number') label.x = Math.round(label.x - normDx);
+            if (typeof label.y === 'number') label.y = Math.round(label.y + normDy);
+            if (typeof label.textX === 'number' && typeof label.textY === 'number') {
+                label.textX = Math.round(label.textX - normDx);
+                label.textY = Math.round(label.textY + normDy);
+            }
+        } else {
+            if (typeof label.x === 'number') label.x = Math.round(label.x + dxPx);
+            if (typeof label.y === 'number') label.y = Math.round(label.y + dyPx);
+        }
+    });
+}
+
 function clearActivePopups() {
     const popups = container.querySelectorAll('.info-popup');
     popups.forEach(p => p.remove());
@@ -3390,6 +3446,7 @@ function attachLabelDragHandlers(labelData, elements, coordMode, coordKeys) {
     elements.forEach(el => {
         el.addEventListener('mousedown', (e) => {
             if (!isCreatorMode) return;
+            if (isMovingAllLabels) return; // let the event bubble to the viewport's bulk-drag handler instead
             e.stopPropagation();
             isDraggingLabel = true;
             draggedLabelData = labelData;
@@ -4039,6 +4096,8 @@ let activeChunkLayer = null;
 let staleChunkLayers = [];
 let chunkTierSwapGeneration = 0;
 let pendingTierTileLoads = 0;
+let backingChunkLayer = null;      // persistent whole-map low-tier backdrop, see setupBackingChunkLayer
+let currentMapHasLowBacking = false;
 
 function createChunkLayer() {
     const layer = document.createElement('div');
@@ -4060,6 +4119,9 @@ function clearMapChunks() {
     activeChunkLayer = null;
     staleChunkLayers = [];
     loadedChunkKeys = new Set();
+    activeTileEls = new Map();
+    backingChunkLayer = null;
+    currentMapHasLowBacking = false;
 }
 
 let chunkBoundsReady = false;
@@ -4179,9 +4241,68 @@ function switchChunkTier(tier, { instant = false } = {}) {
 
     activeChunkLayer = createChunkLayer();
     loadedChunkKeys = new Set();
+    activeTileEls = new Map();
     pendingTierTileLoads = 0;
     chunkTierSwapGeneration++;
     discoverChunkBounds(currentChunkedMap);
+}
+
+// A persistent, whole-map backdrop built once per chunked map from its low tier - the map's
+// coarsest, lightest tile set. It's inserted behind the active tier's chunk-layer div (DOM
+// order = stacking order here, so no z-index is needed) and left alone across zoom/tier
+// changes; only a genuine map switch rebuilds it. Any hairline seam between adjacent
+// active-tier tiles - previously papered over by growing every tile ~1-2px into its neighbor's
+// space - now just reveals this matching low-res backdrop instead of the page background,
+// which reads as a soft blend rather than a black gap. Loading the whole low tier up front like
+// this (rather than viewport-driven, like the active tier) is fine precisely because it's the
+// lightest tile set a map has.
+function setupBackingChunkLayer(selectedMap) {
+    currentMapHasLowBacking = !!(selectedMap.chunkTiers && selectedMap.chunkTiers.low);
+    if (!currentMapHasLowBacking) return;
+
+    const cfg = getChunkTierConfig(selectedMap, 'low');
+    const layer = document.createElement('div');
+    layer.className = 'chunk-layer';
+    layer.style.position = 'absolute';
+    layer.style.top = '0';
+    layer.style.left = '0';
+    chunkContainer.insertBefore(layer, chunkContainer.firstChild);
+    backingChunkLayer = layer;
+
+    const maxCol = Math.ceil(selectedMap.width / cfg.chunkSize) - 1;
+    const maxRow = Math.ceil(selectedMap.height / cfg.chunkSize) - 1;
+
+    for (let row = 0; row <= maxRow; row++) {
+        for (let col = 0; col <= maxCol; col++) {
+            const tileWidth = Math.min(cfg.chunkSize, selectedMap.width - col * cfg.chunkSize);
+            const tileHeight = Math.min(cfg.chunkSize, selectedMap.height - row * cfg.chunkSize);
+
+            const tile = document.createElement('img');
+            tile.className = 'map-chunk-tile map-chunk-tile-backing';
+            tile.decoding = 'async';
+            tile.dataset.tileWidth = tileWidth;
+            tile.dataset.tileHeight = tileHeight;
+            tile.style.position = 'absolute';
+            tile.style.left = `${col * cfg.chunkSize}px`;
+            tile.style.top = `${row * cfg.chunkSize}px`;
+            applyChunkOverlap(tile); // the backing tiles still overlap each other slightly, so THEY have no seams either
+
+            const basePath = `${cfg.folder}/${cfg.prefix}_${col * cfg.chunkSize}_${row * cfg.chunkSize}`;
+            tile.onerror = () => {
+                if (tile.dataset.triedPng) {
+                    // A gap in the low tier's own grid (irregular/sparse map). Leave it be -
+                    // this is only a backdrop, so a missing spot just falls back to the old
+                    // overlap behavior not applying here, which is harmless.
+                    tile.remove();
+                    return;
+                }
+                tile.dataset.triedPng = 'true';
+                tile.src = `${basePath}.png`;
+            };
+            tile.src = `${basePath}.jpg`;
+            layer.appendChild(tile);
+        }
+    }
 }
 
 function setupChunkedMap(selectedMap) {
@@ -4193,12 +4314,19 @@ function setupChunkedMap(selectedMap) {
     chunkContainer.style.height = `${currentMapTotalHeight}px`;
     chunkContainer.style.display = 'block';
     switchChunkTier(getChunkTierForScale(scale), { instant: true });
+    setupBackingChunkLayer(selectedMap); // after switchChunkTier's instant clear, so it isn't wiped out
 }
 
 // How far (in unscaled map pixels) each tile should overshoot into its neighbor's space.
 // Sized so the overlap is always ~2 real screen pixels regardless of zoom level - a fixed
 // unscaled overlap (e.g. always 1px) shrinks to a fraction of a device pixel once zoomed out
 // far enough, which is exactly when the rounding-gap seam becomes visible.
+//
+// Only used for the backing layer now (see setupBackingChunkLayer below) and as a fallback for
+// maps with no low-tier backing at all. Where a backing layer IS present, the active tier's own
+// tiles are sized exactly (see loadChunk) instead of overshooting into each other - any hairline
+// gap between them just reveals the seamless low-res backdrop underneath rather than an
+// overlapping, slightly-misaligned edge, which reads as a soft blend instead of a hard seam.
 function getChunkOverlap() {
     return Math.min(currentChunkSize / 4, Math.max(1, Math.ceil(2 / scale)));
 }
@@ -4215,7 +4343,10 @@ let lastOverlapScale = null;
 function refreshChunkOverlaps() {
     if (!currentMapChunked || lastOverlapScale === scale) return;
     lastOverlapScale = scale;
-    chunkContainer.querySelectorAll('.map-chunk-tile').forEach(applyChunkOverlap);
+    // With a backing layer, only ITS tiles need the overlap treatment - the active tier's
+    // tiles are sized exactly (see loadChunk) and never overshoot their neighbors.
+    const selector = currentMapHasLowBacking ? '.map-chunk-tile-backing' : '.map-chunk-tile';
+    chunkContainer.querySelectorAll(selector).forEach(applyChunkOverlap);
 }
 
 function loadChunk(col, row) {
@@ -4231,12 +4362,20 @@ function loadChunk(col, row) {
 
     const tile = document.createElement('img');
     tile.className = 'map-chunk-tile';
+    tile.decoding = 'async'; // let the browser decode off the main thread instead of blocking the next paint
     tile.dataset.tileWidth = tileWidth;
     tile.dataset.tileHeight = tileHeight;
     tile.style.position = 'absolute';
     tile.style.left = `${col * currentChunkSize}px`;
     tile.style.top = `${row * currentChunkSize}px`;
-    applyChunkOverlap(tile);
+    if (currentMapHasLowBacking) {
+        // No overshoot needed - the backing layer shows through any hairline gap instead of
+        // the background color, so tiles can just be sized to their real, exact bounds.
+        tile.style.width = `${tileWidth}px`;
+        tile.style.height = `${tileHeight}px`;
+    } else {
+        applyChunkOverlap(tile);
+    }
 
     // If a tier swap is in progress (there's an outgoing layer parked in staleChunkLayers),
     // track this tile so we know when it's safe to drop the old tiles - see settleTile below.
@@ -4256,6 +4395,7 @@ function loadChunk(col, row) {
             // real extent, but a sparse/irregular map could still be missing an interior tile -
             // remove it rather than leave a broken-image icon, and don't retry.
             tile.remove();
+            activeTileEls.delete(key);
             settleTile();
             return;
         }
@@ -4265,29 +4405,57 @@ function loadChunk(col, row) {
     tile.onload = settleTile;
     tile.src = `${basePath}.jpg`;
 
+    activeTileEls.set(key, tile);
     activeChunkLayer.appendChild(tile);
 }
 
-// The set of chunks strictly inside the viewport, plus a 1-chunk margin so panning/zooming
-// doesn't show blank tiles for a frame before the next update fires.
+// The set of chunks strictly inside the viewport, plus a small margin so panning/zooming
+// doesn't show blank tiles for a frame before the next update fires. Also prunes any
+// currently-loaded chunk that's drifted well outside that same area, so exploring a large
+// chunked map - especially at the "full"/highest-quality tier, where tiles are heaviest -
+// doesn't just keep accumulating every tile you've ever scrolled past.
 function loadVisibleChunks() {
     if (!currentMapChunked || !chunkBoundsReady) return;
-    const margin = 1;
+    const loadMargin = 1;
+    // Kept a bit wider than the load margin so a chunk isn't unloaded the instant it scrolls
+    // just past the load range, only to be reloaded again on the very next small pan.
+    const unloadMargin = loadMargin + 1;
+
     const viewLeft = (-posX) / scale;
     const viewTop = (-posY) / scale;
     const viewRight = viewLeft + viewport.clientWidth / scale;
     const viewBottom = viewTop + viewport.clientHeight / scale;
 
-    const colStart = Math.floor(viewLeft / currentChunkSize) - margin;
-    const colEnd = Math.floor(viewRight / currentChunkSize) + margin;
-    const rowStart = Math.floor(viewTop / currentChunkSize) - margin;
-    const rowEnd = Math.floor(viewBottom / currentChunkSize) + margin;
+    const colStart = Math.floor(viewLeft / currentChunkSize) - loadMargin;
+    const colEnd = Math.floor(viewRight / currentChunkSize) + loadMargin;
+    const rowStart = Math.floor(viewTop / currentChunkSize) - loadMargin;
+    const rowEnd = Math.floor(viewBottom / currentChunkSize) + loadMargin;
 
     for (let row = rowStart; row <= rowEnd; row++) {
         for (let col = colStart; col <= colEnd; col++) {
             loadChunk(col, row);
         }
     }
+
+    // Skip pruning while a tier swap is still settling in - those tiles are being tracked by
+    // pendingTierTileLoads/settleTile, and removing one mid-load could leave that counter
+    // stuck so the outgoing tier's tiles never get cleared. The brief window this skips is
+    // caught by the next call anyway.
+    if (staleChunkLayers.length > 0) return;
+
+    const keepColStart = Math.floor(viewLeft / currentChunkSize) - unloadMargin;
+    const keepColEnd = Math.floor(viewRight / currentChunkSize) + unloadMargin;
+    const keepRowStart = Math.floor(viewTop / currentChunkSize) - unloadMargin;
+    const keepRowEnd = Math.floor(viewBottom / currentChunkSize) + unloadMargin;
+
+    activeTileEls.forEach((tile, key) => {
+        const [col, row] = key.split('_').map(Number);
+        if (col < keepColStart || col > keepColEnd || row < keepRowStart || row > keepRowEnd) {
+            tile.remove();
+            activeTileEls.delete(key);
+            loadedChunkKeys.delete(key);
+        }
+    });
 }
 
 let chunkUpdateScheduled = false;
@@ -4341,6 +4509,12 @@ viewport.addEventListener('mousemove', (e) => {
 viewport.addEventListener('mousedown', (e) => {
     if (!currentMapLoaded) return;
     if (isDraggingLabel) return; // safety net; label mousedown handlers stopPropagation so this shouldn't fire anyway
+    if (isMovingAllLabels) {
+        isMovingAllLabelsDragging = true;
+        moveAllLastScreenX = e.clientX;
+        moveAllLastScreenY = e.clientY;
+        return;
+    }
     isDragging = true;
     startX = e.clientX - posX;
     startY = e.clientY - posY;
@@ -4355,7 +4529,7 @@ viewport.addEventListener('click', (e) => {
         hasDraggedPastThreshold = false;
         return;
     }
-    if (isCreatorMode) {
+    if (isCreatorMode && !isMovingAllLabels) {
         const rect = container.getBoundingClientRect();
         const clickX = Math.round((e.clientX - rect.left) / scale);
         const clickY = Math.round((e.clientY - rect.top) / scale);
@@ -4375,7 +4549,46 @@ viewport.addEventListener('click', (e) => {
     }
 });
 
+let moveAllUpdateScheduled = false;
+let moveAllPendingDx = 0;
+let moveAllPendingDy = 0;
+
 window.addEventListener('mousemove', (e) => {
+    if (isMovingAllLabelsDragging) {
+        const dx = (e.clientX - moveAllLastScreenX) / scale;
+        const dy = (e.clientY - moveAllLastScreenY) / scale;
+        moveAllLastScreenX = e.clientX;
+        moveAllLastScreenY = e.clientY;
+        moveAllPendingDx += dx;
+        moveAllPendingDy += dy;
+
+        // Coalesce however many mousemove events land within one frame into a single
+        // shift-and-rebuild, same as the chunk loader's rAF throttling above - a fast mouse
+        // can fire this handler well more than once per paint, and rebuilding every label's
+        // DOM (each one recreates its popup content, tooltip and drag handlers) on every one
+        // of those events is wasted work the screen never gets to show anyway.
+        if (!moveAllUpdateScheduled) {
+            moveAllUpdateScheduled = true;
+            requestAnimationFrame(() => {
+                moveAllUpdateScheduled = false;
+                if (!isMovingAllLabelsDragging) return;
+                const dxToApply = moveAllPendingDx;
+                const dyToApply = moveAllPendingDy;
+                moveAllPendingDx = 0;
+                moveAllPendingDy = 0;
+
+                const selectedMap = ArcanumMapData.find(m => m.filename === currentMapFilename);
+                if (selectedMap && selectedMap.labels) {
+                    applyBulkLabelShift(selectedMap.labels, dxToApply, dyToApply);
+                    clearOldLabels();
+                    selectedMap.labels.forEach(label => renderSingleLabel(label));
+                    applyActiveFilters();
+                }
+            });
+        }
+        return;
+    }
+
     if (isDraggingLabel) {
         const dx = (e.clientX - dragLastScreenX) / scale;
         const dy = (e.clientY - dragLastScreenY) / scale;
@@ -4416,6 +4629,20 @@ window.addEventListener('mousemove', (e) => {
 
 window.addEventListener('mouseup', () => {
     isDragging = false;
+    if (isMovingAllLabelsDragging && (moveAllPendingDx || moveAllPendingDy)) {
+        // Flush whatever movement happened since the last rAF-throttled update above, so the
+        // last few pixels of a drag aren't silently dropped when the mouse is released.
+        const selectedMap = ArcanumMapData.find(m => m.filename === currentMapFilename);
+        if (selectedMap && selectedMap.labels) {
+            applyBulkLabelShift(selectedMap.labels, moveAllPendingDx, moveAllPendingDy);
+            clearOldLabels();
+            selectedMap.labels.forEach(label => renderSingleLabel(label));
+            applyActiveFilters();
+        }
+        moveAllPendingDx = 0;
+        moveAllPendingDy = 0;
+    }
+    isMovingAllLabelsDragging = false;
     if (isDraggingLabel) {
         isDraggingLabel = false;
         suppressNextLabelClick = true;

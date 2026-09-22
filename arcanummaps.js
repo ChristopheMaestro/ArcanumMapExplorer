@@ -95,11 +95,10 @@ const ArcanumCitiesMapData = [
       =================
 
       Replace Jen's maps:
-        - Caladon (integrate the new map)
+        - Tarant (integrate)
         - Caladon Castle Main Floor
         - Caladon Castle Upstairs
         - Caladon Castle Vents
-        - Tarant
         - Wheel Clan - Town
         - Wheel Clan - Dredge
         - Black Mountain Mines - Level 1
@@ -120,8 +119,8 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/Ashbury",
     chunked: true,
     chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
-    width: 11000,
-    height: 4500,
+    width: 11073,
+    height: 4620,
     displayName: "Ashbury",
     modGroup: "Cities",
     music: "music/Towns.mp3", // Good
@@ -204,8 +203,8 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/BlackRoot",
     chunked: true,
     chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
-    width: 8500,
-    height: 4000,
+    width: 8624,
+    height: 4448,
     displayName: "Black Root",
     modGroup: "Cities",
     music: "music/Towns.mp3", // Good
@@ -586,8 +585,8 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/IsleOfDespair",
     chunked: true,
     chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
-    width: 4500,
-    height: 5000,
+    width: 4923,
+    height: 5145,
     displayName: "Isle of Despair",
     modGroup: "Cities",
     music: "music/Isle_of_Despair.mp3",
@@ -715,8 +714,8 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/Roseborough",
     chunked: true,
     chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
-    width: 12000,
-    height: 4000,
+    width: 12370,
+    height: 4200,
     displayName: "Roseborough",
     modGroup: "Cities",
     music: "music/Villages.mp3",
@@ -781,8 +780,8 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/ShroudedHills",
     chunked: true,
     chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
-    width: 14000,
-    height: 5000,
+    width: 13708,
+    height: 4958,
     displayName: "Shrouded Hills",
     modGroup: "Cities",
     music: "music/Towns.mp3", // Good
@@ -968,176 +967,166 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/Tarant",
     chunked: true,
-    width: 8192,
-    height: 4096,
+    width: 22752,
+    height: 10332,
     chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
     displayName: "Tarant",
     modGroup: "Cities",
     music: "music/Tarant.mp3",
     defaultView: { x: 3338, y: 2537 },
     labels: [
-      // Waypoints
-      { x: 5442, y: 1502, text: "Bates Mansion", description: "", category: "waypoint", targetMapFilename: "Bates Mansion Level 1" },
-      { x: 4947, y: 1428, text: "Hall of Records", description: "", category: "waypoint", targetMapFilename: "Hall of Records" },
-      { x: 3780, y: 1940, text: "P. Schuyler & Sons", description: "", category: "waypoint", targetMapFilename: "P. Schuyler & Sons - Level 1" },
-      { x: 1812, y: 2706, text: "Tarant Old Sewers", description: "", category: "waypoint", targetMapFilename: "Tarant Old Sewers" },
-      { x: 3081, y: 2970, text: "Tarant Old Sewers", description: "", category: "waypoint", targetMapFilename: "Tarant Old Sewers" },
-      { x: 5443, y: 2279, text: "Tarant Old Sewers", description: "", category: "waypoint", targetMapFilename: "Tarant Old Sewers" },
-      { x: 5066, y: 3131, text: "Tarant Old Sewers", description: "", category: "waypoint", targetMapFilename: "Tarant Old Sewers", targetX: 3805, targetY: 2237 },
-      { x: 3302, y: 2074, text: "Tarant New Sewers", description: "", category: "waypoint" },
-      { x: 3846, y: 2298, text: "Tarant New Sewers", description: "", category: "waypoint" },
-      { x: 3976, y: 1990, text: "Tarant New Sewers", description: "", category: "waypoint" },
-      { x: 3871, y: 1649, text: "Tarant New Sewers", description: "", category: "waypoint" },
-      { x: 2949, y: 2014, text: "Bates Tunnel", description: "", category: "waypoint", targetMapFilename: "Bates Tunnel" },
+      { x: 13730, y: 3956, text: "Bates Mansion", category: "waypoint", targetMapFilename: "Bates Mansion Level 1" },
+      { x: 12703, y: 3707, text: "Hall of Records", category: "waypoint", targetMapFilename: "Hall of Records" },
+      { x: 10426, y: 4830, text: "P. Schuyler & Sons", category: "waypoint", targetMapFilename: "P. Schuyler & Sons - Level 1" },
+      { x: 6372, y: 6256, text: "Tarant Old Sewers", category: "waypoint", targetMapFilename: "Tarant Old Sewers" },
+      { x: 9058, y: 6863, text: "Tarant Old Sewers", category: "waypoint", targetMapFilename: "Tarant Old Sewers" },
+      { x: 13677, y: 5465, text: "Tarant Old Sewers", category: "waypoint", targetMapFilename: "Tarant Old Sewers" },
+      { x: 12964, y: 7182, text: "Tarant Old Sewers", category: "waypoint", targetMapFilename: "Tarant Old Sewers", targetX: 3805, targetY: 2237 },
+      { x: 9450, y: 5059, text: "Tarant New Sewers", category: "waypoint" },
+      { x: 10529, y: 5574, text: "Tarant New Sewers", category: "waypoint" },
+      { x: 10791, y: 4913, text: "Tarant New Sewers", category: "waypoint" },
+      { x: 10581, y: 4233, text: "Tarant New Sewers", category: "waypoint" },
+      { x: 8733, y: 4939, text: "Bates Tunnel", category: "waypoint", targetMapFilename: "Bates Tunnel" },
+      { x: 9687, y: 5859, text: "Station A: West Garillon Bridge", category: "waypoint" },
+      { x: 10044, y: 4369, text: "Station B: Vermillion Station", category: "waypoint" },
+      { x: 11839, y: 3464, text: "Station C: Tarant University", category: "waypoint" },
+      { x: 14865, y: 4934, text: "Station D: Warehouse District", category: "waypoint" },
+      { x: 13062, y: 5170, text: "Station E: Commercial District", category: "waypoint" },
+      { x: 11546, y: 6177, text: "Station F: Tarantian Docks", category: "waypoint" },
+      { x: 11766, y: 4795, text: "Station G: Kensington Park", category: "waypoint" },
+      { x: 7458, y: 6901, text: "Station H: The Boil", category: "waypoint" },
 
-      // Metro
-      { x: 3417, y: 2459, text: "Station A: West Garillon Bridge", description: "", category: "waypoint" },
-      { x: 3598, y: 1728, text: "Station B: Vermillion Station", description: "", category: "waypoint" },
-      { x: 4499, y: 1279, text: "Station C: Tarant University", description: "", category: "waypoint" },
-      { x: 6055, y: 2005, text: "Station D: Warehouse District", description: "", category: "waypoint" },
-      { x: 5111, y: 2121, text: "Station E: Commercial District", description: "", category: "waypoint" },
-      { x: 4350, y: 2624, text: "Station F: Tarantian Docks", description: "", category: "waypoint" },
-      { x: 4459, y: 1911, text: "Station G: Kensington Park", description: "", category: "waypoint" },
-      { x: 2309, y: 3003, text: "Station H: The Boil", description: "", category: "waypoint" },
 
-      // Followers
-      { x: 3800, y: 2093, text: "Magnus", sex: "Male", race: "Dwarf", level: 8, portrait: "Textures/magnus.gif", inventory:["Magnus' Bracelet", "Roan's Almanac of All Things Dwarven", "Mysterious Dwarven Gauntlets"], category: ["quest", "followers"] },
-      { x: 4766, y: 1656, text: "Gar", sex: "Male", race: "Human", level: 10, portrait: "Textures/gar.gif", category: "followers" },
-      { x: 3223, y: 2221, text: "Perriman Smythe", sex: "Male", race: "Human", level: 25, portrait: "Textures/perrimansmythe.gif", category: "followers" },
-      { x: 2469, y: 2829, text: "Sebastian", sex: "Male", race: "Human", level: 30, portrait: "Textures/sebastian.gif", category: ["quest", "followers"],
+      { x: 10449, y: 5117, text: "Magnus", category: ["quest", "followers"], portrait: "Textures/magnus.gif", level: 8, sex: "Male", race: "Dwarf", inventory: ["Magnus' Bracelet", "Roan's Almanac of All Things Dwarven", "Mysterious Dwarven Gauntlets"] },
+      { x: 12390, y: 4246, text: "Gar", category: "followers", portrait: "Textures/gar.gif", level: 10, sex: "Male", race: "Human" },
+      { x: 9300, y: 5359, text: "Perriman Smythe", category: "followers", portrait: "Textures/perrimansmythe.gif", level: 25, sex: "Male", race: "Human" },
+      { x: 7763, y: 6603, text: "Sebastian", category: ["quest", "followers"], portrait: "Textures/sebastian.gif", level: 30, sex: "Male", race: "Human",
         linkedLabels: [
           { questName: "Clean Up the Boil", questDescription: "Sebastian wants you to kill Pollock.  In return, he might aid you in your own quest.", target: "Pollock", part: 1 },
           { questName: "Clean Up the Boil", questDescription: "Sebastian wants you to kill Darian Maug. In return, he might aid you in your own quest.", target: "Darian Maug", part: 2 }
         ]
       },
-
-      // Shops
-      { x: 3546, y: 2326, text: "Castleton the General Store Clerk", sex: "male", race: "Human", level: 27, shopType: "General Store", shopMarkup: 100, inventory: ["Helmet of Strength"], category: "shop" },
-      { x: 3688, y: 2254, text: "Thurston the Tailor", category: "shop", shopType: "Tailor", shopMarkup: 90, level: 17, sex: "male", race: "Elf", inventory: ["Negociator's Ring", "Eye Glasses", "Dagger"] },
-      { x: 3985, y: 2094, text: "Geoffrey the Inventor", sex: "male", race: "Human", level: 37, shopType: "Inventor", shopMarkup: 100, category: "shop" },
-      { x: 4054, y: 2060, text: "Anna the Herbalist", sex: "female", race: "Human", level: 23, shopType: "Herbalist", shopMarkup: 90, category: "shop" },
-      { x: 3932, y: 2486, text: "Junk Dealer", sex: "male", race: "Human", level: 30, shopType: "Junk Dealer", shopMarkup: 200, category: "shop" },
-      { x: 3905, y: 1863, text: "Wallow the Quality Blacksmith", sex: "male", race: "Dwarf", level: 33, shopType: "Blacksmith", shopMarkup: 100, category: "shop" },
-      { x: 3782, y: 1797, text: "Smythe the Gun Smith", sex: "male", race: "Human", level: 31, shopType: "Gun Store", shopMarkup: 100, category: "shop" },
-      { x: 2297, y: 2808, text: "Mellin Bungerton", sex: "male", race: "Halfling", level: 18, shopType: "Junk Dealer", shopMarkup: 300, category: "shop" },
-      { x: 4523, y: 1634, text: "Magick Shop Clerk", sex: "male", race: "Elf", level: 38, shopType: "Magick Shop", shopMarkup: 100, inventory: ["Magick Shoppe Key. Tarant", "Blessed Bow", "Magick Robes"], category: ["shop", "key"] },
-      { x: 4405, y: 1556, text: "Xe'rad the Magickal Smith", sex: "male", race: "Human", level: 34, shopType: "Magickal Smith", inventory: ["Screaming Scimtar"], shopMarkup: 100, category: ["shop"] },
-      { x: 4598, y: 1524, text: "Zeramin the Magick Shop Clerk", sex: "female", race: "Elf", level: 42, shopType: "Magick Shop", shopMarkup: 100, inventory: ["Magick Shoppe Key. Tarant", "Mage's Staff", "Ashen Robes", "Scroll of Teleportation"], category: ["shop", "key"] },
-      { x: 4570, y: 2347, text: "Halfling Shopkeeper", sex: "male", race: "Halfling", level: 20, shopType: "Black Market", shopMarkup: 100, category: "shop" },
-      { x: 5783, y: 1666, text: "Factory Foreman", sex: "male", race: "Human", level: 30, shopType: "Inventor", shopMarkup: 100, category: "shop" },
-      { x: 5628, y: 2752, text: "Wise Woman", sex: "female", race: "Gnome", level: 31, shopType: "Nomad", shopMarkup: 150, category: "shop" },
-
-      // Shop signs
-
-      // Quests
-      { x: 5150, y: 1959, text: "Cedric Appleby", sex: "male", race: "Human", level: 12, inventory:["Dynamite", "Bates Mausoleum Key"], category: ["quest", "npc", "key"],
+      { x: 9958, y: 5581, text: "Castleton the General Store Clerk", category: "shop", shopType: "General Store", shopMarkup: 100, level: 27, sex: "male", race: "Human", inventory: ["Helmet of Strength"] },
+      { x: 10195, y: 5469, text: "Thurston the Tailor", category: "shop", shopType: "Tailor", shopMarkup: 90, level: 17, sex: "male", race: "Elf", inventory: ["Negociator's Ring", "Eye Glasses", "Dagger"] },
+      { x: 10835, y: 5114, text: "Geoffrey the Inventor", category: "shop", shopType: "Inventor", shopMarkup: 100, level: 37, sex: "male", race: "Human" },
+      { x: 10886, y: 5056, text: "Anna the Herbalist", category: "shop", shopType: "Herbalist", shopMarkup: 90, level: 23, sex: "female", race: "Human" },
+      { x: 10721, y: 5890, text: "Junk Dealer", category: "shop", shopType: "Junk Dealer", shopMarkup: 200, level: 30, sex: "male", race: "Human" },
+      { x: 10724, y: 4597, text: "Wallow the Quality Blacksmith", category: "shop", shopType: "Blacksmith", shopMarkup: 100, level: 33, sex: "male", race: "Dwarf" },
+      { x: 10451, y: 4485, text: "Smythe the Gun Smith", category: "shop", shopType: "Gun Store", shopMarkup: 100, level: 31, sex: "male", race: "Human" },
+      { x: 7413, y: 6587, text: "Mellin Bungerton", category: "shop", shopType: "Junk Dealer", shopMarkup: 300, level: 18, sex: "male", race: "Halfling" },
+      { x: 11979, y: 4139, text: "Magick Shop Clerk", category: ["shop", "key"], shopType: "Magick Shop", shopMarkup: 100, level: 38, sex: "male", race: "Elf", inventory: ["Magick Shoppe Key. Tarant", "Blessed Bow", "Magick Robes"] },
+      { x: 11695, y: 4040, text: "Xe'rad the Magickal Smith", category: ["shop"], shopType: "Magickal Smith", shopMarkup: 100, level: 34, sex: "male", race: "Human", inventory: ["Screaming Scimtar"] },
+      { x: 12008, y: 3976, text: "Zeramin the Magick Shop Clerk", category: ["shop", "key"], shopType: "Magick Shop", shopMarkup: 100, level: 42, sex: "female", race: "Elf", inventory: ["Magick Shoppe Key. Tarant", "Mage's Staff", "Ashen Robes", "Scroll of Teleportation"] },
+      { x: 12026, y: 5624, text: "Halfling Shopkeeper", category: "shop", shopType: "Black Market", shopMarkup: 100, level: 20, sex: "male", race: "Halfling" },
+      { x: 14412, y: 4234, text: "Factory Foreman", category: "shop", shopType: "Inventor", shopMarkup: 100, level: 30, sex: "male", race: "Human" },
+      { x: 14092, y: 6477, text: "Wise Woman", category: "shop", shopType: "Nomad", shopMarkup: 150, level: 31, sex: "female", race: "Gnome" },
+      { x: 13194, y: 4835, text: "Cedric Appleby", category: ["quest", "npc", "key"], level: 12, sex: "male", race: "Human", inventory: ["Dynamite", "Bates Mausoleum Key"],
         linkedLabels: [
           { questName: "Sabotage", questDescription: "Cedric Appleby will gain you access into Bates' house if you destroy Bates' new steam engine prototype housed in Bates' factory. The factory is located at the end of Ten Hands Alley.", target: "Metal Object", part: 1 },
-          { questName: "Expose Gilbert Bates", questDescription: "Steal any incriminating evidence from Bates to help Appleby expose him", target: "Chest (Gilbert Bates)", part: 1 },
+          { questName: "Expose Gilbert Bates", questDescription: "Steal any incriminating evidence from Bates to help Appleby expose him", target: "Chest (Gilbert Bates)", part: 1 }
         ]
       },
-      { x: 6099, y: 1465, text: "Metal Object", category: "quest",
+      { x: 15049, y: 3901, text: "Metal Object", category: "quest",
         linkedLabels: [
           { questName: "Sabotage", questDescription: "Cedric Appleby will gain you access into Bates' house if you destroy Bates' new steam engine prototype housed in Bates' factory. The factory is located at the end of Ten Hands Alley.", target: "Cedric Appleby", part: 2 }
         ]
       },
-      { x: 5178, y: 1601, text: "Capt. of Bates' Guard", sex: "male", race: "Human", level: 40, category: ["quest", "npc"],
+      { x: 13192, y: 4148, text: "Capt. of Bates' Guard", category: ["quest", "npc"], level: 40, sex: "male", race: "Human",
         linkedLabels: [
-          { questName: "", questDescription: "Devise a solution to Bates' saboteur difficulties at his factory to gain an audience with him. The factory is located at the end of Ten Hands Alley, and the saboteurs are reputed to strike sometime after midnite.", target: "Saboteurs" }
+          { questDescription: "Devise a solution to Bates' saboteur difficulties at his factory to gain an audience with him. The factory is located at the end of Ten Hands Alley, and the saboteurs are reputed to strike sometime after midnite.", target: "Saboteurs" }
         ]
       },
-      { x: 3225, y: 1865, text: "Dark Elf Noble", sex: "male", race: "Elf", level: 12, category: ["quest", "npc"],
+      { x: 9291, y: 4657, text: "Dark Elf Noble", category: ["quest", "npc"], level: 12, sex: "male", race: "Elf",
         linkedLabels: [
-          { questName: "", questDescription: "A strange man in the Wellington wants you to deliver a note to 36 Low Dervish Row.", target: "Half Orc City Dweller" }
+          { questDescription: "A strange man in the Wellington wants you to deliver a note to 36 Low Dervish Row.", target: "Half Orc City Dweller" }
         ]
       },
-      { x: 4923, y: 2352, text: "Half Orc City Dweller", sex: "male", race: "Half-Orc", level: 7, category: ["quest", "npc"] },
-      { x: 3491, y: 2424, text: "Cassandra Pettibone", sex: "female", race: "Human", level: 10, category: ["quest", "npc"],
+      { x: 12689, y: 5658, text: "Half Orc City Dweller", category: ["quest", "npc"], level: 7, sex: "male", race: "Half-Orc" },
+      { x: 9826, y: 5819, text: "Cassandra Pettibone", category: ["quest", "npc"], level: 10, sex: "female", race: "Human",
         linkedLabels: [
           { questName: "Steal the Elven Funerary Stone", questDescription: "Mrs. Cassandra Pettibone wants you to steal the elven funerary stone from the newly unearthed elven catacombs.", target: "Funeral Stone", part: 1 }
         ]
       },
-      { x: 3523, y: 2181, text: "Evelyn Garringsburg", sex: "female", race: "Human", level: 7, category: ["quest", "npc"],
+      { x: 9857, y: 5300, text: "Evelyn Garringsburg", category: ["quest", "npc"], level: 7, sex: "female", race: "Human",
         linkedLabels: [
           { questName: "The Garringsburg Heist", questDescription: "Mrs. Evelyn Garringsburg wants you to find her stolen painting, the famed ''Kerghan and Persephone'' by Pizarro.", target: "Wellington's Guard", part: 1 }
         ]
       },
-      { x: 3333, y: 1969, text: "Wellington's Guard", sex: "male", race: "Human", level: 32, category: ["quest", "npc"],
+      { x: 9545, y: 4883, text: "Wellington's Guard", category: ["quest", "npc"], level: 32, sex: "male", race: "Human",
         linkedLabels: [
           { questName: "The Garringsburg Heist", questDescription: "The guard will inform you that Mr. Garringsburg was bragging few days ago about his expensive painting. You can get from the guard a list of patrons that were present when that happened. One name isn't a regular member: Rorry Limes. The guard doesn't know him and recommend you to check at the Hall of Records.", target: "Clerk", part: 2 }
         ]
       },
-      { x: 6112, y: 1814, text: "Wood Chest (Kerghan and Persephone)", inventory: ["Kerghan and Persephone"], category: ["key", "quest", "chest"],
+      { x: 15072, y: 4604, text: "Wood Chest (Kerghan and Persephone)", category: ["key", "quest", "chest"], inventory: ["Kerghan and Persephone"],
         linkedLabels: [
           { questName: "The Garringsburg Heist", questDescription: "Kill the guard or steal his key, and recover the painting from the chest. Return it to Evelyn Garringsburg for a reward.", target: "Evelyn Garringsburg", part: 4 }
         ]
       },
-      { x: 4160, y: 1635, text: "Delores Beston", sex: "female", race: "Human", level: 6, category: ["npc", "quest"],
+      { x: 11224, y: 4202, text: "Delores Beston", category: ["npc", "quest"], level: 6, sex: "female", race: "Human",
         linkedLabels: [
           { questName: "The Crystal Ball", questDescription: "Delores Beston wants you to steal Madame Toussaude's crystal ball.", target: "Madame Toussaude", part: 1 }
         ]
       },
-      { x: 4340, y: 2454, text: "Madame Toussaude", sex: "female", race: "Human", level: 1, category: ["npc", "quest"],
+      { x: 11534, y: 5823, text: "Madame Toussaude", category: ["npc", "quest"], level: 1, sex: "female", race: "Human",
         linkedLabels: [
           { questName: "The Crystal Ball", questDescription: "Madame Toussaude wants you to deliver her crystal ball to Delores Beston.", target: "Delores Beston", part: 2 }
         ]
       },
-      { x: 3404, y: 2294, text: "Human City Dweller", sex: "male", race: "Human", level: 1, category: ["npc", "quest"],
+      { x: 9648, y: 5549, text: "Human City Dweller", category: ["npc", "quest"], level: 1, sex: "male", race: "Human",
         linkedLabels: [
-          { questName: "Thieves Underground", questDescription: "If you have tricked Lukan or have completed Cassandra Pettibone quest, he can introduce you to the Thieves Underground.", target: "Thaddeus Mynor", part: 1 },
+          { questName: "Thieves Underground", questDescription: "If you have tricked Lukan or have completed Cassandra Pettibone quest, he can introduce you to the Thieves Underground.", target: "Thaddeus Mynor", part: 1 }
         ]
       },
-      { x: 5380, y: 2563, text: "Thaddeus Mynor", sex: "male", race: "Human", description: "The quest for the Golden Idol of Kree will become available only if you are at least level 20.", level: 45, category: ["quest", "npc"],
+      { x: 13547, y: 6031, text: "Thaddeus Mynor", description: "The quest for the Golden Idol of Kree will become available only if you are at least level 20.", category: ["quest", "npc"], level: 45, sex: "male", race: "Human",
         linkedLabels: [
           { questName: "Thieves Underground", questDescription: "Thaddeus Mynor wants you to retrieve the map of the Tarantian Sewers.", target: "Chest (Sewers map)", part: 2 },
-          { questName: "Steal the Golden Idol of Kree", questDescription: "Thaddeus Mynor wants you to steal the golden idol of the barbarians of Kree.", target: "Altar (Kree)", part: 1 },
+          { questName: "Steal the Golden Idol of Kree", questDescription: "Thaddeus Mynor wants you to steal the golden idol of the barbarians of Kree.", target: "Altar (Kree)", part: 1 }
         ]
       },
-      { x: 4934, y: 1280, text: "Chest (Sewers map)", inventory: ["Map of Tarantian Sewers"], category: ["quest", "chest", "key"],
+      { x: 12684, y: 3507, text: "Chest (Sewers map)", category: ["quest", "chest", "key"], inventory: ["Map of Tarantian Sewers"],
         linkedLabels: [
-          { questName: "Thieves Underground", questDescription: "Retrieve the map of the Tarantian Sewers from the chest and return to Thaddeus Mynor to be accepted in the Thieves Underground.", target: "Thaddeus Mynor", part: 3 },
+          { questName: "Thieves Underground", questDescription: "Retrieve the map of the Tarantian Sewers from the chest and return to Thaddeus Mynor to be accepted in the Thieves Underground.", target: "Thaddeus Mynor", part: 3 }
         ]
       },
-      { x: 3788, y: 2333, text: "Matthew Jameson", sex: "male", race: "Human", level: 12, category: ["quest", "npc"],
+      { x: 10447, y: 5535, text: "Matthew Jameson", category: ["quest", "npc"], level: 12, sex: "male", race: "Human",
         linkedLabels: [
           { questName: "Retrieve Matthew's Wedding Ring", questDescription: "Matthew Jameson wants you to retrieve his wedding ring from the sewers.", target: "Fancy Ring (Quest)", part: 1 }
         ]
       },
-      { x: 5234, y: 1065, text: "Benjamin Gershwin", sex: "male", race: "Gnome", level: 17, category: ["quest", "npc"],
+      { x: 13352, y: 3055, text: "Benjamin Gershwin", category: ["quest", "npc"], level: 17, sex: "male", race: "Gnome",
         linkedLabels: [
-          { questName: "The Ren'ar Siamese Twins", questDescription: "Benjamin Gershwin, the phrenologist, wants you to bring him the skulls of the Ren'ar siamese twins.", target: "" }
+          { questName: "The Ren'ar Siamese Twins", questDescription: "Benjamin Gershwin, the phrenologist, wants you to bring him the skulls of the Ren'ar siamese twins." }
         ]
       },
-      { x: 4668, y: 2647, text: "Simon Plough", sex: "male", race: "Gnome", level: 8, category: ["quest", "npc"],
+      { x: 12167, y: 6219, text: "Simon Plough", category: ["quest", "npc"], level: 8, sex: "male", race: "Gnome",
         linkedLabels: [
           { questName: "Rid Mr. Plough’s Warehouses of Rats", questDescription: "Mr. Plough wants you to rid his warehouses, near the docks in Tarant, of rats.", target: "Warehouse rats" }
         ]
       },
-      { x: 4357, y: 2003, text: "Sammie White", sex: "male", race: "Halfling", level: 40, master: "Pickpocket master", category: ["quest", "npc", "master"],
+      { x: 11591, y: 4936, text: "Sammie White", master: "Pickpocket master", category: ["quest", "npc", "master"], level: 40, sex: "male", race: "Halfling",
         linkedLabels: [
           { questName: "Run around Tarant in your Underwear", questDescription: "You are to go the middle of Tarant and make a fool of yourself by running around in your underwear.", questType: "master", part: 1 },
           { questName: "Run around Tarant in your Underwear", questDescription: "After you ran naked for a good minute or two, go back to Sammie White and he let you know that this was your actual training.", questType: "master", part: "reward" }
-                ]
-      },
-      { x: 4242, y: 1687, text: "Frederick T. Fitzgerald", sex: "male", race: "Gnome", level: 48, master: "Master of Spotting Traps", category: ["quest", "npc", "master"],
-        linkedLabels: [
-          { questName: "Get the staff of K’an T’au", questDescription: "F. Fitzgerald, the master of Spotting Traps, wants you to get the staff of K'an T'au from the castle of S'nel N'fa. In exchange, he will give you master training.", questType: "master", target: "Chest (Staff of K'an T'au)", part: 1 }
         ]
       },
-      { x: 3814, y: 2170, text: "J.M. Morat", sex: "male", race: "Gnome", level: 32, master: "Haggle master", category: ["quest", "npc", "master"],
+      { x: 11362, y: 4303, text: "Frederick T. Fitzgerald", master: "Master of Spotting Traps", category: ["quest", "npc", "master"], level: 48, sex: "male", race: "Gnome",
+        linkedLabels: [
+          { questName: "Get the staff of K’an T’au", questDescription: "F. Fitzgerald, the master of Spotting Traps, wants you to get the staff of K'an T'au from the castle of S'nel N'fa. In exchange, he will give you master training.", target: "Chest (Staff of K'an T'au)", questType: "master", part: 1 }
+        ]
+      },
+      { x: 10451, y: 5303, text: "J.M. Morat", master: "Haggle master", category: ["quest", "npc", "master"], level: 32, sex: "male", race: "Gnome",
         linkedLabels: [
           { questName: "Acquire Ten Thousand Gold Pieces", questDescription: "J. M. Morat, the Haggle Master, wants 10,000 coin in exchange for Master training.", questType: "master", part: 1 },
-          { questName: "Acquire Ten Thousand Gold Pieces", questDescription: "One you gathered the 10,000 coins, J. M. Morat will train you.", questType: "master", part:2 }
+          { questName: "Acquire Ten Thousand Gold Pieces", questDescription: "One you gathered the 10,000 coins, J. M. Morat will train you.", questType: "master", part: "reward" }
         ]
       },
-      { x: 3194, y: 1930, text: "Gurin Rockharrow", sex: "male", race: "Dwarf", level: 45, master: "Master of Gambling", category: ["quest", "npc", "master"],
+      { x: 9286, y: 4783, text: "Gurin Rockharrow", master: "Master of Gambling", category: ["quest", "npc", "master"], level: 45, sex: "male", race: "Dwarf",
         linkedLabels: [
-          { questName: "Gamble with Gurin Rockharrow", questDescription: "Gurin Rockharrow has agreed to tutor you in the skills of gambling.", questType: "master", target: "Gurin Rockharrow", part: 1 },
-          { questName: "Gamble with Gurin Rockharrow", questDescription: "After you won a certain number of times, Gurin will accepts to train you.", questType: "master", target: "Gurin Rockharrow", part: 2 }
-
+          { questName: "Gamble with Gurin Rockharrow", questDescription: "Gurin Rockharrow has agreed to tutor you in the skills of gambling.", target: "Gurin Rockharrow", questType: "master", part: 1 },
+          { questName: "Gamble with Gurin Rockharrow", questDescription: "After you won a certain number of times, Gurin will accepts to train you.", target: "Gurin Rockharrow", questType: "master", part: 2 }
         ]
       },
-      { x: 4199, y: 2406, text: "Madam Lil", sex: "female", race: "Human", level: 30, inventory:["Gift for Mrs. Regina Halster", "Madam Lil's Music Box"],description: "Some quests of Madam Lil are available to men or women only.", category: ["quest", "npc", "bounty"],
+      { x: 11285, y: 5706, text: "Madam Lil", description: "Some quests of Madam Lil are available to men or women only.", category: ["quest", "npc", "bounty"], level: 30, sex: "female", race: "Human", inventory: ["Gift for Mrs. Regina Halster", "Madam Lil's Music Box"],
         linkedLabels: [
           { questName: "Retrieve Cassie's necklace", questDescription: "Madam Lil would like you to retrieve Cassie's necklace from Mr. Mooreland's house at 46 Devonshire Way.", target: "Laura", part: 1 },
           { questName: "Get Mr. Langley to Pay", questDescription: "Mr. Langley owes 400 coin to Madam Lil.  Collect it and return it to her.  He is the doorman at The Bridesdale Inn.", target: "Mr. Langley", part: 1 },
@@ -1147,227 +1136,219 @@ const ArcanumCitiesMapData = [
           { questName: "Get Madam Lil a Medallion of Beauty", questDescription: "The Medallion of Beauty can be bought from the Black Market, or found in the random loots of Magick Chests. Then, return to Madam Lil for a reward.", part: 2 }
         ]
       },
-      { x: 3562, y: 2070, text: "Laura", sex: "female", race: "Human", level: 6, category: ["quest", "npc"],
+      { x: 9953, y: 5070, text: "Laura", category: ["quest", "npc"], level: 6, sex: "female", race: "Human",
         linkedLabels: [
           { questName: "Retrieve Cassie's necklace", questDescription: "Return Cassie's necklace to Madam Lil.", target: "Madam Lil", part: 2 }
         ]
       },
-
-      { x: 3499, y: 1906, text: "Mr. Langley", sex: "male", race: "Halfling", level: 8, category: ["quest", "npc"],
+      { x: 9906, y: 4712, text: "Mr. Langley", category: ["quest", "npc"], level: 8, sex: "male", race: "Halfling",
         linkedLabels: [
           { questName: "Get Mr. Langley to Pay", questDescription: "Mr. Langley will ask you to come back after 5 days to pay his debt. You can convince him to pay half immediately. Afterwards, return to Madam Lil.", target: "Madam Lil", part: 2 }
         ]
       },
-      { x: 3455, y: 2016, text: "Mrs. Regina Halster", sex: "female", race: "Human", level: 5, category: ["quest", "npc"],
+      { x: 9740, y: 4958, text: "Mrs. Regina Halster", category: ["quest", "npc"], level: 5, sex: "female", race: "Human",
         linkedLabels: [
-          { questName: "[Males only] Deliver Package to Mrs. Halster", questDescription: "Pretend you are a delivery boy and make Mrs. Halster happy of the package she received from her ''husband''. Return to Madam Lil after that.", target: "Madam Lil", part: 2 }, 
+          { questName: "[Males only] Deliver Package to Mrs. Halster", questDescription: "Pretend you are a delivery boy and make Mrs. Halster happy of the package she received from her ''husband''. Return to Madam Lil after that.", target: "Madam Lil", part: 2 },
           { questName: "Deliver Payment Notice to Mrs. Halster", questDescription: "Return to Mr. Wright and you will receive 75 coins and 1200 experience.", target: "Mr. Victor Wright", part: 2 }
         ]
       },
-      { x: 3635, y: 1897, text: "Mr. Franklin", sex: "male", race: "Halfling", level: 12, inventory: ["Ring Of Virility"], category: ["quest", "npc", "bounty"],
+      { x: 10067, y: 4780, text: "Mr. Franklin", category: ["quest", "npc", "bounty"], level: 12, sex: "male", race: "Halfling", inventory: ["Ring Of Virility"],
         linkedLabels: [
           { questName: "[Females only] ''Service'' Mr. Franklin", questDescription: "Mr. Franklin lives at corner of Vermillion and Grimson. ''Service'' him and return to Madam Lil.", target: "Madam Lil", part: 2 }
         ]
       },
-
-      { x: 4479, y: 1944, text: "Thom Grak", sex: "male", race: "Half-Orc", level: 7, category: ["quest", "npc"],
+      { x: 11810, y: 4836, text: "Thom Grak", category: ["quest", "npc"], level: 7, sex: "male", race: "Half-Orc",
         linkedLabels: [
-          { questName: "Find Matt de Cesare", questDescription: "Thom Grak, a rather jovial half orc, has asked me to find Sir Matt de Cesare for him.", target: "Matt de Cesare"}
+          { questName: "Find Matt de Cesare", questDescription: "Thom Grak, a rather jovial half orc, has asked me to find Sir Matt de Cesare for him.", target: "Matt de Cesare" }
         ]
       },
-      { x: 3746, y: 1663, text: "Jared", sex: "male", race: "Human", level: 28, category: ["quest", "npc"],
+      { x: 10448, y: 4183, text: "Jared", category: ["quest", "npc"], level: 28, sex: "male", race: "Human",
         linkedLabels: [
           { questName: "Jared & Wilhemina", questDescription: "Discover the fate of Wilhemina, girlfriend of Jared the guard", target: "Wilhemina Carpenter", part: 1 },
           { questName: "Jared & Wilhemina", questDescription: "Jared the guard wants you to go to the stonecutter at the corner of Mulligan Bone Alley and East End Ave. in Tarant to commission a tombstone for his beloved Wilhemina.", target: "Joseph the Stonecutter", part: 3 }
         ]
       },
-      { x: 5980, y: 1917, text: "Joseph the Stonecutter", sex: "male", race: "Dwarf", level: 42, category: ["quest", "npc"],
+      { x: 14790, y: 4780, text: "Joseph the Stonecutter", category: ["quest", "npc"], level: 42, sex: "male", race: "Dwarf",
         linkedLabels: [
           { questName: "Jared & Wilhemina", questDescription: "After you spoke with the stonecutter, return to Jared.", target: "Jared", part: 4 }
         ]
       },
-      { x: 4079, y: 1589, text: "Mr. Victor Wright", sex: "male", race: "Human", level: 15, description: "You can tell Victor Wright about the zeppelin crash, and he'll pay you 500 (or 800) gold for it. Telling your story makes you better known, resulting in gifts from random NPCs, but makes it impossible to talk your way out of fights with assassins on the overworld map.", category: ["quest", "npc"],
+      { x: 11055, y: 4110, text: "Mr. Victor Wright", description: "You can tell Victor Wright about the zeppelin crash, and he'll pay you 500 (or 800) gold for it. Telling your story makes you better known, resulting in gifts from random NPCs, but makes it impossible to talk your way out of fights with assassins on the overworld map.", category: ["quest", "npc"], level: 15, sex: "male", race: "Human",
         linkedLabels: [
-          { questName: "Deliver Payment Notice to Mrs. Halster", questDescription: "Mr. Wright, Editor of the Tarantian, would like you to deliver a payment note to Mrs. Halster who lives on the corner of Devonshire and Vermillion.", target: "Mrs. Regina Halster"}
+          { questName: "Deliver Payment Notice to Mrs. Halster", questDescription: "Mr. Wright, Editor of the Tarantian, would like you to deliver a payment note to Mrs. Halster who lives on the corner of Devonshire and Vermillion.", target: "Mrs. Regina Halster" }
         ]
       },
-      { x: 5596, y: 1842, text: "Captain Wheeler", sex: "male", race: "Human", level: 45, inventory: ["Key to the factory", "Levered Machine Gun"], category: ["quest", "npc"],
+      { x: 14075, y: 4632, text: "Captain Wheeler", category: ["quest", "npc"], level: 45, sex: "male", race: "Human", inventory: ["Key to the factory", "Levered Machine Gun"],
         linkedLabels: [
           { questName: "End the Orc Uprising", questDescription: "Capt. Wheeler of the Tarantian Guard wants you to kill Donn Throgg to end the orc uprising.", target: "Donn Throgg", part: 1 },
           { questName: "End the Orc Uprising", questDescription: "Capt. Wheeler of the Tarantian Guard wants you to convince Donn Throgg to surrender to end the orc uprising.", target: "Donn Throgg", part: 1 }
         ]
       },
-      { x: 5499, y: 1805, text: "Mr. Babcock", sex: "male", race: "Gnome", level: 20, category: ["quest", "npc"],
+      { x: 13913, y: 4581, text: "Mr. Babcock", category: ["quest", "npc"], level: 20, sex: "male", race: "Gnome",
         linkedLabels: [
           { questName: "End the Orc Uprising", questDescription: "Mr. Babcock wants you to convince Donn Throgg to slip out of the factory unseen, thereby ending the orc uprising, so that he may become the union representative for the orcs of Tarant.", target: "Donn Throgg", part: 1 }
         ]
       },
-      { x: 5782, y: 1631, text: "Donn Throgg", sex: "male", race: "Half-Orc", level: 35, category: ["quest", "npc"],
+      { x: 14367, y: 4190, text: "Donn Throgg", category: ["quest", "npc"], level: 35, sex: "male", race: "Half-Orc",
         linkedLabels: [
           { questName: "End the Orc Uprising", questDescription: "There are three ways to complete this quest: kill him, convince him to fight, or convince him to run away.", target: "Donn Throgg", part: 2 }
         ]
       },
-      { x: 3256, y: 2006, text: "Matt de Cesare", sex: "male", race: "Human", level: 15, category: ["quest", "npc"],
+      { x: 9336, y: 4948, text: "Matt de Cesare", category: ["quest", "npc"], level: 15, sex: "male", race: "Human",
         linkedLabels: [
           { questName: "Find Matt de Cesare", questDescription: "It's a trap! As soon as you talk with M. de Cesare, two men tries to kill him.", part: 2 },
-          { questName: "The Ren'ar Siamese Twins", questDescription: "Sir M. de Cesare wants you to find the skulls of the Ren'ar siamese twins and bring them to him. He believes they may be in a warehouse in Tarant somewhere.", target: "Barrel (Ren'ar Twins)", part: 1},
+          { questName: "The Ren'ar Siamese Twins", questDescription: "Sir M. de Cesare wants you to find the skulls of the Ren'ar siamese twins and bring them to him. He believes they may be in a warehouse in Tarant somewhere.", target: "Barrel (Ren'ar Twins)", part: 1 },
           { questName: "The Ren'ar Siamese Twins", questDescription: "You need to find Arthur Tyron and bring him the siamese twin skulls as proof of a larger conspiracy. His last known address was in Black Root.", target: "Tyron's Note", part: 3 },
           { questName: "The Ren'ar Siamese Twins", questDescription: "Search for Arthur Tyron in Caladon. He lives on 22 Dragon's Turnabout", target: "Arthur Tyron", part: 5 }
         ]
       },
-      { x: 5077, y: 2420, text: "Barrel (Ren'ar Twins)", chestState: "locked", inventory: ["The Skulls of the Ren'ar Siamese Twins"], category: ["quest", "chest"],
+      { x: 13008, y: 5799, text: "Barrel (Ren'ar Twins)", category: ["quest", "chest"], chestState: "locked", inventory: ["The Skulls of the Ren'ar Siamese Twins"],
         linkedLabels: [
           { questName: "The Ren'ar Siamese Twins", questDescription: "Picklock or destroy the barrel, get the skulls and return to Matt de Cesare.", target: "Matt de Cesare", part: 2 }
         ]
       },
-      { x: 3264, y: 2193, text: "Edward Willoughsby", sex: "male", race: "Gnome", level: 45, category: ["quest", "npc"],
+      { x: 9369, y: 5321, text: "Edward Willoughsby", category: ["quest", "npc"], level: 45, sex: "male", race: "Gnome",
         linkedLabels: [
-          { questName: "Negotiations with Caladon", questDescription:"Speak to Mr Willoughsby as he leaves his home at 19 Pickwick Alley in Tarant after you have returned from your first visit to Qintarra. He will tell you to meet him at City Hall.", questType: "master", target: "Edward Willoughsby (II)", part: 1 }
+          { questName: "Negotiations with Caladon", questDescription: "Speak to Mr Willoughsby as he leaves his home at 19 Pickwick Alley in Tarant after you have returned from your first visit to Qintarra. He will tell you to meet him at City Hall.", target: "Edward Willoughsby (II)", questType: "master", part: 1 }
         ]
       },
-      { x: 4989, y: 1321, text: "Edward Willoughsby (II)", sex: "male", race: "Gnome", level: 45, category: ["quest", "npc"],
+      { x: 12848, y: 3587, text: "Edward Willoughsby (II)", category: ["quest", "npc"], level: 45, sex: "male", race: "Gnome",
         linkedLabels: [
-          { questName: "Negotiations with Caladon", questDescription:"Edward Willoughsby wants you to convince King Farad's advisors that Caladon should join the Unified Kingdom.", questType: "master", target: "Edward Willoughsby (Caladon)", part: 2}
+          { questName: "Negotiations with Caladon", questDescription: "Edward Willoughsby wants you to convince King Farad's advisors that Caladon should join the Unified Kingdom.", target: "Edward Willoughsby (Caladon)", questType: "master", part: 2 }
         ]
       },
-      { x: 4889, y: 1383, text: "Heinrich Jenks", sex: "male", race: "Human", level: 7, category: ["quest", "npc"],
+      { x: 12726, y: 3653, text: "Heinrich Jenks", category: ["quest", "npc"], level: 7, sex: "male", race: "Human",
         linkedLabels: [
-          { questName: "Assassinating King Farad", questDescription: "Heinrich Jenks wants you to assassinate King Farad of Caladon.", target: "Bullors", part: 1}
+          { questName: "Assassinating King Farad", questDescription: "Heinrich Jenks wants you to assassinate King Farad of Caladon.", target: "Bullors", part: 1 }
         ]
       },
-      { x: 2538, y: 2781, text: "Muggs", sex: "male", race: "Dwarf", level: 25, category: ["quest", "npc"],
+      { x: 7898, y: 6542, text: "Muggs", category: ["quest", "npc"], level: 25, sex: "male", race: "Dwarf",
         linkedLabels: [
           { questName: "Collect from Larrs", questDescription: "Muggs would like for you to collect 200 gold from a Mr. Larrs in the Boil. If Larrs is unable to pay, you are to kill him.", target: "Larrs", part: 1 }
         ]
       },
-      { x: 2408, y: 2792, text: "Miranda Tears", sex: "female", race: "Human", level: 30, category: ["quest", "npc"],
+      { x: 7676, y: 6539, text: "Miranda Tears", category: ["quest", "npc"], level: 30, sex: "female", race: "Human",
         linkedLabels: [
           { questName: "Steal a Crate of Ale", questDescription: "Miranda Tears wants you to take a crate of ale from the Clan Maug's warehouse.", target: "Crate of Ale", part: 1 }
         ]
       },
-      { x: 1624, y: 2778, text: "Crate of Ale", inventory: ["Crate of Ale"], category: "quest",
+      { x: 6088, y: 6515, text: "Crate of Ale", category: "quest", inventory: ["Crate of Ale"],
         linkedLabels: [
           { questName: "Steal a Crate of Ale", questDescription: "Return to Miranda Tears with the crate for a reward.", target: "Miranda Tears", part: 2 }
         ]
       },
-      { x: 2456, y: 2753, text: "Caleb Malloy", category: ["quest", "npc"], level: 35, sex: "male", race: "Human", inventory: ["Malloy's Peacemaker"],
+      { x: 7784, y: 6484, text: "Caleb Malloy", category: ["quest", "npc"], level: 35, sex: "male", race: "Human", inventory: ["Malloy's Peacemaker"],
         linkedLabels: [
           { questName: "Caleb Malloy's Whiskey", questDescription: "Caleb Malloy wants you to pick up his shipment of whiskey.", target: "Biggs", part: 1 }
         ]
       },
-      { x: 3122, y: 2640, text: "Biggs", sex: "male", race: "Dwarf", level: 1, category: ["quest", "npc"],
+      { x: 9143, y: 6179, text: "Biggs", category: ["quest", "npc"], level: 1, sex: "male", race: "Dwarf",
         linkedLabels: [
           { questName: "Caleb Malloy's Whiskey", questDescription: "As soon as you receive the whiskey, you will be attacked by Malek Nebb and his gang. Give the whiskey to Caleb for your reward.", target: "Caleb Malloy", part: 2 }
         ]
       },
-      { x: 1639, y: 2631, text: "Darian Maug", sex: "male", race: "Human", level: 40, category: ["quest", "npc"],
+      { x: 6135, y: 6203, text: "Darian Maug", category: ["quest", "npc"], level: 40, sex: "male", race: "Human",
         linkedLabels: [
           { questName: "Kill Pollock", questDescription: "Darian Maug has contracted you to kill Pollock.", target: "Pollock", part: 1 },
           { questName: "Kill Darian Maug", questDescription: "Return to Pollock for a reward.", target: "Pollock", part: 2 }
         ]
       },
-      { x: 3128, y: 3009, text: "Pollock", sex: "male", race: "Half-Ogre", level: 40, category: ["quest", "npc"],
+      { x: 9063, y: 6981, text: "Pollock", category: ["quest", "npc"], level: 40, sex: "male", race: "Half-Ogre",
         linkedLabels: [
           { questName: "Kill Darian Maug", questDescription: "Pollock wants you to kill Darian Maug.", target: "Darian Maug", part: 1 },
           { questName: "Kill Pollock", questDescription: "Return to Darian Maug for a reward.", target: "Darian Maug", part: 2 }
         ]
       },
-      { x: 1961, y: 2671, text: "Milo", sex: "male", race: "Gnome", level: 30, category: ["quest", "npc"],
+      { x: 6787, y: 6280, text: "Milo", category: ["quest", "npc"], level: 30, sex: "male", race: "Gnome",
         linkedLabels: [
-          {questName: "Kill Treat", questDescription: "Milo wants you to kill Treat, a Pollock gang member, for messing with his girl.", target: "Treat", part: 1 }
+          { questName: "Kill Treat", questDescription: "Milo wants you to kill Treat, a Pollock gang member, for messing with his girl.", target: "Treat", part: 1 }
         ]
       },
-      { x: 2669, y: 3167, text: "Treat", sex: "male", race: "Half-Orc", level: 17, category: ["quest", "npc"],
+      { x: 8186, y: 7274, text: "Treat", category: ["quest", "npc"], level: 17, sex: "male", race: "Half-Orc",
         linkedLabels: [
-          {questName: "Kill Treat", questDescription: "Once you killed Treat, return to Milo for a reward.", target: "Milo", part: 2 }
+          { questName: "Kill Treat", questDescription: "Once you killed Treat, return to Milo for a reward.", target: "Milo", part: 2 }
         ]
       },
-      { x: 1886, y: 2861, text: "Larrs", sex: "male", race: "Half-Orc", level: 1, category: ["quest", "npc"],
+      { x: 6646, y: 6677, text: "Larrs", category: ["quest", "npc"], level: 1, sex: "male", race: "Half-Orc",
         linkedLabels: [
-          {questName: "Collect from Larrs", questDescription: "Muggs would like for you to collect 200 gold from a Mr. Larrs in the Boil. If Larrs is unable to pay, you are to kill him.", target: "Muggs", part: 2 }
+          { questName: "Collect from Larrs", questDescription: "Muggs would like for you to collect 200 gold from a Mr. Larrs in the Boil. If Larrs is unable to pay, you are to kill him.", target: "Muggs", part: 2 }
         ]
       },
-      { x: 3913, y: 2132, text: "Telegraph Operator", sex: "male", race: "Human", level: 5, category: "quest", inventory: ["Telegram"],
+      { x: 10667, y: 5193, text: "Telegraph Operator", category: "quest", level: 5, sex: "male", race: "Human", inventory: ["Telegram"],
         linkedLabels: [
-          {questName: "Elder Joachim’s paper trail", target: "Innkeeper (Stillwater)", part: 3 }
+          { questName: "Elder Joachim’s paper trail", target: "Innkeeper (Stillwater)", part: 3 }
         ]
       },
-      { x: 5267, y: 2200, text: "Stanton", sex: "male", race: "Human", level: 20, description: "You can get the deed by either killing Stanton or buying it from him. If your persuasion skill is at least of 1 point, you can convince him that you are a representative of the Industrial Council and scare him into handing over the deed.", category: ["quest", "npc"],
+      { x: 13408, y: 5334, text: "Stanton", description: "You can get the deed by either killing Stanton or buying it from him. If your persuasion skill is at least of 1 point, you can convince him that you are a representative of the Industrial Council and scare him into handing over the deed.", category: ["quest", "npc"], level: 20, sex: "male", race: "Human",
         linkedLabels: [
-          { questName: "Free the Ghost of Bessie Toone", questDescription: "Good ending - you can return the deed to Sarah Toone.",  target: "Sarah Toone", part: 5 },
-          { questName: "Free the Ghost of Bessie Toone", questDescription: "Bad ending - you can return the deed to Percival Toone.",  target: "Percival Toone", part: 5 }
+          { questName: "Free the Ghost of Bessie Toone", questDescription: "Good ending - you can return the deed to Sarah Toone.", target: "Sarah Toone", part: 5 },
+          { questName: "Free the Ghost of Bessie Toone", questDescription: "Bad ending - you can return the deed to Percival Toone.", target: "Percival Toone", part: 5 }
         ]
       },
-      { x: 4969, y: 1126, text: "Librarian", sex: "female", race: "Gnome", level: 13, inventory: ["The Curse of T'sen-Ang"], category: ["npc", "quest"],
+      { x: 12785, y: 3206, text: "Librarian", category: ["npc", "quest"], level: 13, sex: "female", race: "Gnome", inventory: ["The Curse of T'sen-Ang"],
         linkedLabels: [
           { questName: "Find Mr. Victor Misk", questDescription: "Find Mr. Victor Misk", target: "Lillian Misk", part: 1 }
         ]
       },
-      { x: 5053, y: 995, text: "Professor Eakins", sex: "male", race: "Human", level: 14, category: ["quest","npc"], 
+      { x: 12942, y: 2920, text: "Professor Eakins", category: ["quest", "npc"], level: 14, sex: "male", race: "Human",
         linkedLabels: [
-          { questName: "Stop the Whytechurch Murderer", questDescription: "You need to retrieve the Blade of Xerxes to enable you to slay the demon L'anamelach.", target: "", part: 4 }
+          { questName: "Stop the Whytechurch Murderer", questDescription: "You need to retrieve the Blade of Xerxes to enable you to slay the demon L'anamelach.", part: 4 }
         ]
       },
-      { x: 6109, y: 1545, text: "Saboteurs", description: "3 NPCs spawns at midnite (nothing valuable in inventory): Half Orc Bandit / Male / 8 - Human Bandit / Female / 7 - Human Bandit / Male / 6", category: ["quest"]},
-      { x: 3795, y: 2011, text: "James Kingsford", sex: "male", race: "Human", level: 6, category: ["quest", "key", "npc"],
+      { x: 15104, y: 4025, text: "Saboteurs", description: "3 NPCs spawns at midnite (nothing valuable in inventory): Half Orc Bandit / Male / 8 - Human Bandit / Female / 7 - Human Bandit / Male / 6", category: ["quest"] },
+      { x: 10471, y: 4990, text: "James Kingsford", category: ["quest", "key", "npc"], level: 6, sex: "male", race: "Human",
         linkedLabels: [
           { questName: "Origins of the Strange Ring", questDescription: "James Kingsford doesn't want to let you see Winston Schuyler. Take care of him, get his key and proceed to the underground.", target: "Winston Schuyler", questType: "main", part: 3 }
         ]
       },
-      { x: 4001, y: 1367, text: "Wendell Wellington", sex: "male", race: "Gnome", level: 10, category: ["quest", "npc"] },
-      { x: 4870, y: 1664, text: "H. T. Parnell", sex: "male", race: "Human", level: 19, inventory: ["Key for Stillwater Giant Case"], category: ["quest", "npc", "key"],
+      { x: 10875, y: 3670, text: "Wendell Wellington", category: ["quest", "npc"], level: 10, sex: "male", race: "Gnome" },
+      { x: 12560, y: 4310, text: "H. T. Parnell", category: ["quest", "npc", "key"], level: 19, sex: "male", race: "Human", inventory: ["Key for Stillwater Giant Case"],
         linkedLabels: [
-          { questName: "The Stillwater Giant", questDescription: "", target: ""}
+          { questName: "The Stillwater Giant" }
         ]
       },
-      { x: 4821, y: 1615, text: "Stillwater Giant display case", inventory: ["Stillwater Giant Pelt"], category: ["quest", "chest", "key"],
+      { x: 12510, y: 4200, text: "Stillwater Giant display case", category: ["quest", "chest", "key"], inventory: ["Stillwater Giant Pelt"],
         linkedLabels: [
-          { questName: "The Stillwater Giant", questDescription: "", target: ""}
+          { questName: "The Stillwater Giant" }
         ]
       },
-      { x: 4676, y: 1240, text: "Ancient Iron Chest", inventory: ["Map: The Place of Lost Voices", "Ancient Iron Drums", "Ancient Iron Drums", "Ancient Iron Drums"], category: ["quest", "chest"],
+      { x: 12202, y: 3427, text: "Ancient Iron Chest", category: ["quest", "chest"], inventory: ["Map: The Place of Lost Voices", "Ancient Iron Drums", "Ancient Iron Drums", "Ancient Iron Drums"],
         linkedLabels: [
           { questName: "The Iron Clan", questDescription: "Craft the Key to the Iron Clan Chest, open it and get what the chest contains. Then, go to the Place of Lost Voices.", target: "Music Box of the Iron Clan", part: 2 }
         ]
       },
-      { x: 4744, y: 1166, text: "Dr. Tristan Fenwick", sex: "male", race: "Gnome", level: 24, category: ["quest", "npc"],
+      { x: 12321, y: 3253, text: "Dr. Tristan Fenwick", category: ["quest", "npc"], level: 24, sex: "male", race: "Gnome",
         linkedLabels: [
-          { questName: "The Stillwater Giant", questDescription: "", target: "" }
+          { questName: "The Stillwater Giant" }
         ]
       },
-
-      // Thief underground
-      { x: 4482, y: 2260, text: "Chest", inventory: ["Cassie's Jewellery"], category: ["chest", "bounty"] },
-      { x: 5273, y: 1874, text: "Safe", inventory: ["Derian Ka Sword"], category: ["chest", "bounty"] },
-      { x: 3386, y: 2220, text: "Chest", inventory: ["Enchanted Looking Glass"], category: ["chest", "bounty"] },
-      { x: 4682, y: 1711, text: "Wood Chest", inventory: ["Will-O-The-Wisp Essence"], category: ["chest", "bounty"] },
-      { x: 4275, y: 2987, text: "Barrel", inventory: ["Flawless Dwarven Rubies"], category: ["chest", "bounty"] },
-      { x: 6470, y: 1675, text: "Crates", inventory: ["Heron Device"], category: ["chest", "bounty"] },
-      { x: 5145, y: 1805, text: "Chest", inventory: ["Jewel Of Hebe"], category: ["chest", "bounty"] },
-      { x: 4675, y: 2230, text: "Human City Dweller", sex: "male", race: "Human", level: 14, inventory: ["Lucky Medallion"], category: ["npc", "bounty"] },
-      { x: 4746, y: 1137, text: "Chest", inventory: ["Lethe Wyvern Venom"], category: ["chest", "bounty"] },
-      { x: 3452, y: 1974, text: "Cabinet", inventory: ["Napha Water"], category: ["chest", "bounty"] },
-      { x: 6193, y: 1636, text: "Wood Chest", inventory: ["Plans For Schreck's Multi-barrel Pistol"], category: ["chest", "bounty"] },
-      { x: 4270, y: 1656, text: "Chest", inventory: ["Potion Of Dark Power"], category: ["chest", "bounty"] },
-
-      // Other labels
-      { x: 6156, y: 1855, text: "Half Ogre City Dweller", sex: "male", race: "Half-Ogre", level: 14, inventory: ["Key to the Back Room in 57 Mulligan Bone"], category: ["key", "npc"] },
-      { x: 6222, y: 1781, text: "Human Guard", sex: "male", race: "Human", level: 42, inventory: ["Key to the Warehouse of the Small"], category: ["key", "npc"] },
-      { x: 4483, y: 2330, text: "Mr. Black", sex: "male", race: "Half-Orc", level: 38, category: "npc" },
-      { x: 5187, y: 1020, text: "Aldous T. Buxington", sex: "male", race: "Elf", level: 18, category: "npc" },
-      { x: 5110, y: 965, text: "University Bookseller", sex: "male", race: "Dwarf", level: 17, category: "npc" },
-      { x: 4783, y: 2261, text: "Poone", sex: "male", race: "Human", level: 23, category: "npc" },
-      { x: 4155, y: 2339, text: "Nicholas Longfoot", sex: "male", race: "Half-Ogre", level: 31, category: "npc" },
-      { x: 3812, y: 2131, text: "Grant the Bartender", sex: "male", race: "Human", level: 31, category: "npc" },
-      { x: 3439, y: 1815, text: "Innkeeper", sex: "female", race: "Human", level: 21, category: "npc" },
-      { x: 5160, y: 1840, text: "Human Priest", sex: "male", race: "Human", level: 20, category: "npc" },
-      { x: 4809, y: 1202, text: "Half Orc City Dweller", sex: "female", race: "Half-Orc", level: 10, category: "npc" },
-      { x: 3481, y: 1480, text: "Train Conductor (Tarant)", sex: "male", race: "Human", level: 20, category: "npc" },
-      { x: 3278, y: 1584, text: "Train Conductor (Tarant)", sex: "male", race: "Human", level: 22, category: "npc" },
-
-      // Chest
-      { x: 3260, y: 2098, text: "Wood Chest", chestState: "locked", inventory: ["3600 gold"], category: "chest" },
-      { x: 2823, y: 2066, text: "Coffin", description: "inventory: Gentleman's club Matchbook", category: "chest" },
+      { x: 11792, y: 5493, text: "Chest", category: ["chest", "bounty"], inventory: ["Cassie's Jewellery"] },
+      { x: 13344, y: 4713, text: "Safe", category: ["chest", "bounty"], inventory: ["Derian Ka Sword"] },
+      { x: 9585, y: 5361, text: "Chest", category: ["chest", "bounty"], inventory: ["Enchanted Looking Glass"] },
+      { x: 12231, y: 4334, text: "Wood Chest", category: ["chest", "bounty"], inventory: ["Will-O-The-Wisp Essence"] },
+      { x: 11392, y: 6928, text: "Barrel", category: ["chest", "bounty"], inventory: ["Flawless Dwarven Rubies"] },
+      { x: 15765, y: 4264, text: "Crates", category: ["chest", "bounty"], inventory: ["Heron Device"] },
+      { x: 13104, y: 4574, text: "Chest", category: ["chest", "bounty"], inventory: ["Jewel Of Hebe"] },
+      { x: 12163, y: 5420, text: "Human City Dweller", category: ["npc", "bounty"], level: 14, sex: "male", race: "Human", inventory: ["Lucky Medallion"] },
+      { x: 12309, y: 3219, text: "Chest", category: ["chest", "bounty"], inventory: ["Lethe Wyvern Venom"] },
+      { x: 9762, y: 4888, text: "Cabinet", category: ["chest", "bounty"], inventory: ["Napha Water"] },
+      { x: 15167, y: 4241, text: "Wood Chest", category: ["chest", "bounty"], inventory: ["Plans For Schreck's Multi-barrel Pistol"] },
+      { x: 11405, y: 4261, text: "Chest", category: ["chest", "bounty"], inventory: ["Potion Of Dark Power"] },
+      { x: 15091, y: 4671, text: "Half Ogre City Dweller", category: ["key", "npc"], level: 14, sex: "male", race: "Half-Ogre", inventory: ["Key to the Back Room in 57 Mulligan Bone"] },
+      { x: 15283, y: 4569, text: "Human Guard", category: ["key", "npc"], level: 42, sex: "male", race: "Human", inventory: ["Key to the Warehouse of the Small"] },
+      { x: 11907, y: 5601, text: "Mr. Black", category: "npc", level: 38, sex: "male", race: "Half-Orc" },
+      { x: 13168, y: 2945, text: "Aldous T. Buxington", category: "npc", level: 18, sex: "male", race: "Elf" },
+      { x: 13054, y: 2866, text: "University Bookseller", category: "npc", level: 17, sex: "male", race: "Dwarf" },
+      { x: 12368, y: 5432, text: "Poone", category: "npc", level: 23, sex: "male", race: "Human" },
+      { x: 11155, y: 5626, text: "Nicholas Longfoot", category: "npc", level: 31, sex: "male", race: "Half-Ogre" },
+      { x: 10528, y: 5248, text: "Grant the Bartender", category: "npc", level: 31, sex: "male", race: "Human" },
+      { x: 9764, y: 4616, text: "Innkeeper", category: "npc", level: 21, sex: "female", race: "Human" },
+      { x: 13113, y: 4636, text: "Human Priest", category: "npc", level: 20, sex: "male", race: "Human" },
+      { x: 12486, y: 3335, text: "Half Orc City Dweller", category: "npc", level: 10, sex: "female", race: "Half-Orc" },
+      { x: 9891, y: 3869, text: "Train Conductor (Tarant)", category: "npc", level: 20, sex: "male", race: "Human" },
+      { x: 9370, y: 4101, text: "Train Conductor (Tarant)", category: "npc", level: 22, sex: "male", race: "Human" },
+      { x: 9386, y: 5098, text: "Wood Chest", category: "chest", chestState: "locked", inventory: ["3600 gold"] },
+      { x: 8480, y: 5055, text: "Coffin", description: "inventory: Gentleman's club Matchbook", category: "chest" },
     ]
   },
   {
@@ -1496,7 +1477,7 @@ const ArcanumCitiesMapData = [
     filename: "ArcanumBase/WheelClan.png",
     displayName: "Wheel Clan",
     altView: {
-      icon: "Textures/itemimg/WheelClanSpectacles.png",
+      icon: "Textures/itemimg/Helmets/WheelClanSpectacles.png",
       image: "ArcanumBase/WheelClan-Open.png"
     },
     music: "", // CONFIRMED - No music outside.
@@ -1904,18 +1885,18 @@ const ArcanumCitiesMapData = [
   {
     filename: "ArcanumBase/NasrudinRestingPlace",
     chunked: true,
-    width: 6400,
-    height: 2592,
+    width: 21401,
+    height: 9648,
     chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
     displayName: "Nasrudin’s Resting Place",
     modGroup: "Quest locations",
     // music: "",
-    defaultView: { x: 3144, y: 2443 }, // Good
+    defaultView: { x: 13148, y: 4022 }, // Good
     altViews: [
-        { displayName: "Land Bridge", defaultView: { x: 1435, y: 735 } }
+        { displayName: "Land Bridge", defaultView: { x: 9680, y: 581 } } // Good
     ],
     labels: [
-      { x: 3210, y: 2374, text: "Nasrudin", sex: "male", race: "Elf", level: 50, category: ["quest", "npc"],
+      { x: 13336, y: 3868, text: "Nasrudin", sex: "male", race: "Elf", level: 50, category: ["quest", "npc"],
         linkedLabels: [
           { questName: "Find Nasrudin", questDescription: "Nasrudin stands in front of you, ready to answer all your questions.", part: "reward" },
           { questName: "Kill Bogaroth", questDescription: "Nasrudin wishes you to kill the Bogaroth. In return, he will tell you what you need to do to kill Arronax.", target: "Bogaroth", part: 1 },

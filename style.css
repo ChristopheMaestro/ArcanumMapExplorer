@@ -249,6 +249,16 @@ body {
     cursor: move;
 }
 
+/* Move All Labels mode: the whole map becomes a drag handle, so it overrides the
+   crosshair/move cursors above while active */
+#viewport.move-all-labels-mode,
+#viewport.move-all-labels-mode.creator-mode,
+#viewport.move-all-labels-mode .map-label,
+#viewport.move-all-labels-mode .arcanum-world-dot,
+#viewport.move-all-labels-mode .arcanum-world-text {
+    cursor: move !important;
+}
+
 /* Marks a label that only exists in this editing session and hasn't been pasted into maps.js yet */
 .pending-label {
     outline: 2px dashed #ffffff;
@@ -272,6 +282,7 @@ body {
     position: absolute;
     transform-origin: 0 0;
     display: inline-block;
+    will-change: transform;
 }
 
 #chunk-container {
