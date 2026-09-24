@@ -1,6 +1,6 @@
 # Arcanum chunk tile-pyramid generation summary
-# Generated: 2026-09-22 20:59:22
+# Generated: 2026-09-25 00:58:32
 # Source: C:\Users\PetitChat\Documents\GitHub\ArcanumMapExplorer\Toolbox\Map chunker\ArcanumBase
 # Format: mapKey | tier | chunkSize | folder | prefix | totalWidth | totalHeight | originalChunkSize
-NasrudinRestingPlace | low | 2500 | ArcanumBase/NasrudinRestingPlace_low | NasrudinRestingPlace_low | 21401 | 9648 | 500
-NasrudinRestingPlace | mid | 833 | ArcanumBase/NasrudinRestingPlace_mid | NasrudinRestingPlace_mid | 21401 | 9648 | 500
+LostDungeonOfSouls | low | 2500 | ArcanumBase/LostDungeonOfSouls_low | LostDungeonOfSouls_low | 6620 | 4257 | 500
+LostDungeonOfSouls | mid | 833 | ArcanumBase/LostDungeonOfSouls_mid | LostDungeonOfSouls_mid | 6620 | 4257 | 500

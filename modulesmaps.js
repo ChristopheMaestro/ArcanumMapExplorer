@@ -11,10 +11,22 @@ const ModulesMapData = [
     labels: []
   },
   {
+    filename: "Modules/DungeonCrawl2",
+    chunked: true,
+    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
+    width: 17306,
+    height: 7963,
+    displayName: "Dungeon Crawl 2",
+    modGroup: "Dungeon Crawl 2",
+    defaultView: { x: 11391, y: 2146 },
+    //background: "url('Textures/Water.png') repeat",
+    labels: []
+  },
+  {
     filename: "Modules/Hellgate.png",
     displayName: "Hellgate",
     modGroup: "Hellgate",
-    //defaultView: { x: 2085, y: 706, zoom: 0.8},
+    defaultView: { x: 1201, y: 272 }, // Good
     background: "#000000",
     labels: []
   },
@@ -26,6 +38,42 @@ const ModulesMapData = [
     background: "#000000",
     labels: []
   },
+  {
+    filename: "Modules/Grayhills",
+    chunked: true,
+    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
+    width: 31656,
+    height: 9042,
+    displayName: "Grayhills",
+    modGroup: "Grayhills",
+    defaultView: { x: 14862, y: 7919 }, // Good
+    //background: "url('Textures/Water.png') repeat",
+    labels: []
+  },
+  {
+    filename: "Modules/Malicorne",
+    chunked: true,
+    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
+    width: 24920,
+    height: 8195,
+    displayName: "Malicorne",
+    modGroup: "The Secret of Professor Quentin Blafard",
+    defaultView: { x: 7467, y: 2802 },
+    labels: []
+  },
+  {
+    filename: "Modules/LostDungeonOfSouls",
+    chunked: true,
+    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
+    width: 6620,
+    height: 4257,
+    displayName: "Lost Dungeon of Souls",
+    modGroup: "Lost Dungeon of Souls",
+    defaultView: { x: 1450, y: 3575 }, // Good
+    //background: "url('Textures/Water.png') repeat",
+    labels: []
+  },
+
   {
     filename: "Modules/TombTolGurdurCity.jpg",
     displayName: "City",
@@ -95,8 +143,60 @@ const ModulesMapData = [
     filename: "Modules/Vormantown.jpg",
     displayName: "Vormantown",
     modGroup: "Vormantown",
+    defaultView: { x: 895, y: 1422 }, // Good
+    background: "url('Textures/Water.png') repeat",
+    labels: [
+      { x: 2884, y: 1268, text: "Vorman Mansion", category: "waypoint", targetMapFilename: "Vorman Mansion", targetX: 465, targetY: 645 },
+      { x: 1317, y: 909, text: "Ter'elon", category: "waypoint", targetMapFilename: "Ter'elon", targetX: 585, targetY: 2469 },
+      { x: 4362, y: 1478, text: "Stone Heart Clan's seat", category: "waypoint", targetMapFilename: "Stone Heart Clan's seat", targetX: 3438, targetY: 490 },
+    ]
+  },
+  {
+    filename: "Modules/Vormantown-Terelon",
+    chunked: true,
+    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
+    width: 7704,
+    height: 4243,
+    displayName: "Ter'elon",
+    modGroup: "Vormantown",
+    defaultView: { x: 585, y: 2469 }, // Good
+    background: "url('Textures/Water.png') repeat",
+    labels: [
+      { x: 585, y: 2469, text: "Vormantown", category: "waypoint", targetMapFilename: "Vormantown", targetX: 1317, targetY: 909 },
+    ]
+  },
+  {
+    filename: "Modules/Vormantown-Seat",
+    chunked: true,
+    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
+    width: 4557,
+    height: 2461,
+    displayName: "Stone Heart Clan's seat",
+    modGroup: "Vormantown",
     //defaultView: { x: 2085, y: 706, zoom: 0.8},
     background: "url('Textures/Water.png') repeat",
+    labels: [
+      { x: 3438, y: 490, text: "Vormantown", category: "waypoint", targetMapFilename: "Vormantown", targetX: 4362, targetY: 1478 },
+    ]
+  },
+  {
+    filename: "Modules/Vormantown-Mansion.png",
+    displayName: "Vorman Mansion",
+    modGroup: "Vormantown",
+    parentFilename: "Modules/Vormantown.jpg",
+    defaultView: { x: 465, y: 645 }, // Good
+    //background: "url('Textures/Water.png') repeat",
+    labels: [
+      { x: 465, y: 645, text: "Vormantown", category: "waypoint", targetMapFilename: "Vormantown", targetX: 2884, targetY: 1268 },
+    ]
+  },
+  {
+    filename: "Modules/Vormantown-SeatLevel1.png",
+    displayName: "Stone Heart Clan's seat - Level 1",
+    modGroup: "Vormantown",
+    parentFilename: "Modules/Vormantown-Seat",
+    //defaultView: { x: 465, y: 645 },
+    //background: "url('Textures/Water.png') repeat",
     labels: []
   },
 ];

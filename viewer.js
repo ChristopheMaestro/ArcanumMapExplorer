@@ -2193,6 +2193,11 @@ function initViewer() {
         const selectedMap = ArcanumMapData.find(m => m.filename === currentMapFilename);
         if (!selectedMap || !selectedMap.altView) return;
         isShowingAltView = !isShowingAltView;
+        // Clear the stale onload handler left over from the last full map load - it closes
+        // over that load's arrivalView/restorePosition and would call finishMapLoad()/resetView()
+        // again when this src swap fires a fresh 'load' event, resetting pan/zoom. The next real
+        // map load (loadImage()) reassigns img.onload itself, so clearing it here is safe.
+        img.onload = null;
         img.src = isShowingAltView ? selectedMap.altView.image : selectedMap.filename;
         altViewBtn.classList.toggle('active', isShowingAltView);
         altViewBtn.title = isShowingAltView ? 'Show original view' : 'Show alternate view';

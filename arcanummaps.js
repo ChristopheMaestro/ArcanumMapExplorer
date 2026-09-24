@@ -6,7 +6,11 @@ const ArcanumCitiesMapData = [
     modGroup: "World Map",
     typemap: "overworld",
     music: "music/Arcanum.mp3",
-    defaultView: { x: 1000, y: 1000, zoom: 0.6 },
+    altView: {
+      icon: "Textures/itemimg/drawing.png",
+      image: "ArcanumBase/ArcanumWorldMap.png"
+    },
+    defaultView: { x: 1000, y: 1000 },
     labels: [
       { x: 503, y: 977, text: "Ashbury", textX: 503, textY: 978, description: "A city on the eastern seaboard.", targetMapFilename: "Ashbury" },
       { x: 1098, y: 1441, text: "Black Root", textX: 1096, textY: 1441, description: "A border town.", targetMapFilename: "Black Root" },
@@ -95,7 +99,6 @@ const ArcanumCitiesMapData = [
       =================
 
       Replace Jen's maps:
-        - Tarant (integrate)
         - Caladon Castle Main Floor
         - Caladon Castle Upstairs
         - Caladon Castle Vents
@@ -104,7 +107,6 @@ const ArcanumCitiesMapData = [
         - Black Mountain Mines - Level 1
         - Black Mountain Mines - Level 2
         - Black Mountain Mines - Level 3
-        - Nasrudin's Resting Place
 
       New map to do:
         - Mannox's Hole
@@ -973,7 +975,7 @@ const ArcanumCitiesMapData = [
     displayName: "Tarant",
     modGroup: "Cities",
     music: "music/Tarant.mp3",
-    defaultView: { x: 3338, y: 2537 },
+    defaultView: { x: 9607, y: 5976 },
     labels: [
       { x: 13730, y: 3956, text: "Bates Mansion", category: "waypoint", targetMapFilename: "Bates Mansion Level 1" },
       { x: 12703, y: 3707, text: "Hall of Records", category: "waypoint", targetMapFilename: "Hall of Records" },
