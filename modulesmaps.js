@@ -1,15 +1,155 @@
 // Arcanum CE Restored - Map Database Manifest (Modules)
 const ModulesMapData = [
 
-/// MODULES
+/// TROIKA MODULES
+// 1 - Buried Secrets (Worldmap)
+// 2 - Death Match (Worldmap)
+// 3 - Dusty Dunes (Broken)
+// 4 - Hellgate (Worldmap + Cave)
+// 5 - The Lost Dungeon of Souls (Worldmap)
+// 6 - Time (Worldmap)
+// 7 - Vormantown (Vormantown / Mansion / Ter'elon / Stone Heart Clan's Seat / SHC Level 1)
+// 8 - Woodmir Race (Worldmap)
+
   {
     filename: "Modules/BuriedSecrets.jpg",
     displayName: "Buried Secrets",
     modGroup: "Buried Secrets",
-    //defaultView: { x: 2085, y: 706, zoom: 0.8},
-    //background: "url('Textures/Water.png') repeat",
+    defaultView: { x: 821, y: 2353 }, // Good
     labels: []
   },
+  {
+    filename: "Modules/Deathmatch",
+    chunked: true,
+    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
+    width: 6982,
+    height: 5956,
+    displayName: "Death Match",
+    modGroup: "Death Match",
+    defaultView: { x: 2533, y: 1872 }, // Good
+    labels: []
+  },
+  {
+    filename: "Modules/Hellgate.png",
+    displayName: "Hellgate",
+    modGroup: "Hellgate",
+    defaultView: { x: 1201, y: 272 }, // Good
+    background: "#000000",
+    labels: [
+      { x: 1972, y: 487, text: "Hellgate - Cave", category: "waypoint", targetMapFilename: "Hellgate - Cave", targetX: 2267, targetY: 1842 },
+    ]
+  },
+  {
+    filename: "Modules/Hellgate-Cave.png",
+    displayName: "Hellgate - Cave",
+    modGroup: "Hellgate",
+    defaultView: { x: 2267, y: 1842 }, // Good
+    background: "#000000",
+    labels: [
+      { x: 2267, y: 1842, text: "Hellgate", category: "waypoint", targetMapFilename: "Hellgate", targetX: 1972, targetY: 487 },
+    ]
+  },
+  {
+    filename: "Modules/LostDungeonOfSouls",
+    chunked: true,
+    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
+    width: 6620,
+    height: 4257,
+    displayName: "Lost Dungeon of Souls",
+    modGroup: "Lost Dungeon of Souls",
+    defaultView: { x: 1450, y: 3575 }, // Good
+    background: "#000000",
+    labels: []
+  },
+  {
+    filename: "Modules/Time",
+    chunked: true,
+    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
+    width: 11087,
+    height: 5535,
+    displayName: "Time",
+    modGroup: "Time",
+    defaultView: { x: 2368, y: 1624 }, // Good
+    labels: []
+  },
+  {
+    filename: "Modules/Vormantown.jpg",
+    displayName: "Vormantown",
+    modGroup: "Vormantown",
+    defaultView: { x: 895, y: 1422 }, // Good
+    background: "url('Textures/Water.png') repeat",
+    labels: [
+      { x: 2884, y: 1268, text: "Vorman Mansion", category: "waypoint", targetMapFilename: "Vorman Mansion", targetX: 465, targetY: 645 },
+      { x: 1317, y: 909, text: "Ter'elon", category: "waypoint", targetMapFilename: "Ter'elon", targetX: 585, targetY: 2469 },
+      { x: 4362, y: 1478, text: "Stone Heart Clan's seat", category: "waypoint", targetMapFilename: "Stone Heart Clan's seat", targetX: 3438, targetY: 490 },
+    ]
+  },
+  {
+    filename: "Modules/Vormantown-Terelon",
+    chunked: true,
+    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
+    width: 7704,
+    height: 4243,
+    displayName: "Ter'elon",
+    modGroup: "Vormantown",
+    defaultView: { x: 585, y: 2469 }, // Good
+    background: "url('Textures/Water.png') repeat",
+    labels: [
+      { x: 585, y: 2469, text: "Vormantown", category: "waypoint", targetMapFilename: "Vormantown", targetX: 1317, targetY: 909 },
+    ]
+  },
+  {
+    filename: "Modules/Vormantown-Seat",
+    chunked: true,
+    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
+    width: 4557,
+    height: 2461,
+    displayName: "Stone Heart Clan's seat",
+    modGroup: "Vormantown",
+    //defaultView: { x: 2085, y: 706 },
+    labels: [
+      { x: 3438, y: 490, text: "Vormantown", category: "waypoint", targetMapFilename: "Vormantown", targetX: 4362, targetY: 1478 },
+      { x: 2405, y: 1012, text: "Stone Heart Clan's seat - Level 1", category: "waypoint", targetMapFilename: "Stone Heart Clan's seat - Level 1" },
+    ]
+  },
+  {
+    filename: "Modules/Vormantown-Mansion.png",
+    displayName: "Vorman Mansion",
+    modGroup: "Vormantown",
+    parentFilename: "Modules/Vormantown.jpg",
+    defaultView: { x: 465, y: 645 }, // Good
+    background: "#000000",
+    labels: [
+      { x: 465, y: 645, text: "Vormantown", category: "waypoint", targetMapFilename: "Vormantown", targetX: 2884, targetY: 1268 },
+    ]
+  },
+  {
+    filename: "Modules/Vormantown-SeatLevel1.png",
+    displayName: "Stone Heart Clan's seat - Level 1",
+    modGroup: "Vormantown",
+    parentFilename: "Modules/Vormantown-Seat",
+    defaultView: { x: 521, y: 682 }, // Good
+    background: "#000000",
+    labels: [
+      { x: 522, y: 673, text: "Stone Heart Clan's seat", category: "waypoint", targetMapFilename: "Stone Heart Clan's seat", targetX: 2405, targetY: 1012 },
+      { x: 603, y: 131, text: "Stone Heart Clan's seat - Level 2", category: "waypoint" },
+    ]
+  },
+  {
+    filename: "Modules/WoodmirRace",
+    chunked: true,
+    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
+    width: 9041,
+    height: 4997,
+    displayName: "Woodmir Race",
+    modGroup: "Woodmir Race",
+    defaultView: { x: 5172, y: 2789 }, // Good
+    background: "#000000",
+    labels: []
+  },
+
+/// TROIKA MODULES - OTHERS
+// Tutorial module: Dungeon Crawl 2 (worldmap) - Cave to do
   {
     filename: "Modules/DungeonCrawl2",
     chunked: true,
@@ -19,37 +159,20 @@ const ModulesMapData = [
     displayName: "Dungeon Crawl 2",
     modGroup: "Dungeon Crawl 2",
     defaultView: { x: 11391, y: 2146 },
-    //background: "url('Textures/Water.png') repeat",
     labels: []
   },
-  {
-    filename: "Modules/Hellgate.png",
-    displayName: "Hellgate",
-    modGroup: "Hellgate",
-    defaultView: { x: 1201, y: 272 }, // Good
-    background: "#000000",
-    labels: []
-  },
-  {
-    filename: "Modules/Hellgate-Cave.png",
-    displayName: "Hellgate - Cave",
-    modGroup: "Hellgate",
-    //defaultView: { x: 2085, y: 706, zoom: 0.8},
-    background: "#000000",
-    labels: []
-  },
-  {
-    filename: "Modules/Grayhills",
-    chunked: true,
-    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
-    width: 31656,
-    height: 9042,
-    displayName: "Grayhills",
-    modGroup: "Grayhills",
-    defaultView: { x: 14862, y: 7919 }, // Good
-    //background: "url('Textures/Water.png') repeat",
-    labels: []
-  },
+
+/// FRENCH MODULES
+// Triblonto 1 - The Secret of Professor Quentin Blafard (Worldmap [Malicorne])
+// Triblonto 2 - L'epee du naufrageur
+// Triblonto 3 - Tomb of Tol Gurdur (COMPLETE)
+// Triblonto 4 - Treasure Island (COMPLETE)
+// Triblonto 5 - The Valley of the Exiled (Unreleased)
+// Triblonto 6 - L'affaire du mort mysterieux (Unreleased)
+// Triblonto 7 - Mystere a l'abbaye (Unreleased)
+// Triblonto 8 - Le livre des ombres (Unreleased)
+// Destos - Bourrin (To do)
+
   {
     filename: "Modules/Malicorne",
     chunked: true,
@@ -61,19 +184,6 @@ const ModulesMapData = [
     defaultView: { x: 7467, y: 2802 },
     labels: []
   },
-  {
-    filename: "Modules/LostDungeonOfSouls",
-    chunked: true,
-    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
-    width: 6620,
-    height: 4257,
-    displayName: "Lost Dungeon of Souls",
-    modGroup: "Lost Dungeon of Souls",
-    defaultView: { x: 1450, y: 3575 }, // Good
-    //background: "url('Textures/Water.png') repeat",
-    labels: []
-  },
-
   {
     filename: "Modules/TombTolGurdurCity.jpg",
     displayName: "City",
@@ -139,64 +249,86 @@ const ModulesMapData = [
       { x: 2007, y: 1355, text: "Treasure Island", description: "", category: "waypoint", targetMapFilename: "Treasure Island", targetX: 5604, targetY: 1559}, // E      
     ]
   },
+
+/// RUSSIAN MODULES
+// Hell Day (Complete!)
+
   {
-    filename: "Modules/Vormantown.jpg",
-    displayName: "Vormantown",
-    modGroup: "Vormantown",
-    defaultView: { x: 895, y: 1422 }, // Good
-    background: "url('Textures/Water.png') repeat",
-    labels: [
-      { x: 2884, y: 1268, text: "Vorman Mansion", category: "waypoint", targetMapFilename: "Vorman Mansion", targetX: 465, targetY: 645 },
-      { x: 1317, y: 909, text: "Ter'elon", category: "waypoint", targetMapFilename: "Ter'elon", targetX: 585, targetY: 2469 },
-      { x: 4362, y: 1478, text: "Stone Heart Clan's seat", category: "waypoint", targetMapFilename: "Stone Heart Clan's seat", targetX: 3438, targetY: 490 },
-    ]
-  },
-  {
-    filename: "Modules/Vormantown-Terelon",
+    filename: "Modules/HellDay",
     chunked: true,
     chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
-    width: 7704,
-    height: 4243,
-    displayName: "Ter'elon",
-    modGroup: "Vormantown",
-    defaultView: { x: 585, y: 2469 }, // Good
-    background: "url('Textures/Water.png') repeat",
+    width: 17359,
+    height: 9654,
+    displayName: "Hell Day",
+    modGroup: "Hell Day",
+    defaultView: { x: 12319, y: 4065 }, // Good
     labels: [
-      { x: 585, y: 2469, text: "Vormantown", category: "waypoint", targetMapFilename: "Vormantown", targetX: 1317, targetY: 909 },
+      { x: 13537, y: 3684, text: "Hell Day - Cave", category: "waypoint", targetMapFilename: "Hell Day - Cave", targetX: 3318, targetY: 189 },
+      { x: 6715, y: 1157, text: "Hell Day - Mines", category: "waypoint", targetMapFilename: "Hell Day - Mines", targetX: 1281, targetY: 2302 },
     ]
   },
   {
-    filename: "Modules/Vormantown-Seat",
+    filename: "Modules/HellDay-Cave.png",
+    displayName: "Hell Day - Cave",
+    modGroup: "Hell Day",
+    parentFilename: "Modules/HellDay",
+    defaultView: { x: 3318, y: 189 }, // Good
+    background: "#000000",
+    labels: [
+      { x: 3318, y: 189, text: "Hell Day", category: "waypoint", targetMapFilename: "Hell Day", targetX: 13537, targetY: 3684 },
+    ]
+  },
+  {
+    filename: "Modules/HellDay-Mines.png",
+    displayName: "Hell Day - Mines",
+    modGroup: "Hell Day",
+    defaultView: { x: 1281, y: 2302 }, // Good
+    background: "#000000",
+    labels: [
+      { x: 1281, y: 2302, text: "Hell Day", category: "waypoint", targetMapFilename: "Hell Day", targetX: 6715, targetY: 1157 },
+      { x: 549, y: 493, text: "Hell Day - Desert", category: "waypoint", targetMapFilename: "Hell Day - Desert", targetX: 9754, targetY: 2571 },
+    ]
+  },
+  {
+    filename: "Modules/HellDay-Desert",
     chunked: true,
     chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
-    width: 4557,
-    height: 2461,
-    displayName: "Stone Heart Clan's seat",
-    modGroup: "Vormantown",
-    //defaultView: { x: 2085, y: 706, zoom: 0.8},
-    background: "url('Textures/Water.png') repeat",
+    width: 12000,
+    height: 5340,
+    displayName: "Hell Day - Desert",
+    modGroup: "Hell Day",
+    defaultView: { x: 9754, y: 2571 }, // Good
     labels: [
-      { x: 3438, y: 490, text: "Vormantown", category: "waypoint", targetMapFilename: "Vormantown", targetX: 4362, targetY: 1478 },
+      { x: 9754, y: 2571, text: "Hell Day - Mines", category: "waypoint", targetMapFilename: "Hell Day - Mines", targetX: 549, targetY: 493 },
+      { x: 8061, y: 3388, text: "Hell Day - Desert", category: "waypoint", targetMapFilename: "Hell Day - Desert", targetX: 7673, targetY: 3615 },
+      { x: 7673, y: 3615, text: "Hell Day - Desert", category: "waypoint", targetMapFilename: "Hell Day - Desert", targetX: 8061, targetY: 3388 },
     ]
   },
+
+
+/// OTHER MODULES
+// Delirium of Evil (Castle) - In .dat, the only other map is "ShopMap". So what, is that it? Castle is only 4 sectors also. Now, comments online talks of 50 random dungeons sooo ???
+// Grayhills (Worldmap) - In .dat, there is also a "amtut_cave" map (and a ShopMap, but that's probably irrelevant)
+// WhiteSands
+
   {
-    filename: "Modules/Vormantown-Mansion.png",
-    displayName: "Vorman Mansion",
-    modGroup: "Vormantown",
-    parentFilename: "Modules/Vormantown.jpg",
-    defaultView: { x: 465, y: 645 }, // Good
-    //background: "url('Textures/Water.png') repeat",
-    labels: [
-      { x: 465, y: 645, text: "Vormantown", category: "waypoint", targetMapFilename: "Vormantown", targetX: 2884, targetY: 1268 },
-    ]
-  },
-  {
-    filename: "Modules/Vormantown-SeatLevel1.png",
-    displayName: "Stone Heart Clan's seat - Level 1",
-    modGroup: "Vormantown",
-    parentFilename: "Modules/Vormantown-Seat",
-    //defaultView: { x: 465, y: 645 },
-    //background: "url('Textures/Water.png') repeat",
+    filename: "Modules/DeliriumOfEvil.png",
+    displayName: "Delirium of Evil - Castle",
+    modGroup: "Delirium of Evil",
+    defaultView: { x: 1372, y: 350 }, // Good
+    background: "#000000",
     labels: []
   },
+  {
+    filename: "Modules/Grayhills",
+    chunked: true,
+    chunkTiers: { low: { chunkSize: 2500 }, mid: { chunkSize: 833 } },
+    width: 31656,
+    height: 9042,
+    displayName: "Grayhills",
+    modGroup: "Grayhills",
+    defaultView: { x: 14862, y: 7919 }, // Good
+    labels: []
+  },
+
 ];
