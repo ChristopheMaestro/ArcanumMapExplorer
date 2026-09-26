@@ -137,14 +137,14 @@ const ArcanumCitiesMapData = [
       { x: 6109, y: 1862, text: "Scienticians Underground", category: "waypoint", targetMapFilename: "Scienticians Underground" },
 
       // Shop (All checked and good)
-      { x: 7825, y: 2050, text: "Gun Smith", category: "shop", shopType: "Gun store", shopMarkup: 100, level: 33, sex: "male", race: "Human" },
+      { x: 7825, y: 2050, text: "Gun Smith", category: "shop", shopType: "Gun Smith", shopMarkup: 100, level: 33, sex: "male", race: "Human" },
       { x: 6702, y: 1979, text: "Peony the Herbalist", category: "shop", shopType: "Herbalist", shopMarkup: 90, level: 32, sex: "female", race: "Human", inventory: ["Mechanical Dagger", "Copper Ring", { name: "Healing Salve", count: 2 }, "Wonder Drug"] },
-      { x: 6757, y: 2500, text: "General Store Clerk", category: "shop", shopType: "General Store", shopMarkup: 100, level: 29, sex: "female", race: "Human", inventory: ["Shocking Dagger"] },
-      { x: 7095, y: 2317, text: "Elf Shopkeeper", category: "shop", shopType: "Magic shop", shopMarkup: 100, level: 28, sex: "female", race: "Elf", inventory: ["Divining Staff", "Magick Robes"] },
-      { x: 7471, y: 2241, text: "Fenwick the Tailor", category: "shop", shopType: "Tailor", shopMarkup: 90, level: 23, sex: "male", race: "Half-Elf", inventory: ["Mage’s Dagger"] },
-      { x: 7278, y: 2142, text: "Blacksmith", category: "shop", shopType: "Blacksmith", shopMarkup: 110, level: 34, sex: "male", race: "Human", inventory: ["Machined Gauntlets"] },
+      { x: 6757, y: 2500, text: "General Store Clerk", category: "shop", shopType: "General Store (Rural)", shopMarkup: 100, level: 29, sex: "female", race: "Human", inventory: ["Shocking Dagger"] },
+      { x: 7095, y: 2317, text: "Elf Shopkeeper", category: "shop", shopType: "Magic (General)", shopMarkup: 100, level: 28, sex: "female", race: "Elf", inventory: ["Divining Staff", "Magick Robes"] },
+      { x: 7471, y: 2241, text: "Fenwick the Tailor", category: "shop", shopType: "Tailor (City)", shopMarkup: 90, level: 23, sex: "male", race: "Half-Elf", inventory: ["Mage's Dagger"] },
+      { x: 7278, y: 2142, text: "Blacksmith", category: "shop", shopType: "Smith (Quality)", shopMarkup: 110, level: 34, sex: "male", race: "Human", inventory: ["Machined Gauntlets"] },
       { x: 8594, y: 2335, text: "Elven Trader", category: "shop", shopType: "Elven Trader", shopMarkup: 100, level: 35, sex: "male", race: "Elf", inventory: ["Shaman's Staff", "Scroll of Call Earth Elemental", "Scroll of Teleportation", "Bow of Damage", "Priest Robes", "Water", { name: "Bread", count: 2 }] },
-      { x: 8437, y: 2215, text: "Raymond Pierce", description: "If you didn't get a pair of Wheel Clan spectacles from Thorvald on the Isle of Despair, you can get Raymond Pierce to make them in his shop. Just ask him what sorts of wares he carries, and then ask him to make you some custom spectacles. He'll charge you 1000 gold and also require a kathorn crystal.", category: "shop", shopType: "Glasses", shopMarkup: 100, level: 28, sex: "male", race: "Human" },
+      { x: 8437, y: 2215, text: "Raymond Pierce", description: "If you didn't get a pair of Wheel Clan spectacles from Thorvald on the Isle of Despair, you can get Raymond Pierce to make them in his shop. Just ask him what sorts of wares he carries, and then ask him to make you some custom spectacles. He'll charge you 1000 gold and also require a kathorn crystal.", category: "shop", shopType: "Spectals Maker", shopMarkup: 100, level: 28, sex: "male", race: "Human" },
       { x: 7558, y: 4051, text: "Wise Woman", category: "shop", shopType: "Nomad", shopMarkup: 150, level: 37, sex: "female", race: "Halfling" },
 
       // Shop signs
@@ -215,6 +215,7 @@ const ArcanumCitiesMapData = [
     displayName: "Black Root",
     modGroup: "Cities",
     music: "music/Towns.mp3", // Good
+    defaultView: { x: 3487, y: 2935 }, // Good
     labels: [
       // Waypoints
       { x: 4224, y: 1820, text: "Train Conductor (Black Root)", sex: "male", race: "Human", level: 1, description: "Tarant / Ashbury. 75 gold per party member.", category: ["npc"] },
@@ -225,17 +226,22 @@ const ArcanumCitiesMapData = [
       { x: 4727, y: 3785, text: "Franklin Payne", sex: "Male", race: "Human", level: 35, portrait: "Textures/franklinpayne.gif", description: "Franklin Payne will only show up after you've visited T'sen-Ang and learned the fate of the Black Mountain Clan . If you ask him the most dangerous place he's ever been, he'll say Thanatos. At that point you can invite him to come along with you to Thanatos, even if you joined the dark elves and thus can't go to Thanatos.", inventory: ["Elephant Gun", "Mithril Chainmail"], category: ["followers", "information"] },
       
       // Shop
-      { x: 3912, y: 2885, text: "Garret Almstead", sex: "male", race: "Half-Orc", level: 38, shopType: "Blacksmith", shopMarkup: 110, inventory: ["Dwarven Gauntlets", "Almstead's Axe", "Key to Garret Almstead's Trunk"], category: ["quest", "shop", "key"],
+      { x: 3912, y: 2885, text: "Garret Almstead", category: ["quest", "shop", "key"], shopType: "Smith (Rural)", shopMarkup: 110, level: 38, sex: "male", race: "Half-Orc", inventory: ["Dwarven Gauntlets", "Almstead's Axe", "Key to Garret Almstead's Trunk"],
         linkedLabels: [
-          { questName: "Retrieve the Strongbox", questDescription: "", target: "Daniel Hallaway", part: 2 }
+          { questName: "Retrieve the Strongbox", questDescription: "Garret says that the strongbox required more repair that what Daniel Hallaway expected, so his asked for a higher price. You can convince him to give you the strongbox because Hallaway is a good customer. He will give you a key to a chest containing it.", target: "Chest (Strongbox)", part: 2 }
         ]
       },
-      { x: 3575, y: 3080, text: "Tailor", sex: "female", race: "Human", level: 24, shopType: "Tailor", shopMarkup: 90, inventory: ["Enchanted Gown"], category: ["shop"] },
-      { x: 5032, y: 2161, text: "General Store Clerk", category: "shop", shopType: "General Store", shopMarkup: 110, level: 34, sex: "male", race: "Human", inventory: ["Dagger of Pain"] },
+      { x: 3889, y: 2845, text: "Chest (Strongbox)", category: ["quest", "key", "chest"], chestState: "locked", chestKey: "Key to Garret Almstead's Trunk", inventory: ["Antique Strongbox"],
+        linkedLabels: [
+          { questName: "Retrieve the Strongbox", questDescription: "Get the strongbox and bring it back to Daniel Hallaway.", target: "Daniel Hallaway", part: 3 }
+        ]
+      },
+      { x: 3575, y: 3080, text: "Tailor", sex: "female", race: "Human", level: 24, shopType: "Tailor (Rural)", shopMarkup: 90, inventory: ["Enchanted Gown"], category: ["shop"] },
+      { x: 5032, y: 2161, text: "General Store Clerk", category: "shop", shopType: "General Store (Rural)", shopMarkup: 110, level: 34, sex: "male", race: "Human", inventory: ["Dagger of Pain"] },
       { x: 4383, y: 3109, text: "Inventor", sex: "male", race: "Human", level: 33, shopType: "Inventor", shopMarkup: 110, category: ["shop"] },
       { x: 5496, y: 2376, text: "Junk Dealer", shopType: "Junk Dealer", sex: "Male", race: "Half-Orc", level: 30, shopMarkup: 200, category: ["shop"] },
-      { x: 4360, y: 2355, text: "Herbalist", sex: "female", race: "Elf", level: 27, inventory: ["Staff of Healing"], shopType: "Herbalist", shopMarkup: 90, category: ["shop"] },
-      { x: 3083, y: 2915, text: "Dierdre, the Magick Shop Clerk", sex: "female", race: "Half-Elf", level: 34, shopType: "Magic Shop", shopMarkup: 100, category: ["shop"] },
+      { x: 4360, y: 2355, text: "Herbalist", category: "shop", shopType: "Herbalist", shopMarkup: 90, level: 27, sex: "female", race: "Elf", inventory: ["Staff of Healing", "Morning Star Perfume", { name: "Healing Salve", count: 2 }] },
+      { x: 3083, y: 2915, text: "Dierdre, the Magick Shop Clerk", sex: "female", race: "Half-Elf", level: 34, shopType: "Magic (Light)", shopMarkup: 100, category: ["shop"] },
 
       // Quests
       // Black Root Taxes
@@ -244,13 +250,14 @@ const ArcanumCitiesMapData = [
           { questName: "Collect Black Root's Taxes for King Praetor", questDescription: "Black Root Mayor won't give you the taxes unless you retrieve his ceremonial silver dagger.", target: "King Praetor", part: 2 },
           { questName: "Retrieve the ceremonial silver dagger", questDescription: "The Mayor of Black Root wants you to find his badge of office, a ceremonial silver dagger, stolen by a local gang of thieves.", target: "D'ak Taan", part: 1 }
         ] },
-      { x: 3164, y: 1271, text: "D'ak Taan", sex: "male", race: "Elf", level: 21, category: ["quest", "npc"],
+      { x: 3164, y: 1271, text: "D'ak Taan", category: ["quest", "npc"], level: 21, sex: "male", race: "Elf", inventory: ["Long Bow", "Leather Armour", "Sword", { name: "Arrow", count: 20 }, "Vase", "Candle Stick", "Ceremonial Dagger", "Music Box"],
         linkedLabels: [
           { questName: "Retrieve the ceremonial silver dagger", questDescription: "D'ak Taan will give you stolen items if you do a quest for him. You have two options.", target: "Mayor of Black Root", part: 2 },
           { questName: "Retrieve the ceremonial silver dagger", questDescription: "D'ak Taan the thief wants you to rob the Hedgewizard's chest. If successful, he will give you stolen items from Black Root.", target: "Tugal the Hedgewizard", part: 3 },
           { questName: "Retrieve the ceremonial silver dagger", questDescription: "D'ak Taan the thief wants you to obtain poison from Grunwalde. If successful, he will give you stolen items from Black Root.", target: "Grunwalde", part: 3 }
-        ] },
-      { x: 2331, y: 3399, text: "Tugal the Hedgewizard", sex: "male", race: "Gnome", level: 14, inventory:["Scroll of Summon Undead"], category: ["quest", "npc"],
+        ]
+      },
+      { x: 2331, y: 3399, text: "Tugal the Hedgewizard", sex: "male", race: "Gnome", level: 14, inventory: ["Scroll of Summon Undead"], category: ["quest", "npc"],
         linkedLabels: [
           { questName: "Retrieve the ceremonial silver dagger", questDescription: "Tugal the Hedgewizard is a paranoid little man. He won't let you get his statuette. Take care of him and lockpick or destroy his chest.", target: "Wood Chest (Tugal)", part: 4 }
         ]
@@ -300,10 +307,11 @@ const ArcanumCitiesMapData = [
           { questName: "Retrieve Azram’s Star", questDescription: "Retrieve Azram’s Star from K’na Tha for Clarissa Shalmo in Black Root.", target: "Altar (Azram’s Star)", questType: "master", part: 1 }
         ]
       },
-      { x: 3568, y: 2664, text: "Daniel Hallaway", sex: "male", race: "Human", level: 32, category: ["quest", "npc"],
+      { x: 3568, y: 2664, text: "Daniel Hallaway", category: ["quest", "npc"], level: 32, sex: "male", race: "Human",
         linkedLabels: [
-          { questName: "Retrieve the Strongbox", questDescription: "The innkeeper wants you to bring back his strong box from the blacksmith.", target: "Garret Almstead", part: 1 }
-        ] 
+          { questName: "Retrieve the Strongbox", questDescription: "The innkeeper wants you to bring back his Strongbox from the blacksmith.", target: "Garret Almstead", part: 1 },
+          { questName: "Retrieve the Strongbox", questDescription: "To thank you for returning the Strongbox, Daniel Hallaway will let you stay in the inn for free.", part: "reward" }
+        ]
       },
       { x: 2028, y: 3570, text: "Tyron's Note", inventory: ["Tyron's Note"], category: "quest", linkedLabels: [
           { questName: "The Ren'ar Siamese Twins", questDescription: "Tyron has vanished, leaving behind a mysterious note. Report back to Matt de Cesare.", target: "Matt de Cesare", part: 4}
@@ -314,24 +322,27 @@ const ArcanumCitiesMapData = [
       // Information
       { x: 5926, y: 1652, text: "Master Shipbuilder", sex: "male", race: "Human", level: 15, description: "At one point in the game you might need to buy a ship. The regular price is 50,000 coins, but a skilled haggler can try to negotiate. The price will be brought down to 35,000 with maximum (rank 20, 5 character points worth) Haggle but no Master status, whereas a Haggle Master can reduce it down to 25,000.", category: ["npc", "information"] },
       { x: 5685, y: 2704, text: "Herkemer Oggdoddler", sex: "male", race: "Human", level: 38, description: "If you let him tell his war stories for long enough, he'll offer to give you expert training in melee , dodge , firearms , and spot traps.", category: "npc" },
-      { x: 864, y: 3243, text: "Monster around Black Root (1/3)", description: "", category: "information" },
-      { x: 3707, y: 3803, text: "Monster around Black Root (2/3)", description: "", category: "information" },
-      { x: 5738, y: 4002, text: "Monster around Black Root (3/3)", description: "", category: "information" },
-      { x: 5581, y: 2193, text: "The Sour Barnacle", description: "", category: "information" },
-      { x: 5496, y: 2438, text: "Seaside Salvage", description: "", category: "information" },
-      { x: 4990, y: 2240, text: "Captain's Quarter", description: "", category: "information" },
-      { x: 4474, y: 2396, text: "Theriacal Herbs", description: "", category: "information" },
-      { x: 3810, y: 2926, text: "The Stedfast Anvil", description: "", category: "information" },
-      { x: 3610, y: 3148, text: "The Dancing Needle", description: "", category: "information" },
-      { x: 3593, y: 2746, text: "Drop Yer Anchor", description: "", category: "information" },
-      { x: 3411, y: 2826, text: "Annabelle's Galley", description: "", category: "information" },
-      { x: 3135, y: 2975, text: "Deidre's Charms and Magickal Potions", description: "", category: "information" },
+      { x: 864, y: 3243, text: "Monster around Black Root (1/3)", category: "information" },
+      { x: 3707, y: 3803, text: "Monster around Black Root (2/3)", category: "information" },
+      { x: 5738, y: 4002, text: "Monster around Black Root (3/3)", category: "information" },
+      { x: 5581, y: 2193, text: "The Sour Barnacle", category: "information" },
+      { x: 5496, y: 2438, text: "Seaside Salvage", category: "information" },
+      { x: 4990, y: 2240, text: "Captain's Quarter", category: "information" },
+      { x: 4474, y: 2396, text: "Theriacal Herbs", category: "information" },
+      { x: 3810, y: 2926, text: "The Stedfast Anvil", category: "information" },
+      { x: 3610, y: 3148, text: "The Dancing Needle", category: "information" },
+      { x: 3593, y: 2746, text: "Drop Yer Anchor", category: "information" },
+      { x: 3411, y: 2826, text: "Annabelle's Galley", category: "information" },
+      { x: 3135, y: 2975, text: "Deidre's Charms and Magickal Potions", category: "information" },
       { x: 3223, y: 2620, text: "Bartender", category: "npc", level: 22, sex: "male", race: "Half-Elf", inventory: ["Dagger", "Wine", "Heal Lesser Wounds", { name: "Coins", count: 73 }] },
       { x: 5062, y: 2074, text: "Barrel", category: "chest", chestState: "locked", inventory: ["Mithril Ore", "Arbalest", { name: "Pure Ore", count: 3 }, "Looking Glass"] },
-      { x: 5009, y: 2043, text: "Barrel", category: "chest", chestState: "locked", inventory: ["Witch Bane", { name: "Coca Leaves", count: 3 }, { name: "Heal Lesser Wounds", count: 3 }, { name: "Tobacco Leaves", count: 3 }, "Wonder Drug"] },
+      { x: 5009, y: 2043, text: "Barrel", category: "chest", chestState: "locked", inventory: ["Witchbane", { name: "Coca Leaves", count: 3 }, { name: "Heal Lesser Wounds", count: 3 }, { name: "Tobacco Leaves", count: 3 }, "Wonder Drug"] },
       { x: 4573, y: 1658, text: "Safe", category: "chest", chestState: "locked", inventory: [{ name: "Coins", count: 547 }] },
       { x: 4521, y: 1765, text: "Train Ticket Agent", category: "npc", level: 10, sex: "female", race: "Human", inventory: ["Dagger", "Rustic Dress", "Shoes", { name: "Coins", count: 385 }] },
-      { x: 5684, y: 2020, text: "Bartender", category: "npc", level: 28, sex: "male", race: "Human" },    
+      { x: 5684, y: 2020, text: "Bartender", category: "npc", level: 28, sex: "male", race: "Human" },   
+      { x: 4190, y: 2448, text: "Lemon Tree", category: "chest", portrait: "Textures/Cont_Plant.png", inventory: [{ name: "Lemon", count: 3 }] },
+      { x: 4271, y: 2312, text: "Drying Herbs", category: "chest", chestState: "locked", inventory: [{ name: "Lingham's Belladonna", count: 3 }, { name: "Poppy Flowers", count: 3 }] },
+      { x: 4358, y: 2269, text: "Barrel", category: "chest", chestState: "locked", inventory: [{ name: "Ginka Root", count: 3 }, { name: "Kadura Stem", count: 3 }, { name: "Mushrooms", count: 2 }] }, 
     ]
   },
   {
@@ -358,12 +369,14 @@ const ArcanumCitiesMapData = [
       { x: 7769, y: 2848, text: "Caladon Sewers", category: "waypoint", targetMapFilename: "Caladon - Sewers", targetX: 3265, targetY: 1347 },
       { x: 5891, y: 2527, text: "Caladon Sewers", category: "waypoint", targetMapFilename: "Caladon - Sewers", targetX: 2148, targetY: 1103 },
       { x: 6031, y: 3584, text: "Caladon Sewers", category: "waypoint", targetMapFilename: "Caladon - Sewers", targetX: 2326, targetY: 1784 },
+      
       { x: 6716, y: 388, text: "Wise Woman", category: "shop", shopType: "Nomad", shopMarkup: 150, level: 28, sex: "female", race: "Human" },
-      { x: 6109, y: 2138, text: "Human Shopkeeper", category: "shop", shopType: "Black market", shopMarkup: 100, level: 34, sex: "male", race: "Human" },
-      { x: 5425, y: 2412, text: "Magickal Smith", category: "shop", shopType: "Magickal smith", shopMarkup: 100, level: 37, sex: "male", race: "Half-Elf" },
-      { x: 5619, y: 2394, text: "Magick Shop Clerk", category: "shop", shopType: "Magic shop", shopMarkup: 100, level: 30, sex: "female", race: "Elf" },
+      { x: 6109, y: 2138, text: "Human Shopkeeper", category: "shop", shopType: "Black Market", shopMarkup: 100, level: 34, sex: "male", race: "Human" },
+      { x: 5425, y: 2412, text: "Magickal Smith", category: "shop", shopType: "Smith (Magical)", shopMarkup: 100, level: 37, sex: "male", race: "Half-Elf" },
+      { x: 5619, y: 2394, text: "Magick Shop Clerk", category: "shop", shopType: "Magic (General)", shopMarkup: 100, level: 30, sex: "female", race: "Elf" },
       { x: 4708, y: 2432, text: "Herbalist", category: "shop", shopType: "Herbalist", shopMarkup: 90, level: 34, sex: "female", race: "Half-Elf", inventory: ["Dread Dagger", "Fatigue Restorer", "Wonder Drug", { name: "Healing Salve", count: 2 }] },
-      { x: 5086, y: 2622, text: "Dwarven Smith", category: "shop", shopType: "Blacksmith", shopMarkup: 105, level: 34, sex: "male", race: "Dwarf", inventory: ["Dwarven Hammer", "Small Machined Platemail", "Wine", "Sugar", { name: "Healing Salve", count: 2 }] },
+      { x: 5086, y: 2622, text: "Dwarven Smith", category: "shop", shopType: "Smith (Dwarven)", shopMarkup: 105, level: 34, sex: "male", race: "Dwarf", inventory: ["Dwarven Hammer", "Small Machined Platemail", "Wine", "CK Sugar", { name: "Healing Salve", count: 2 }] },
+      
       { x: 4622, y: 2867, text: "Kietzel Pierce (Caladon)", master: "Bow Master", category: ["quest", "npc", "master"], level: 48, sex: "male", race: "Half-Elf",
         linkedLabels: [
           { questName: "Find the Bow of Ecclesiates", questDescription: "Kietzel Pearce will train you as a Bow Master if you can find the Bow of Ecclesiates, said to be hidden in the ancient Ruins of Szabo.", questType: "master", part: 1 }
@@ -460,7 +473,7 @@ const ArcanumCitiesMapData = [
           { questName: "The Ren'ar Siamese Twins", questDescription: "Arthur Tyron has disappeared. In his place is a gnome that has been waiting for you, and will tell you all about the Half-Ogre conspiracy.", part: "reward" }
         ]
       },
-      { x: 4132, y: 2112, text: "Grave of Victor Misk", description: "Book purchased at the Roseborough Gift Shop.", category: ["quest", "chest"],
+      { x: 4132, y: 2112, text: "Grave of Victor Misk", inventory: ["Pamphlet - Come to Beautiful Roseborough"], category: ["quest", "chest"],
         linkedLabels: [
           { questName: "Investigate M'in Gorad", questType: "main" }
         ]
@@ -505,7 +518,7 @@ const ArcanumCitiesMapData = [
           { questName: "Find the Master of Prowling", questDescription: "The man will introduce himself as A.L. Make him drink until he recognizes being Albert Leek and trains you.", questType: "master", part: "reward" }
         ]
       },
-      { x: 6055, y: 6626, text: "Chest Of Gold", category: "bounty" },
+      { x: 6055, y: 6626, text: "Chest of Gold", inventory: ["Chest of Gold"], category: "bounty" },
       { x: 4188, y: 2561, text: "Chest", category: ["chest", "bounty"], inventory: ["Great Aunt Ester's Amulet"] },
       { x: 5799, y: 3708, text: "Crate", category: ["chest", "bounty"], inventory: ["Post Bound For Tarant"] },
       { x: 7713, y: 2062, text: "Cabinet", category: ["chest", "bounty"], chestState: "locked", inventory: ["Ryan Marshall's Police Record"] },
@@ -536,35 +549,35 @@ const ArcanumCitiesMapData = [
       { x: 6132, y: 1215, text: "Dernholm Pits", category: "waypoint", targetMapFilename: "Dernholm Pits", targetX: 2399, targetY: 1977},
 
       // Followers      
-      { x: 4851, y: 2182, text: "Vollinger", sex: "male", race: "Gnome", level: 15, portrait: "Textures/vollinger.png", category: "followers" },
-      { x: 4273, y: 2736, text: "Jayna Stiles", sex: "female", race: "Half-Elf", level: 6, portrait: "Textures/jaynastiles.gif", description: "Jayna can be recruited if the player is at least level 5 and has a Technical Aptitude of 10 or higher", category: "followers" },
+      { x: 4912, y: 2135, text: "Vollinger", followerType: "regular", category: "followers", portrait: "Textures/vollinger.png", level: 15, sex: "male", race: "Gnome", inventory: ["Fancy Pistol", "Small Rustic Finery", "Top Hat", { name: "Bullet", count: 50 }, "Eye Glasses"] },
+      { x: 4273, y: 2736, text: "Jayna Stiles", description: "Jayna can be recruited if the player is at least level 5 and has a Technical Aptitude of 10 or higher", category: "followers", portrait: "Textures/jaynastiles.gif", level: 6, sex: "female", race: "Half-Elf", inventory: ["Plain Dress"] },
 
       // Shops
-      { x: 3566, y: 2147, text: "Charles Dolan", sex: "male", race: "Human", level: 26, shopType: "General Store", shopMarkup: 110, inventory: ["Package for Jongle Dunne"], category: ["quest", "shop"],
+      { x: 3566, y: 2147, text: "Charles Dolan", sex: "male", race: "Human", level: 26, shopType: "General Store (Rural)", shopMarkup: 110, inventory: ["Package for Jongle Dunne"], category: ["quest", "shop"],
         linkedLabels: [
           { questName: "Pickup Jongle's Package", questDescription: "Jongle Dunne needs a package picked up from a man named Charles Dolan, a merchant in Dernholm.", target: "Jongle Dunne", part: 2 }
         ]
       },
-      { x: 4488, y: 2401, text: "Rupert the Junk Dealer", sex: "male", race: "Half-Orc", level: 31, shopType: "Junk Dealer", shopMarkup: 200, category: "shop" },
-      { x: 4404, y: 1736, text: "Wallow the Blacksmith", sex: "male", race: "Human", level: 34, shopType: "Blacksmith", shopMarkup: 110, category: "shop" },
+      { x: 4488, y: 2401, text: "Rupert the Junk Dealer", category: "shop", shopType: "Junk Dealer", shopMarkup: 200, level: 31, sex: "male", race: "Half-Orc", inventory: ["Rusty Sword", "Oiled Thieves Leather", "Battered Wooden Shield", "Boots", "Water"] },
+      { x: 4404, y: 1736, text: "Wallow the Blacksmith", category: "shop", shopType: "Smith (Rural)", shopMarkup: 110, level: 34, sex: "male", race: "Human", inventory: ["Leather Armour"] },
 
       // Quests
-      { x: 3631, y: 1635, text: "Gladys", sex: "female", race: "Human", level: 14, category: ["quest", "npc"],
+      { x: 3548, y: 1565, text: "Gladys", category: ["quest", "npc"], level: 14, sex: "female", race: "Human", inventory: ["Dagger", "Worn Ladies Boots"],
         linkedLabels: [
           { questName: "Gladys' Ring", questDescription: "Gladys wants you to find her ring, an old family heirloom.", target: "Archibald", part: 1 }
         ]
       },
-      { x: 5331, y: 2291, text: "Archibald", sex: "male", race: "Human", level: 14, inventory: ["Gladys' Ring"], category: ["quest", "npc"],
-        linkedLabels: [
-          { questName: "Gladys' Ring", questDescription: "Archibald will refuse to give you the ring. You can either steal it from it (or kill him), or ask for help from his son Bernard.", target: "Bernard", part: 2 }
-        ]
-      },
-      { x: 5608, y: 2574, text: "Bernard", sex: "male", race: "Human", level: 8, category: ["quest", "npc"],
+      { x: 5608, y: 2574, text: "Bernard", category: ["quest", "npc"], level: 8, sex: "male", race: "Human", inventory: ["Dagger"],
         linkedLabels: [
           { questName: "Gladys' Ring", questDescription: "Bernard will explain to you about Gladys ''game''.", target: "Gladys", part: 3 }
         ]
       },
-      { x: 3794, y: 1939, text: "Lianna", sex: "female", race: "Human", level: 35, inventory: ["Sword of Baltar"], category: ["quest", "npc"],
+      { x: 5331, y: 2291, text: "Archibald", category: ["quest", "npc"], level: 14, sex: "male", race: "Human", inventory: ["Gladys' Ring", "Rusty Dagger", "Worn Shoes", "Wine", { name: "Coins", count: 17 }, { name: "Heal Lesser Wounds", count: 2 }],
+        linkedLabels: [
+          { questName: "Gladys' Ring", questDescription: "Archibald will refuse to give you the ring. You can either steal it from it (or kill him), or ask for help from his son Bernard.", target: "Bernard", part: 2 }
+        ]
+      },
+      { x: 3794, y: 1939, text: "Lianna", category: ["quest", "npc"], level: 35, sex: "female", race: "Human", inventory: ["Sword of Baltar", "Machined Gauntlets", "Leather Armour"],
         linkedLabels: [
           { questName: "Tell Lianna Pel Dar about Maximillian", questDescription: "Find Warren Pel Dar of Cumbria and tell him that Maximillian still lives on the Isle of Despair.", part: 2 },
           { questName: "Tell Lianna Pel Dar about Maximillian", questDescription: "Find Warren Lianna Pel Dar of Cumbria and tell her that Maximillian still lives on the Isle of Despair.", part: 2 }
@@ -587,17 +600,43 @@ const ArcanumCitiesMapData = [
           { questName: "Find Dudley Crosston", questDescription: "Dudley Crosston doesn't want to go back to Kietzel Pierce. Go and report that to him.", target: "Kietzel Pierce (Caladon)", part: 2 }
         ]
       },
+      { x: 6244, y: 1057, text: "Human Guard", category: ["quest", "npc"], level: 45, sex: "male", race: "Human", linkedLabels: [{ questName: "Rescue Tollo Underhill", questDescription: "Insult the guards until they throw you in the pit.", target: "Tollo Underhill", part: 2 }] },      { x: 4446, y: 2464, text: "- Rupert's House of Well-Worn Effects -", category: "information" },
 
       // Chests
-      { x: 3870, y: 1373, text: "Wood Chest", inventory: ["Shovel"], category: "chest" },
+      { x: 4268, y: 2668, text: "Black Chest", category: "chest", inventory: [{ name: "Coins", count: 52 }] },
+      { x: 4896, y: 2079, text: "Cabinet", category: "chest", chestState: "locked", inventory: [{ name: "Wine", count: 8 }, "Ammonia", { name: "Heal Lesser Wounds", count: 2 }, { name: "Healing Salve", count: 3 }] },
+      { x: 3776, y: 1379, text: "Table", category: "chest", inventory: ["Shovel", "Revolver Parts", "Metal Shavings"] },
+      { x: 4683, y: 1916, text: "Cabinet", category: "chest", chestState: "locked", inventory: [{ name: "Wine", count: 2 }, { name: "Heal Lesser Wounds", count: 2 }] },    
+      { x: 3682, y: 1570, text: "Wood Chest", category: "chest", chestState: "locked", inventory: [{ name: "Coins", count: 43 }, "Fancy Ring"] },
+      { x: 3624, y: 1528, text: "Cabinet", category: "chest", chestState: "locked", inventory: ["Monroe's Cleaner", "Water", "Bread"] },
+      { x: 5069, y: 2067, text: "Dresser", category: "chest", inventory: ["Wine", "Rheumatism Cure", "Morning Star Perfume", { name: "Coins", count: 273 }, { name: "Heal Lesser Wounds", count: 2 }] },
+      { x: 5236, y: 2504, text: "Barrel", category: "chest", inventory: ["Monroe's Cleaner", { name: "Coins", count: 31 }, "Fatigue Restorer"] },
+      { x: 4111, y: 1619, text: "Wood Chest", category: "chest", chestState: "locked", inventory: ["Quality Sword", { name: "Wine", count: 3 }, "Water", "Dragon Cologne", "Bread", { name: "Coins", count: 135 }] },
+      { x: 4506, y: 1287, text: "Chest", category: "chest", inventory: ["Small Metal Tube", "Old Gears"] },
+      { x: 5197, y: 1208, text: "Black Chest", category: "chest", chestState: "locked", inventory: ["Wine", "Boots", "Water", { name: "Coins", count: 29 }] },
+      { x: 5192, y: 1241, text: "Black Chest", category: "chest", chestState: "locked", inventory: ["Quality Staff", { name: "Coins", count: 37 }, { name: "Heal Lesser Wounds", count: 2 }] },
+      { x: 5123, y: 1271, text: "Black Chest", category: "chest", chestState: "locked", inventory: [{ name: "Wine", count: 2 }, "Boots", { name: "Coins", count: 15 }] },
+      { x: 5051, y: 1302, text: "Black Chest", category: "chest", chestState: "locked", inventory: ["Leather Gloves", "Water", { name: "Coins", count: 29 }, "Heal Lesser Wounds"] },
+      { x: 4975, y: 1334, text: "Black Chest", category: "chest", chestState: "locked", inventory: ["Wine", "Boots", { name: "Coins", count: 37 }] },
+      { x: 5081, y: 1376, text: "Black Chest", category: "chest", chestState: "locked", inventory: [{ name: "Arrow", count: 38 }, "Helmet", { name: "Coins", count: 29 }, { name: "Heal Lesser Wounds", count: 2 }, "Healing Salve"] },
+      { x: 5152, y: 1342, text: "Black Chest", category: "chest", chestState: "locked", inventory: ["Short Bow", { name: "Wine", count: 2 }, { name: "Arrow", count: 10 }, "Worn Boots", { name: "Coins", count: 15 }, "Heal Lesser Wounds"] },
+      { x: 5210, y: 1310, text: "Black Chest", category: "chest", chestState: "locked", inventory: [{ name: "Arrow", count: 17 }, { name: "Coins", count: 29 }, "Healing Salve"] },
+      { x: 5281, y: 1277, text: "Black Chest", category: "chest", chestState: "locked", inventory: [{ name: "Arrow", count: 15 }, "Leather Gloves", { name: "Coins", count: 37 }, { name: "Healing Salve", count: 3 }] },      
+      { x: 5340, y: 1244, text: "Black Chest", category: "chest", chestState: "locked", inventory: [{ name: "Arrow", count: 10 }, { name: "Coins", count: 15 }, { name: "Healing Salve", count: 2 }] },
+      { x: 3379, y: 1986, text: "Cabinet", category: "chest", chestState: "locked", inventory: [{ name: "Wine", count: 2 }, "Bread", { name: "Healing Salve", count: 2 }] },
+      { x: 4046, y: 2591, text: "Cabinet", category: "chest", chestState: "locked", inventory: [{ name: "Rusty Sword", count: 2 }, "Rusty Dagger"] },
 
-      // Information
-      { x: 6244, y: 1057, text: "Human Guard", category: ["quest", "npc"], level: 45, sex: "male", race: "Human", linkedLabels: [{ questName: "Rescue Tollo Underhill", questDescription: "Insult the guards until they throw you in the pit.", target: "Tollo Underhill", part: 2 }] },      { x: 4446, y: 2464, text: "- Rupert's House of Well-Worn Effects -", description: "", category: "information" },
-      { x: 3676, y: 2188, text: "Dolan's General Store", description: "", category: "information" },
-      { x: 4776, y: 2228, text: "- King's Inn & Pub -", description: "", category: "information" },
-      { x: 4548, y: 1768, text: "Wallow's Quality Armour", description: "", category: "information" },
-      { x: 4898, y: 2136, text: "Bartender", sex: "male", race: "Human", level: 24, category: "npc" },
-      { x: 4964, y: 2195, text: "Innkeeper", sex: "male", race: "Gnome", level: 19, inventory: ["Innkeeper's Key, Dernholm"], category: "npc" },
+      // Information & NPCs
+      { x: 3676, y: 2188, text: "Dolan's General Store", category: "information" },
+      { x: 4776, y: 2228, text: "- King's Inn & Pub -", category: "information" },
+      { x: 4548, y: 1768, text: "Wallow's Quality Armour", category: "information" },
+      { x: 4276, y: 2425, text: "Tarant Newspaper", category: "information", inventory: ["Councilman urges war on Caladon"] },
+      { x: 4867, y: 2297, text: "Halfling Villager (Beggar)", category: "npc", level: 21, sex: "male", race: "Halfling", inventory: ["Dagger", "Rusty Dagger", "Wine", { name: "Coins", count: 13 }] },
+      { x: 4979, y: 2099, text: "Bartender", category: "npc", level: 24, sex: "male", race: "Human" },
+      { x: 5047, y: 2141, text: "Innkeeper", category: ["key", "npc"], level: 15, sex: "female", race: "Gnome", inventory: ["Innkeeper's Key, Dernholm", { name: "Dagger", count: 2 }, { name: "Coins", count: 93 }, "Heal Lesser Wounds"] },
+      { x: 5007, y: 2038, text: "Innkeeper", category: ["key", "npc"], level: 19, sex: "male", race: "Gnome", inventory: ["Dagger", { name: "Coins", count: 72 }, "Heal Lesser Wounds", "Innkeeper's Key, Dernholm"] },
+      { x: 4915, y: 2181, text: "Human Villager", category: "npc", level: 19, sex: "female", race: "Human", inventory: ["Medallion of Beauty", { name: "Kadura Stem", count: 2 }, { name: "Coins", count: 42 }] },
+      { x: 5196, y: 2068, text: "Human Villager", category: "npc", level: 23, sex: "female", race: "Human", inventory: ["Staff", "Fancy Ring", { name: "Coins", count: 121 }] },
     ]
   },
   {
@@ -614,7 +653,7 @@ const ArcanumCitiesMapData = [
       // Followers
       { x: 2559, y: 3446, text: "Cynthia Boggs", sex: "female", race: "Human", level: 20, portrait: "Textures/cynthiaboggs.gif", inventory: ["White Scarf", "Cynthia Boggs' Locket"], category: ["quest", "followers"],
         linkedLabels: [
-          { questName: "Help Cynthia Boggs Escape the Isle of Despair", questDescription: "Cynthia Boggs has asked you to help her escape from the encampment on the Isle of Despair.", target: "", part: 1 }
+          { questName: "Help Cynthia Boggs Escape the Isle of Despair", questDescription: "Cynthia Boggs has asked you to help her escape from the encampment on the Isle of Despair.", target: "Lorria", part: 1 }
         ]
        },
       { x: 1504, y: 3105, text: "Thorvald Two Stones", sex: "Male", race: "Dwarf", level: 23, portrait: "Textures/thorvald.gif", inventory: ["Key to Thorvald's Chest", "Wheel Clan Spectacles"], category: ["quest", "followers", "key"],
@@ -632,9 +671,15 @@ const ArcanumCitiesMapData = [
           "Captain Edward Teach (Ashbury)"
         ]
       },
-      { x: 2836, y: 3708, text: "Village Guard", sex: "male", race: "Human", level: 20, inventory: ["Serpentine Necklace", "Key to the Gates of the Isle of Despair"], category: ["quest", "npc", "key"],
+      { x: 2836, y: 3708, text: "Village Guard", category: ["quest", "key", "npc"], level: 20, sex: "male", race: "Human", inventory: ["Serpentine Necklace", "Key to the Gates of the Isle of Despair", "Mace", "Leather Armour"],
         linkedLabels: [
-          { questName: "The Sorcerous Beast", questDescription: "The village guard on Isle of Despair wants you to kill the Sorcerous Beast.", target: "The Sorcerous Beast", part: 1 }
+          { questName: "The Sorcerous Beast", questDescription: "The village guard on Isle of Despair wants you to kill the Sorcerous Beast.", target: "The Sorcerous Beast", part: 1 },
+          { questName: "The Sorcerous Beast", questDescription: "For killing the Sorcerous Beast, the guard will reward with the Serpentine Necklace.", part: "reward" }
+        ]
+      },
+      { x: 1954, y: 605, text: "The Sorcerous Beast", category: "quest",
+        linkedLabels: [
+          { questName: "The Sorcerous Beast", questDescription: "Kill the sorcerous beast and return to the guard", target: "Village Guard", part: 2 }
         ]
       },
       { x: 2340, y: 3662, text: "Norian", sex: "male", race: "Half-Orc", level: 24, category: ["quest", "npc"],
@@ -646,14 +691,13 @@ const ArcanumCitiesMapData = [
       { x: 2330, y: 3216, text: "Jones the Collector", category: ["quest", "npc"], level: 23, sex: "male", race: "Human", inventory: ["Ancient Gun Chassis", "Mace", "Guard Armour"], linkedLabels: [{ questName: "Find Some Objects from Shades Beach", questDescription: "Jones the Collector wants you to gather some objects from Shades Beach.  If he likes any of them, he will trade you for a strange weapon.", part: 1 }] },
       { x: 1836, y: 3281, text: "Ogdin", category: ["quest", "key", "npc"], level: 40, sex: "male", race: "Half-Ogre", inventory: ["Key to Thorvald's House", "Leather Gloves", "Axe", "Large Leather Armour", "Helmet"], linkedLabels: [{ questName: "The Hand", questDescription: "Ogdin will let you meet with Thorvald without having to fight in the pit if you bring him the book ''The Hand''.", part: "reward" }] },
       { x: 2054, y: 3320, text: "Gorrin, Master of the Pit", sex: "male", race: "Human", level: 24, category: ["quest", "npc"] },
-      { x: 1954, y: 605, text: "The Sorcerous Beast", description: "", category: "quest" },
       { x: 1423, y: 3142, text: "Wood Chest", inventory: ["Thorvald's Journal", "Schematics: Wheel Clan Spectacles"], category: ["quest", "chest"] },
 
       // Information
       { x: 1121, y: 3570, text: "Window", description: "You can break this window to run away with Cynthia Boggs.", category: "information" },
 
       // Chests
-      { x: 3891, y: 1901, text: "Wooden Chest", inventory: [{ name: "Coins", count: 1800}], category: "chest" },
+      { x: 3891, y: 1901, text: "Wooden Chest", chestState: "locked", inventory: [{ name: "Coins", count: 1837}], category: "chest" },
           // Approximative amount - find exact
       { x: 1934, y: 539, text: "Junk Pile", inventory: ["Baneful Gauntlets", "Charmed Ring"], category: "chest" },
     ]
@@ -706,19 +750,19 @@ const ArcanumCitiesMapData = [
           { questName: "Investigate the Murder of Wrath", questDescription: "", target: "", part: 0 }
         ]
       },
-      { x: 2135, y: 1905, text: "Fawn", sex: "female", race: "Elf", level: 44, master: "Master Healer", shopType: "Magic Shop", shopMarkup: 100, category: ["shop", "master"] },
+      { x: 2135, y: 1905, text: "Fawn", master: "Master Healer", category: ["shop", "master"], shopType: "Magic (General)", shopMarkup: 100, level: 44, sex: "female", race: "Elf", inventory: ["Amulet of K'an-el"] },
       { x: 1879, y: 2035, text: "Whysper", sex: "female", race: "Elf", level: 19, category: ["quest", "npc"],
         linkedLabels: [
           { questName: "Find a Volar's Wisp Essence for Whysper", questDescription: "Whysper wants you to gather an essence from the rare Vol'ars Wisp.", target: "Volar's Wisp", part: 1 }
         ]
       },
-      { x: 3064, y: 1993, text: "Ellumyn", sex: "male", race: "Elf", level: 23, inventory:["Ellumyn's Bow"], shopType: "Magic Shop", shopMarkup: 300, category: ["quest", "shop"],
+      { x: 3064, y: 1993, text: "Ellumyn", sex: "male", race: "Elf", level: 23, inventory: ["Ellumyn's Bow"], shopType: "Magic (General)", shopMarkup: 300, category: ["quest", "shop"],
         linkedLabels: [
           { questName: "Get Mithril Ore from the Wheel Clan", questDescription: "Ellumyn wants you to retrieve some mithril from the caves of the Wheel Clan.", target: "Dwarven Smith", part: 1 },
         ]
        },
 
-      // Shops
+      // Shops - SHOPTYPE TO CORRECT
       { x: 3493, y: 1913, text: "Ivory", sex: "female", race: "Elf", level: 1, shopType: "Potions", shopMarkup: 300, category: ["quest", "shop"],
         linkedLabels: [
           { questName: "Investigate the Murder of Wrath", questDescription: "Discussing the case with Ivory leads to Sharpe becoming a suspect. Pressing her on the subject leads to an abrupt end of the discussion. Taking this information to the Guards watching Jormund will be enough to facilitate his release and indict Sharpe as the killer.", target: "", part: 2 },
@@ -745,24 +789,24 @@ const ArcanumCitiesMapData = [
       { x: 926, y: 658, text: "Mannox's Hole", category: "waypoint" },
 
       // Shops
-      { x: 8431, y: 2866, text: "Gnome Shopkeeper", sex: "male", race: "Gnome", level: 24,  category: "shop", shopType: "General Store", shopMarkup: 110 },
-      { x: 8794, y: 2047, text: "Blacksmith", sex: "male", race: "Human", level: 31, category: "shop", shopType: "Blacksmith", shopMarkup: 110, inventory: ["Screaming Shield", "Power Axe"] },
+      { x: 8442, y: 2836, text: "Gnome Shopkeeper", category: "shop", shopType: "General Store (Rural)", shopMarkup: 110, level: 24, sex: "male", race: "Gnome", inventory: ["Heal Lesser Wounds"] },
+      { x: 8794, y: 2047, text: "Blacksmith", category: "shop", shopType: "Smith (Rural)", shopMarkup: 110, level: 31, sex: "male", race: "Human", inventory: ["Screaming Shield", "Power Axe", "Boots"] },
 
       // Shop signs
       { x: 8537, y: 2953, text: "Roseborough Gift Shoppe", category: ["information"] },
 
       // Main Quest
-      { x: 6650, y: 1740, text: "A freshly filled grave", description: "", category: ["quest", "chest"], inventory: ["Horror Among the Dark Elves"],
+      { x: 6650, y: 1740, text: "A freshly filled grave", category: ["quest", "chest"], inventory: ["Horror Among the Dark Elves", "Skull"],
         linkedLabels: [
           { questName: "Investigate M'in Gorad", questDescription: "Now that you know its location, go to T'sen-Ang.", questType: "main", target: "T’sen-Ang Guards" }
         ]
       },
 
       // Side quests
-      { x: 5100, y: 2639, text: "Captain of the Roseborough Guard", sex: "male", race: "Human", level: 40, category: ["quest", "npc"],
-        linkedLabels: [  
-          { questName: "Clear the Halfling Gang", questDescription: "", target: "", part: "" },
-        ] 
+      { x: 5100, y: 2639, text: "Captain of the Roseborough Guard", category: ["quest", "npc"], level: 40, sex: "male", race: "Human", inventory: ["Guard Chainmail", "Broadsword"],
+        linkedLabels: [
+          { questName: "Clear the Halfling Gang" }
+        ]
       },
       { x: 8123, y: 2049, text: "Mrs. R.L. Morgan", sex: "female", race: "Gnome", level: 26, inventory: ["Ring of Silence", "J.T. Morgan's Master Locksmith Tools"], category: ["quest", "npc"],
         linkedLabels: [
@@ -783,16 +827,28 @@ const ArcanumCitiesMapData = [
       },
 
       // NPCs
-      { x: 7129, y: 1298, text: "Doctor Edmund Craig", sex: "male", race: "Half-Orc", level: 48, master: "Backstab Master", category: ["npc", "master"] },
+      { x: 7129, y: 1298, text: "Doctor Edmund Craig", master: "Backstab Master", category: "master", level: 48, sex: "male", race: "Half-Orc", inventory: ["Decent Gold Ring", "Fine Steel Dagger", "Dagger of Speed", { name: "Coins", count: 2 }, { name: "Cure All", count: 2 }, { name: "Healing Salve", count: 2 }, "Fatigue Restorer"] },
+      { x: 8292, y: 2863, text: "Gnome Villager", category: "npc", level: 21, sex: "female", race: "Gnome", inventory: [{ name: "Coins", count: 97 }, "Heal Lesser Wounds"] },
 
       // Information
       { x: 4471, y: 1482, text: "Ring of Brodgar", category: "information" },
       { x: 6144, y: 3086, text: "Ancient stone", description: "This ancient stone is carved with what looks to be old runes and numbers.", category: "information" },
       { x: 6605, y: 1705, text: "Grave of Phillip Misk", category: "information" },
+      { x: 8897, y: 2063, text: "Buckner's Smithy", category: "information" },
 
       // Chests
-      { x: 7451, y: 2374, text: "Chest", inventory: ["Ring of Protection"], category: "chest" },
-      { x: 8286, y: 1947, text: "Wood Chest", inventory: ["Magick Robes"], category: "chest" }
+      { x: 7451, y: 2374, text: "Wood Chest", category: "chest", chestState: "locked", inventory: ["Ring of Protection", { name: "Coins", count: 221 }, { name: "Heal Lesser Wounds", count: 3 }] },
+      { x: 8286, y: 1947, text: "Wood Chest", inventory: ["Magick Robes"], category: "chest" },
+      { x: 6805, y: 2036, text: "A freshly filled grave", category: "chest", inventory: ["Skull", { name: "Coins", count: 76 }, "Pocket Watch"] },
+      { x: 6508, y: 1989, text: "A freshly filled grave", category: "chest", inventory: ["Skull", { name: "Coins", count: 112 }, "Decent Gold Ring"] },
+      { x: 7919, y: 2098, text: "Lemon Tree", category: "chest", inventory: [{ name: "Lemon", count: 3 }] },
+      { x: 8889, y: 2101, text: "Barrel", category: "chest", inventory: [{ name: "Metal Shavings", count: 3 }, "Small Metal Tube", "Leather Straps"] },
+      { x: 9092, y: 2071, text: "Potato Plant", category: "chest", inventory: [{ name: "Potato", count: 2 }] },
+      { x: 9126, y: 2095, text: "Potato Plant", category: "chest", inventory: [{ name: "Potato", count: 2 }] },
+      { x: 8776, y: 2260, text: "Lemon Tree", category: "chest", inventory: ["Lemon"] },
+      { x: 9112, y: 1865, text: "Barrel", category: "chest", chestState: "locked", inventory: [{ name: "Wine", count: 3 }, { name: "Coins", count: 143 }, "Heal Lesser Wounds"] },
+      { x: 8991, y: 2409, text: "Wood Chest", category: "chest", chestState: "locked", inventory: [{ name: "Wine", count: 2 }, "Morning Star Perfume", { name: "Coins", count: 97 }, { name: "Heal Lesser Wounds", count: 3 }] },
+      { x: 7579, y: 2067, text: "Barrel", category: "chest", chestState: "locked", inventory: [{ name: "Tom's Fertilizer", count: 3 }] },
     ]
   },
   {
@@ -812,8 +868,8 @@ const ArcanumCitiesMapData = [
       { x: 4707, y: 2378, text: "Bessie Toone Mine", category: "waypoint", targetMapFilename: "Bessie Toone Mine", targetX: 1697, targetY: 805 },
 
       // Followers
-      { x: 8262, y: 2598, text: "Sogg Mead Mug", sex: "male", race: "Half-Ogre", level: 2, portrait: "Textures/soggmeadmug.gif", description: "Sogg can be recruited if you have 9 charisma.", category: "followers" },
-      { x: 8013, y: 1883, text: "Doc Roberts", sex: "male", race: "Human", level: 30, portrait: "Textures/docroberts.gif", category: ["quest", "followers"],
+      { x: 8262, y: 2598, text: "Sogg Mead Mug", description: "Sogg can be recruited if you have 9 charisma.", category: "followers", portrait: "Textures/soggmeadmug.gif", level: 2, sex: "male", race: "Half-Ogre", inventory: ["Rags"] },
+      { x: 8013, y: 1883, text: "Doc Roberts", category: ["quest", "followers"], portrait: "Textures/docroberts.gif", level: 30, sex: "male", race: "Human", inventory: [{ name: "Bullet", count: 40 }, { name: "Bandages", count: 3 }],
         linkedLabels: [
           { questName: "Stop the bank robbery", questDescription: "Doc Roberts wants you to help him stop an impending bank robbery.", target: "Bank robber", part: 1 },
           { questName: "Stop the bank robbery", questDescription: "Doc Roberts will give you an Enchanted Sword, a Revolver or an Axe as a reward.", part: "reward" }
@@ -821,13 +877,13 @@ const ArcanumCitiesMapData = [
       },
 
       // Shops
-      { x: 7774, y: 2104, text: "Ristezze", sex: "male", race: "Human", level: 12, shopType: "Junk Dealer", shopMarkup: 200, inventory: ["Charming Medallion"], category: ["shop", "quest", "key"], inventory: ["Key to Ristezze’s Bedroom"],
+      { x: 7774, y: 2104, text: "Ristezze", category: ["quest", "shop", "key"], shopType: "Junk Dealer", shopMarkup: 200, level: 12, sex: "male", race: "Human", inventory: ["Key to Ristezze’s Bedroom", "Charming Medallion", "Rusty Sword"],
         linkedLabels: [
-          { questName: "Origins of the Strange Ring", questDescription: "Get information from P. Schuyler & Sons about owner of strange ring.", questType: "main", target: "Winston Schuyler", part: 2 },
-          { questName: "Find a camera or Bessie Toone paraphernalia", questDescription: "Ristezze the Importer wants you to find a camera OR some Bessie Toone paraphenalia. In return, he will give you information about P. Schuyler & Sons.", target: "Isaac Zapruder", part: 1 },
+          { questName: "Origins of the Strange Ring", questDescription: "Get information from P. Schuyler & Sons about owner of strange ring.", target: "Winston Schuyler", questType: "main", part: 2 },
+          { questName: "Find a camera or Bessie Toone paraphernalia", questDescription: "Ristezze the Importer wants you to find a camera OR some Bessie Toone paraphenalia. In return, he will give you information about P. Schuyler & Sons.", target: "Isaac Zapruder", part: 1 }
         ]
       },
-      { x: 7512, y: 2301, text: "Lloyd Gurloes", sex: "male", race: "Human", level: 22, shopType: "Blacksmith", shopMarkup: 110, inventory: ["Lloyd' Hammer"], category: ["shop", "quest", "key"], inventory: ["Key to Lloyd Gurloes’ backroom"],
+      { x: 7512, y: 2301, text: "Lloyd Gurloes", category: ["quest", "shop", "key"], shopType: "Smith (Rural)", shopMarkup: 110, level: 22, sex: "male", race: "Human", inventory: ["Key to Lloyd Gurloes’ backroom", "Lloyd' Hammer"],
         linkedLabels: [
           { questName: "Find some Pure Ore for Lloyd", questDescription: "Lloyd Gurloes wants you to obtain some pure ore for him.", target: "Lloyd Gurloes", part: 1 },
           { questName: "Find some Pure Ore for Lloyd", questDescription: "You can craft pure ore with a piece of iron and a piece of steel. Llyod will reward you with a Fine Steel Dagger one day after you give him the pure ore.", part: "reward" }
@@ -840,23 +896,23 @@ const ArcanumCitiesMapData = [
           { questName: "Find Qintarra", questDescription: "If you are searching for Qintarra, completing the Amulet of N’Tala quest will also make Gaylin tell you where the city is.", questType: "main", target: "Raven", part: 2 }
         ]
       },
-      { x: 7089, y: 2359, text: "Gnome Shopkeeper", sex: "male", race: "Gnome", level: 18, shopType: "General Store", shopMarkup: 110, category: "shop" },
-      { x: 9693, y: 1666, text: "Wise Woman", sex: "female", race: "Human", level: 22, shopType: "Nomad", shopMarkup: 150, inventory: ["Witch's Dagger"], category: "shop" },
+      { x: 7089, y: 2359, text: "Gnome Shopkeeper", category: "shop", shopType: "General Store (Rural)", shopMarkup: 110, level: 18, sex: "male", race: "Gnome", inventory: [{ name: "Spirit of Camphor", count: 2 }] },
+      { x: 9693, y: 1666, text: "Wise Woman", category: "shop", shopType: "Nomad", shopMarkup: 150, level: 22, sex: "female", race: "Human", inventory: ["Witch's Dagger", "Bread", "Greater Fatigue Restore", "Heal Lesser Wounds"] },
 
       // Quests
-      { x: 7241, y: 2765, text: "Jongle Dunne", sex: "male", race: "Halfling", level: 13, category: ["quest", "npc"],
+      { x: 7241, y: 2765, text: "Jongle Dunne", category: ["quest", "npc"], level: 13, sex: "male", race: "Halfling", inventory: ["Small Priest Robes", { name: "Heal Lesser Wounds", count: 2 }],
         linkedLabels: [
           { questName: "Destroy the Town's Steam Engine", questDescription: "Jongle Dunne wants you to destroy the town’s steam engine.", target: "Control Box", part: 1 },
           { questName: "Pickup Jongle's Package", questDescription: "Jongle Dunne needs a package picked up from a man named Charles Dolan, a merchant in Dernholm.", target: "Charles Dolan", part: 1 }
         ]
       },
-      { x: 8172, y: 2352, text: "Constable Owens", sex: "male", race: "Human", level: 5, category: ["quest", "npc"],
+      { x: 8172, y: 2352, text: "Constable Owens", category: ["quest", "npc"], level: 5, sex: "male", race: "Human", inventory: ["Old Revolver", { name: "Bullet", count: 20 }],
         linkedLabels: [
           { questName: "The Thieves and the Bridge", questDescription: "Constable Owens needs you to remove the thieves from the bridge.", target: "Lukan the Witless", part: 1 },
           { questName: "Fix the Town's Steam Engine", questDescription: "Constable Owens wants you to fix the town’s steam engine.", target: "Barrel (Sprocket)", part: 1 }
         ]
       },
-      { x: 10909, y: 1232, text: "Lukan the Witless", sex: "male", race: "Human", level: 3, inventory: ["Key to the Shrouded Hills Bridge Gate"], category: ["quest", "key", "npc"],
+      { x: 10909, y: 1232, text: "Lukan the Witless", category: ["quest", "key", "npc"], level: 3, sex: "male", race: "Human", inventory: ["Key to the Shrouded Hills Bridge Gate", "Suede Jacket", "Copper Ring"],
         linkedLabels: [
           { questName: "The Thieves and the Bridge", questDescription: "In order to join the thieves, you must destroy the construction materials for the new bridge.", target: "Bridge materials", part: 2 }
         ]
@@ -866,10 +922,10 @@ const ArcanumCitiesMapData = [
           { questName: "The Thieves and the Bridge", questDescription: "Destroy the bridge materials and return to Lukan.", target:"Lukan the Witless" , part: 3 }
         ]
       },
-      { x: 8278, y: 2640, text: "Jacob Bens", sex: "male", race: "Half-Orc", level: 5, inventory: ["Note (Safe Combination)"], category: ["quest", "npc"],
+      { x: 8326, y: 2624, text: "Jacob Bens", category: ["quest", "npc"], level: 5, sex: "male", race: "Half-Orc", inventory: ["Safe Combination", "Dagger"],
         linkedLabels: [
           { questName: "Rob the Bank", questDescription: "Jacob Bens in Shrouded Hills wants you to steal the local mining company’s payroll from the bank’s safe.", target: "Combination safe", part: 1 },
-          { questName: "Rob the Bank", questDescription: "Give Jacob Bens his share of 250 gold or else he will rat you out.", part: 3 }
+          { questName: "Rob the Bank", questDescription: "Give Jacob Bens his share of 250 gold or else he will rat you out.", part: "reward" }
         ]
       },
       { x: 7768, y: 2508, text: "Bank robber", sex: "male", race: "Human", level: 3, category: "quest",
@@ -884,12 +940,12 @@ const ArcanumCitiesMapData = [
           { questName: "Free the Ghost of Bessie Toone", questDescription: "Percival Toone will reward you 500 coins for returning him the deed. However, he will mention plans to sell the mine again.", part: "reward" }
         ]
       },
-      { x: 8851, y: 2680, text: "Joachim’s Note to Virgil", inventory: ["Joachim’s Note to Virgil"], category: "quest",
+      { x: 8894, y: 2679, text: "Joachim’s Note to Virgil", category: "quest", inventory: ["Joachim’s Note to Virgil"],
         linkedLabels: [
-          { questName: "Elder Joachim’s paper trail", questDescription: "", target: "Telegraph Operator", part: 3 }
+          { questName: "Elder Joachim’s paper trail", target: "Telegraph Operator", part: 3 }
         ]
       },
-      { x: 7733, y: 2386, text: "Combination safe", chestState: "locked", description: "This looks to be a combination safe. There is no keyhole.", category: ["quest", "chest"],
+      { x: 7757, y: 2368, text: "Combination safe", description: "This looks to be a combination safe. There is no keyhole.", category: ["quest", "chest"], chestState: "locked",
         linkedLabels: [
           { questName: "Rob the Bank", questDescription: "Steal the 500 coins and return to Jacob Bens.", target: "Jacob Bens", part: 2 }
         ]
@@ -897,19 +953,44 @@ const ArcanumCitiesMapData = [
 
       // Chests
       { x: 7732, y: 2228, text: "Barrel", chestState: "locked", inventory: ["Ristezze's File Cabinet Key"], category: "chest" },
-      { x: 7611, y: 2040, text: "Cabinet", chestState: "locked", chestKey: "Key to Ristezze’s Bedroom", inventory: ["Telegram", "Ristezze's Map"], category: "chest" },
+      { x: 7611, y: 2040, text: "Cabinet", chestState: "locked", chestKey: "Key to Ristezze’s Bedroom", inventory: ["Ristezze's Telegraph", "Ristezze's Map"], category: "chest" },
       { x: 7283, y: 2722, text: "Chest", chestState: "locked", inventory: ["Hexed Leather Armour"], category: "chest" },
       { x: 5878, y: 2927, text: "Dresser", category: "chest", chestState: "locked", inventory: ["Ammonia", { name: "Coins", count: 37 }, "Healing Salve", "Copper Ring"] },
+      { x: 8193, y: 1795, text: "Barrel", category: "chest", inventory: ["Magnesium", "Capacitor", "Thermometer", { name: "Coca Leaves", count: 2 }, { name: "Migraine Cure", count: 2 }, "Famous Blood Pills"] },
+      { x: 6762, y: 2409, text: "Barrel", category: "chest", inventory: ["Monroe's Cleaner"] },
+      { x: 8569, y: 2485, text: "Dresser", category: "chest", inventory: ["Worn Shoes", { name: "Coins", count: 16 }] },
+      { x: 8706, y: 2555, text: "Cabinet", category: "chest", chestState: "locked", inventory: ["Rusty Dagger", { name: "Coins", count: 12 }] },
+      { x: 8806, y: 2646, text: "Wood Chest", category: "chest", inventory: [{ name: "Coins", count: 20 }] },
+      { x: 7701, y: 2396, text: "Wood Chest", category: "chest", chestState: "locked", inventory: [{ name: "Metal Plates", count: 2 }] },
+      { x: 7648, y: 2418, text: "Wood Chest", category: "chest", chestState: "locked", inventory: ["Pocket Watch", "Fine Hilt and Guard", "Electrolyte Solution"] },
+      { x: 5116, y: 2862, text: "Chest", category: "chest", chestState: "locked", inventory: [{ name: "Varham's Aqua Vitae", count: 2 }, "Fine Steel Dagger", { name: "Spirit of Camphor", count: 3 }, { name: "Coins", count: 125 }, "Fancy Ring", "Copper Ring"] },
+      { x: 6516, y: 1921, text: "Lemon Tree", category: "chest", inventory: ["Lemon"] },
+      { x: 6541, y: 1977, text: "Potato Plant", category: "chest", inventory: [{ name: "Potato", count: 2 }] },
+      { x: 6425, y: 1955, text: "Lemon Tree", category: "chest", inventory: ["Lemon"] },
+      { x: 6462, y: 2008, text: "Potato Plant", category: "chest", inventory: [{ name: "Potato", count: 2 }] },
+      { x: 5483, y: 2101, text: "Barrel", category: "chest", inventory: [{ name: "Tom's Fertilizer", count: 3 }, "Liquid Soap"] },
+      { x: 6508, y: 1585, text: "Barrel", category: "chest", inventory: ["Liquid Soap", { name: "Charcoal", count: 2 }] },
+      { x: 7420, y: 1680, text: "Barrel", category: "chest", chestState: "locked", inventory: [{ name: "Arrow", count: 18 }, { name: "Bullet", count: 17 }, "Fine Hilt and Guard"] },
+      { x: 10829, y: 1197, text: "Barrel", category: "chest", chestState: "locked", inventory: [{ name: "Coins", count: 47 }, "Revolver Parts"] },
 
       // Information
       { x: 1431, y: 2662, text: "Mysterious barrels", description: "These barrels are not the fruit of a random terrain generation: they were deliberately placed here. None can be open, and no script are attached to them in WorldEd.", category: "information" },
       { x: 4139, y: 1985, text: "Four wolves and a bunny", description: "Behind the Bessie Toone Mine are four wolves and a bunny.", category: "information" },
       { x: 7908, y: 903, text: "Three wolves", category: "information" },
       { x: 7757, y: 2465, text: "Bank Teller", sex: "female", race: "Human", level: 8, inventory: ["Shrouded Hills Bank Key"], category: ["key", "npc"] },
-      { x: 8220, y: 2666, text: "Innkeeper", sex: "male", race: "Human", level: 1, category: "npc" },
+      { x: 8253, y: 2655, text: "Innkeeper", category: "npc", level: 1, sex: "male", race: "Human" },
       { x: 8151, y: 2160, text: "William Radclife", sex: "male", race: "Gnome", level: 3, category: "npc" },
-      { x: 11664, y: 853, text: "William Radclife (Bridge)", sex: "male", race: "Gnome", level: 3, inventory: ["Note: The IFS Zephyr has crashed"], category: "npc" },
-      { x: 8345, y: 2567, text: "Bartender", sex: "male", race: "Human", level: 18, category: "npc" },
+      { x: 11664, y: 853, text: "William Radclife (Bridge)", category: "npc", level: 3, sex: "male", race: "Gnome", inventory: ["The IFS Zephyr has crashed", "Dagger", "Molochean Hand Amulet"] },
+      { x: 8328, y: 2569, text: "Bartender", category: "npc", level: 18, sex: "male", race: "Human" },
+      { x: 8073, y: 2000, text: "General Practitioner", category: "information" },
+      { x: 7914, y: 2164, text: "Ristezze Imported Goods", category: "information" },
+      { x: 7586, y: 2247, text: "Gurloes' Metalworkings", category: "information" },
+      { x: 7917, y: 2565, text: "First Bank of Shrouded Hills", category: "information" },
+      { x: 8136, y: 2700, text: "Shrouded Hills Inn", category: "information" },
+      { x: 7274, y: 2880, text: "Jongle's Enchantments", category: "information" },
+      { x: 7226, y: 2423, text: "Slim Pickens'", category: "information" },
+      { x: 8720, y: 2680, text: "Human Villager", category: "npc", level: 1, sex: "male", race: "Human", inventory: ["Molochean Hand Amulet"] },
+      { x: 8812, y: 2710, text: "Half Orc Bandit", category: "npc", level: 1, sex: "male", race: "Half-Orc", inventory: ["Molochean Hand Amulet"] },
     ]
   },
   {
@@ -928,8 +1009,8 @@ const ArcanumCitiesMapData = [
       { x: 4211, y: 1759, text: "Stillwater Giants Cave", category: "waypoint", targetMapFilename: "Stillwater Giants Cave" },
 
       // Shops
-      { x: 1978, y: 3831, text: "General Store Clerk", category: "shop", shopType: "General Store", shopMarkup: 110, level: 29, sex: "male", race: "Gnome", inventory: ["Finely Honed Dagger", "Dagger", "Small Rustic Finery"] },
-      { x: 2278, y: 3130, text: "Richard Leeks", category: ["quest", "shop"], shopType: "Blacksmith", shopMarkup: 110, level: 35, sex: "male", race: "Human", inventory: [{ name: "Stillwater Blade", count: 2 }, "Tempered Shield"], linkedLabels: [{ questName: "Rescue Cyrus", questDescription: "Richard Leeks, the blacksmith in Stillwater, wants you to find his friend Cyrus.", target: "Puddles of blood and footprints", part: 1 }] },
+      { x: 1978, y: 3831, text: "General Store Clerk", category: "shop", shopType: "General Store (Rural)", shopMarkup: 110, level: 29, sex: "male", race: "Gnome", inventory: ["Finely Honed Dagger", "Dagger", "Small Rustic Finery"] },
+      { x: 2278, y: 3130, text: "Richard Leeks", category: ["quest", "shop"], shopType: "Smith (Rural)", shopMarkup: 110, level: 35, sex: "male", race: "Human", inventory: [{ name: "Stillwater Blade", count: 2 }, "Tempered Shield"], linkedLabels: [{ questName: "Rescue Cyrus", questDescription: "Richard Leeks, the blacksmith in Stillwater, wants you to find his friend Cyrus.", target: "Puddles of blood and footprints", part: 1 }] },
 
       // Quests
       //// Find the Stolen Idol
@@ -946,14 +1027,14 @@ const ArcanumCitiesMapData = [
       },
 
       //// Rescue Cyrus
-      { x: 721, y: 2002, text: "Puddles of blood and footprints", category: "quest", 
+      { x: 721, y: 2002, text: "Puddles of blood and footprints", portrait: "Textures/Blood.png", category: "quest", 
         linkedLabels: [
           { questName: "Rescue Cyrus", questDescription: "Cyrus house shows signs of a fight. Follow the tracks to the cave in the North.", target: "Cyrus", part: 2 }
         ]
       },
 
       { x: 2389, y: 3537, text: "Innkeeper (Stillwater)", category: ["quest", "npc"], level: 35, sex: "male", race: "Gnome", inventory: ["Joachim's Stillwater Book", "Bread", "Healing Salve", "Dagger", "Small Rustic Finery"], linkedLabels: [{ questName: "Elder Joachim’s paper trail", questDescription: "Elder Joachim left a telegram at the inn of Stillwater.", part: 4 }] },
-      { x: 2271, y: 2586, text: "Myrth", sex: "male", race: "Elf", level: 20, inventory:["Amulet of N'Tala", "Elven Hunter's Bow", "Smoking Jacket", { name: "Arrow", count: 35 }], category: ["npc", "quest"],
+      { x: 2271, y: 2586, text: "Myrth", sex: "male", race: "Elf", level: 20, inventory: ["Amulet of N'Tala", "Elven Hunter's Bow", "Smoking Jacket", { name: "Arrow", count: 35 }], category: ["npc", "quest"],
         linkedLabels: [
           { questName: "The Stillwater Giant", questDescription: "Myrth, an elf residing in Stillwater, instructs you to perform a rite of passage, killing a Stillwater Giant and bringing its pelt to him. He directs you to Stanley Xavier Hippington, living directly North from his house.", target: "Stanley Xavier Hippington", part: 1 },
           { questName: "Find Qintarra", questDescription: "For bringing a fake pelt of the Stillwater Giant to Myrth, you will make him laugh and he will reveal where Qintarra is located", questType: "main", target: "Raven", part: "reward"},
@@ -980,7 +1061,7 @@ const ArcanumCitiesMapData = [
         inscription: "Textures/Altar/Geshtianna.png",
         offering: ["Passion Root"],
         blessing: ["+1 Beauty"] },
-      { x: 1545, y: 2837, text: "Passion Root", description: "", category: "information", linkedLabels:["Geshtianna's Altar"]},
+      { x: 1545, y: 2837, text: "Passion Root", category: "information", linkedLabels:["Geshtianna's Altar"]},
       { x: 1620, y: 3915, text: "Dresser", category: "chest", chestState: "locked", inventory: ["Leather Gloves", "Small Wool Jacket", "Dragon's Cologne", "Rheumatism Cure", "Cure Poison", "Heal Lesser Wounds"] },
     ],
   },
@@ -1026,17 +1107,17 @@ const ArcanumCitiesMapData = [
           { questName: "Clean Up the Boil", questDescription: "Sebastian wants you to kill Darian Maug. In return, he might aid you in your own quest.", target: "Darian Maug", part: 2 }
         ]
       },
-      { x: 9958, y: 5581, text: "Castleton the General Store Clerk", category: "shop", shopType: "General Store", shopMarkup: 100, level: 27, sex: "male", race: "Human", inventory: ["Helmet of Strength"] },
-      { x: 10195, y: 5469, text: "Thurston the Tailor", category: "shop", shopType: "Tailor", shopMarkup: 90, level: 17, sex: "male", race: "Elf", inventory: ["Negociator's Ring", "Eye Glasses", "Dagger"] },
+      { x: 9958, y: 5581, text: "Castleton the General Store Clerk", category: "shop", shopType: "General Store (City)", shopMarkup: 100, level: 27, sex: "male", race: "Human", inventory: ["Helmet of Strength"] },
+      { x: 10195, y: 5469, text: "Thurston the Tailor", category: "shop", shopType: "Tailor (City)", shopMarkup: 90, level: 17, sex: "male", race: "Elf", inventory: ["Negociator's Ring", "Eye Glasses", "Dagger"] },
       { x: 10835, y: 5114, text: "Geoffrey the Inventor", category: "shop", shopType: "Inventor", shopMarkup: 100, level: 37, sex: "male", race: "Human" },
       { x: 10886, y: 5056, text: "Anna the Herbalist", category: "shop", shopType: "Herbalist", shopMarkup: 90, level: 23, sex: "female", race: "Human" },
       { x: 10721, y: 5890, text: "Junk Dealer", category: "shop", shopType: "Junk Dealer", shopMarkup: 200, level: 30, sex: "male", race: "Human" },
-      { x: 10724, y: 4597, text: "Wallow the Quality Blacksmith", category: "shop", shopType: "Blacksmith", shopMarkup: 100, level: 33, sex: "male", race: "Dwarf" },
-      { x: 10451, y: 4485, text: "Smythe the Gun Smith", category: "shop", shopType: "Gun Store", shopMarkup: 100, level: 31, sex: "male", race: "Human" },
+      { x: 10724, y: 4597, text: "Wallow the Quality Blacksmith", category: "shop", shopType: "Smith (Quality)", shopMarkup: 100, level: 33, sex: "male", race: "Dwarf" },
+      { x: 10451, y: 4485, text: "Smythe the Gun Smith", category: "shop", shopType: "Gun Smith", shopMarkup: 100, level: 31, sex: "male", race: "Human" },
       { x: 7413, y: 6587, text: "Mellin Bungerton", category: "shop", shopType: "Junk Dealer", shopMarkup: 300, level: 18, sex: "male", race: "Halfling" },
-      { x: 11979, y: 4139, text: "Magick Shop Clerk", category: ["shop", "key"], shopType: "Magick Shop", shopMarkup: 100, level: 38, sex: "male", race: "Elf", inventory: ["Magick Shoppe Key. Tarant", "Blessed Bow", "Magick Robes"] },
-      { x: 11695, y: 4040, text: "Xe'rad the Magickal Smith", category: ["shop"], shopType: "Magickal Smith", shopMarkup: 100, level: 34, sex: "male", race: "Human", inventory: ["Screaming Scimtar"] },
-      { x: 12008, y: 3976, text: "Zeramin the Magick Shop Clerk", category: ["shop", "key"], shopType: "Magick Shop", shopMarkup: 100, level: 42, sex: "female", race: "Elf", inventory: ["Magick Shoppe Key. Tarant", "Mage's Staff", "Ashen Robes", "Scroll of Teleportation"] },
+      { x: 11979, y: 4139, text: "Magick Shop Clerk", category: ["shop", "key"], shopType: "Magic Shop (Light)", shopMarkup: 100, level: 38, sex: "male", race: "Elf", inventory: ["Magick Shoppe Key. Tarant", "Blessed Bow", "Magick Robes"] },
+      { x: 11695, y: 4040, text: "Xe'rad the Magickal Smith", category: ["shop"], shopType: "Smith (Magical)", shopMarkup: 100, level: 34, sex: "male", race: "Human", inventory: ["Screaming Scimtar"] },
+      { x: 12008, y: 3976, text: "Zeramin the Magick Shop Clerk", category: ["shop", "key"], shopType: "Magic Shop (Dark)", shopMarkup: 100, level: 42, sex: "female", race: "Elf", inventory: ["Magick Shoppe Key. Tarant", "Mage's Staff", "Ashen Robes", "Scroll of Teleportation"] },
       { x: 12026, y: 5624, text: "Halfling Shopkeeper", category: "shop", shopType: "Black Market", shopMarkup: 100, level: 20, sex: "male", race: "Halfling" },
       { x: 14412, y: 4234, text: "Factory Foreman", category: "shop", shopType: "Inventor", shopMarkup: 100, level: 30, sex: "male", race: "Human" },
       { x: 14092, y: 6477, text: "Wise Woman", category: "shop", shopType: "Nomad", shopMarkup: 150, level: 31, sex: "female", race: "Gnome" },
@@ -1103,7 +1184,7 @@ const ArcanumCitiesMapData = [
           { questName: "Steal the Golden Idol of Kree", questDescription: "Thaddeus Mynor wants you to steal the golden idol of the barbarians of Kree.", target: "Altar (Kree)", part: 1 }
         ]
       },
-      { x: 12684, y: 3507, text: "Chest (Sewers map)", category: ["quest", "chest", "key"], inventory: ["Map of Tarantian Sewers"],
+      { x: 12684, y: 3507, text: "Chest (Sewers map)", category: ["quest", "key", "chest"], chestState: "locked", chestKey: "Key to Dept. of Water & Power", inventory: ["Map of Tarantian Sewers"],
         linkedLabels: [
           { questName: "Thieves Underground", questDescription: "Retrieve the map of the Tarantian Sewers from the chest and return to Thaddeus Mynor to be accepted in the Thieves Underground.", target: "Thaddeus Mynor", part: 3 }
         ]
@@ -1143,7 +1224,7 @@ const ArcanumCitiesMapData = [
       { x: 9286, y: 4783, text: "Gurin Rockharrow", master: "Master of Gambling", category: ["quest", "npc", "master"], level: 45, sex: "male", race: "Dwarf",
         linkedLabels: [
           { questName: "Gamble with Gurin Rockharrow", questDescription: "Gurin Rockharrow has agreed to tutor you in the skills of gambling.", target: "Gurin Rockharrow", questType: "master", part: 1 },
-          { questName: "Gamble with Gurin Rockharrow", questDescription: "After you won a certain number of times, Gurin will accepts to train you.", target: "Gurin Rockharrow", questType: "master", part: 2 }
+          { questName: "Gamble with Gurin Rockharrow", questDescription: "After you won a certain number of times, Gurin will accepts to train you.", target: "Gurin Rockharrow", questType: "master", part: "reward" }
         ]
       },
       { x: 11285, y: 5706, text: "Madam Lil", description: "Some quests of Madam Lil are available to men or women only.", category: ["quest", "npc", "bounty"], level: 30, sex: "female", race: "Human", inventory: ["Gift for Mrs. Regina Halster", "Madam Lil's Music Box"],
@@ -1193,7 +1274,7 @@ const ArcanumCitiesMapData = [
           { questName: "Jared & Wilhemina", questDescription: "After you spoke with the stonecutter, return to Jared.", target: "Jared", part: 4 }
         ]
       },
-      { x: 11055, y: 4110, text: "Mr. Victor Wright", description: "You can tell Victor Wright about the zeppelin crash, and he'll pay you 500 (or 800) gold for it. Telling your story makes you better known, resulting in gifts from random NPCs, but makes it impossible to talk your way out of fights with assassins on the overworld map.", category: ["quest", "npc"], level: 15, sex: "male", race: "Human",
+      { x: 11055, y: 4110, text: "Mr. Victor Wright", description: "You can tell Victor Wright about the zeppelin crash, and he'll pay you 500 (or 800) gold for it. Telling your story makes you better known, resulting in gifts from random NPCs, but makes it impossible to talk your way out of fights with assassins on the overworld map.", category: ["quest", "npc"], level: 15, sex: "male", race: "Human", inventory: ["Note for Mrs Regina Halster"],
         linkedLabels: [
           { questName: "Deliver Payment Notice to Mrs. Halster", questDescription: "Mr. Wright, Editor of the Tarantian, would like you to deliver a payment note to Mrs. Halster who lives on the corner of Devonshire and Vermillion.", target: "Mrs. Regina Halster" }
         ]
@@ -1262,7 +1343,7 @@ const ArcanumCitiesMapData = [
           { questName: "Caleb Malloy's Whiskey", questDescription: "Caleb Malloy wants you to pick up his shipment of whiskey.", target: "Biggs", part: 1 }
         ]
       },
-      { x: 9143, y: 6179, text: "Biggs", category: ["quest", "npc"], level: 1, sex: "male", race: "Dwarf",
+      { x: 9143, y: 6179, text: "Biggs", category: ["quest", "npc"], level: 1, sex: "male", race: "Dwarf", inventory: ["Case of Whiskey"],
         linkedLabels: [
           { questName: "Caleb Malloy's Whiskey", questDescription: "As soon as you receive the whiskey, you will be attacked by Malek Nebb and his gang. Give the whiskey to Caleb for your reward.", target: "Caleb Malloy", part: 2 }
         ]
@@ -1327,12 +1408,12 @@ const ArcanumCitiesMapData = [
           { questName: "The Stillwater Giant" }
         ]
       },
-      { x: 12510, y: 4200, text: "Stillwater Giant display case", category: ["quest", "chest", "key"], inventory: ["Stillwater Giant Pelt"],
+      { x: 12510, y: 4200, text: "Stillwater Giant display case", category: ["quest", "key", "chest"], chestState: "locked", chestKey: "Key for Stillwater Giant Case", inventory: ["Stillwater Giant Pelt (Fake)"],
         linkedLabels: [
           { questName: "The Stillwater Giant" }
         ]
       },
-      { x: 12202, y: 3427, text: "Ancient Iron Chest", category: ["quest", "chest"], inventory: ["Map: The Place of Lost Voices", "Ancient Iron Drums", "Ancient Iron Drums", "Ancient Iron Drums"],
+      { x: 12202, y: 3427, text: "Ancient Iron Chest", category: ["quest", "chest"], inventory: ["Map to the Place of Lost Voices", { name: "Ancient Iron Drums", count: 3 }],
         linkedLabels: [
           { questName: "The Iron Clan", questDescription: "Craft the Key to the Iron Clan Chest, open it and get what the chest contains. Then, go to the Place of Lost Voices.", target: "Music Box of the Iron Clan", part: 2 }
         ]
@@ -1346,14 +1427,14 @@ const ArcanumCitiesMapData = [
       { x: 13344, y: 4713, text: "Safe", category: ["chest", "bounty"], inventory: ["Derian Ka Sword"] },
       { x: 9585, y: 5361, text: "Chest", category: ["chest", "bounty"], inventory: ["Enchanted Looking Glass"] },
       { x: 12231, y: 4334, text: "Wood Chest", category: ["chest", "bounty"], inventory: ["Will-O-The-Wisp Essence"] },
-      { x: 11392, y: 6928, text: "Barrel", category: ["chest", "bounty"], inventory: ["Flawless Dwarven Rubies"] },
+      { x: 11392, y: 6928, text: "Barrel", category: ["chest", "bounty"], chestState: "locked", inventory: ["Flawless Dwarven Rubies"] },
       { x: 15765, y: 4264, text: "Crates", category: ["chest", "bounty"], inventory: ["Heron Device"] },
-      { x: 13104, y: 4574, text: "Chest", category: ["chest", "bounty"], inventory: ["Jewel Of Hebe"] },
+      { x: 13104, y: 4574, text: "Chest", category: ["chest", "bounty"], chestState: "locked", inventory: ["Jewel Of Hebe"] },
       { x: 12163, y: 5420, text: "Human City Dweller", category: ["npc", "bounty"], level: 14, sex: "male", race: "Human", inventory: ["Lucky Medallion"] },
       { x: 12309, y: 3219, text: "Chest", category: ["chest", "bounty"], inventory: ["Lethe Wyvern Venom"] },
       { x: 9762, y: 4888, text: "Cabinet", category: ["chest", "bounty"], inventory: ["Napha Water"] },
       { x: 15167, y: 4241, text: "Wood Chest", category: ["chest", "bounty"], inventory: ["Plans For Schreck's Multi-barrel Pistol"] },
-      { x: 11405, y: 4261, text: "Chest", category: ["chest", "bounty"], inventory: ["Potion Of Dark Power"] },
+      { x: 11405, y: 4261, text: "Chest", category: ["chest", "bounty"], inventory: ["Mr. Fitzgerald's Potion of Dark Power"] },
       { x: 15091, y: 4671, text: "Half Ogre City Dweller", category: ["key", "npc"], level: 14, sex: "male", race: "Half-Ogre", inventory: ["Key to the Back Room in 57 Mulligan Bone"] },
       { x: 15283, y: 4569, text: "Human Guard", category: ["key", "npc"], level: 42, sex: "male", race: "Human", inventory: ["Key to the Warehouse of the Small"] },
       { x: 11907, y: 5601, text: "Mr. Black", category: "npc", level: 38, sex: "male", race: "Half-Orc" },
@@ -1367,8 +1448,18 @@ const ArcanumCitiesMapData = [
       { x: 12486, y: 3335, text: "Half Orc City Dweller", category: "npc", level: 10, sex: "female", race: "Half-Orc" },
       { x: 9891, y: 3869, text: "Train Conductor (Tarant)", category: "npc", level: 20, sex: "male", race: "Human" },
       { x: 9370, y: 4101, text: "Train Conductor (Tarant)", category: "npc", level: 22, sex: "male", race: "Human" },
-      { x: 9386, y: 5098, text: "Wood Chest", category: "chest", chestState: "locked", inventory: ["3600 gold"] },
-      { x: 8480, y: 5055, text: "Coffin", description: "inventory: Gentleman's club Matchbook", category: "chest" },
+      { x: 9386, y: 5098, text: "Wood Chest", category: "chest", chestState: "locked", inventory: [{ name: "Coins", count: 3600 }] },
+      { x: 8480, y: 5055, text: "Coffin", inventory: ["Gentleman's club Matchbook"], category: "chest" },
+      { x: 12553, y: 3583, text: "Dept. of Water Clerk", category: ["npc", "key"], level: 8, sex: "male", race: "Human", inventory: ["Key to Dept. of Water & Power"] },
+      { x: 12821, y: 3501, text: "Cabinet", category: ["key", "chest"], chestState: "locked", chestKey: "Key to Dept. of Water & Power", inventory: [{ name: "Arrow", count: 25 }, { name: "Bullet", count: 25 }, "Candle Stick"] },
+      { x: 12769, y: 3467, text: "Cabinet", category: ["key", "chest"], chestState: "locked", chestKey: "Key to Dept. of Water & Power", inventory: ["Small Electrical Parts", { name: "Saltpeter", count: 2 }] },
+      { x: 12513, y: 3120, text: "Bookstand", category: "chest", inventory: ["The Gods Give Us Soot", "Psychological Treatise On Intolerance", "Quirren's Poem", "Dread Armor"] },
+      { x: 12621, y: 3061, text: "Bookstand", category: "chest", inventory: ["Journal of Henry Dovern", "Treatise on the Causes of Disease"] },
+      { x: 12729, y: 3089, text: "Bookstand", category: "chest", inventory: ["The Nature of Archaeological Practice", "The Life of Ashton Fernwilter", "Hunters Hunted", "History of the Isle of Despair"] },
+      { x: 12826, y: 3141, text: "Bookstand", category: "chest", inventory: ["The Orcish Question (Vol 1)", "The Orcish Question (Vol 2)"] },
+      { x: 10143, y: 6209, text: "Barrel", category: "chest", chestState: "locked", inventory: ["Small Metal Tube", { name: "Leather Straps", count: 2 }] },
+      { x: 11528, y: 6305, text: "Cart", category: "chest", chestState: "locked", inventory: [{ name: "Tom's Fertilizer", count: 5 }] },
+      { x: 14083, y: 5119, text: "Charles Dunston", category: "npc", level: 30, sex: "male", race: "Dwarf" },
     ]
   },
   {
@@ -1408,8 +1499,8 @@ const ArcanumCitiesMapData = [
     music: "", // CONFIRMED - No music.
     defaultView: { x: 2294, y: 1344 },
     labels: [
-      { x: 2347, y: 1314, text: "T'sen-Ang - Entrance", description: "", category: "waypoint", targetMapFilename: "T’sen-Ang Entrance", targetX: 1072, targetY: 511 },
-      { x: 2360, y: 710, text: "M'in Gorad Chamber", description: "", category: "waypoint", targetMapFilename: "M'in Gorad Chamber", targetX: 137, targetY: 316 },
+      { x: 2347, y: 1314, text: "T'sen-Ang - Entrance", category: "waypoint", targetMapFilename: "T’sen-Ang Entrance", targetX: 1072, targetY: 511 },
+      { x: 2360, y: 710, text: "M'in Gorad Chamber", category: "waypoint", targetMapFilename: "M'in Gorad Chamber", targetX: 137, targetY: 316 },
 
       { x: 1468, y: 979, text: "Z'an Al'urin", sex: "female", race: "Dark Elf", level: 29, portrait: "Textures/zanalurin.gif", description: "Z'an is an evil spellcaster (earth, force, and temporal). If you tell her your name, she might agree to join you.", inventory: ["Magick Robes"], category: "followers" },
       { x: 1305, y: 472, text: "Maug Maulman", sex: "male", race: "Half-Ogre", level: 31, category: ["quest", "npc"], linkedLabels: ["T'val N'or"],
@@ -1440,9 +1531,9 @@ const ArcanumCitiesMapData = [
     defaultView: { x: 676, y: 2431 },
     labels: [
       // Waypoints
-      { x: 743, y: 2388, text: "Teleportation Gate", description: "", category: "waypoint", targetMapFilename: "Tulla", targetX: 1030, targetY: 2242 },
-      { x: 1030, y: 2242, text: "Teleportation Gate", description: "", category: "waypoint", targetMapFilename: "Tulla", targetX: 743, targetY: 2388 },
-      { x: 2268, y: 1619, text: "Tulla - Inside", description: "", category: "waypoint", targetMapFilename: "Tulla - Main Floor", targetX: 836, targetY: 1410 },
+      { x: 743, y: 2388, text: "Teleportation Gate", category: "waypoint", targetMapFilename: "Tulla", targetX: 1030, targetY: 2242 },
+      { x: 1030, y: 2242, text: "Teleportation Gate", category: "waypoint", targetMapFilename: "Tulla", targetX: 743, targetY: 2388 },
+      { x: 2268, y: 1619, text: "Tulla - Inside", category: "waypoint", targetMapFilename: "Tulla - Main Floor", targetX: 836, targetY: 1410 },
 
       // Quests
       { x: 1964, y: 2153, text: "Herzod Munk", sex: "male", race: "Human", level: 35, category: ["quest", "npc"],
@@ -1458,14 +1549,14 @@ const ArcanumCitiesMapData = [
       },
 
       // NPCs
-      { x: 662, y: 2350, text: "Elf Guard", sex: "Male", race: "Elf", level: 50, inventory:["Magick Robes"], category: "npc" },
+      { x: 662, y: 2350, text: "Elf Guard", sex: "Male", race: "Elf", level: 50, inventory: ["Magick Robes"], category: "npc" },
 
       // Information
-      { x: 1837, y: 1775, text: "1 - Star", description: "", category: "information" },
-      { x: 2058, y: 1701, text: "2 - Spiral", description: "", category: "information" },
-      { x: 2098, y: 1789, text: "3 - Stick Figure", description: "", category: "information" },
-      { x: 1918, y: 1692, text: "4 - Cross-circle", description: "", category: "information" },
-      { x: 1957, y: 1837, text: "5 - Magic symbol", description: "", category: "information" },
+      { x: 1837, y: 1775, text: "1 - Star", category: "information" },
+      { x: 2058, y: 1701, text: "2 - Spiral", category: "information" },
+      { x: 2098, y: 1789, text: "3 - Stick Figure", category: "information" },
+      { x: 1918, y: 1692, text: "4 - Cross-circle", category: "information" },
+      { x: 1957, y: 1837, text: "5 - Magic symbol", category: "information" },
     ]
   },
   {
@@ -1485,7 +1576,7 @@ const ArcanumCitiesMapData = [
           { questName: "A new stone for Halcyon's Altar", questDescription: "For this quest, you can recruit Murgo as a temporary follower. Murgo will leave the group once you return to Vooriden, or if you deviate from the quest.", target: "Stone", part: 2 }
         ]
       },
-      { x: 1343, y: 248, text: "Halcyon's Altar", description: "", category: ["altar"],
+      { x: 1343, y: 248, text: "Halcyon's Altar", category: ["altar"],
         godType: "Greater God",
         inscription: "Textures/Altar/Halcyon.png",
         offering: ["Olive Tree Branch"],
@@ -1510,7 +1601,7 @@ const ArcanumCitiesMapData = [
           { questName: "Contact the Wheel Clan", questDescription: "As soon as you will pass the gate, Thorvald will leave your group. If you don't want that to happen, make him wait while you talk about him to the guards. This will make him be a permanent follower.", part: 2 },
         ],
       },
-      { x: 1257, y: 418, text: "Wheel Clan - Level 1", description: "", category: "waypoint", targetMapFilename: "Wheel Clan - Level 1", targetX: 238, targetY: 858},
+      { x: 1257, y: 418, text: "Wheel Clan - Level 1", category: "waypoint", targetMapFilename: "Wheel Clan - Level 1", targetX: 238, targetY: 858},
     ]
   },
 
@@ -1522,7 +1613,7 @@ const ArcanumCitiesMapData = [
     music: "", // CONFIRMED - No music.
     defaultView: { x: 737, y: 1221},
     labels: [
-      { x: 1602, y: 524, text: "Lady Druella", sex: "female", race: "Half-Elf", level: 17, portrait: "Textures/druella.png", description: "", category: ["followers", "quest"] },
+      { x: 1602, y: 524, text: "Lady Druella", sex: "female", race: "Half-Elf", level: 17, portrait: "Textures/druella.png", category: ["followers", "quest"] },
     ],
   },
   {
@@ -1546,13 +1637,13 @@ const ArcanumCitiesMapData = [
     music: "", // CONFIRMED - No music.
     defaultView: { x: 2662, y: 1730 },
     labels: [
-      { x: 2372, y: 1329, text: "Fancy Chest", description: "", category: "chest" },
-      { x: 1531, y: 776, text: "Mystic Chest", description: "", category: "chest" },
-      { x: 1288, y: 1063, text: "Mystic Chest", description: "", category: "chest" },
-      { x: 2206, y: 1073, text: "Mystic Chest", description: "", category: "chest" },
-      { x: 1802, y: 577, text: "Mystic Chest", description: "", category: "chest" },
-      { x: 956, y: 947, text: "Sarcophagus", description: "", category: "chest" },
-      { x: 888, y: 702, text: "Mystic Chest", description: "", category: "chest" },
+      { x: 2372, y: 1329, text: "Fancy Chest", category: "chest" },
+      { x: 1531, y: 776, text: "Mystic Chest", category: "chest" },
+      { x: 1288, y: 1063, text: "Mystic Chest", category: "chest" },
+      { x: 2206, y: 1073, text: "Mystic Chest", category: "chest" },
+      { x: 1802, y: 577, text: "Mystic Chest", category: "chest" },
+      { x: 956, y: 947, text: "Sarcophagus", category: "chest" },
+      { x: 888, y: 702, text: "Mystic Chest", category: "chest" },
     ]
   },
   {
@@ -1561,7 +1652,7 @@ const ArcanumCitiesMapData = [
     modGroup: "Other locations",
     defaultView: { x: 655, y: 493 },
     labels: [
-      { x: 835, y: 390, text: "Mystic Chest", description: "", category: ["chest"] },
+      { x: 835, y: 390, text: "Mystic Chest", category: ["chest"] },
     ],
   },
   {
@@ -1580,7 +1671,7 @@ const ArcanumCitiesMapData = [
     modGroup: "Quest locations",
     defaultView: { x: 1026, y: 849 }, // Good
     labels: [
-      { x: 1107, y: 315, text: "Ancient Temple - Underground", description: "", category: "waypoint", targetMapFilename: "Ancient Temple - Underground", targetX: 1798, targetY: 223},
+      { x: 1107, y: 315, text: "Ancient Temple - Underground", category: "waypoint", targetMapFilename: "Ancient Temple - Underground", targetX: 1798, targetY: 223},
     ],
   },
   {
@@ -1660,7 +1751,7 @@ const ArcanumCitiesMapData = [
       { x: 1309, y: 1733, text: "Magick Chest", category: "chest" },
 
       // Information
-      { x: 2137, y: 430, text: "Crashed aeroplane", description: "", category: "information" },
+      { x: 2137, y: 430, text: "Crashed aeroplane", category: "information" },
         // Add info
       { x: 3458, y: 2103, text: "Shrine", description: "The Shrine before you is crude, made of rough stone and wood. Carved into one of the stone is this: ''And His spirit shall be reborn on wings of fire in hills shrouded in fog. Archeon 5:16''", category: "information" },
         // Add info
@@ -1691,7 +1782,7 @@ const ArcanumCitiesMapData = [
     music: "", // CONFIRMED - No music.
     defaultView: { x: 1294, y: 1343 }, // Good
     labels: [
-      { x: 1276, y: 582, text: "Dungeon of the Dragon Pool - Level 1", description: "", category: "waypoint", targetMapFilename: "Dungeon of the Dragon Pool - Level 1", targetX: 164, targetY: 836 },
+      { x: 1276, y: 582, text: "Dungeon of the Dragon Pool - Level 1", category: "waypoint", targetMapFilename: "Dungeon of the Dragon Pool - Level 1", targetX: 164, targetY: 836 },
     ],
   },
   {
@@ -1701,10 +1792,10 @@ const ArcanumCitiesMapData = [
     //music: 
     defaultView: { x: 837, y: 611 },
     labels: [
-      { x: 812, y: 471, text: "Elven Ruins - Underground", description: "", category: "waypoint", targetMapFilename: "Elven Ruins - Underground", targetX: 1904, targetY: 342},
+      { x: 812, y: 471, text: "Elven Ruins - Underground", category: "waypoint", targetMapFilename: "Elven Ruins - Underground", targetX: 1904, targetY: 342},
       { x: 892, y: 428, text: "Dark Elf Noble", category: "npc", level: 8, sex: "male", race: "Dark Elf", inventory: ["Enchanted Sword"] },
-      { x: 887, y: 385, text: "Dark Elf Noble", description: "25 arrow", category: "npc", level: 7, sex: "female", race: "Dark Elf", inventory: ["Bow"] },
-      { x: 933, y: 399, text: "Dark Elf Noble", description: "25 arrow", category: "npc", level: 7, sex: "male", race: "Dark Elf", inventory: ["Bow"] },
+      { x: 887, y: 385, text: "Dark Elf Noble", category: "npc", level: 7, sex: "female", race: "Dark Elf", inventory: ["Bow", { name: "Arrow", count: 25 }] },
+      { x: 933, y: 399, text: "Dark Elf Noble", category: "npc", level: 7, sex: "male", race: "Dark Elf", inventory: ["Bow", { name: "Arrow", count: 25 }] },
       { x: 930, y: 432, text: "Dark Elf Noble", category: "npc", level: 7, sex: "male", race: "Dark Elf", inventory: ["Scimitar", "Battered Wooden Shield"] },
       { x: 913, y: 400, text: "Professor James", category: "npc", level: 1, sex: "male", race: "Human" },
     ],
@@ -1717,12 +1808,12 @@ const ArcanumCitiesMapData = [
     defaultView: { x: 1541, y: 645 },
     //background: "#000000",
     labels: [
-      { x: 1636, y: 1011, text: "William Bench", sex: "male", race: "Human", level: 20, description: "", category: ["quest", "npc"], 
+      { x: 1636, y: 1011, text: "William Bench", sex: "male", race: "Human", level: 20, category: ["quest", "npc"], 
         linkedLabels: [
           { questName: "Remove the Humans from Falcon's Ache", questDescription: "With persuasion, you can make William Bench leave by saying that you represent Gilbert Bates and that he is contesting the ownership of the land. Otherwise, let him attack you but don't fight back.", target: "Raven", part: 2 }
         ]
       },
-      { x: 1772, y: 996, text: "Black Chest", description: "150 gold", category: "chest", chestState: "locked" },
+      { x: 1772, y: 996, text: "Black Chest", inventory: [{ name: "Coins", count: 150}], category: "chest", chestState: "locked" },
       { x: 1923, y: 648, text: "Ter'el's Altar", category: "altar",
         godType: "Noble Lesser God",
         inscription: "Textures/Altar/Ter'el.png",
@@ -1738,7 +1829,7 @@ const ArcanumCitiesMapData = [
     music: "", // CONFIRMED - No music.
     defaultView: { x: 1076, y: 399 },
     labels: [
-      { x: 867, y: 559, text: "Junk Pile", description: "350 gold", category: "chest", inventory: ["Ring of Poison Resistance"] },
+      { x: 867, y: 559, text: "Junk Pile", category: "chest", inventory: [{ name: "Coins", count: 350 }, "Ring of Poison Resistance"] },
     ]
   },
   {
@@ -1826,7 +1917,7 @@ const ArcanumCitiesMapData = [
     // music: "",
     defaultView: { x: 591, y: 517 }, // Good
     labels: [
-      { x: 848, y: 552, text: "K’na Tha - Level 1", description: "", category: "waypoint", targetMapFilename: "K’na Tha - Level 1", targetX: 3763, targetY: 2373},
+      { x: 848, y: 552, text: "K’na Tha - Level 1", category: "waypoint", targetMapFilename: "K’na Tha - Level 1", targetX: 3763, targetY: 2373},
     ],
   },
   {
@@ -1847,6 +1938,7 @@ const ArcanumCitiesMapData = [
         ]
       },
       { x: 2788, y: 846, text: "Arcane Chest", category: "chest" },
+      { x: 1557, y: 968, text: "House of Torian Kel", description: "If Torian Kel is in your party, a dialog will be available here where he tells you this used to be his house.", category: "information" },
     ],
   },
   {
@@ -1895,7 +1987,11 @@ const ArcanumCitiesMapData = [
     // music: "",
     defaultView: { x: 799, y: 983 }, // Good
     labels: [
-      { x: 1072, y: 811, text: "Items", description: "Sprocket", category: ["quest", "chest"], linkedLabels: ["Weldo Rubin"] },
+      { x: 1072, y: 811, text: "Items", category: ["quest", "chest"], inventory: ["Old Sprocket", { name: "Bullet", count: 75 }, { name: "Healing Salve", count: 2 }],
+        linkedLabels: [
+          { questName: "Find Weldo's Item", questDescription: "Kill the lizard and get the sprocket, then return to Weldo", target: "Weldo Rubin", part: 2 },
+        ]
+      },
     ],
   }, 
   {
@@ -1974,7 +2070,14 @@ const ArcanumCitiesMapData = [
     modGroup: "Quest locations",
     // music: "",
     defaultView: { x: 1617, y: 1238 },
-    labels: [],
+    labels: [
+      { x: 1532, y: 821, text: "Ancient Looking Glass", category: "quest", inventory: ["Ancient Looking Glass"] },
+      { x: 1487, y: 744, text: "Schematic", category: "quest", inventory: ["Schematic: Reanimator"] },
+      { x: 1376, y: 747, text: "Ancient Gears", category: "quest", inventory: ["Ancient Gears"] },
+      { x: 1226, y: 849, text: "Schematic", category: "quest", inventory: ["Schematic: Bronwyck's Gun"] },
+      { x: 1027, y: 864, text: "Ancient Filament", category: "quest", inventory: ["Ancient Filament"] },
+      { x: 1071, y: 705, text: "Ancient Pocket Watch", category: "quest", inventory: ["Ancient Pocket Watch"] },
+    ],
   },
   {
     filename: "ArcanumBase/SimonFahrkusShack.png",
@@ -1983,7 +2086,7 @@ const ArcanumCitiesMapData = [
     music: "", // CONFIRMED - No music.
     defaultView: { x: 695, y: 549 }, // Good
     labels: [
-      { x: 828, y: 498, text: "Simon Fahrkus", sex: "male", race: "Human", level: 3, inventory: ["Arabalah's Sacred Artifact"], category: ["quest", "npc"],
+      { x: 828, y: 498, text: "Simon Fahrkus", sex: "male", race: "Human", level: 3, inventory: ["Arbalah's Sacred Artifact"], category: ["quest", "npc"],
         linkedLabels: [
           { questName: "Quest: The Priest and the Bandit", questDescription: "Lie, threaten, steal or kill Fahrkus to retrieve the Sacred Artifact.", target: "Arbalah", part: 4 },
         ],
@@ -1997,7 +2100,7 @@ const ArcanumCitiesMapData = [
     music: "", // CONFIRMED - No music.
     defaultView: { x: 816, y: 711 }, // Good
     labels: [
-      { x: 1170, y: 246, text: "Arcane Chest", description: "", category: "chest" },
+      { x: 1170, y: 246, text: "Arcane Chest", category: "chest" },
     ],
   },
   {
@@ -2007,7 +2110,7 @@ const ArcanumCitiesMapData = [
     // music: "",
     defaultView: { x: 1132, y: 1123 }, // Good
     labels: [
-      { x: 1391, y: 645, text: "Arcane Chest", description: "", category: "chest" },
+      { x: 1391, y: 645, text: "Arcane Chest", category: "chest" },
       { x: 1476, y: 757, text: "Garbonzo the Monkey Trainer", category: "npc", level: 34, sex: "male", race: "Half-Ogre", inventory: ["Rusty Axe", "Rusty Sword", "Large Leather Armour"] },
     ],
   },
@@ -2018,7 +2121,7 @@ const ArcanumCitiesMapData = [
     // music: "",
     defaultView: { x: 923, y: 684 }, // Good
     labels: [
-      { x: 990, y: 620, text: "Stonecutter Clan - Level 1", description: "", category: "waypoint", targetMapFilename: "Stonecutter Clan - Level 1", targetX: 2592, targetY: 1503},
+      { x: 990, y: 620, text: "Stonecutter Clan - Level 1", category: "waypoint", targetMapFilename: "Stonecutter Clan - Level 1", targetX: 2592, targetY: 1503},
     ]
   },
   {
@@ -2038,7 +2141,7 @@ const ArcanumCitiesMapData = [
     //music: No music here.
     defaultView: { x: 2532, y: 562 },
     labels: [
-      { x: 1501, y: 1146, text: "Arcane Chest", description: "Always contains a Ring of Shadows", category: "chest" },
+      { x: 1501, y: 1146, text: "Arcane Chest", inventory: ["Ring of Shadows"], category: "chest" },
     ],
   },
   {
@@ -2059,8 +2162,8 @@ const ArcanumCitiesMapData = [
           { questName: "Destroy the Bangellian Scourge", questDescription: "Stringy Pete wants you to destroy the Bangellian Scourge.", target: "Arcane Chest (Bangellian Scourge)", part: 1 }
         ]
       },
-      { x: 1819, y: 742, text: "Boat", description: "", category: "waypoint", targetMapFilename: "Stringy Petes Cove", targetX: 3093, targetY: 1266 },
-      { x: 3095, y: 1258, text: "Boat", description: "", category: "waypoint", targetMapFilename: "Stringy Petes Cove", targetX: 1819, targetY: 742 },
+      { x: 1819, y: 742, text: "Boat", category: "waypoint", targetMapFilename: "Stringy Petes Cove", targetX: 3093, targetY: 1266 },
+      { x: 3095, y: 1258, text: "Boat", category: "waypoint", targetMapFilename: "Stringy Petes Cove", targetX: 1819, targetY: 742 },
     ]
   },
   {
@@ -2080,7 +2183,7 @@ const ArcanumCitiesMapData = [
     // music: no music here
     defaultView: { x: 977, y: 975 }, // Good
     labels: [
-      { x: 1111, y: 896, text: "The Bangellian Deeps - Inside", description: "", category: "waypoint", targetMapFilename: "The Bangellian Deeps - Inside", targetX: 1227, targetY: 1340 },
+      { x: 1111, y: 896, text: "The Bangellian Deeps - Inside", category: "waypoint", targetMapFilename: "The Bangellian Deeps - Inside", targetX: 1227, targetY: 1340 },
     ]
   },
   {
@@ -2105,7 +2208,7 @@ const ArcanumCitiesMapData = [
     //music: No music here.
     defaultView: { x: 1396, y: 1442 },
     labels: [
-      { x: 1563, y: 789, text: "Wood Chest", description: "Contains an Arcane Great Sword and an Axe of Creeping Death.", category: "chest" },
+      { x: 1563, y: 789, text: "Wood Chest", inventory: ["Arcane Great Sword", "Axe of Creeping Death"], category: "chest" },
     ],
   },
   {
@@ -2115,7 +2218,7 @@ const ArcanumCitiesMapData = [
     music: "", // CONFIRMED - No music.
     defaultView: { x: 868, y: 598 },
     labels: [
-      { x: 1061, y: 524, text: "Arcane Chest", category: "chest" },
+      { x: 1061, y: 524, text: "Arcane Chest", category: "chest", inventory: ["Blade of Malevolent Storm"] },
     ],
   },
   {
@@ -2158,7 +2261,7 @@ const ArcanumCitiesMapData = [
     background: "#000000",
     defaultView: { x: 1051, y: 936 }, // Good
     labels: [
-      { x: 185, y: 564, text: "The Lair of Bellerogrim - Underground", description: "", category: "waypoint", targetMapFilename: "The Lair of Bellerogrim - Underground" },
+      { x: 185, y: 564, text: "The Lair of Bellerogrim - Underground", category: "waypoint", targetMapFilename: "The Lair of Bellerogrim - Underground" },
       { x: 1051, y: 936, text: "The Lair of Bellerogrim - Entrance", category: "waypoint", targetMapFilename: "The Lair of Bellerogrim - Entrance", targetX: 1330, targetY: 739 },
     ],
   },
@@ -2200,7 +2303,7 @@ const ArcanumCitiesMapData = [
       { x: 1114, y: 511, text: "The Pit of Fires - Inside", category: "waypoint", targetMapFilename: "The Pit of Fires - Inside" },
 
       // NPC
-      { x: 955, y: 477, text: "Morrawynd", description: "Red Barbarian Clothes", category: "npc", level: 25, sex: "female", race: "Half-Elf" },
+      { x: 955, y: 477, text: "Morrawynd", inventory: ["Red Barbarian Clothes"], category: "npc", level: 25, sex: "female", race: "Half-Elf" },
       { x: 918, y: 511, text: "R'yn-Diak", category: "npc", level: 20, sex: "male", race: "Elf", inventory: ["Magick Robes"] },
       { x: 1013, y: 510, text: "Frondo", category: "npc", level: 15, sex: "male", race: "Halfling", inventory: ["Dagger"] },
       { x: 955, y: 543, text: "Jyheirad", category: "npc", level: 30, sex: "male", race: "Human", inventory: ["Basic Platemail", "Broadsword"] },
@@ -2266,8 +2369,14 @@ const ArcanumCitiesMapData = [
     displayName: "The Women’s Camp",
     modGroup: "Quest locations",
     // music: no music here
-    // defaultView: { x: 1306, y: 323 },
-    labels: [],
+    defaultView: { x: 713, y: 963 }, // Good
+    labels: [
+      { x: 1076, y: 893, text: "Lorria", category: ["quest", "npc"], level: 25, sex: "female", race: "Half-Orc", inventory: ["Old Revolver", "Broadsword", "Dread Armour"],
+        linkedLabels: [
+          { questName: "Help Cynthia Boggs Escape the Isle of Despair", questDescription: "The women's tribe doesn't want to help Cynthia to escape. They give you an old revolver for her.", target: "Cynthia Boggs", part: 2 }
+        ]
+      },
+    ],
   },
   {
     filename: "ArcanumBase/ThievesCaveOutside.png",
@@ -2316,7 +2425,7 @@ const ArcanumCitiesMapData = [
     music: "", // CONFIRMED - No music.
     defaultView: { x: 999, y: 487 }, // Good
     labels: [
-      { x: 1187, y: 297, text: "Uncharted Cave - Inside", description: "", category: "waypoint", targetMapFilename: "Uncharted Cave - Inside" },
+      { x: 1187, y: 297, text: "Uncharted Cave - Inside", category: "waypoint", targetMapFilename: "Uncharted Cave - Inside" },
     ]
   },
   {
@@ -2325,8 +2434,8 @@ const ArcanumCitiesMapData = [
     modGroup: "Other locations",
     defaultView: { x: 868, y: 598 },
     labels: [
-      { x: 1232, y: 225, text: "Arcane Chest", description: "", category: "chest" },
-      { x: 751, y: 480, text: "Arcane Chest", description: "", category: "chest" },
+      { x: 1232, y: 225, text: "Arcane Chest", category: "chest" },
+      { x: 751, y: 480, text: "Arcane Chest", category: "chest" },
     ]
   }, 
   {
@@ -2379,13 +2488,9 @@ const ArcanumCitiesMapData = [
     background: "#000000",
     labels: [
       { x: 1798, y: 223, text: "Ancient Temple", category: "waypoint", targetMapFilename: "Ancient Temple", targetX: 1107, targetY: 315 },
-      { x: 218, y: 810, text: "Arcane Chest", description: "Temple of the Derian-Ka, Torian Kel Key", category: ["key", "chest"] },
-      { x: 1679, y: 880, text: "Magick Chest", description: "Temple of the Derian-Ka, Library Key", category: ["key", "chest"] },
+      { x: 218, y: 810, text: "Arcane Chest", inventory: ["Temple of the Derian-Ka, Torian Kel Key"], category: ["key", "chest"] },
+      { x: 1679, y: 880, text: "Magick Chest", inventory: ["Temple of the Derian-Ka, Library Key"], category: ["key", "chest"] },
       { x: 2403, y: 550, text: "Torian Kel", category: ["quest", "followers"], portrait: "Textures/toriankel.gif", level: 20, sex: "Male", race: "Human", linkedLabels: ["Dragon Pool"] },
-      { x: 939, y: 1249, text: "Arcane Chest", category: "chest" },
-
-      { x: 218, y: 810, text: "Arcane Chest", description: "Temple of the Derian-Ka, Torian Kel Key", category: ["key", "chest"] },
-      { x: 1679, y: 880, text: "Magick Chest", description: "Temple of the Derian-Ka, Library Key", category: ["key", "chest"] },
       { x: 1304, y: 991, text: "Fancy Chest", category: "chest" },
       { x: 940, y: 1252, text: "Arcane Chest", category: "chest", inventory: ["Chill Shield"] },
       { x: 824, y: 1220, text: "Scroll of Create Undead", category: "information" },
@@ -2421,8 +2526,8 @@ const ArcanumCitiesMapData = [
     defaultView: { x: 1345, y: 1230 }, // Good
     background: "#000000",
     labels: [
-      { x: 1345, y: 1230, text: "Ashbury Crematorium - Level 1", description: "", category: "waypoint", targetMapFilename: "Ashbury Crematorium - Level 1", targetX: 823, targetY: 513 },
-      { x: 1506, y: 192, text: "Ashbury Crematorium - Level 3", description: "", category: "waypoint", targetMapFilename: "Ashbury Crematorium - Level 3", targetX: 338, targetY: 617 },
+      { x: 1345, y: 1230, text: "Ashbury Crematorium - Level 1", category: "waypoint", targetMapFilename: "Ashbury Crematorium - Level 1", targetX: 823, targetY: 513 },
+      { x: 1506, y: 192, text: "Ashbury Crematorium - Level 3", category: "waypoint", targetMapFilename: "Ashbury Crematorium - Level 3", targetX: 338, targetY: 617 },
     ]
   },
   {
@@ -2432,7 +2537,7 @@ const ArcanumCitiesMapData = [
     defaultView: { x: 338, y: 617 }, // Good
     background: "#000000",
     labels: [
-      { x: 338, y: 617, text: "Ashbury Crematorium - Level 2", description: "", category: "waypoint", targetMapFilename: "Ashbury Crematorium - Level 2", targetX: 1506, targetY: 192 },
+      { x: 338, y: 617, text: "Ashbury Crematorium - Level 2", category: "waypoint", targetMapFilename: "Ashbury Crematorium - Level 2", targetX: 1506, targetY: 192 },
       { x: 1339, y: 308, text: "Gem of Malachi Rench", inventory: ["Gem of Malachi Rench"], category: "quest", 
         linkedLabels: [
           { questName: "The Ashbury Cemetary", questDescription: "Return the gem to Geoffrey Tarellond-Ashe for a reward.", target: "Geoffrey Tarellond-Ashe", part: "reward" }
@@ -2494,8 +2599,8 @@ const ArcanumCitiesMapData = [
     background: "#000000",
     labels: [
       { x: 723, y: 405, text: "Ashbury", category: "waypoint", targetMapFilename: "Ashbury", targetX: 6109, targetY: 1862 },
-      { x: 376, y: 261, text: "Automaton", description: "", category: "information" },
-      { x: 481, y: 218, text: "Wood Chest (Plate)", inventory:["Basic Machined Plate", "Schematic: Automaton"], category: ["quest", "chest"],
+      { x: 376, y: 261, text: "Automaton", category: "information" },
+      { x: 481, y: 218, text: "Wood Chest (Plate)", inventory: ["Basic Machined Plate", "Schematic: Automaton"], category: ["quest", "chest"],
         linkedLabels: [
           { questName: "Retrieve Theodore's Platemail", questDescription: "Return the platemail to Theodore for a reward.", target: "Theodore", part: "reward" }
         ]
@@ -2581,7 +2686,7 @@ const ArcanumCitiesMapData = [
     // defaultView: {},
     parentFilename: "ArcanumBase/Caladon",
     labels: [
-      { x: 627, y: 479, text: "Caladon Panarii Temple - Level 2", description: "", category: "waypoint", targetMapFilename: "Caladon Panarii Temple - Level 2", targetX: 1188, targetY: 227 },
+      { x: 627, y: 479, text: "Caladon Panarii Temple - Level 2", category: "waypoint", targetMapFilename: "Caladon Panarii Temple - Level 2", targetX: 1188, targetY: 227 },
     ]
   },
   {
@@ -2603,15 +2708,15 @@ const ArcanumCitiesMapData = [
           { questName: "Find Nasrudin", questDescription: "Hardian is confused: the supposed skull of Nasrudin belongs to a human, not an elf. A finger is also missing - is that the body of Mannox? He tells you to go ask Gunther for a translation of the writings.", target: "Gunther Willhelm", part: 6 }
         ]
       },
-      { x: 1067, y: 626, text: "Gunther Willhelm", sex: "male", race: "Human", level: 30, inventory:["Note discrepensy archaeon"], category: ["quest", "npc"],
+      { x: 1067, y: 626, text: "Gunther Willhelm", sex: "male", race: "Human", level: 30, inventory: ["Note discrepensy archaeon"], category: ["quest", "npc"],
         linkedLabels: [
           { questName: "Find Nasrudin", questDescription: "Gunther considers that the Archeon translation is wrong. For him, Nasrudin would be at the southern point of Arcanum, meaning: Thanatos. He also translates the blood writing as ''Mirror'' or ''Truth''.", target: "", part: 7 }
         ]
       },
-      { x: 1795, y: 124, text: "Caladon Panarii Temple - Level 2", description: "", category: "waypoint", targetMapFilename: "Caladon Panarii Temple - Level 2" },
-      { x: 1148, y: 112, text: "Caladon Panarii Temple - Level 3", description: "", category: "waypoint", targetMapFilename: "Caladon Panarii Temple - Level 3" },
+      { x: 1795, y: 124, text: "Caladon Panarii Temple - Level 2", category: "waypoint", targetMapFilename: "Caladon Panarii Temple - Level 2" },
+      { x: 1148, y: 112, text: "Caladon Panarii Temple - Level 3", category: "waypoint", targetMapFilename: "Caladon Panarii Temple - Level 3" },
       { x: 206, y: 964, text: "Caladon", category: "waypoint", targetMapFilename: "Caladon", targetX: 4690, targetY: 1554 },
-      { x: 443, y: 924, text: "Archeon", description: "", category: "information" },
+      { x: 443, y: 924, text: "Archeon", category: "information" },
       { x: 748, y: 486, text: "Glass Case", category: "chest", chestState: "locked", inventory: ["Glass Key"] },
       { x: 810, y: 450, text: "Glass Case", category: "chest", chestState: "locked", inventory: ["Eye of Kraka-tur"] },
       { x: 873, y: 417, text: "Glass Case", category: "chest", chestState: "locked", inventory: ["The Finger of Mannox"] },
@@ -2650,7 +2755,7 @@ const ArcanumCitiesMapData = [
     defaultView: { x: 174, y: 362 }, // Good
     parentFilename: "ArcanumBase/Caladon",
     labels: [
-      { x: 174, y: 362, text: "Caladon Panarii Temple - Level 1", description: "", category: "waypoint", targetMapFilename: "Caladon Panarii Temple - Level 1", targetX: 1148, targetY: 112 },
+      { x: 174, y: 362, text: "Caladon Panarii Temple - Level 1", category: "waypoint", targetMapFilename: "Caladon Panarii Temple - Level 1", targetX: 1148, targetY: 112 },
       { x: 483, y: 191, text: "K'an Hua", sex: "male", race: "Dark Elf", level: 50, category: ["quest", "npc"],
         linkedLabels: [
           { questName: "Rescue Tollo Underhill", questDescription: "Rescue Tollo Underhill, the thief, from the pits beneath Praetor's castle.", target: "", part: 1 },
@@ -2685,8 +2790,8 @@ const ArcanumCitiesMapData = [
       },
 
       // Chests
-      { x: 2569, y: 886, text: "Arcane Chest", description: "", category: "chest" },
-      { x: 2789, y: 874, text: "Arcane Chest", description: "", category: "chest" },
+      { x: 2569, y: 886, text: "Arcane Chest", category: "chest" },
+      { x: 2789, y: 874, text: "Arcane Chest", category: "chest" },
       { x: 1399, y: 989, text: "Half Ogre Bandit", sex: "male", race: "Half-Ogre", level: 1, inventory: ["Boots of the Dark Toll"], category: ["npc"] },
     ]
   },
@@ -2789,7 +2894,7 @@ const ArcanumCitiesMapData = [
     parentFilename: "ArcanumBase/Dernholm",
     labels: [
       // Waypoints
-      { x: 702, y: 956, text: "Dernholm", description: "", category: "waypoint", targetMapFilename: "Dernholm", targetX: 5465, targetY: 1782 },
+      { x: 702, y: 956, text: "Dernholm", category: "waypoint", targetMapFilename: "Dernholm", targetX: 5465, targetY: 1782 },
 
       // Quests
       { x: 1683, y: 450, text: "King Praetor", sex: "male", race: "Human", level: 37, category: ["quest", "npc"], 
@@ -2839,7 +2944,7 @@ const ArcanumCitiesMapData = [
       // Chest
       { x: 1980, y: 835, text: "Arcane Chest", category: "chest" },
       { x: 1543, y: 392, text: "Magick Chest", category: "chest" },
-      { x: 1331, y: 769, text: "Junk Pile", inventory: ["Dragon Pool Key 1","150 gold","2 heal lesser wounds","2 healing salve"], category: ["key", "chest"] },
+      { x: 1331, y: 769, text: "Junk Pile", inventory: ["Dragon Pool Key 1", { name: "coins", count: 150 }, { name: "Heal Lesser Wounds", count: 2 }, { name: "Healing Salve", count: 2}], category: ["key", "chest"] },
       { x: 1027, y: 445, text: "Mystic Chest", category: ["key", "chest"], inventory: ["Dragon Pool Key 2"] },
 
     ],
@@ -2851,7 +2956,7 @@ const ArcanumCitiesMapData = [
     background: "#000000", // Good
     parentFilename: "ArcanumBase/DungeonOfTheDragonPool.jpg",
     labels: [
-      { x: 807, y: 279, text: "Dungeon of the Dragon Pool - Level 1", description: "", category: "waypoint", targetMapFilename: "Dungeon of the Dragon Pool - Level 1", targetX: 2234, targetY: 218 },
+      { x: 807, y: 279, text: "Dungeon of the Dragon Pool - Level 1", category: "waypoint", targetMapFilename: "Dungeon of the Dragon Pool - Level 1", targetX: 2234, targetY: 218 },
       { x: 1483, y: 627, text: "Blood", description: "Interacting with the dragon's pool will give you the vial.", inventory: ["Vial of Dragon's Blood"], category: "quest", linkedLabels: ["Torian Kel"] },
     ],
   },
@@ -2863,7 +2968,7 @@ const ArcanumCitiesMapData = [
     parentFilename: "ArcanumBase/ElvenRuins.png",
     background: "#000000",
     labels: [
-      { x: 1904, y: 342, text: "Elven Ruins", description: "", category: "waypoint", targetMapFilename: "Elven Ruins", targetX: 812, targetY: 471 },
+      { x: 1904, y: 342, text: "Elven Ruins", category: "waypoint", targetMapFilename: "Elven Ruins", targetX: 812, targetY: 471 },
       { x: 629, y: 180, text: "Funeral Stone", inventory: ["Funeral Stone"], category: "quest", 
         linkedLabels: [
           { questName: "Steal the Elven Funerary Stone", questDescription: "Bring back the Funeral Stone to Cassandra.", target: "Cassandra Pettibone", part: 2 }
@@ -2886,7 +2991,7 @@ const ArcanumCitiesMapData = [
     parentFilename: "ArcanumBase/KnaThaEntrance.png",
     //background: "#000000",
     labels: [
-      { x: 3763, y: 2373, text: "K’na Tha - Entrance", description: "", category: "waypoint", targetMapFilename: "K’na Tha", targetX: 848, targetY: 552 },
+      { x: 3763, y: 2373, text: "K’na Tha - Entrance", category: "waypoint", targetMapFilename: "K’na Tha", targetX: 848, targetY: 552 },
     ],
   },
   {
@@ -2974,7 +3079,7 @@ const ArcanumCitiesMapData = [
     parentFilename: "ArcanumBase/Roseborough",
     labels: [
       // Waypoints
-      { x: 554, y: 874, text: "Roseborough", description: "", category: "waypoint", targetMapFilename: "Roseborough", targetX: 6354, targetY: 3069 },
+      { x: 554, y: 874, text: "Roseborough", category: "waypoint", targetMapFilename: "Roseborough", targetX: 6354, targetY: 3069 },
       
       // Quests
       { x: 913, y: 774, text: "Trevor Lynwood", sex: "male", race: "Half-Elf", level: 25, inventory: ["Trevor Lynwood's Camera", "Elven Boots", "Roseborough Inn Room Key"], category: ["quest", "npc", "key"],
@@ -2996,8 +3101,8 @@ const ArcanumCitiesMapData = [
       },
 
       // NPCs
-      { x: 854, y: 705, text: "Innkeeper", sex: "female", race: "Human", level: 24, inventory:["Roseborough Inn Key", "Scroll of Major Healing", "Arcane Ring", "Staff of Healing"], category: "npc" },
-      { x: 317, y: 505, text: "Elf Villager", sex: "male", race: "Elf", level: 26, inventory:["Elven Hunter Bow", "Elven Boots"], category: "npc" },
+      { x: 854, y: 705, text: "Innkeeper", sex: "female", race: "Human", level: 24, inventory: ["Roseborough Inn Key", "Scroll of Major Healing", "Arcane Ring", "Staff of Healing"], category: "npc" },
+      { x: 317, y: 505, text: "Elf Villager", sex: "male", race: "Elf", level: 26, inventory: ["Elven Hunter Bow", "Elven Boots"], category: "npc" },
       { x: 252, y: 477, text: "Bartender", sex: "male", race: "Human", level: 28, inventory: ["Magick Ring", "Mage's Staff"], category: "npc" },
       { x: 273, y: 585, text: "Human Villager", sex: "female", race: "Human", level: 17, inventory: ["Medallion of Beauty"], category: "npc" },
       { x: 1439, y: 264, text: "Innkeeper", sex: "male", race: "Half-Elf", level: 29, inventory: ["Ring of Protection", "Mage's Staff"], category: "npc" },
@@ -3005,7 +3110,7 @@ const ArcanumCitiesMapData = [
       // Chests
       { x: 1417, y: 305, text: "Chest", inventory: ["Medallion of Beauty"], category: "chest" },
       { x: 1662, y: 689, text: "Bookstand", inventory: ["Creature Compendium by Sir Maxwell III"], category: "chest" },
-      { x: 1428, y: 782, text: "Wood Chest", description: "Magick Robes", category: "chest" },
+      { x: 1428, y: 782, text: "Wood Chest", inventory: ["Magick Robes"], category: "chest" },
     ]
   },
   {
@@ -3068,12 +3173,14 @@ const ArcanumCitiesMapData = [
     parentFilename: "ArcanumBase/ShroudedHills",
     labels: [
       { x: 545, y: 599, text: "Shrouded Hills", category: "waypoint", targetMapFilename: "Shrouded Hills", targetX: 8430, targetY: 2265 },
-      { x: 1085, y: 279, text: "Control Box", category: "quest",
+      { x: 1085, y: 279, text: "Control Box", portrait: "Textures/Portraits/Object.png", category: "quest",
         linkedLabels: [
           { questName: "Destroy the Town's Steam Engine", questDescription: "Return to Jongle Dunne for a reward", target: "Jongle Dunne", part: "reward"}
         ]
       },
       { x: 1104, y: 315, text: "Hervor", sex: "male", race: "Dwarf", level: 5, description: "Herver will rat you out if you destroy the steam machine but leave him alive.", category: "npc" },
+      { x: 758, y: 341, text: "Wood Chest", category: "chest", inventory: ["Pilgrim's Robes"] },
+      { x: 646, y: 351, text: "Wood Chest", category: "chest", inventory: [{ name: "Ammonia", count: 2 }, { name: "Magnesium", count: 2 }, { name: "Tobacco Leaves", count: 3 }] },
     ]
   },
   {
@@ -3111,8 +3218,8 @@ const ArcanumCitiesMapData = [
     parentFilename: "ArcanumBase/Stillwater",
     defaultView: { x: 432, y: 719 }, // Good
     labels: [
-      { x: 432, y: 719, text: "Stillwater", description: "", category: "waypoint", targetMapFilename: "Stillwater", targetX: 4211, targetY: 1759, targetZoom: 1.0},
-      { x: 1264, y: 483, text: "Bunny", description: "", category: "quest", 
+      { x: 432, y: 719, text: "Stillwater", category: "waypoint", targetMapFilename: "Stillwater", targetX: 4211, targetY: 1759, targetZoom: 1.0},
+      { x: 1264, y: 483, text: "Bunny", category: "quest", 
         linkedLabels: [
           { questName: "The Stillwater Giant", questDescription: "", target: "", part: 3 }
         ]
@@ -3127,7 +3234,7 @@ const ArcanumCitiesMapData = [
     defaultView: { x: 841, y: 739 }, // Good
     labels: [
       // Waypoints
-      { x: 841, y: 739, text: "Stillwater", description: "", category: "waypoint", targetMapFilename: "Stillwater", targetX: 1681, targetY: 633 },
+      { x: 841, y: 739, text: "Stillwater", category: "waypoint", targetMapFilename: "Stillwater", targetX: 1681, targetY: 633 },
 
       // Quests
       { x: 394, y: 202, text: "Cyrus", sex: "male", race: "Gnome", level: 1, category: ["quest", "npc"],
@@ -3145,8 +3252,8 @@ const ArcanumCitiesMapData = [
     defaultView: { x : 2592, y: 1503 }, // Good
     background: "#000000",
     labels: [
-      { x: 2592, y: 1503, text: "Stonecutter Clan - Entrance", description: "", category: "waypoint", targetMapFilename: "Stonecutter Clan", targetX: 990, targetY: 620 },
-      { x: 2519, y: 264, text: "Stonecutter Clan - Level 2", description: "", category: "waypoint", targetMapFilename: "Stonecutter Clan - Level 2", targetX: 328, targetY: 262 },
+      { x: 2592, y: 1503, text: "Stonecutter Clan - Entrance", category: "waypoint", targetMapFilename: "Stonecutter Clan", targetX: 990, targetY: 620 },
+      { x: 2519, y: 264, text: "Stonecutter Clan - Level 2", category: "waypoint", targetMapFilename: "Stonecutter Clan - Level 2", targetX: 328, targetY: 262 },
     
       { x: 1037, y: 270, text: "Erland Iron Heart", sex: "male", race: "Dwarf", level: 25, inventory: ["Erland's key, Stonecutter Clan"], category: ["quest", "key", "npc"], linkedLabels: [{ questName: "Thrayne Wants His Brother to Return Home", part: 2 }] },
       { x: 1717, y: 889, text: "Barrel", category: "chest", inventory: ["Mithril Ore"] },
@@ -3159,7 +3266,7 @@ const ArcanumCitiesMapData = [
     defaultView: { x : 328, y: 262 }, // Good
     background: "#000000",
     labels: [
-      { x: 328, y: 262, text: "Stonecutter Clan - Level 1", description: "", category: "waypoint", targetMapFilename: "Stonecutter Clan - Level 1", targetX: 2519, targetY: 264 },
+      { x: 328, y: 262, text: "Stonecutter Clan - Level 1", category: "waypoint", targetMapFilename: "Stonecutter Clan - Level 1", targetX: 2519, targetY: 264 },
       { x: 362, y: 353, text: "Table", inventory: ["Schematics: Necromizer", "Kerghan's Journal", "Medallion of Dark Magicks", "Ring of Dark Magicks"], category: "chest" },
     ]
   },
@@ -3174,8 +3281,8 @@ const ArcanumCitiesMapData = [
     background: "#000000",
     defaultView: { x: 251, y: 937 }, // Good
     labels: [
-      { x: 251, y: 937, text: "Tarant", description: "", category: "waypoint", targetMapFilename: "Tarant" },
-      { x: 3702, y: 145, text: "Bates Mansion - Level 1", description: "", category: "waypoint", targetMapFilename: "Bates Mansion Level 1" },
+      { x: 251, y: 937, text: "Tarant", category: "waypoint", targetMapFilename: "Tarant" },
+      { x: 3702, y: 145, text: "Bates Mansion - Level 1", category: "waypoint", targetMapFilename: "Bates Mansion Level 1" },
     ]
   },
   {
@@ -3220,13 +3327,16 @@ const ArcanumCitiesMapData = [
     parentFilename: "ArcanumBase/Tarant",
     background: "#000000",
     labels: [
-      { x: 841, y: 297, text: "Tarant", category: "waypoint", targetMapFilename: "Tarant" },
+      { x: 841, y: 297, text: "Tarant", category: "waypoint", targetMapFilename: "Tarant", targetX: 12703, targetY: 3707 },
       { x: 467, y: 287, text: "Clerk", sex: "female", race: "Human", level: 14, category: ["quest", "npc"],
         linkedLabels: [
           { questName: "", questDescription: "Obtain a copy of ''Horror Among the Dark Elves'' by Renford A. Terwilliger.", target: "Librarian" },
           { questName: "The Garringsburg Heist", questDescription: "The clerk informs you that Rorry Limes owns a warehouse property on 57 Mulligan Bone Alley.", target: "Wood Chest (Kerghan and Persephone)", part: 3 }
         ]
       },
+      { x: 665, y: 186, text: "Wood Chest", category: "chest", chestState: "locked", inventory: ["Renford A. Terwilliger Found"] },
+      { x: 1000, y: 394, text: "Safe", category: "chest", chestState: "locked", inventory: [{ name: "Coins", count: 178 }] },
+      { x: 1020, y: 432, text: "Barrel", category: "chest", chestState: "locked", inventory: [{ name: "Coins", count: 210 }] },
     ]
   },
   {
@@ -3236,10 +3346,10 @@ const ArcanumCitiesMapData = [
     parentFilename: "ArcanumBase/Tarant",
     background: "#000000",
     labels: [
-      { x: 80, y: 419, text: "Tarant", description: "", category: "waypoint" },
-      { x: 906, y: 664, text: "Tarant", description: "", category: "waypoint" },
-      { x: 925, y: 553, text: "Tarant", description: "", category: "waypoint" },
-      { x: 1115, y: 91, text: "Tarant", description: "", category: "waypoint" },
+      { x: 80, y: 419, text: "Tarant", category: "waypoint" },
+      { x: 906, y: 664, text: "Tarant", category: "waypoint" },
+      { x: 925, y: 553, text: "Tarant", category: "waypoint" },
+      { x: 1115, y: 91, text: "Tarant", category: "waypoint" },
 
       // Quests
       { x: 337, y: 663, text: "Fancy Ring (Quest)", inventory: ["Fancy Ring (Quest)"], category: "quest", 
@@ -3360,15 +3470,15 @@ const ArcanumCitiesMapData = [
       { x: 1258, y: 539, text: "Dwarven Chest", category: "chest" },
       { x: 1341, y: 295, text: "Dwarven Chest", category: "chest" },
       { x: 1539, y: 136, text: "Dwarven Chest", category: "chest" },
-      { x: 1445, y: 301, text: "Barrel", inventory: ["Schematic: Pyrotechnic Bow", "Rough-Cut Ruby", "121 gold"], category: "chest" },
+      { x: 1445, y: 301, text: "Barrel", inventory: ["Schematic: Pyrotechnic Bow", "Rough-Cut Ruby", {name: "Coins", count: 121}], category: "chest" },
       { x: 1415, y: 321, text: "Barrel", inventory: ["Eye Gear", "Lantern", "Crushing Hammer"], category: "chest" },
       { x: 1390, y: 339, text: "Barrel", inventory: ["Rough-Cut Emerald"], category: "chest", inventory: ["Machined Gauntlets"] },
       { x: 1115, y: 413, text: "Dwarven Chest", category: "chest" },
       { x: 877, y: 491, text: "Dwarven Chest", category: "chest" },
-      { x: 1139, y: 348, text: "Gnome Wizard", description: "Molochian amulet; small guard leather; Note of GL BMC; Scroll of Sense Invisible/Scroll of Exiting", category: "npc", level: 1, sex: "male", race: "Gnome" },
-      { x: 989, y: 193, text: "Half Orc Thief", description: "Molochian Amulet / Guard Leather / GL BMC note / Scroll of Sense Invisible", category: "npc", level: 1, sex: "female", race: "Half-Orc" }, 
-      { x: 993, y: 160, text: "Elf Thief", description: "GL BMC note / Guard LEather / Molochian amulet", category: "npc", level: 1, sex: "male", race: "Elf" },
-      { x: 902, y: 163, text: "Half Ogre Thief", description: "Large Guard Leather / GL BMC Note / Dagger / Molochian Amulet", category: "npc", level: 1, sex: "male", race: "Half-Ogre" },
+      { x: 1139, y: 348, text: "Gnome Wizard", inventory: ["Molochean Hand Amulet", "Small Guard Leather", "Black Mountain Mines note of G.L.", "Scroll of Sense Invisible", "Scroll of Exiting"], category: "npc", level: 1, sex: "male", race: "Gnome" },
+      { x: 989, y: 193, text: "Half Orc Thief", inventory: ["Molochean Hand Amulet", "Guard Leather", "Black Mountain Mines note of G.L.", "Scroll of Sense Invisible" ], category: "npc", level: 1, sex: "female", race: "Half-Orc" }, 
+      { x: 993, y: 160, text: "Elf Thief", inventory:  ["Molochean Hand Amulet", "Guard Leather", "Black Mountain Mines note of G.L."], category: "npc", level: 1, sex: "male", race: "Elf" },
+      { x: 902, y: 163, text: "Half Ogre Thief", inventory:  ["Molochean Hand Amulet", "Large Guard Leather", "Black Mountain Mines note of G.L.", "Dagger"], category: "npc", level: 1, sex: "male", race: "Half-Ogre" },
       { x: 939, y: 129, text: "Dwarven Chest", category: "chest" },
     ],
   },
@@ -3397,7 +3507,7 @@ const ArcanumCitiesMapData = [
           { questName: "Investigate the Isle of Despair", questDescription: "Look for the Black Mountain Clan on the Isle of Despair.", target: "Gilbert Bates", questType: "main", part: 1 }
         ]
       },
-      { x: 1908, y: 544, text: "Pillar of Truth", description: "", category: ["quest"] },
+      { x: 1908, y: 544, text: "Pillar of Truth", category: ["quest"] },
     ]
   },
   {
@@ -3408,7 +3518,7 @@ const ArcanumCitiesMapData = [
     parentFilename: "ArcanumBase/TheCastleOfSnelNfa.png",
     labels: [
       { x: 693, y: 1020, text: "The Castle S’nel N’fa", category: "waypoint", targetMapFilename: "The Castle S’nel N’fa", targetX: 1182, targetY: 1246 },
-      { x: 1833, y: 407, text: "Chest (Staff of K'an T'au)", inventory: "Staff of K’an T’au", category: ["quest", "chest"],
+      { x: 1833, y: 407, text: "Chest (Staff of K'an T'au)", inventory: ["Staff of K’an T’au"], category: ["quest", "chest"],
         linkedLabels: [
           { questName: "Get the staff of K’an T’au", questDescription: "Return the Staff to Frederick to receive your training.", target: "Frederick T. Fitzgerald", questType: "master", part: 2 }
         ]
@@ -3501,7 +3611,7 @@ const ArcanumCitiesMapData = [
     parentFilename: "ArcanumBase/TsenAng.png",
     labels: [
       // Waypoints
-      { x: 1072, y: 511, text: "T’sen Ang", description: "", category: "waypoint", targetMapFilename: "T’sen-Ang", targetX: 2347, targetY: 1314 },
+      { x: 1072, y: 511, text: "T’sen Ang", category: "waypoint", targetMapFilename: "T’sen-Ang", targetX: 2347, targetY: 1314 },
 
       // NPCs
       { x: 1083, y: 561, text: "Dark Elf Guard", sex: "male", race: "Dark Elf", level: 35, description: "The two guards next to the staircase there won't let you go up unless you have a Molochean Hand amulet. If you don't have one, the easiest place to find one is on Bingham Schulefest at the Caladon cemetery. You can also just wander around the world map until assassins attack you, and then pick up an amulet from them. Finally, if you're a good-aligned character, you can simply attack the guards to go up (you'll probably end up fighting everybody at T'sen-Ang anyway), but be aware that there are about a half dozen guards in the area. Most are hidden behind trees and are difficult to spot.", category: ["npc", "information"],
@@ -3518,7 +3628,7 @@ const ArcanumCitiesMapData = [
     parentFilename: "ArcanumBase/TsenAng.png",
     labels: [
       // Waypoints
-      { x: 137, y: 316, text: "T’sen-Ang", description: "", category: "waypoint", targetMapFilename: "T’sen-Ang", targetX: 2360, targetY: 710 },
+      { x: 137, y: 316, text: "T’sen-Ang", category: "waypoint", targetMapFilename: "T’sen-Ang", targetX: 2360, targetY: 710 },
 
       // NPCs
       { x: 280, y: 278, text: "M’in Gorad", sex: "female", race: "Dark Elf", level: 40, inventory: ["Note to M'in Gorad from K'an Hua"], category: ["quest", "npc"],
@@ -3549,12 +3659,12 @@ const ArcanumCitiesMapData = [
           { questName: "Discover what is killing David's rabbits", questDescription: "Buy a Lycanthrope Restorative (or steal it) from S'Btin'ka and return to David Wit.", target: "David Wit", part: 4 } 
         ]
       },
-      { x: 213, y: 626, text: "Ferko Lydell, Nature Master", sex: "male", race: "Halfling", level: 50, description: "Small Arcane Robes / Scroll of Regenerate / Scroll of Succour Beast", category: "npc" },
-      { x: 335, y: 374, text: "D'ary, Necromantic Black Master", sex: "male", race: "Elf", level: 50, description: "Arcane Sword / Arcane Robes / Scroll of Create Undead / Scroll of Quench Life", category: "npc" },
-      { x: 495, y: 162, text: "Bilko Gavin, Necromantic White Master", sex: "male", race: "Halfling", level: 50, description: "Small Arcane Robes / Staff of Healing / Scroll of Sanctuary (x2)", category: "npc" },
-      { x: 1216, y: 164, text: "Daemon Gardi, Phantasm Master", sex: "male", race: "Gnome", level: 50, description: "Arcane Dagger / Small Arcane Robes / Ring of Protection / Mastery Medallion of Phantasm / Scroll of Phantasmal Fiend / Scroll of Invisibility", category: "npc" },
-      { x: 1497, y: 244, text: "Harold Sumner, Summoning Master", sex: "male", race: "Gnome", level: 50, description: "Arcane Dagger / Small Arcane Robes / Mastery Medallion of Summoning / Scroll of Hellgate / Scroll of Familiar", category: "npc" },
-      { x: 1836, y: 360, text: "S'yala, Temporal Master", sex: "female", race: "Elf", level: 50, description: "Arcane staff / Arcane Robes / Scroll of Tempus Fugit / Scroll of Hasten", category: "npc" },
+      { x: 213, y: 626, text: "Ferko Lydell, Nature Master", sex: "male", race: "Halfling", level: 50, inventory: ["Small Arcane Robes", "Scroll of Regenerate", "Scroll of Succour Beast"], category: "npc" },
+      { x: 335, y: 374, text: "D'ary, Necromantic Black Master", sex: "male", race: "Elf", level: 50, inventory: ["Arcane Sword", "Arcane Robes", "Scroll of Create Undead", "Scroll of Quench Life"], category: "npc" },
+      { x: 495, y: 162, text: "Bilko Gavin, Necromantic White Master", sex: "male", race: "Halfling", level: 50, inventory: ["Small Arcane Robes", "Staff of Healing", { name: "Scroll of Sanctuary", count: 2 }], category: "npc" },
+      { x: 1216, y: 164, text: "Daemon Gardi, Phantasm Master", sex: "male", race: "Gnome", level: 50, inventory: ["Arcane Dagger", "Small Arcane Robes", "Ring of Protection", "Mastery Medallion of Phantasm", "Scroll of Phantasmal Fiend", "Scroll of Invisibility"], category: "npc" },
+      { x: 1497, y: 244, text: "Harold Sumner, Summoning Master", sex: "male", race: "Gnome", level: 50, inventory: ["Arcane Dagger", "Small Arcane Robes", "Mastery Medallion of Summoning", "Scroll of Hellgate", "Scroll of Familiar"], category: "npc" },
+      { x: 1836, y: 360, text: "S'yala, Temporal Master", sex: "female", race: "Elf", level: 50, inventory: ["Arcane Staff", "Arcane Robes", "Scroll of Tempus Fugit", "Scroll of Hasten"], category: "npc" },
       { x: 2298, y: 1693, text: "V'ed Eckes, Master of Water Magick", sex: "male", race: "Elf", level: 50, inventory: ["Mastery Medallion of Water", "Robe of Fire Protection", "Arcane Staff", "Arcane Robes", "Scroll of Call Water Elemental", "Scroll of Squall of Ice"], category: ["quest", "npc"],
         linkedLabels: [
           { questName: "The Gem of Water Purification", questDescription: "V'ed Eckes, Master of Water Magick in Tulla, wants you to retrieve the Gem of Water Purification from the acolyte waiting outside the gates of Tulla.", target: "Albert", part: 1 }
@@ -3564,7 +3674,7 @@ const ArcanumCitiesMapData = [
       { x: 1997, y: 1583, text: "Rys'Ard, Force Master", category: "npc", level: 50, sex: "male", race: "Half-Elf", inventory: ["Arcane Robes", "Elven Boots", "Scroll of Teleportation", "Scroll of Disintegrate"] },
       { x: 2958, y: 1655, text: "Naph'Tha, Fire Master", category: "npc", level: 50, sex: "female", race: "Elf", inventory: ["Pyrotechnic Bow", "Arcane Robes", { name: "Arrow", count: 25 }, "Scroll of Fireflash", "Scroll of Body of Fire"] },
       { x: 3455, y: 1365, text: "Addo Terrin, Earth Master", category: "npc", level: 50, sex: "male", race: "Halfling", inventory: ["Arcane Staff", "Small Arcane Robes", "Scroll of Body of Stone", "Scroll of Call Earth Elemental"] },
-      { x: 3217, y: 1249, text: "Wel'Kene, Air Master", category: "npc", inventory: ["Arcane Staff", "Scroll of Body of Air", "Scroll of Poison Vapours", "Shadowing Robes"] },    
+      { x: 3217, y: 1249, text: "Wek' K'ene, Air Master", category: "npc", level: 50, inventory: ["Arcane Staff", "Scroll of Body of Air", "Scroll of Poison Vapours", "Shadowing Robes"] },    
       { x: 3036, y: 999, text: "Cassandra Johanson, Divination Master", category: "npc", level: 50, sex: "female", race: "Human", inventory: ["Arcane Robes", "Arcane Staff", { name: "Heal Lesser Wounds", count: 2 }] },
       { x: 2915, y: 846, text: "Ve'Tura, Conveyance Master", category: "npc", level: 50, sex: "female", race: "Elf", inventory: ["Arcane Robes", "Arcane Staff", "Scroll of Teleportation", "Scroll of Unseen Force"] },
     ]
@@ -3612,7 +3722,7 @@ const ArcanumCitiesMapData = [
     parentFilename: "ArcanumBase/UnchartedCave.png",
     labels: [
       { x: 622, y: 141, text: "Junk Pile", inventory: ["Magick Ring"], category: "chest" },
-      { x: 136, y: 417, text: "Uncharted Cave", description: "", category: "waypoint", targetMapFilename: "Uncharted Cave" },
+      { x: 136, y: 417, text: "Uncharted Cave", category: "waypoint", targetMapFilename: "Uncharted Cave" },
     ]
   },
   {
@@ -3678,10 +3788,10 @@ const ArcanumCitiesMapData = [
 
       { x: 1742, y: 182, text: "Chest", category: "chest", inventory: ["Vendigroth Key 3"] },
       { x: 1747, y: 98, text: "Chest", category: "chest", inventory: [{ name: "Coins", count: 1500 }] },
-      { x: 562, y: 790, text: "Chest", category: "quest", inventory: ["Accelerate Healing", { name: "Bullet", count: 25 }] },
+      { x: 562, y: 790, text: "Chest", category: "chest", inventory: ["Accelerate Healing", { name: "Bullet", count: 25 }] },
       { x: 1386, y: 1086, text: "Chest", category: "chest", inventory: ["Schematic: Droch's Warbringer", { name: "Cure All", count: 2 }] },
       { x: 1303, y: 1124, text: "Chest", category: "chest", inventory: ["Healing Salve"] },
-      { x: 2145, y: 862, text: "Chest", category: "chest", inventory: ["Corrosive Acid", "Large Capacitor", "Witch Bane", "Large Spring", "Tincture of Arnica", "Venom"] },
+      { x: 2145, y: 862, text: "Chest", category: "chest", inventory: ["Corrosive Acid", "Large Capacitor", "Witchbane", "Large Spring", "Tincture of Arnica", "Venom"] },
     ]
   },
   {
@@ -3713,7 +3823,7 @@ const ArcanumCitiesMapData = [
       { x: 238, y: 535, text: "Chest", category: "chest", inventory: ["Schematic: Droch's Warbringer", { name: "Bullet", count: 10 }] },
       { x: 1345, y: 962, text: "Chest", category: "chest", inventory: ["Unknown Chemical Compound"] },
       { x: 1387, y: 986, text: "Chest", category: "chest", inventory: [{ name: "Coins", count: 250 }] },
-      { x: 2055, y: 596, text: "Chest", category: "quest", inventory: ["Schematic: Vivifier", "Scanlan Factory Destroyed", "Vendigroth Key 4"] },
+      { x: 2055, y: 596, text: "Chest", category: "chest", inventory: ["Schematic: Vivifier", "Scanlan Factory Destroyed", "Vendigroth Key 4"] },
     ]
   },
   {
@@ -3920,8 +4030,8 @@ const ArcanumCitiesMapData = [
     parentFilename: "ArcanumBase/VollingersMeetingPlace.png",
     background: "#000000",
     labels: [
-      { x: 506, y: 200, text: "Mystic Chest", description: "", category: "chest" },
-      { x: 117, y: 162, text: "Vollinger’s Meeting Place", description: "", category: "waypoint", targetMapFilename: "Vollinger’s Meeting Place", targetX: 944, targetY: 400 },
+      { x: 506, y: 200, text: "Mystic Chest", category: "chest" },
+      { x: 117, y: 162, text: "Vollinger’s Meeting Place", category: "waypoint", targetMapFilename: "Vollinger’s Meeting Place", targetX: 944, targetY: 400 },
     ],
   },
   {
@@ -3972,9 +4082,9 @@ const ArcanumCitiesMapData = [
       { x: 5852, y: 2397, text: "Castle also but other side", category: "waypoint" },
       { x: 771, y: 3714, text: "Mines (to the east of big spider)", category: "waypoint" },
 
-      // Shops
+      // Shops - SHOPTYPE to verify in game
       { x: 2027, y: 2655, text: "Inventor", sex: "male", race: "Dwarf", level: 32, category: "shop", shopType: "Inventor", shopMarkup: 300 },
-      { x: 1401, y: 2984, text: "Dwarven Smith", sex: "male", race: "Dwarf", level: 30, category: ["quest","shop"], shopType: "Dwarven Smith", shopMarkup: 300,
+      { x: 1401, y: 2984, text: "Dwarven Smith", sex: "male", race: "Dwarf", level: 30, category: ["quest","shop"], shopType: "Smith (Dwarven)", shopMarkup: 300,
         linkedLabels: [
           { questName: "Get Mithril Ore from the Wheel Clan", questDescription: "Return with the Mithril to Ellumyn. She will give you her Bow in exchange.", target: "Ellumyn", part: 2 },
         ]
@@ -4083,7 +4193,7 @@ const ArcanumCitiesMapData = [
     parentFilename: "ArcanumBase/WolfCave.png",
     background: "#000000",
     labels: [
-      { x: 537, y: 661, text: "Wolf Cave - Outside", description: "", category: "waypoint", targetMapFilename: "Wolf Cave", targetX: 796, targetY: 739 },
+      { x: 537, y: 661, text: "Wolf Cave - Outside", category: "waypoint", targetMapFilename: "Wolf Cave", targetX: 796, targetY: 739 },
     ]
   },
 ];

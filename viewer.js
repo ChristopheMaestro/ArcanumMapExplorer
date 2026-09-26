@@ -156,6 +156,12 @@ const toggleDescBtn = document.getElementById('toggle-desc-btn');
 const descriptionField = document.getElementById('description-field');
 const newLabelDesc = document.getElementById('new-label-desc');
 const newLabelMaster = document.getElementById('new-label-master');
+const overrideDefaultPortrait = document.getElementById('override-default-portrait');
+const choosePortraitBtn = document.getElementById('choose-portrait-btn');
+const selectedPortraitPreview = document.getElementById('selected-portrait-preview');
+const portraitPickerOverlay = document.getElementById('portrait-picker-overlay');
+const portraitPickerGrid = document.getElementById('portrait-picker-grid');
+const closePortraitPickerBtn = document.getElementById('close-portrait-picker');
 const newLabelLinks = document.getElementById('new-label-links');
 const genericLinksField = document.getElementById('generic-links-field');
 const questFields = document.getElementById('quest-fields');
@@ -200,6 +206,107 @@ let editingLabelDomEls = [];
 // buildQuestEntriesFromState / startEditingLabel.
 let editingQuestEntries = [];
 
+let currentEditingPortrait = '';
+let availablePortraits = null;
+
+function normalizePortraitManifest(data) {
+    const source = Array.isArray(data) ? data : (data && (data.files || data.portraits || data.items || data.entries));
+    if (!Array.isArray(source)) return [];
+    return source.map(entry => {
+        if (typeof entry === 'string') return entry;
+        if (!entry || typeof entry !== 'object') return '';
+        return entry.path || entry.file || entry.filename || entry.name || entry.src || '';
+    }).filter(Boolean).map(value => String(value).replace(/^\.\//, '').replace(/^Textures\/Portraits\//i, ''));
+}
+
+async function loadPortraitManifest() {
+    if (availablePortraits) return availablePortraits;
+    if (Array.isArray(window.__portraitManifest)) {
+        const portraits = normalizePortraitManifest(window.__portraitManifest);
+        if (portraits.length) {
+            availablePortraits = [...new Set(portraits)].sort((a,b) => a.localeCompare(b));
+            return availablePortraits;
+        }
+    }
+    const candidates = [
+        'Textures/Portraits/portraits_manifest.json',
+        'Textures/Portraits/Portraits_manifest.json',
+        'Textures/Portraits/manifest.json',
+        'Textures/Portraits_manifest.json'
+    ];
+    const errors = [];
+    for (const url of candidates) {
+        try {
+            const response = await fetch(url, { cache: 'no-cache' });
+            if (!response.ok) { errors.push(`${url}: HTTP ${response.status}`); continue; }
+            const raw = await response.text();
+            let portraits = [];
+            try { portraits = normalizePortraitManifest(JSON.parse(raw)); }
+            catch (_) { portraits = raw.split(/\r?\n/).map(line => line.trim()).filter(line => line && !line.startsWith('#')); }
+            if (portraits.length) {
+                availablePortraits = [...new Set(portraits)].sort((a,b) => a.localeCompare(b));
+                return availablePortraits;
+            }
+        } catch (error) { errors.push(`${url}: ${error && error.message ? error.message : 'fetch failed'}`); }
+    }
+    throw new Error('Could not load the portrait manifest. The file:// version uses Textures/Portraits/portraits_manifest.js.' + (errors.length ? ` (${errors.join(' | ')})` : ''));
+}
+
+function updatePortraitOverrideUI() {
+    if (!overrideDefaultPortrait) return;
+    const enabled = overrideDefaultPortrait.checked;
+    if (choosePortraitBtn) choosePortraitBtn.style.display = enabled ? '' : 'none';
+    if (!selectedPortraitPreview) return;
+    if (enabled && currentEditingPortrait) {
+        const safeSrc = String(currentEditingPortrait).replace(/"/g, '&quot;');
+        const filename = String(currentEditingPortrait).split('/').pop();
+        selectedPortraitPreview.style.display = 'inline-flex';
+        selectedPortraitPreview.innerHTML = `<img src="${safeSrc}" alt="" loading="lazy"><span>${filename}</span>`;
+    } else {
+        selectedPortraitPreview.style.display = 'none';
+        selectedPortraitPreview.innerHTML = '';
+    }
+}
+
+function closePortraitPicker() {
+    if (!portraitPickerOverlay) return;
+    portraitPickerOverlay.classList.remove('open');
+    portraitPickerOverlay.setAttribute('aria-hidden', 'true');
+}
+
+async function openPortraitPicker() {
+    if (!overrideDefaultPortrait || !overrideDefaultPortrait.checked || !portraitPickerOverlay || !portraitPickerGrid) return;
+    portraitPickerOverlay.classList.add('open');
+    portraitPickerOverlay.setAttribute('aria-hidden', 'false');
+    portraitPickerGrid.innerHTML = '<div class="search-empty">Loading portraits...</div>';
+    try {
+        const portraits = await loadPortraitManifest();
+        portraitPickerGrid.innerHTML = portraits.map(file => {
+            const src = `Textures/Portraits/${file}`;
+            const safe = String(file).replace(/"/g, '&quot;');
+            return `<button type="button" class="portrait-picker-item" data-portrait="${safe}" title="${safe}"><img src="${src}" alt="" loading="lazy"><span>${file}</span></button>`;
+        }).join('') || '<div class="search-empty">No portraits were listed in the manifest.</div>';
+        portraitPickerGrid.querySelectorAll('.portrait-picker-item').forEach(button => {
+            button.addEventListener('click', () => {
+                currentEditingPortrait = `Textures/Portraits/${button.getAttribute('data-portrait')}`;
+                updatePortraitOverrideUI();
+                closePortraitPicker();
+            });
+        });
+    } catch (error) {
+        portraitPickerGrid.innerHTML = `<div class="search-empty">${error.message}</div>`;
+    }
+}
+
+if (overrideDefaultPortrait) overrideDefaultPortrait.addEventListener('change', () => {
+    if (!overrideDefaultPortrait.checked) currentEditingPortrait = '';
+    updatePortraitOverrideUI();
+});
+if (choosePortraitBtn) choosePortraitBtn.addEventListener('click', openPortraitPicker);
+if (closePortraitPickerBtn) closePortraitPickerBtn.addEventListener('click', closePortraitPicker);
+if (portraitPickerOverlay) portraitPickerOverlay.addEventListener('click', e => { if (e.target === portraitPickerOverlay) closePortraitPicker(); });
+updatePortraitOverrideUI();
+
 // --- Inventory picker (Label Editor "Manage Inventory" button) ---------------------------
 const openInventoryPickerBtn = document.getElementById('open-inventory-picker-btn');
 const inventoryCountBadge = document.getElementById('inventory-count-badge');
@@ -225,8 +332,8 @@ const altViewBtn = document.getElementById('altViewBtn');
 const altViewIcon = document.getElementById('altViewIcon');
 let isShowingAltView = false;
 
-const filterDropdownBtn = document.getElementById('filterDropdownBtn');
-let labelsVisible = true;
+const mapVisibilityButtons = document.querySelectorAll('.map-visibility-btn');
+const labelVisibility = { npc: true, chest: true, information: true, waypoint: true };
 
 const mapCoordinatesHud = document.getElementById('map-coordinates-hud');
 const hudValW = document.getElementById('hud-val-w');
@@ -244,11 +351,29 @@ const questListPanel = document.getElementById('quest-list-panel');
 const questPanelMapName = document.getElementById('quest-panel-mapname');
 const questPanelContent = document.getElementById('quest-panel-content');
 const questPanelClose = document.getElementById('quest-panel-close');
+const labelInventoryPanel = document.getElementById('label-inventory-panel');
+const labelInventoryPanelTitle = document.getElementById('label-inventory-panel-title');
+const labelInventoryPanelOwnGrid = document.getElementById('label-inventory-panel-own');
+const labelInventoryPanelShopSection = document.getElementById('label-inventory-panel-shop-section');
+const labelInventoryPanelShopGrid = document.getElementById('label-inventory-panel-shop-grid');
+const labelInventoryPanelClose = document.getElementById('label-inventory-panel-close');
 const statisticsBtn = document.getElementById('statisticsBtn');
 const statisticsOverlay = document.getElementById('statistics-overlay');
 const statisticsMapName = document.getElementById('statistics-mapname');
 const statisticsContent = document.getElementById('statistics-content');
 const statisticsClose = document.getElementById('statistics-close');
+const searchBtn = document.getElementById('searchBtn');
+const searchOverlay = document.getElementById('search-overlay');
+const searchClose = document.getElementById('search-close');
+const searchItemInput = document.getElementById('search-item-input');
+const searchLocationToggle = document.getElementById('search-location-toggle');
+const searchInventoryCount = document.getElementById('search-inventory-count');
+const searchItemCount = document.getElementById('search-item-count');
+const searchItemGrid = document.getElementById('search-item-grid');
+const searchResultsList = document.getElementById('search-results-list');
+let searchCatalogItems = [];
+let searchSelectedItemName = '';
+let searchEverywhere = true;
 const questsTableOverlay = document.getElementById('quests-table-overlay');
 const questsTableMapName = document.getElementById('quests-table-mapname');
 const questsTableContent = document.getElementById('quests-table-content');
@@ -584,6 +709,180 @@ function getShopMarkupTier(markup) {
     return SHOP_MARKUP_TIERS.find(tier => markup >= tier.min) || null;
 }
 
+// --- Shop Inventory panel (shopinv.js) ---------------------------------------------------
+// shopinv.js defines ArcanumShopInventoryData: a plain object keyed by shopType string (the
+// same value stored on a shop-category label's `shopType` field, and offered by the Label
+// Editor's Shop Type datalist - see populateShopTypeOptions) whose value is an array of
+// items.js item names (or { name, chance, ...overrides } objects, same shape as a label's
+// inventory entries plus an optional `chance` - a 0-100 number giving that item's percent
+// chance of appearing in stock) representing what that type of shop has for sale. This
+// resolves those names against the items.js catalog for their itemimg/icon, sorts the highest
+// chance first (an entry with no `chance` is treated as guaranteed/100 and sorts to the top),
+// and renders them as a tile grid with a color-coded chance badge, reusing the Library grid's
+// click-to-view-art behavior.
+
+// Chance severity tags - checked highest threshold first, same pattern as SHOP_MARKUP_TIERS.
+// Edit freely to adjust the thresholds/wording/colors.
+const SHOP_ITEM_CHANCE_TIERS = [
+    { min: 75, label: 'common', color: '#2ecc71' },
+    { min: 40, label: 'uncommon', color: '#f1c40f' },
+    { min: 15, label: 'rare', color: '#e67e22' },
+    { min: 0, label: 'very rare', color: '#e74c3c' }
+];
+
+function getShopItemChanceTier(chance) {
+    if (typeof chance !== 'number') return null;
+    return SHOP_ITEM_CHANCE_TIERS.find(tier => chance >= tier.min) || SHOP_ITEM_CHANCE_TIERS[SHOP_ITEM_CHANCE_TIERS.length - 1];
+}
+
+// Same tile shape as buildInventoryTileHtml, plus a color-coded "chance" line under the name
+// (omitted entirely for a guaranteed/no-chance-set item, rather than showing "100%").
+function buildShopInventoryTileHtml(name, icon, chance, extraAttrs) {
+    const imgHtml = icon ? `<img src="${icon}" alt="" loading="lazy">` : '';
+    let chanceHtml = '';
+    if (typeof chance === 'number') {
+        const tier = getShopItemChanceTier(chance);
+        chanceHtml = `<div class="shop-inv-tile-chance" style="color:${tier.color};">${chance}%</div>`;
+    }
+    return `<div class="inventory-item-tile library-item-tile"${extraAttrs || ''}>
+        <div class="inventory-item-tile-img">${imgHtml}</div>
+        <div class="inventory-item-tile-name">${name}</div>
+        ${chanceHtml}
+    </div>`;
+}
+
+// targetEl is the grid container to render into - the Label Inventory panel's shop section
+// (see renderLabelInventoryPanelContent), since a label's own Inventory shares the panel now.
+function renderShopInventoryGrid(shopType, targetEl) {
+    const shopCatalog = (typeof ArcanumShopInventoryData !== 'undefined' ? ArcanumShopInventoryData : {});
+    const entries = shopType ? (shopCatalog[shopType] || []) : [];
+
+    if (entries.length === 0) {
+        targetEl.innerHTML = `<div class="inventory-picker-empty-hint">${shopType ? `No items listed for "${shopType}" in shopinv.js` : 'This label has no Shop Type set'}</div>`;
+        return;
+    }
+
+    const resolved = entries.map(entry => {
+        const name = typeof entry === 'string' ? entry : entry.name;
+        const catalogItem = ItemDataByName.get(name) || {};
+        const merged = typeof entry === 'string' ? catalogItem : { ...catalogItem, ...entry };
+        const icon = merged.itemimg ? resolveItemIconPath(merged.itemimg) : (merged.image || '');
+        const chance = typeof merged.chance === 'number' ? merged.chance : null;
+        return { name, icon, chance };
+    });
+
+    // Highest chance first; a guaranteed item (no chance field) sorts as if it were 100%.
+    resolved.sort((a, b) => (b.chance ?? 100) - (a.chance ?? 100));
+
+    targetEl.innerHTML = resolved
+        .map(r => buildShopInventoryTileHtml(r.name, r.icon, r.chance, ` data-item-name="${r.name}"`))
+        .join('');
+}
+
+// --- Label Inventory panel (a label's own Inventory, shop stock included below) -----------
+// Resolves a label's raw `inventory` array (plain item-name strings or { name, tier?, count?,
+// ...overrides } objects, same shape buildItemListHtml expects) against the items.js catalog
+// for icon/class/tier, ready for sorting + tile rendering.
+function resolveLabelInventoryEntries(items) {
+    if (!Array.isArray(items)) return [];
+    return items.map(item => {
+        const itemData = typeof item === 'string' ? { name: item } : item;
+        const catalogItem = ItemDataByName.get(itemData.name) || {};
+        const merged = { ...catalogItem, ...itemData };
+        const icon = merged.itemimg ? resolveItemIconPath(merged.itemimg) : (merged.image || '');
+        return { name: merged.name, icon, tier: merged.tier || 'regular', count: merged.count, class: merged.class };
+    });
+}
+
+// Display order for the Label Inventory panel's own-inventory grid: items that carry an
+// items.js "class" (i.e. equipment) always come before items that don't, and within the
+// equipment group, magick/hexed-tier items come before regular ones. Everything else keeps
+// its original (catalog/inventory-array) order - Array.prototype.sort is stable.
+function compareInventoryPanelEntries(a, b) {
+    const aHasClass = Boolean(a.class && (!Array.isArray(a.class) || a.class.length > 0));
+    const bHasClass = Boolean(b.class && (!Array.isArray(b.class) || b.class.length > 0));
+    if (aHasClass !== bHasClass) return aHasClass ? -1 : 1;
+    const aSpecial = (a.tier === 'magick' || a.tier === 'hexed') ? 0 : 1;
+    const bSpecial = (b.tier === 'magick' || b.tier === 'hexed') ? 0 : 1;
+    return aSpecial - bSpecial;
+}
+
+// Same tile shape as buildShopInventoryTileHtml, but color-codes the name by item tier
+// (see ITEM_TIER_COLORS) instead of showing a chance line, and shows a "×N" count instead
+// (omitted for a plain single item, same threshold as buildItemListHtml's count suffix).
+// These resources represent a quantity in a single inventory slot, so a large count
+// should stay as one tile rather than producing dozens of identical tiles.
+function isSingleTileStackItem(name) {
+    const key = String(name || '').trim().toLowerCase();
+    return /\b(bullets?|arrows?|fuel|batter(?:y|ies)|coins?)\b/.test(key);
+}
+
+function buildLabelInventoryTileHtml(entry, countOverride) {
+    const color = ITEM_TIER_COLORS[entry.tier] || ITEM_TIER_COLORS.regular;
+    const tierClass = entry.tier === 'magick' ? ' magick-inventory-item'
+        : entry.tier === 'hexed' ? ' hexed-inventory-item' : '';
+    const imgHtml = entry.icon ? `<img src="${entry.icon}" alt="" loading="lazy">` : '';
+    const count = typeof countOverride === 'number' ? countOverride : entry.count;
+    const keepCountOnOneTile = isSingleTileStackItem(entry.name) && typeof count === 'number' && count > 1;
+    const countHtml = keepCountOnOneTile
+        ? `<div class="shop-inv-tile-chance" style="color:${color};">&times;${count}</div>`
+        : '';
+    return `<div class="inventory-item-tile library-item-tile${tierClass}" data-item-name="${entry.name}">
+        <div class="inventory-item-tile-img">${imgHtml}</div>
+        <div class="inventory-item-tile-name" style="color:${color};">${entry.name}</div>
+        ${countHtml}
+    </div>`;
+}
+
+function buildLabelInventoryTilesHtml(entry) {
+    const count = (typeof entry.count === 'number' && entry.count > 1) ? Math.floor(entry.count) : 1;
+    if (count <= 1 || isSingleTileStackItem(entry.name)) {
+        return buildLabelInventoryTileHtml(entry);
+    }
+    return Array.from({ length: count }, () => buildLabelInventoryTileHtml(entry, 1)).join('');
+}
+
+// Fills the Label Inventory panel for whichever label opened it: the label's own Inventory
+// always renders in the top grid, and shop-category labels additionally get their shop's
+// stock (from shopinv.js) below a "Shop Inventory" divider (see renderShopInventoryGrid).
+function renderLabelInventoryPanelContent(label) {
+    const entries = resolveLabelInventoryEntries(label.inventory);
+    entries.sort(compareInventoryPanelEntries);
+    labelInventoryPanelOwnGrid.innerHTML = entries.length > 0
+        ? entries.map(buildLabelInventoryTilesHtml).join('')
+        : `<div class="inventory-picker-empty-hint">This label has no Inventory</div>`;
+
+    const cats = Array.isArray(label.category) ? label.category : (label.category ? [label.category] : []);
+    if (cats.includes('shop')) {
+        labelInventoryPanelShopSection.style.display = 'block';
+        renderShopInventoryGrid(label.shopType || '', labelInventoryPanelShopGrid);
+    } else {
+        labelInventoryPanelShopSection.style.display = 'none';
+    }
+}
+
+// Whether a label carries an "inventory section" at all - its own Inventory items, or a
+// shop's stock (shop-category labels always get a stock section, even at an empty/unset
+// shopType - see renderLabelInventoryPanelContent). Clicking such a label opens the Label
+// Inventory panel directly (see renderSingleLabel) instead of the ordinary info popup.
+function labelHasInventorySection(label) {
+    const cats = Array.isArray(label.category) ? label.category : (label.category ? [label.category] : []);
+    return (Array.isArray(label.inventory) && label.inventory.length > 0) || cats.includes('shop');
+}
+
+// Opens the Label Inventory side panel for a given label (clicking a label with an inventory
+// section - see labelHasInventorySection/renderSingleLabel - opens this directly, skipping the
+// ordinary info popup).
+function openLabelInventoryPanel(label) {
+    labelInventoryPanelTitle.textContent = label.text || '';
+    renderLabelInventoryPanelContent(label);
+    labelInventoryPanel.classList.add('open');
+}
+
+function closeLabelInventoryPanel() {
+    labelInventoryPanel.classList.remove('open');
+}
+
 // Sex displays as an emoji only - edit/extend this map for other values you use
 const SEX_EMOJI = {
     male: '♂️',
@@ -653,25 +952,16 @@ function buildLabelFollowerTypeHtml(label) {
     return text ? `<div class="label-follower-type">${text}</div>` : '';
 }
 
-// Item tiers shown by default when a list is collapsible (see buildItemListHtml) - everything
-// else (regular items, and any future tier not listed here) is what gets tucked behind the
-// "[+N]" toggle.
-const ITEM_LIST_DEFAULT_TIERS = new Set(['magick', 'hexed']);
-
-// Shared renderer for inventory-like item lists (inventory / offering / blessing) - each entry is
+// Shared renderer for inventory-like item lists (offering / blessing - a label's own Inventory
+// instead opens the Label Inventory side panel, see openLabelInventoryPanel) - each entry is
 // either a plain string (regular tier, implicit quantity 1, not clickable) or an object like
 // { name, image?, tier?, count? }. fieldName is used to route clicks back to the right array on
 // the label object when opening a clickable item's image. showIcon (optional, default false)
 // additionally renders each item's itemimg (falling back to its image) as a small icon before the
 // name - used for Offering so altar popups show what the item actually looks like, while
-// Inventory/Blessing keep the plain bulleted-text look. A count above 1 (e.g. "100 coins", "2
-// swords") is shown as a "×N" suffix regardless of showIcon.
-// collapsible (optional, default false) - when true and there's more than one non-magick/hexed
-// item, only the magick/hexed items are shown by default; the rest sit behind a "[+N]" toggle
-// (see the click handler on .npc-inventory-toggle) so a label with a huge regular-tier inventory
-// doesn't blow out the popup's height. A single non-magick/hexed item is shown right away rather
-// than hidden behind a toggle for just one item.
-function buildItemListHtml(items, sectionTitle, fieldName, showIcon, collapsible) {
+// Blessing keeps the plain bulleted-text look. A count above 1 (e.g. "100 coins", "2 swords") is
+// shown as a "×N" suffix regardless of showIcon.
+function buildItemListHtml(items, sectionTitle, fieldName, showIcon) {
     if (!Array.isArray(items) || items.length === 0) return '';
 
     const resolvedItems = items.map(item => {
@@ -680,19 +970,12 @@ function buildItemListHtml(items, sectionTitle, fieldName, showIcon, collapsible
         return { ...catalogItem, ...itemData };
     });
 
-    const extraCount = resolvedItems.filter(r => !ITEM_LIST_DEFAULT_TIERS.has(r.tier || 'regular')).length;
-    const collapsed = Boolean(collapsible) && extraCount > 1;
-
     const itemsHtml = resolvedItems.map((resolvedItem, i) => {
         const name = resolvedItem.name;
         const tier = resolvedItem.tier || 'regular';
         const color = ITEM_TIER_COLORS[tier] || ITEM_TIER_COLORS.regular;
         const clickable = Boolean(resolvedItem.image);
-        const isExtra = collapsed && !ITEM_LIST_DEFAULT_TIERS.has(tier);
-        const classes = [];
-        if (clickable) classes.push('inventory-item-clickable');
-        if (isExtra) classes.push('npc-inventory-item-extra');
-        const clsAttr = classes.length > 0 ? ` class="${classes.join(' ')}"` : '';
+        const clsAttr = clickable ? ` class="inventory-item-clickable"` : '';
         const dataAttr = clickable ? ` data-item-field="${fieldName}" data-item-index="${i}"` : '';
         const iconSrc = showIcon ? (resolvedItem.itemimg ? resolveItemIconPath(resolvedItem.itemimg) : (resolvedItem.image || '')) : '';
         const iconHtml = iconSrc ? `<img class="npc-inventory-item-icon" src="${iconSrc}" alt="" loading="lazy" onerror="this.style.display='none'">` : '';
@@ -700,13 +983,9 @@ function buildItemListHtml(items, sectionTitle, fieldName, showIcon, collapsible
         return `<li${clsAttr}${dataAttr} style="color:${color};">${iconHtml}${name}${countHtml}</li>`;
     }).join('');
 
-    const toggleHtml = collapsed
-        ? `<li class="npc-inventory-toggle" data-action="toggle-inventory-extra">[+${extraCount}]</li>`
-        : '';
-
-    return `<div class="npc-inventory-block${collapsed ? ' npc-inventory-collapsed' : ''}">
+    return `<div class="npc-inventory-block">
         <div class="npc-inventory-title">${sectionTitle}</div>
-        <ul class="npc-inventory-list${showIcon ? ' npc-inventory-list-icons' : ''}">${itemsHtml}${toggleHtml}</ul>
+        <ul class="npc-inventory-list${showIcon ? ' npc-inventory-list-icons' : ''}">${itemsHtml}</ul>
     </div>`;
 }
 
@@ -805,6 +1084,305 @@ function populateInventoryPickerFilterOptions() {
     inventoryPickerSizeFilter.innerHTML = ['<option value="">All Sizes</option>']
         .concat(ITEM_SIZE_FILTER_ORDER.map(s => `<option value="${s}">${formatItemClassLabel(s)}</option>`))
         .join('');
+}
+
+
+// --- Item inventory search ----------------------------------------------------------
+// The item catalog comes from items.js. The inventory scan is deliberately restricted to
+// arcanummaps.js, represented in this merged viewer by ArcanumCitiesMapData.
+function getArcanumSearchMaps() {
+    return (typeof ArcanumCitiesMapData !== 'undefined' && Array.isArray(ArcanumCitiesMapData))
+        ? ArcanumCitiesMapData
+        : [];
+}
+
+function getInventoryEntryName(entry) {
+    if (typeof entry === 'string') return entry;
+    return entry && typeof entry === 'object' ? entry.name : '';
+}
+
+function inventoryContainsItem(label, itemName) {
+    if (!label || !Array.isArray(label.inventory) || !itemName) return false;
+    return label.inventory.some(entry => getInventoryEntryName(entry) === itemName);
+}
+
+function getInventoryItemCount(entry) {
+    if (entry && typeof entry === 'object' && typeof entry.count === 'number' && Number.isFinite(entry.count)) {
+        return Math.max(1, Math.floor(entry.count));
+    }
+    return 1;
+}
+
+function getSearchMatchItemData(label, itemName) {
+    if (!label || !Array.isArray(label.inventory)) return null;
+    const entry = label.inventory.find(item => getInventoryEntryName(item) === itemName);
+    if (!entry) return null;
+
+    const rawEntry = typeof entry === 'string' ? { name: entry } : entry;
+    const catalogItem = ItemDataByName.get(itemName) || {};
+    const merged = { ...catalogItem, ...rawEntry };
+    const itemimg = merged.itemimg || '';
+    const icon = itemimg ? resolveItemIconPath(itemimg) : (merged.image || '');
+    return {
+        count: getInventoryItemCount(entry),
+        icon,
+        itemimg
+    };
+}
+
+function isSearchCompactCountItem(itemName) {
+    const normalized = String(itemName || '').trim().toLowerCase();
+    return ['arrow', 'fuel', 'battery', 'coins', 'bullet'].includes(normalized);
+}
+
+function getSearchScopeMaps() {
+    const allMaps = getArcanumSearchMaps();
+    if (searchEverywhere || !currentMapFilename) return allMaps;
+
+    const normalizedCurrent = ArcanumMapData.find(map => map && map.filename === currentMapFilename);
+    const rootFilename = normalizedCurrent ? normalizedCurrent.filename : currentMapFilename;
+    const included = new Set([rootFilename]);
+    let changed = true;
+    while (changed) {
+        changed = false;
+        allMaps.forEach(map => {
+            if (!map || !map.filename || included.has(map.filename)) return;
+            if (map.parentFilename && included.has(map.parentFilename)) {
+                included.add(map.filename);
+                changed = true;
+            }
+        });
+    }
+
+    return allMaps.filter(map => map && included.has(map.filename));
+}
+
+function getSearchLocationLabel() {
+    if (searchEverywhere || currentMapType === 'overworld' || !currentMapFilename) return 'Everywhere';
+    const currentMap = ArcanumMapData.find(map => map && map.filename === currentMapFilename);
+    return currentMap ? (currentMap.name || currentMap.displayName || currentMap.filename) : 'Current map';
+}
+
+function getSearchInventoryCount() {
+    let count = 0;
+    getSearchScopeMaps().forEach(rawMap => {
+        if (!rawMap || !Array.isArray(rawMap.labels)) return;
+        rawMap.labels.forEach(label => {
+            // Count every label that actually has an inventory field, including empty inventories.
+            if (label && Array.isArray(label.inventory)) count++;
+        });
+    });
+    return count;
+}
+
+function getSearchAvailableItemNames() {
+    const names = new Set();
+    getSearchScopeMaps().forEach(rawMap => {
+        if (!rawMap || !Array.isArray(rawMap.labels)) return;
+        rawMap.labels.forEach(label => {
+            if (!label || !Array.isArray(label.inventory)) return;
+            label.inventory.forEach(entry => {
+                const name = getInventoryEntryName(entry);
+                if (name) names.add(name);
+            });
+        });
+    });
+    return names;
+}
+
+function buildItemSearchMatches(itemName) {
+    const matches = [];
+    getSearchScopeMaps().forEach(rawMap => {
+        if (!rawMap || !Array.isArray(rawMap.labels)) return;
+
+        // ArcanumCitiesMapData is the raw arcanummaps.js data. Its map objects can use
+        // older/short metadata fields, so resolve the corresponding normalized map from
+        // ArcanumMapData before displaying its location or navigating to it.
+        const map = ArcanumMapData.find(normalized =>
+            normalized.filename === rawMap.filename ||
+            normalized.name === rawMap.name ||
+            normalized.name === rawMap.displayName
+        ) || rawMap;
+
+        rawMap.labels.forEach(label => {
+            if (inventoryContainsItem(label, itemName)) {
+                matches.push({ map, label });
+            }
+        });
+    });
+    return matches;
+}
+
+function getSearchLabelPortrait(label) {
+    if (!label) return '';
+    let portraitSrc = label.portrait || '';
+    const cats = Array.isArray(label.category)
+        ? label.category
+        : (label.category ? [label.category] : []);
+
+    if (!portraitSrc && cats.includes('chest') && label.text === 'Junk Pile') portraitSrc = 'Textures/Portraits/junkpile.png';
+    if (cats.includes('chest') && (label.text === 'Lemon Tree' || label.text === 'Potato Plant')) portraitSrc = 'Textures/Portraits/Cont_Plant.png';
+    if (!portraitSrc && cats.includes('altar')) portraitSrc = 'Textures/altar.png';
+    if (!portraitSrc && cats.includes('chest')) portraitSrc = 'Textures/chest.png';
+    if (!portraitSrc && label.race) portraitSrc = `Textures/${label.race}.png`;
+    return portraitSrc;
+}
+
+function renderSearchItemGrid(query) {
+    const catalog = (typeof ArcanumItemData !== 'undefined' ? ArcanumItemData : []);
+    const q = (query || '').trim().toLowerCase();
+
+    const availableItemNames = getSearchAvailableItemNames();
+    const availableCatalog = catalog.filter(item => item && item.name && availableItemNames.has(item.name));
+
+    searchCatalogItems = availableCatalog
+        .filter(item => !q || item.name.toLowerCase().includes(q))
+        .slice()
+        .sort((a, b) => a.name.localeCompare(b.name));
+
+    const inventoryCount = getSearchInventoryCount();
+    const total = availableCatalog.length;
+    if (searchInventoryCount) {
+        searchInventoryCount.textContent = `Searching through ${inventoryCount.toLocaleString()} inventories`;
+    }
+    searchItemCount.textContent = `Showing ${searchCatalogItems.length.toLocaleString()} / ${total.toLocaleString()} items`;
+
+    if (searchCatalogItems.length === 0) {
+        searchItemGrid.innerHTML = '<div class="search-empty">No items match your search.</div>';
+        searchSelectedItemName = '';
+        renderSearchResults([]);
+        return;
+    }
+
+    searchItemGrid.innerHTML = searchCatalogItems.map(item => {
+        const icon = item.itemimg ? resolveItemIconPath(item.itemimg) : (item.image || '');
+        const selected = item.name === searchSelectedItemName ? ' active' : '';
+        return buildInventoryTileHtml(
+            item.name,
+            icon,
+            `search-item-tile${selected}`,
+            ` data-item-name="${item.name}"`
+        );
+    }).join('');
+
+    // An exact typed name selects immediately; partial text only filters the catalog.
+    const exact = searchCatalogItems.find(item => item.name.toLowerCase() === q && q);
+    if (exact) {
+        selectSearchItem(exact.name, false);
+    } else if (!searchSelectedItemName || !searchCatalogItems.some(item => item.name === searchSelectedItemName)) {
+        searchSelectedItemName = '';
+        renderSearchResults([]);
+    }
+}
+
+function selectSearchItem(itemName, rerenderGrid = true) {
+    searchSelectedItemName = itemName || '';
+    if (rerenderGrid) renderSearchItemGrid(searchItemInput.value);
+    const matches = searchSelectedItemName ? buildItemSearchMatches(searchSelectedItemName) : [];
+    renderSearchResults(matches);
+}
+
+function renderSearchResults(matches) {
+    if (!searchSelectedItemName) {
+        searchResultsList.innerHTML = '<div class="search-empty">Select an item above to find every label that contains it.</div>';
+        return;
+    }
+
+    if (!matches.length) {
+        searchResultsList.innerHTML = `<div class="search-empty">No labels contain “${searchSelectedItemName}”.</div>`;
+        return;
+    }
+
+    const enrichedMatches = matches.map(match => ({
+        ...match,
+        itemData: getSearchMatchItemData(match.label, searchSelectedItemName)
+    })).sort((a, b) => {
+        const aCount = a.itemData ? a.itemData.count : 1;
+        const bCount = b.itemData ? b.itemData.count : 1;
+        return bCount - aCount;
+    });
+
+    searchResultsList.innerHTML = enrichedMatches.map((match, index) => {
+        const portraitSrc = getSearchLabelPortrait(match.label);
+        const portraitHtml = portraitSrc
+            ? `<div class="search-result-portrait"><img src="${portraitSrc}" alt="" loading="lazy" onerror="this.parentElement.style.display='none'"></div>`
+            : '<div class="search-result-portrait search-result-portrait-empty"></div>';
+
+        const itemData = match.itemData || { count: 1, icon: '' };
+        let itemDisplayHtml = '';
+        if (itemData.icon) {
+            if (isSearchCompactCountItem(searchSelectedItemName)) {
+                itemDisplayHtml = `<div class="search-result-item-quantity search-result-item-quantity-compact">
+                    <img src="${itemData.icon}" alt="" loading="lazy" onerror="this.style.display='none'">
+                    <span>&times; ${itemData.count.toLocaleString()}</span>
+                </div>`;
+            } else {
+                const imageCount = itemData.count;
+                itemDisplayHtml = `<div class="search-result-item-quantity" title="${itemData.count.toLocaleString()} item(s)">
+                    ${Array.from({ length: imageCount }, () => `<img src="${itemData.icon}" alt="" loading="lazy" onerror="this.style.display='none'">`).join('')}
+                </div>`;
+            }
+        }
+
+        return `<div class="search-result-item" data-search-result-index="${index}">
+            ${portraitHtml}
+            <div class="search-result-info">
+                <div class="search-result-label">${match.label.text || '(Unnamed Label)'}</div>
+                <div class="search-result-map">${match.map.name || match.map.displayName || '(Unnamed map)'}</div>
+            </div>
+            ${itemDisplayHtml}
+        </div>`;
+    }).join('');
+
+    searchResultsList.querySelectorAll('.search-result-item').forEach(el => {
+        el.addEventListener('click', () => {
+            const index = parseInt(el.getAttribute('data-search-result-index'), 10);
+            navigateToSearchMatch(enrichedMatches[index]);
+        });
+    });
+    return;
+
+}
+
+function navigateToSearchMatch(match) {
+    if (!match || !match.map || !match.label) return;
+
+    closeSearch();
+
+    if (match.map.filename === currentMapFilename) {
+        jumpToLabelOnCurrentMap(match.label);
+        return;
+    }
+
+    travelToMapByFilename(
+        match.map.name,
+        { x: match.label.x, y: match.label.y, zoom: 1.5 },
+        match.label.text
+    );
+}
+
+function updateSearchLocationUI() {
+    const locationButton = document.getElementById('search-location-toggle');
+    if (!locationButton) return;
+    locationButton.textContent = getSearchLocationLabel();
+    locationButton.title = searchEverywhere
+        ? 'Searching every map. Click to limit the search to the current map and its submaps.'
+        : 'Searching the current map and its submaps. Click to search everywhere.';
+}
+
+function openSearch() {
+    searchItemInput.value = '';
+    searchSelectedItemName = '';
+    searchEverywhere = currentMapType === 'overworld' || !currentMapFilename;
+    updateSearchLocationUI();
+    renderSearchItemGrid('');
+    renderSearchResults([]);
+    searchOverlay.classList.add('open');
+    requestAnimationFrame(() => searchItemInput.focus());
+}
+
+function closeSearch() {
+    searchOverlay.classList.remove('open');
 }
 
 function renderInventoryPickerGrid(query) {
@@ -1637,6 +2215,35 @@ function initViewer() {
         if (e.target === statisticsOverlay) statisticsOverlay.classList.remove('open');
     });
 
+    // --- Item search wiring ---
+    searchBtn.addEventListener('click', openSearch);
+    searchClose.addEventListener('click', closeSearch);
+    if (searchLocationToggle) {
+        searchLocationToggle.addEventListener('click', () => {
+            // The world map always starts in Everywhere mode, but the toggle can
+            // still be used normally after opening the search on another map.
+            searchEverywhere = !searchEverywhere;
+            updateSearchLocationUI();
+            if (searchSelectedItemName) {
+                renderSearchResults(buildItemSearchMatches(searchSelectedItemName));
+            }
+            renderSearchItemGrid(searchItemInput.value);
+        });
+    }
+    searchOverlay.addEventListener('click', (e) => {
+        if (e.target === searchOverlay) closeSearch();
+    });
+
+    searchItemInput.addEventListener('input', () => {
+        renderSearchItemGrid(searchItemInput.value);
+    });
+
+    searchItemGrid.addEventListener('click', (e) => {
+        const tile = e.target.closest('.search-item-tile');
+        if (!tile) return;
+        selectSearchItem(tile.getAttribute('data-item-name'));
+    });
+
     questsTableClose.addEventListener('click', () => {
         questsTableOverlay.classList.remove('open');
     });
@@ -1661,6 +2268,18 @@ function initViewer() {
         const idx = currentLibraryItems.findIndex(it => it.name === itemName);
         const item = idx !== -1 ? currentLibraryItems[idx] : ItemDataByName.get(itemName);
         if (itemHasArt(item)) openItemArt(item, { items: currentLibraryItems, index: idx });
+    });
+
+    // --- Label Inventory panel wiring ---
+    labelInventoryPanelClose.addEventListener('click', () => {
+        closeLabelInventoryPanel();
+    });
+    labelInventoryPanel.addEventListener('click', (e) => {
+        const tile = e.target.closest('.library-item-tile');
+        if (!tile) return;
+        const itemName = tile.getAttribute('data-item-name');
+        const item = ItemDataByName.get(itemName);
+        if (itemHasArt(item)) openItemArt(item);
     });
 
     itemImageOverlay.addEventListener('click', hideItemImage);
@@ -1703,9 +2322,11 @@ function initViewer() {
             // dismiss the image and leave the Library open; a second Escape then closes it.
             if (itemImageOverlay.style.display === 'flex') hideItemImage();
             else if (statisticsOverlay.classList.contains('open')) statisticsOverlay.classList.remove('open');
+            else if (searchOverlay.classList.contains('open')) closeSearch();
             else if (questsTableOverlay.classList.contains('open')) questsTableOverlay.classList.remove('open');
             else if (inventoryPickerOverlay.classList.contains('open')) closeInventoryPicker();
             else if (libraryOverlay.classList.contains('open')) closeLibrary();
+            else if (labelInventoryPanel.classList.contains('open')) closeLabelInventoryPanel();
         }
     });
 
@@ -1828,12 +2449,16 @@ function initViewer() {
         menuContainer.innerHTML = '<div style="text-align:center;color:#888;padding:20px;">No maps registered.</div>';
     }
 
-    filterDropdownBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        labelsVisible = !labelsVisible;
-        filterDropdownBtn.textContent = labelsVisible ? 'Hide labels' : 'Display labels';
-        filterDropdownBtn.classList.toggle('active-tool', !labelsVisible);
-        applyActiveFilters();
+    mapVisibilityButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const category = btn.getAttribute('data-visibility-category');
+            if (!category || !(category in labelVisibility)) return;
+            labelVisibility[category] = !labelVisibility[category];
+            btn.classList.toggle('active', labelVisibility[category]);
+            btn.classList.toggle('inactive', !labelVisibility[category]);
+            applyActiveFilters();
+        });
     });
 
 
@@ -2054,6 +2679,9 @@ function initViewer() {
                 }
             }
 
+            if (overrideDefaultPortrait && overrideDefaultPortrait.checked && currentEditingPortrait) editingLabel.portrait = currentEditingPortrait;
+            else if (overrideDefaultPortrait && !overrideDefaultPortrait.checked) delete editingLabel.portrait;
+
             if (editingInventoryItems.length > 0) editingLabel.inventory = [...editingInventoryItems];
             else delete editingLabel.inventory;
 
@@ -2074,6 +2702,10 @@ function initViewer() {
         };
 
         if (!cats.includes('waypoint')) newLabelObj.description = labelDescription;
+
+        if (overrideDefaultPortrait && overrideDefaultPortrait.checked && currentEditingPortrait) {
+            newLabelObj.portrait = currentEditingPortrait;
+        }
 
         if (cats.includes('quest')) {
             const questEntries = buildQuestEntriesFromState();
@@ -2138,6 +2770,9 @@ function initViewer() {
         setDescriptionFieldVisible(false);
         newLabelMaster.value = '';
         newLabelLinks.value = '';
+        currentEditingPortrait = '';
+        if (overrideDefaultPortrait) overrideDefaultPortrait.checked = false;
+        updatePortraitOverrideUI();
         editingQuestEntries = getSelectedNewLabelCategories().includes('quest') ? [{}] : [];
         renderQuestEntriesList();
         newLabelTargetX.value = '';
@@ -2220,7 +2855,31 @@ function initViewer() {
 
 function applyActiveFilters() {
     const elements = container.querySelectorAll('.arcanum-world-dot, .arcanum-world-text, .map-label');
-    elements.forEach(el => el.classList.toggle('filter-hidden', !labelsVisible));
+    elements.forEach(el => {
+        const categoryString = el.getAttribute('data-category') || '';
+        const rawCategories = categoryString.split(/\s+/).filter(Boolean);
+        // NPC visibility also controls Shop, Followers and Masters. Treat all four as
+        // one visibility group so the single NPC button consistently affects them.
+        const categories = rawCategories.map(category =>
+            ['shop', 'follower', 'followers', 'master', 'masters'].includes(category) ? 'npc' : category
+        );
+        const controlledCategories = categories.filter(category => Object.prototype.hasOwnProperty.call(labelVisibility, category));
+
+        // The Info toggle also controls quest-only labels. A label that has ONLY the
+        // quest category is treated as informational for visibility purposes. Labels
+        // that combine quest with NPC/shop/follower/master or any other category are
+        // left alone here, so hiding Info never hides an NPC just because it has a quest.
+        const isQuestOnly = rawCategories.length === 1 && rawCategories[0] === 'quest';
+        if (isQuestOnly && !labelVisibility.information) {
+            el.classList.add('filter-hidden');
+            return;
+        }
+
+        // Labels outside the four controlled categories remain visible. For a multi-category
+        // label, it stays visible when at least one of its controlled categories is enabled.
+        const shouldHide = controlledCategories.length > 0 && !controlledCategories.some(category => labelVisibility[category]);
+        el.classList.toggle('filter-hidden', shouldHide);
+    });
     clearActivePopups();
 }
 
@@ -3192,7 +3851,7 @@ function getStatisticsSourceMaps(selectedMap) {
 
 function buildStatisticsForCurrentMap() {
     const selectedMap = ArcanumMapData.find(m => m.filename === currentMapFilename);
-    if (!selectedMap) return { entries: [], npcCount: 0, shopCount: 0, followerCount: 0, raceCounts: {}, sexCounts: {} };
+    if (!selectedMap) return { entries: [], demographyCount: 0, npcCount: 0, shopCount: 0, followerCount: 0, masterCount: 0, raceCounts: {}, sexCounts: {} };
 
     const sourceMaps = getStatisticsSourceMaps(selectedMap);
 
@@ -3201,13 +3860,13 @@ function buildStatisticsForCurrentMap() {
         if (!map.labels) return;
         map.labels.forEach(label => {
             const cats = Array.isArray(label.category) ? label.category : (label.category ? [label.category] : []);
-            if (cats.includes('npc') || cats.includes('shop') || cats.includes('followers')) {
+            if (cats.includes('npc') || cats.includes('shop') || cats.includes('followers') || cats.includes('master')) {
                 entries.push({ label, mapDisplayName: map.name, mapFilename: map.filename });
             }
         });
     });
 
-    let npcCount = 0, shopCount = 0, followerCount = 0;
+    let npcCount = 0, shopCount = 0, followerCount = 0, masterCount = 0;
     const raceCounts = {};
     const sexCounts = {};
 
@@ -3216,6 +3875,7 @@ function buildStatisticsForCurrentMap() {
         if (cats.includes('npc')) npcCount++;
         if (cats.includes('shop')) shopCount++;
         if (cats.includes('followers')) followerCount++;
+        if (cats.includes('master')) masterCount++;
 
         if (label.race) {
             raceCounts[label.race] = (raceCounts[label.race] || 0) + 1;
@@ -3227,7 +3887,8 @@ function buildStatisticsForCurrentMap() {
         }
     });
 
-    return { entries, npcCount, shopCount, followerCount, raceCounts, sexCounts };
+    const demographyCount = entries.length;
+    return { entries, demographyCount, npcCount, shopCount, followerCount, masterCount, raceCounts, sexCounts };
 }
 
 let statsEntries = [];
@@ -3321,36 +3982,42 @@ function renderStatisticsPanel() {
     const selectedMap = ArcanumMapData.find(m => m.filename === currentMapFilename);
     statisticsMapName.textContent = selectedMap ? (currentDisplayName || selectedMap.name) : '';
 
-    const { entries, npcCount, shopCount, followerCount, raceCounts, sexCounts } = buildStatisticsForCurrentMap();
+    const { entries, demographyCount, npcCount, shopCount, followerCount, masterCount, raceCounts, sexCounts } = buildStatisticsForCurrentMap();
     statsEntries = entries;
     statsSortColumn = null;
     statsSortDirection = 'asc';
     statsCategoryFilter = new Set();
 
     if (entries.length === 0) {
-        statisticsContent.innerHTML = '<div class="quest-panel-empty">No NPCs, Shops, or Followers found here.</div>';
+        statisticsContent.innerHTML = '<div class="quest-panel-empty">No NPCs, Shops, Followers, or Masters found here.</div>';
         return;
     }
 
     const raceItems = Object.entries(raceCounts).sort((a, b) => b[1] - a[1]).map(([race, count]) => `<li>${race}: ${count}</li>`).join('');
     const sexItems = Object.entries(sexCounts).map(([sex, count]) => `<li>${sex}: ${count}</li>`).join('');
 
-    // Icon legend: only the category icons actually present here. Clicking one (or several)
-    // filters the table below to entries carrying any of the selected categories.
-    const legendCategories = getStatsPresentCategories(entries);
-    const legendHtml = legendCategories.length ? `
+    // Fixed legend order: first column NPC / Shop / Followers / Masters, second column
+    // Quest / Information / Key / Bounty. Clicking one (or several) filters the table below.
+    const orderedLegendCategories = ['npc', 'shop', 'followers', 'master', 'quest', 'information', 'key', 'bounty'];
+    const legendHtml = orderedLegendCategories.length ? `
         <div class="stats-summary-group stats-legend-group">
             <span class="stats-summary-label">Legend</span>
             <div class="stats-legend-icons">
-                ${legendCategories.map(c => `<span class="stats-legend-icon" data-category="${c}" title="${CATEGORY_LABELS[c] || c}"><span class="stats-legend-icon-emoji">${CATEGORY_EMOJI[c]}</span><span class="stats-legend-icon-label">${CATEGORY_LABELS[c] || c}</span></span>`).join('')}
+                ${orderedLegendCategories.map(c => `<span class="stats-legend-icon" data-category="${c}" title="${CATEGORY_LABELS[c] || c}"><span class="stats-legend-icon-emoji">${CATEGORY_EMOJI[c]}</span><span class="stats-legend-icon-label">${CATEGORY_LABELS[c] || c}</span></span>`).join('')}
             </div>
         </div>` : '';
 
     statisticsContent.innerHTML = `
         <div class="stats-summary">
-            <div class="stats-summary-count"><strong>${npcCount}</strong>NPC${npcCount !== 1 ? 's' : ''}</div>
-            <div class="stats-summary-count"><strong>${shopCount}</strong>Shop${shopCount !== 1 ? 's' : ''}</div>
-            <div class="stats-summary-count"><strong>${followerCount}</strong>Follower${followerCount !== 1 ? 's' : ''}</div>
+            <div class="stats-demography">
+                <div class="stats-summary-count stats-demography-total">Demography <strong>${demographyCount}</strong></div>
+                <div class="stats-demography-categories">
+                    <div class="stats-demography-category">NPC <strong>${npcCount}</strong></div>
+                    <div class="stats-demography-category">Shop <strong>${shopCount}</strong></div>
+                    <div class="stats-demography-category">Followers <strong>${followerCount}</strong></div>
+                    <div class="stats-demography-category">Masters <strong>${masterCount}</strong></div>
+                </div>
+            </div>
             ${raceItems ? `<div class="stats-summary-group"><span class="stats-summary-label">By Race</span><ul>${raceItems}</ul></div>` : ''}
             ${sexItems ? `<div class="stats-summary-group"><span class="stats-summary-label">By Sex</span><ul>${sexItems}</ul></div>` : ''}
             ${legendHtml}
@@ -3444,6 +4111,7 @@ function applyBulkLabelShift(labels, dxPx, dyPx) {
 function clearActivePopups() {
     const popups = container.querySelectorAll('.info-popup');
     popups.forEach(p => p.remove());
+    closeLabelInventoryPanel();
 }
 
 function attachLabelDragHandlers(labelData, elements, coordMode, coordKeys) {
@@ -3468,6 +4136,15 @@ function attachLabelDragHandlers(labelData, elements, coordMode, coordKeys) {
 }
 
 function renderSingleLabel(label, isPending) {
+    // A label always opens its ordinary info popup on click; one that also has an inventory
+    // section (see labelHasInventorySection) additionally opens the Label Inventory panel
+    // alongside it, with no button needed.
+    const openLabelDisplay = () => {
+        openInfoPopup();
+        if (labelHasInventorySection(label)) {
+            openLabelInventoryPanel(label);
+        }
+    };
     const openInfoPopup = () => {
         clearActivePopups();
         const popup = document.createElement('div');
@@ -3484,7 +4161,8 @@ function renderSingleLabel(label, isPending) {
 
         const statsRowHtml = buildLabelStatsRowHtml(label);
         let portraitSrc = label.portrait;
-        if (popupCats.includes('chest') && label.text === 'Junk Pile') portraitSrc = 'Textures/junkpile.png';
+        if (popupCats.includes('chest') && label.text === 'Junk Pile') portraitSrc = 'Textures/Portraits/junkpile.png';
+        if (popupCats.includes('chest') && (label.text === 'Lemon Tree' || label.text === 'Potato Plant')) portraitSrc = 'Textures/Portraits/Cont_Plant.png';
         if (!portraitSrc && popupCats.includes('altar')) portraitSrc = 'Textures/altar.png';
         if (!portraitSrc && popupCats.includes('chest')) portraitSrc = 'Textures/chest.png';
         if (!portraitSrc && label.race) portraitSrc = `Textures/${label.race}.png`;
@@ -3507,8 +4185,9 @@ function renderSingleLabel(label, isPending) {
             }
             shopInfoHtml = `<div class="shop-info-block">${shopTypeHtml}${shopMarkupHtml}</div>`;
         }
-
-        const inventoryHtml = buildItemListHtml(label.inventory, 'Inventory', 'inventory', false, true);
+        // A label's own Inventory (and a shop's stock) now only ever appears in the side panel
+        // (see openLabelInventoryPanel/labelHasInventorySection) - a label that has either
+        // skips this popup entirely, so nothing else needs to reference them here.
         const offeringHtml = buildItemListHtml(label.offering, 'Offering', 'offering', true);
         const blessingHtml = buildItemListHtml(label.blessing, 'Blessing', 'blessing');
 
@@ -3575,7 +4254,6 @@ function renderSingleLabel(label, isPending) {
             chestStatusHtml,
             shopInfoHtml,
             inscriptionHtml,
-            inventoryHtml,
             offeringHtml,
             blessingHtml,
             descHtmlMain,
@@ -3591,7 +4269,7 @@ function renderSingleLabel(label, isPending) {
         const masterHeaderClass = (label.master || label.followerType) ? ' has-master' : '';
         const headerHtml = `<div class="${headerClass}${masterHeaderClass}">${portraitHtml}<div class="popup-header-text"><h4>${label.text}${buildQuestTypeMarker(label.questType)}${buildQuestPartBadge(label.part)}</h4>${masterHtml}${followerTypeHtml}${godTypeHtml}${chestStatusHtml}${statsRowHtml}</div></div>`;
         
-        popup.innerHTML = `<span class="close-btn">&times;</span>${headerHtml}${shopInfoHtml}${inscriptionHtml}${inventoryHtml}${offeringHtml}${blessingHtml}${descHtmlMain}${travelButtonHtml}${linkedButtonsHtml}`;
+        popup.innerHTML = `<span class="close-btn">&times;</span>${headerHtml}${shopInfoHtml}${inscriptionHtml}${offeringHtml}${blessingHtml}${descHtmlMain}${travelButtonHtml}${linkedButtonsHtml}`;
         popup.querySelector('.close-btn').addEventListener('click', (el) => { el.stopPropagation(); popup.remove(); });
         
         if (label.targetMapFilename) {
@@ -3629,18 +4307,6 @@ function renderSingleLabel(label, isPending) {
                     ? ItemDataByName.get(itemName)
                     : { ...(ItemDataByName.get(itemName) || {}), ...rawItem };
                 if (itemHasArt(item)) openItemArt(item);
-            });
-        });
-
-        // Collapsed Inventory list (see buildItemListHtml's "collapsible" arg) - clicking the
-        // "[+N]" toggle reveals the tucked-away regular-tier items and removes the toggle itself,
-        // rather than re-rendering the list.
-        popup.querySelectorAll('.npc-inventory-toggle').forEach(el => {
-            el.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const block = el.closest('.npc-inventory-block');
-                if (block) block.classList.remove('npc-inventory-collapsed');
-                el.remove();
             });
         });
 
@@ -3774,7 +4440,7 @@ function renderSingleLabel(label, isPending) {
 
         if (cats.length === 0) {
             labelElement.textContent = label.text;
-            labelElement.addEventListener('click', guardedClick(openInfoPopup));
+            labelElement.addEventListener('click', guardedClick(openLabelDisplay));
         } else {
             cats.forEach(c => labelElement.classList.add(`cat-${c}`));
             const emojiPrefix = cats.map(c => CATEGORY_EMOJI[c] || '').join('');
@@ -3790,11 +4456,12 @@ function renderSingleLabel(label, isPending) {
             }
 
             // A waypoint travels; anything else (including a waypoint combined with
-            // other categories) opens the info popup, which still offers the travel button
+            // other categories) opens the info popup (or the Label Inventory panel, for a
+            // label with an inventory section), which still offers the travel button
             if (cats.includes('waypoint') && cats.length === 1) {
                 labelElement.addEventListener('click', guardedClick(openWaypointTravel));
             } else {
-                labelElement.addEventListener('click', guardedClick(openInfoPopup));
+                labelElement.addEventListener('click', guardedClick(openLabelDisplay));
             }
         }
 
@@ -3915,6 +4582,9 @@ function startEditingLabel(label) {
     setDescriptionFieldVisible(Boolean(label.description));
     newLabelMaster.value = label.master || '';
     newLabelFollowerType.value = label.followerType || '';
+    currentEditingPortrait = label.portrait || '';
+    if (overrideDefaultPortrait) overrideDefaultPortrait.checked = Boolean(label.portrait);
+    updatePortraitOverrideUI();
     const sexKey = label.sex ? String(label.sex).trim().toLowerCase() : '';
     newLabelSex.value = (sexKey === 'm') ? 'male' : (sexKey === 'f') ? 'female' : sexKey;
     newLabelRace.value = label.race || '';
@@ -3980,6 +4650,9 @@ function stopEditingLabel() {
     newLabelMaster.value = '';
     newLabelFollowerType.value = '';
     newLabelLinks.value = '';
+    currentEditingPortrait = '';
+    if (overrideDefaultPortrait) overrideDefaultPortrait.checked = false;
+    updatePortraitOverrideUI();
     editingQuestEntries = [];
     renderQuestEntriesList();
     newLabelTargetX.value = '';
@@ -4053,37 +4726,53 @@ function extractBackgroundImageUrl(bgValue) {
 function applyMapBackground(bgValue) {
     const imageUrl = extractBackgroundImageUrl(bgValue || '');
 
-    // Reset transform whenever a new background is applied.
-    mapBackgroundLayer.style.transformOrigin = '0 0';
-    mapBackgroundLayer.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
+    // The layer itself is never transformed - it stays pinned at inset:0, i.e. exactly the
+    // size of the viewport, no matter what. (An earlier version scaled/translated the whole
+    // layer with a CSS transform to avoid per-frame background-size/position repaints, but
+    // since the layer's box is viewport-sized, scaling it down - e.g. at low zoom, scale can
+    // go as low as 0.05 - shrank the box well below the viewport and left the rest of the
+    // screen uncovered. Panning could also carry the box away from the viewport entirely.)
+    // Instead the tiling pattern is zoomed/panned via background-size/background-position,
+    // which keeps the layer's box (and therefore its coverage) fixed while still moving the
+    // texture in sync with the map - see updateBackgroundLayerTransform.
+    mapBackgroundLayer.style.transform = '';
 
     if (imageUrl) {
-        mapBackgroundLayer.style.background = `url("${imageUrl}") repeat`;
-        // Natural-size tiling: no per-frame background-size recalculation.
-        mapBackgroundLayer.style.backgroundSize = '';
-        mapBackgroundLayer.style.backgroundPosition = '0 0';
+        mapBackgroundLayer.style.backgroundRepeat = 'repeat';
+        mapBackgroundLayer.style.backgroundImage = `url("${imageUrl}")`;
+        mapBackgroundLayer.style.backgroundColor = '';
 
         if (backgroundTileImg && backgroundTileImg.src === imageUrl) {
+            updateBackgroundLayerTransform();
             return;
         }
 
         const tileImg = new Image();
+        tileImg.onload = () => {
+            // Ignore a load that finished after a newer background was already applied.
+            if (backgroundTileImg !== tileImg) return;
+            updateBackgroundLayerTransform();
+        };
         backgroundTileImg = tileImg;
         tileImg.src = imageUrl;
     } else {
         backgroundTileImg = null;
-        mapBackgroundLayer.style.background = bgValue || "#0b0a08";
-        mapBackgroundLayer.style.backgroundSize = '';
-        mapBackgroundLayer.style.backgroundPosition = '';
+        mapBackgroundLayer.style.backgroundImage = 'none';
+        mapBackgroundLayer.style.backgroundColor = bgValue || "#0b0a08";
     }
+    updateBackgroundLayerTransform();
 }
 
 function updateBackgroundLayerTransform() {
-    // The background layer is transformed as a whole instead of changing its CSS
-    // background-size/background-position. This avoids repeated large-area repaints.
-    mapBackgroundLayer.style.transformOrigin = '0 0';
-    mapBackgroundLayer.style.transform =
-        `translate(${posX}px, ${posY}px) scale(${scale})`;
+    // Pan: shift the tiling pattern's origin. Zoom: scale the tile's rendered size to match
+    // the map's own scale. Both act on the pattern (background-position/-size), never on the
+    // layer's own box, so the layer always keeps covering the full viewport.
+    if (backgroundTileImg && backgroundTileImg.naturalWidth) {
+        const tileW = backgroundTileImg.naturalWidth * scale;
+        const tileH = backgroundTileImg.naturalHeight * scale;
+        mapBackgroundLayer.style.backgroundSize = `${tileW}px ${tileH}px`;
+    }
+    mapBackgroundLayer.style.backgroundPosition = `${posX}px ${posY}px`;
 }
 
 // --- Chunked map loading -------------------------------------------------
